@@ -6,7 +6,7 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.2.1-blue" alt="Version 0.2.1">
+  <img src="https://img.shields.io/badge/Version-0.3.0-blue" alt="Version 0.3.0">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -39,16 +39,19 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 ## Novidades
 
-> 🆕 **v0.2.0: time de especialistas.** 6 novos agents e 63 novas skills de Flutter, Dart e Firebase. O router passa a acionar `flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer` e `mobile-staff-engineer` conforme o pedido, e o `lead-mobile` coordena auditorias completas.
+> 🆕 **v0.3.0: os especialistas debatem.** Numa decisão de arquitetura, um só especialista te dá a resposta da especialidade dele. `/reis-mobile:debate` põe três deles para defender posições incompatíveis sobre a mesma questão — e o `lead-mobile` decide, em vez de listar prós e contras.
 >
 > ```bash
-> reis-mobile route "a lista está com jank no scroll"   # → flutter-performance-engineer
-> reis-mobile route "escreva testes para o login cubit" # → flutter-test-engineer
+> /reis-mobile:debate Riverpod ou BLoC para o estado deste app?
+> /reis-mobile:debate --rounds 3 offline-first no Firestore ou cache local?
 > ```
+>
+> A rodada 1 é às cegas, para que ninguém ancore os outros. Os participantes não variam só de papel: variam de modelo, porque três instâncias do mesmo modelo concordam pelos mesmos motivos errados.
 
 | Versão | Destaques |
 |--------|-----------|
-| **v0.2.1** (atual) | Comando `/reis-mobile`: lista os comandos e encaminha para `doctor`, `review` ou, com um pedido livre, para o agent e as skills da stack detectada. Aparece no menu de comandos da extensão do VS Code. |
+| **v0.3.0** (atual) | Comando `/reis-mobile:debate`: três especialistas com prioridades conflitantes debatem em duas rodadas e o `lead-mobile` decide. Participantes variam em papel e em modelo; `--external` soma Codex e Gemini. Antecipa o `council` previsto para a v0.8.0. |
+| **v0.2.1** | Comando `/reis-mobile`: lista os comandos e encaminha para `doctor`, `review` ou, com um pedido livre, para o agent e as skills da stack detectada. Aparece no menu de comandos da extensão do VS Code. |
 | **v0.2.0** | 6 novos agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) e 63 novas skills de Flutter, Dart e Firebase. O router passa a ter especialista para debug, test, architecture e performance. |
 | **v0.1.0** | Plugin `reis-mobile` para o Claude Code. Detecção de 5 stacks. Router intent + stack → agent + skills. Context engine com diff mascarado. `/reis-mobile:doctor` e `/reis-mobile:review`. CLI `reis-mobile`. |
 
@@ -156,13 +159,13 @@ Depois, reinicie o Claude Code e rode, na pasta do seu app:
 
 | Variável | Padrão | Uso |
 |----------|--------|-----|
-| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.2.1` |
+| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.3.0` |
 | `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Pasta de instalação |
 | `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Pasta do comando `reis-mobile` |
 | `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` instala só a CLI, sem registrar o plugin |
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.2.1 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.0 sh
 ```
 </details>
 
@@ -234,7 +237,7 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 Para instalar uma versão específica:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.2.1 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.0 sh
 ```
 
 ### CLI no Windows (PowerShell)
@@ -248,7 +251,7 @@ irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 Para uma versão específica:
 
 ```powershell
-$env:REIS_MOBILE_VERSION = 'v0.2.1'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+$env:REIS_MOBILE_VERSION = 'v0.3.0'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
 ### CLI via Homebrew (macOS/Linux)
@@ -350,7 +353,7 @@ O router nunca inventa um especialista: se nenhum agent atende a intent, ele avi
 | Criar um plugin ou depurar MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
 | Auditoria completa com vários especialistas | agent `lead-mobile` | ✅ |
 | Decidir entre duas arquiteturas com trade-off real | `/reis-mobile:debate` | ✅ |
-| Comando dedicado de debug | `/reis-mobile:debug` | 🔜 v0.3 |
+| Comando dedicado de debug | `/reis-mobile:debug` | 🔜 v0.4 |
 | Comando dedicado de testes (incluindo XCTest e Espresso) | `/reis-mobile:test` | 🔜 v0.4 |
 | Checar se o app está pronto para a loja | `/reis-mobile:release` | 🔜 v0.5 |
 | Decisão consolidada por consenso entre agents | `/reis-mobile:council` | 🔜 v0.8 |
@@ -611,13 +614,13 @@ As skills de terceiros mantêm o nome e a licença originais. Veja [THIRD_PARTY_
 | v0.1.0 | Fundação, detecção de stack, router, `/reis-mobile:doctor`, `/reis-mobile:review` para Flutter | ✅ |
 | v0.2.0 | 6 agents e 63 skills de Flutter, Dart e Firebase | ✅ |
 | v0.2.1 | Comando de entrada `/reis-mobile` | ✅ |
-| v0.3.0 | Skills de Android e iOS nativos, `.reis-mobile/config.yaml` e `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
-| v0.4.0 | `/reis-mobile:test` e testes nativos (XCTest, Espresso) | ⏳ |
-| v0.5.0 | `/reis-mobile:release` com quality gates | ⏳ |
-| v0.6.0 | Pack React Native | ⏳ |
-| v0.7.0 | MCP server | ⏳ |
-| v0.8.0 | `/reis-mobile:council`: multi-agent com consenso | ⏳ |
-| v0.9.0 | Multi-provider (Claude, OpenAI, Gemini, OpenRouter, Ollama) | ⏳ |
+| v0.3.0 | `/reis-mobile:debate`: multi-agent com decisão, em papéis e modelos distintos — entregue no lugar do `council` que estava previsto para a v0.8.0 | ✅ |
+| v0.4.0 | Skills de Android e iOS nativos, `.reis-mobile/config.yaml` e `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
+| v0.5.0 | `/reis-mobile:test` e testes nativos (XCTest, Espresso) | ⏳ |
+| v0.6.0 | `/reis-mobile:release` com quality gates | ⏳ |
+| v0.7.0 | Pack React Native | ⏳ |
+| v0.8.0 | MCP server | ⏳ |
+| v0.9.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) além do `--external` do debate | ⏳ |
 | v1.0.0 | Primeira versão estável: Flutter, Android, iOS e React Native | ⏳ |
 
 ---
@@ -631,7 +634,7 @@ Não para o review, que só lê código. O `/reis-mobile:doctor` mostra o que fa
 Rode a partir da pasta do app, ou use `--dir apps/mobile` na CLI. O diff fica restrito a essa pasta.
 
 **Funciona com Android e iOS nativos?**
-A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`, `mobile-staff-engineer` e `lead-mobile` já funcionam. As skills específicas de Android e iOS chegam na v0.3.0; as 63 skills importadas são de Flutter, Dart e Firebase.
+A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`, `mobile-staff-engineer` e `lead-mobile` já funcionam. As skills específicas de Android e iOS chegam na v0.4.0; as 63 skills importadas são de Flutter, Dart e Firebase.
 
 **Já tenho skills com os mesmos nomes em `~/.claude/skills`.**
 As do plugin ficam no namespace `reis-mobile:` e não conflitam, mas o Claude Code carrega as duas descrições. Para economizar contexto, remova as cópias globais que o plugin já cobre.
