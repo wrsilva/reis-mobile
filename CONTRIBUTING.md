@@ -44,3 +44,11 @@ Uma boa skill de reis-mobile:
 - é um checklist verificável, ordenado por impacto (crash e perda de dados primeiro);
 - não afirma versões, lints ou requisitos de loja de memória. Quando o valor muda com o tempo, manda verificar;
 - indica em que seção do relatório cada achado entra.
+
+## Publicando uma versão
+
+1. Atualize a versão em `package.json`, `.claude-plugin/plugin.json` e `.claude-plugin/marketplace.json`, e registre as mudanças no `CHANGELOG.md`.
+2. `node scripts/versions.mjs vX.Y.Z` confirma que tudo bate.
+3. Commit, `git tag vX.Y.Z` e `git push origin main vX.Y.Z`.
+4. O workflow **Release** roda os testes e publica na release o tarball, o `SHA256SUMS` e o `reis-mobile.rb`. Se o secret `NPM_TOKEN` existir, também publica no npm.
+5. Copie o `reis-mobile.rb` da release para `Formula/reis-mobile.rb` no repositório `wrsilva/homebrew-tap`.

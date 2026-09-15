@@ -31,7 +31,7 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 🔒 **Secrets nunca chegam ao modelo.** O diff enviado para revisão passa por uma camada que mascara API keys, tokens, JWTs, chaves privadas e senhas de keystore.
 
-🪶 **Leve.** Zero dependências npm, nenhum hook, nenhum provider externo. Cerca de 590 tokens fixos por sessão.
+🪶 **Leve.** Instala com um comando, zero dependências npm, nenhum hook, nenhum provider externo. Cerca de 590 tokens fixos por sessão.
 
 ---
 
@@ -50,63 +50,111 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 [Changelog completo →](CHANGELOG.md)
 
-## Quickstart
+## Instalação
+
+Requisitos: **Node.js 22+** e, para usar os comandos `/reis-mobile:*`, o **[Claude Code](https://claude.com/claude-code)**.
+
+Todos os métodos instalam a CLI `reis-mobile`. Quando o Claude Code está disponível, o instalador também registra o plugin. Se ele não estiver, rode `reis-mobile init` depois de instalá-lo.
+
+### Quick Install (macOS/Linux) — recomendado
 
 ```bash
-# No terminal (fora de uma sessão do Claude Code):
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
+```
+
+Instala em `~/.local/share/reis-mobile`, cria o comando em `~/.local/bin` e confere o SHA-256 do download. Se `~/.local/bin` não estiver no `PATH`:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # ou ~/.bashrc
+```
+
+### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+```
+
+Instala em `%LOCALAPPDATA%\reis-mobile`, cria `reis-mobile.cmd` em `%USERPROFILE%\.local\bin` e adiciona essa pasta ao `PATH` do usuário. Abra um novo terminal depois.
+
+### Homebrew
+
+```bash
+brew install wrsilva/tap/reis-mobile
+reis-mobile init
+```
+
+### npm
+
+```bash
+npm install -g reis-mobile
+reis-mobile init
+```
+
+### Só o plugin do Claude Code
+
+```bash
 claude plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 claude plugin install reis-mobile@reis-mobile
+```
 
-# Depois, dentro do Claude Code, na pasta do seu app:
+### Verificar a instalação
+
+```bash
+reis-mobile --version   # reis-mobile 0.1.0
+```
+
+Depois, reinicie o Claude Code e rode, na pasta do seu app:
+
+```text
 /reis-mobile:doctor
 /reis-mobile:review
 ```
 
-Só isso. Requisitos: **Claude Code** e **Node.js 22+** no `PATH`. Não há `npm install`.
-
 <details>
-<summary>Usar como CLI (sem o Claude Code)</summary>
+<summary>Opções do instalador</summary>
+
+| Variável | Padrão | Uso |
+|----------|--------|-----|
+| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.1.0` |
+| `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Pasta de instalação |
+| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Pasta do comando `reis-mobile` |
+| `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` instala só a CLI, sem registrar o plugin |
 
 ```bash
-git clone https://github.com/wrsilva/reis-mobile.git
-cd reis-mobile && npm link      # expõe o comando reis-mobile
-
-cd ~/meu-app
-reis-mobile doctor
-reis-mobile detect
-reis-mobile route "o build android parou depois de atualizar o Kotlin"
-reis-mobile review --base main
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.1.0 sh
 ```
-
-Todos os comandos aceitam `--json` e `--dir <path>`. Rode `reis-mobile --help` para ver a lista completa.
-</details>
-
-<details>
-<summary>Instalar a partir de um clone local (desenvolvimento)</summary>
-
-```bash
-git clone https://github.com/wrsilva/reis-mobile.git
-claude plugin marketplace add ./reis-mobile
-claude plugin install reis-mobile@reis-mobile
-```
-
-Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code.
 </details>
 
 <details>
 <summary>Atualizar / desinstalar</summary>
 
 ```bash
-# Atualizar
-claude plugin marketplace update reis-mobile
-claude plugin update reis-mobile@reis-mobile
+# Atualizar: rode o instalador de novo, ou
+brew upgrade reis-mobile          # Homebrew
+npm update -g reis-mobile         # npm
+claude plugin marketplace update reis-mobile && claude plugin update reis-mobile@reis-mobile
 
 # Desinstalar
-claude plugin uninstall reis-mobile
-claude plugin marketplace remove reis-mobile
+reis-mobile init --uninstall      # remove o plugin do Claude Code
+rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile   # instalação via curl
+brew uninstall reis-mobile        # ou: npm uninstall -g reis-mobile
 ```
 
 Reinicie o Claude Code depois de atualizar.
+</details>
+
+<details>
+<summary>Desenvolvimento a partir do clone</summary>
+
+```bash
+git clone https://github.com/wrsilva/reis-mobile.git
+cd reis-mobile
+npm link                      # CLI apontando para o clone
+reis-mobile init --local      # plugin apontando para o clone
+npm run check                 # valida e roda os testes
+```
+
+Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code.
 </details>
 
 ---
@@ -210,13 +258,13 @@ O núcleo em Node.js decide **o que** carregar. O modelo decide **como** revisar
 
 **Secrets mascarados.** O diff passa por [`core/security/redact.mjs`](core/security/redact.mjs) antes de chegar ao modelo. Lock files e código gerado (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) ficam fora do diff. A redação é uma camada de proteção, não uma garantia. Veja [SECURITY.md](SECURITY.md).
 
-**Sem rede, sem telemetria.** A CLI não faz chamadas de rede e não grava nada fora do terminal. O único modelo envolvido é o da sua sessão do Claude Code.
+**Sem telemetria.** `detect`, `doctor`, `route` e `review` não fazem chamadas de rede. Só a instalação acessa a rede, para baixar a release e registrar o plugin. O único modelo envolvido é o da sua sessão do Claude Code.
 
 **Sem hooks.** O plugin não se prende a eventos do Claude Code. Ele só age quando você chama um comando ou quando uma skill é relevante.
 
 **Namespace próprio.** Os comandos ficam em `/reis-mobile:*` e não conflitam com `/review` nem com `/security-review` nativos.
 
-**Desinstalação limpa.** `claude plugin uninstall reis-mobile` remove tudo.
+**Instalação verificável.** Os instaladores conferem o SHA-256 da release e não pedem `sudo`. `reis-mobile init --uninstall` remove o plugin sem deixar configuração para trás.
 
 ---
 

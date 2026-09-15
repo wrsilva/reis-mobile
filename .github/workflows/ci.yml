@@ -26,3 +26,39 @@ jobs:
         run: npm run validate
       - name: Test
         run: npm test
+
+  installers:
+    name: Installer · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build release-like archive
+        shell: bash
+        run: git archive --format=tar.gz --prefix=reis-mobile-ci/ -o "$RUNNER_TEMP/reis-mobile.tar.gz" HEAD
+
+      - name: install.sh
+        if: runner.os != 'Windows'
+        env:
+          REIS_MOBILE_SKIP_PLUGIN: '1'
+        run: |
+          REIS_MOBILE_ARCHIVE_URL="file://$RUNNER_TEMP/reis-mobile.tar.gz" sh install.sh
+          "$HOME/.local/bin/reis-mobile" --version
+          "$HOME/.local/bin/reis-mobile" validate
+
+      - name: install.ps1
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          REIS_MOBILE_SKIP_PLUGIN: '1'
+        run: |
+          $env:REIS_MOBILE_ARCHIVE_URL = Join-Path $env:RUNNER_TEMP 'reis-mobile.tar.gz'
+          ./install.ps1
+          & (Join-Path $HOME '.local\bin\reis-mobile.cmd') validate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

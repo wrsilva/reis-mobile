@@ -15,5 +15,8 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). 
 - `/reis-mobile:review` e `reis-mobile review`.
 - Agent `mobile-code-reviewer`.
 - Skills `flutter-project-audit`, `flutter-widget-review`, `mobile-security-audit` e `detect-mobile-stack`.
-- CLI `reis-mobile`: `detect`, `doctor`, `route`, `review`, `agents`, `skills`, `stacks`, `validate`.
-- CI no GitHub Actions (Node 22 e 24, Ubuntu e macOS).
+- CLI `reis-mobile`: `init`, `detect`, `doctor`, `route`, `review`, `agents`, `skills`, `stacks`, `validate`.
+- `reis-mobile init`: registra (ou remove, com `--uninstall`) o plugin no Claude Code.
+- Instaladores `install.sh` (macOS/Linux) e `install.ps1` (Windows), com verificação SHA-256.
+- Workflow de release: tarball, `SHA256SUMS`, fórmula do Homebrew e publicação no npm.
+- CI no GitHub Actions (Node 22 e 24, Ubuntu e macOS) e teste dos instaladores em Ubuntu, macOS e Windows.
