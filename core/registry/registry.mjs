@@ -70,6 +70,9 @@ function toComponent(kind, path, fileName, source) {
     stacks: asList(data.stacks),
     // `routing: manual` marks helpers that Claude invokes by description only.
     routed: data.routing !== 'manual',
+    // Third-party components declare where they came from (see THIRD_PARTY_NOTICES.md).
+    source: data.source ?? null,
+    license: data.license ?? null,
     path,
   };
 }
@@ -101,6 +104,8 @@ export function validateRegistry({ stacks, agents, skills }) {
       errors.push(`${label}: declare at least one intent in "intents" or set "routing: manual"`);
     }
     if (!component.stacks.length) errors.push(`${label}: declare "stacks" (use "*" for any stack)`);
+
+    if (component.source && !component.license) errors.push(`${label}: "source" requires "license"`);
 
     for (const intent of component.intents) {
       if (!INTENT_IDS.includes(intent)) errors.push(`${label}: unknown intent "${intent}"`);

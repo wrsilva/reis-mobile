@@ -14,6 +14,7 @@ reis-mobile é um plugin do Claude Code com uma CLI em Node.js que orquestra age
 - **Não invente.** Checklists de skills citam APIs, lints, flags e requisitos de loja que existem de fato. Na dúvida, instrua o modelo a verificar a versão no lock file do projeto em vez de afirmar.
 - **Skills pequenas.** Uma skill resolve um problema (`flutter-widget-review`), não um domínio inteiro (`mobile-development`).
 - **Nomes com prefixo de stack**: `flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`. Skills agnósticas usam `mobile-*`.
+- **Skills de terceiros** mantêm o nome original, declaram `source` e `license` no frontmatter e aparecem em `THIRD_PARTY_NOTICES.md` com o texto da licença. Só importe de fontes com licença que permita redistribuição, e nunca copie agents ou skills com dados de clientes, caminhos locais ou código proprietário.
 - Todo agent e skill declara `intents` e `stacks` no frontmatter, ou `routing: manual`.
 - Mudança no detector, no router ou na redação exige teste em `tests/`.
 
