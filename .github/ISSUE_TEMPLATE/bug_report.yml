@@ -1,0 +1,77 @@
+name: Bug
+description: Algo no reis-mobile não funciona como deveria.
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar. Antes de enviar, confira se já existe uma [issue parecida](https://github.com/wrsilva/reis-mobile/issues?q=is%3Aissue).
+        **Não cole secrets, tokens nem código proprietário.**
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Detecção de stack
+        - Router (intent, agent ou skills errados)
+        - /reis-mobile:doctor
+        - /reis-mobile:review
+        - Agent
+        - Skill
+        - Instalação ou atualização
+        - CLI
+        - Outra
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu
+      description: Descreva o comportamento atual e o esperado.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Como reproduzir
+      description: Comando executado, prompt usado e tipo de projeto (Flutter, Android, iOS, React Native, KMP).
+      placeholder: |
+        1. Num app Flutter com android/ e ios/
+        2. Rodar `reis-mobile route "..."`
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Saída
+      description: Saída de `reis-mobile route`, `reis-mobile detect --json` ou `reis-mobile doctor`, quando relevante.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Versão do reis-mobile
+      description: Saída de `reis-mobile --version` e/ou `claude plugin list | grep -A1 reis-mobile`.
+      placeholder: reis-mobile 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Como instalou
+      options:
+        - curl (install.sh)
+        - PowerShell (install.ps1)
+        - Homebrew
+        - npm
+        - Só o plugin do Claude Code
+        - Clone local
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Sistema operacional, `node --version` e versão do Claude Code.
+      placeholder: macOS 26, Node 22.12, Claude Code 2.x
