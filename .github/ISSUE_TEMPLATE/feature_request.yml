@@ -1,0 +1,41 @@
+name: Funcionalidade
+description: Proponha um comando, uma melhoria no router ou uma nova capacidade.
+title: "[feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema de desenvolvimento mobile isso resolve?
+      description: O reis-mobile é focado em mobile. Descreva a dor real antes da solução.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Como você imagina que funcione. Exemplos de comando ou de saída ajudam.
+    validations:
+      required: true
+  - type: dropdown
+    id: stacks
+    attributes:
+      label: Stacks afetadas
+      multiple: true
+      options:
+        - Flutter
+        - Android
+        - iOS
+        - React Native
+        - Kotlin Multiplatform
+        - Todas
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribuição
+      options:
+        - label: Posso abrir o pull request dessa funcionalidade.

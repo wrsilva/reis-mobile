@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # O projeto não tem dependências npm; só as GitHub Actions dos workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: ["dependencies", "ci"]
+    commit-message:
+      prefix: ci

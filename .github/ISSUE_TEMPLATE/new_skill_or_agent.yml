@@ -1,0 +1,74 @@
+name: Nova skill ou agent
+description: Proponha uma skill ou um agent especializado em mobile.
+title: "[skill] "
+labels: ["skill", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Skills pequenas e específicas são mais úteis que skills genéricas: prefira `ios-signing-debug` a `mobile-development`.
+        Veja as regras em [AGENTS.md](https://github.com/wrsilva/reis-mobile/blob/main/AGENTS.md).
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Tipo
+      options:
+        - Skill
+        - Agent
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Nome sugerido
+      description: kebab-case com prefixo da stack (`flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`) ou `mobile-*`.
+      placeholder: android-gradle-debug
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: Quando deve ser usada
+      description: Situações e pedidos que devem acioná-la. Isso vira a `description` do frontmatter.
+    validations:
+      required: true
+  - type: dropdown
+    id: stacks
+    attributes:
+      label: Stacks
+      multiple: true
+      options:
+        - flutter
+        - android
+        - ios
+        - react-native
+        - kotlin-multiplatform
+        - "* (todas)"
+    validations:
+      required: true
+  - type: dropdown
+    id: intents
+    attributes:
+      label: Intents em que o router deve carregá-la
+      multiple: true
+      options:
+        - review
+        - debug
+        - test
+        - security
+        - performance
+        - architecture
+        - release
+        - accessibility
+        - migration
+        - dependency
+        - build
+        - deployment
+        - Nenhuma (routing manual)
+  - type: textarea
+    id: source
+    attributes:
+      label: Origem
+      description: É conteúdo original? Se vier de outro projeto, informe o link e a licença. Só aceitamos licenças que permitam redistribuição.
+    validations:
+      required: true

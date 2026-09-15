@@ -592,9 +592,14 @@ A CLI não envia nada. O que o modelo lê durante o `/reis-mobile:review` segue 
 
 ## Contribuindo
 
-1. Leia [AGENTS.md](AGENTS.md) (regras do projeto) e [CONTRIBUTING.md](CONTRIBUTING.md).
-2. `git clone https://github.com/wrsilva/reis-mobile.git && cd reis-mobile && npm run check`
-3. Abra um PR mostrando a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
+Contribuições são bem-vindas, principalmente skills de Android, iOS e React Native.
+
+1. Leia o [CONTRIBUTING.md](CONTRIBUTING.md), as regras em [AGENTS.md](AGENTS.md) e o [Código de Conduta](CODE_OF_CONDUCT.md).
+2. Escolha uma [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) ou [proponha uma skill](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml).
+3. `git clone https://github.com/<seu-usuario>/reis-mobile.git && cd reis-mobile && npm run check`
+4. Abra um PR mostrando a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
+
+Dúvidas: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Onde pedir ajuda: [SUPPORT.md](SUPPORT.md).
 
 ---
 
@@ -603,6 +608,8 @@ A CLI não envia nada. O que o modelo lê durante o `/reis-mobile:review` segue 
 - [Arquitetura](ARCHITECTURE.md): módulos, detecção, roteamento e contrato de agents e skills
 - [AGENTS.md](AGENTS.md): regras para quem (ou qual IA) contribui com o repositório
 - [Contribuindo](CONTRIBUTING.md)
+- [Código de Conduta](CODE_OF_CONDUCT.md)
+- [Suporte](SUPPORT.md)
 - [Segurança](SECURITY.md)
 - [Third-Party Notices](THIRD_PARTY_NOTICES.md): origem e licença das skills de terceiros
 - [Changelog](CHANGELOG.md)

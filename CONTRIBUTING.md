@@ -24,13 +24,25 @@ Para testar o plugin no Claude Code a partir do clone:
 
 Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code para recarregar o plugin.
 
+## Por onde começar
+
+- Issues marcadas com [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) são pequenas e bem delimitadas.
+- [`help wanted`](https://github.com/wrsilva/reis-mobile/labels/help%20wanted) indica onde o projeto mais precisa de ajuda, como skills de Android, iOS e React Native.
+- Dúvidas e ideias ainda sem forma vão para as [Discussions](https://github.com/wrsilva/reis-mobile/discussions).
+- Leia o [Código de Conduta](CODE_OF_CONDUCT.md). Ele vale para issues, PRs e discussões.
+
 ## Fluxo
 
-1. Abra uma issue descrevendo o problema mobile que a mudança resolve.
+1. Abra uma issue pelo template adequado (bug, funcionalidade ou nova skill/agent), descrevendo o problema mobile que a mudança resolve. Para mudanças pequenas e óbvias, como typos, pode ir direto ao PR.
 2. Crie um branch a partir de `main`.
 3. Siga as regras de [AGENTS.md](AGENTS.md).
 4. Rode `npm run check`.
-5. Abra o PR explicando o que mudou e como foi verificado, de preferência com a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
+5. Faça um fork, crie o branch e abra o PR contra `main`. O template pede a verificação e um checklist, de preferência com a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
+6. O CI precisa passar e o mantenedor precisa aprovar. Os PRs entram por squash merge, e o título vira a mensagem do commit, então use Conventional Commits no título.
+
+## Licença das contribuições
+
+Ao contribuir, você concorda que sua contribuição seja distribuída sob a [licença MIT](LICENSE) do projeto. Conteúdo de terceiros só entra com licença compatível, declarando `source` e `license` e com o aviso em `THIRD_PARTY_NOTICES.md`.
 
 ## Commits
 
