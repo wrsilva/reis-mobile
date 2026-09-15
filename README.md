@@ -86,7 +86,9 @@ brew install wrsilva/tap/reis-mobile
 reis-mobile init
 ```
 
-### npm
+### npm (em breve)
+
+O pacote ainda não foi publicado no npm. Quando for:
 
 ```bash
 npm install -g reis-mobile
@@ -129,21 +131,29 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 </details>
 
 <details>
-<summary>Atualizar / desinstalar</summary>
+<summary>Desinstalar</summary>
+
+Remova primeiro o plugin do Claude Code e depois a CLI, pelo mesmo método usado na instalação.
 
 ```bash
-# Atualizar: rode o instalador de novo, ou
-brew upgrade reis-mobile          # Homebrew
-npm update -g reis-mobile         # npm
-claude plugin marketplace update reis-mobile && claude plugin update reis-mobile@reis-mobile
+# Plugin do Claude Code (qualquer plataforma)
+reis-mobile init --uninstall
+# ou, sem a CLI:
+claude plugin uninstall reis-mobile && claude plugin marketplace remove reis-mobile
 
-# Desinstalar
-reis-mobile init --uninstall      # remove o plugin do Claude Code
-rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile   # instalação via curl
-brew uninstall reis-mobile        # ou: npm uninstall -g reis-mobile
+# macOS/Linux (curl)
+rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile
+
+# Homebrew
+brew uninstall reis-mobile
+brew untap wrsilva/tap            # opcional
 ```
 
-Reinicie o Claude Code depois de atualizar.
+```powershell
+# Windows (PowerShell)
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\reis-mobile"
+Remove-Item -Force "$HOME\.local\bin\reis-mobile.cmd"
+```
 </details>
 
 <details>
@@ -158,6 +168,89 @@ npm run check                 # valida e roda os testes
 ```
 
 Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code.
+</details>
+
+---
+
+## Atualização
+
+O reis-mobile tem duas partes que se atualizam separadamente: o **plugin do Claude Code** (agents, skills e comandos `/reis-mobile:*`) e a **CLI** (`reis-mobile`). Atualize as duas.
+
+Para ver o que mudou, consulte o [CHANGELOG](CHANGELOG.md) ou as [releases](https://github.com/wrsilva/reis-mobile/releases).
+
+### Plugin do Claude Code (todas as plataformas)
+
+```bash
+claude plugin marketplace update reis-mobile
+claude plugin update reis-mobile@reis-mobile
+```
+
+Depois, **reinicie o Claude Code**. O update só acontece quando sai uma nova versão; se já estiver na última, o comando responde `already at the latest version`.
+
+### CLI no macOS/Linux (curl)
+
+Rode o instalador de novo. Ele baixa a última release, confere o SHA-256 e substitui a versão anterior:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
+```
+
+Para instalar uma versão específica:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.2.0 sh
+```
+
+### CLI no Windows (PowerShell)
+
+Rode o instalador de novo:
+
+```powershell
+irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+```
+
+Para uma versão específica:
+
+```powershell
+$env:REIS_MOBILE_VERSION = 'v0.2.0'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+```
+
+### CLI via Homebrew (macOS/Linux)
+
+```bash
+brew update
+brew upgrade reis-mobile
+```
+
+### CLI via npm (em breve)
+
+Disponível quando o pacote for publicado no npm:
+
+```bash
+npm update -g reis-mobile
+```
+
+### Conferir as versões
+
+```bash
+reis-mobile --version                  # CLI
+claude plugin list | grep -A1 reis-mobile  # plugin
+```
+
+As duas devem mostrar a mesma versão.
+
+<details>
+<summary>Problemas ao atualizar</summary>
+
+| Sintoma | Solução |
+|---------|---------|
+| `claude plugin update` diz que já está na última versão, mas a release é mais nova | Rode `claude plugin marketplace update reis-mobile` antes do `update` |
+| Agents ou skills novos não aparecem | Reinicie o Claude Code: plugins só recarregam em uma nova sessão |
+| `brew upgrade` não encontra a versão nova | Rode `brew update` antes; a fórmula do tap é atualizada logo após cada release |
+| `reis-mobile --version` continua antiga depois do curl | Outro `reis-mobile` vem antes no `PATH`; confira com `which -a reis-mobile` |
+| Windows continua com a versão antiga | Abra um novo terminal e confira com `where.exe reis-mobile` |
+| Plugin quebrado depois de atualizar | Reinstale: `reis-mobile init --uninstall` e depois `reis-mobile init` |
+
 </details>
 
 ---
