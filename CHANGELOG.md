@@ -2,6 +2,18 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). O projeto segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Não publicado]
+
+### Adicionado
+
+- Comando `/reis-mobile:debate`: debate estruturado entre três especialistas com prioridades conflitantes. Rodada 1 às cegas (evita ancoragem), rodada 2 de réplica a pontos específicos, e decisão final pelo `lead-mobile`. Flags `--rounds`, `--agents` e `--external`.
+- Seção **Debate moderation** no agent `lead-mobile`: como pesar evidência contra posição e fechar numa decisão em vez de um empate.
+- `tests/commands.test.mjs`: valida o frontmatter de todo comando e garante que agents e skills citados por eles existem de fato — o `validate` cobria agents, skills e stacks, mas não `commands/`.
+
+### Segurança
+
+- `/reis-mobile:debate --external` envia o contexto do debate para as CLIs `codex` e `gemini`, de terceiros. Sem a flag, nada sai da sessão. Documentado em README.md.
+
 ## [0.2.1] - 2026-09-15
 
 ### Adicionado

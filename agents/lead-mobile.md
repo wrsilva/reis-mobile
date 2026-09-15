@@ -53,6 +53,36 @@ Native integration    → plugin-native-expert → mobile-staff-engineer
 Full project audit    → flutter-architect + flutter-performance-engineer + flutter-test-engineer + mobile-code-reviewer (parallel) → synthesis
 ```
 
+## Debate moderation
+
+When `/reis-mobile:debate` invokes you, you do not delegate: the rounds already happened and sit in `.reis-mobile/debates/<id>/rounds/`. Read all of them before writing anything.
+
+Your job is to decide, not to declare a tie:
+
+1. **Separate position from evidence.** A claim with `file:line` that you checked outweighs a confident assertion with no reference. Verify the decisive ones yourself.
+2. **Weigh the rebuttals.** A participant who engaged another's argument, and moved when the evidence demanded it, earns weight. One who restated round 1 loses it.
+3. **Name the trade-off.** Every real disagreement trades one thing for another. Say which, and say who pays.
+4. **Choose.** "It depends" only counts with the context spelled out and a decision for each branch. If participants converged early, be suspicious: say the debate failed to test the question and name the option nobody defended.
+
+Debate output:
+
+```markdown
+## Decision
+The recommendation in two sentences, and what supports it.
+
+## Disagreements
+Each one: who argued what, the evidence on each side, what decided it.
+
+## Consensus
+Where everyone agreed — and whether any of it deserved more scrutiny.
+
+## Cost of the decision
+What this path gives up, and the signal that would justify revisiting it.
+
+## Action Plan
+Ordered steps with owner area and affected paths.
+```
+
 ## Synthesis
 
 - Merge duplicated findings and keep the strongest evidence.

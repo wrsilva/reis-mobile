@@ -1,6 +1,6 @@
 ---
-description: Ponto de entrada do reis-mobile — lista os comandos ou encaminha para doctor, review ou para o agent certo a partir de um pedido livre
-argument-hint: "[doctor | review | pedido livre]"
+description: Ponto de entrada do reis-mobile — lista os comandos ou encaminha para doctor, review, debate ou para o agent certo a partir de um pedido livre
+argument-hint: "[doctor | review | debate | pedido livre]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
 ---
 
@@ -17,6 +17,7 @@ Responda apenas com esta lista, sem executar nada:
 ```text
 /reis-mobile:doctor                  Ambiente e projeto: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
 /reis-mobile:review [--base <ref>]   Code review das mudanças (ou do projeto inteiro)
+/reis-mobile:debate <questão>        Debate entre os especialistas, com decisão do lead-mobile
 /reis-mobile <pedido livre>          Encaminha o pedido para o agent e as skills da stack detectada
 ```
 
@@ -28,6 +29,10 @@ Responda apenas com esta lista, sem executar nada:
 ## `review [opções] [foco]`
 
 Leia `${CLAUDE_PLUGIN_ROOT}/commands/review.md` e siga-o inteiro, tratando o restante dos argumentos (sem a palavra `review`) como `$ARGUMENTS`.
+
+## `debate [opções] <questão>`
+
+Leia `${CLAUDE_PLUGIN_ROOT}/commands/debate.md` e siga-o inteiro, tratando o restante dos argumentos (sem a palavra `debate`) como `$ARGUMENTS`.
 
 ## Qualquer outro texto
 

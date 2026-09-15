@@ -6,6 +6,7 @@ coverage/
 
 # Local reis-mobile state
 .reis-mobile/logs/
+.reis-mobile/debates/
 
 # Secrets — never commit (see SECURITY.md)
 .env

@@ -301,7 +301,17 @@ As duas devem mostrar a mesma versão.
 /reis-mobile:review                               # Revisa as mudanças não commitadas (ou o projeto inteiro, se não houver)
 /reis-mobile:review --base main                   # Revisa o branch atual contra main, no estilo de pull request
 /reis-mobile:review --base main foco em segurança # Foco livre, em português ou inglês
+/reis-mobile:debate Riverpod ou BLoC neste app?   # Debate entre os especialistas, com decisão do lead-mobile
+/reis-mobile:debate --rounds 3 --external ...     # Mais rodadas; --external soma Codex e Gemini, se instalados
 ```
+
+### Debate
+
+`/reis-mobile:debate` coloca três especialistas com prioridades conflitantes para defender posições sobre a mesma questão. A rodada 1 é às cegas, para que o primeiro a responder não ancore os demais; na rodada 2 cada um refuta pontos específicos dos outros; no fim, o `lead-mobile` decide e entrega o plano de ação. As rodadas ficam em `.reis-mobile/debates/`.
+
+É caro: são vários agents em duas rodadas. Use em decisão de arquitetura com trade-off real — *migrar para Riverpod*, *offline-first no Firestore ou cache local*, *plugin nativo ou pacote pronto* — e não em pergunta com resposta única, onde `/reis-mobile <pedido>` resolve por menos.
+
+Com `--external`, o comando confere se as CLIs `codex` e `gemini` existem e segue sem elas se faltarem. Os provedores externos não conhecem o projeto nem têm as skills do plugin: entram como opinião de fora, conferida no código antes da síntese.
 
 Não sabe o que o router vai escolher? Pergunte à CLI:
 
@@ -337,6 +347,7 @@ O router nunca inventa um especialista: se nenhum agent atende a intent, ele avi
 | Depurar build do Gradle, Xcode ou CocoaPods | agent `mobile-staff-engineer` | ✅ |
 | Criar um plugin ou depurar MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
 | Auditoria completa com vários especialistas | agent `lead-mobile` | ✅ |
+| Decidir entre duas arquiteturas com trade-off real | `/reis-mobile:debate` | ✅ |
 | Comando dedicado de debug | `/reis-mobile:debug` | 🔜 v0.3 |
 | Comando dedicado de testes (incluindo XCTest e Espresso) | `/reis-mobile:test` | 🔜 v0.4 |
 | Checar se o app está pronto para a loja | `/reis-mobile:release` | 🔜 v0.5 |
@@ -573,11 +584,13 @@ As skills de terceiros mantêm o nome e a licença originais. Veja [THIRD_PARTY_
 
 ## Confiança, segurança e limites
 
-**Somente leitura.** `doctor`, `detect`, `route` e `review` não alteram seu projeto. O comando `/reis-mobile:review` instrui o modelo a não editar arquivos.
+**Somente leitura.** `doctor`, `detect`, `route` e `review` não alteram seu projeto. Os comandos `/reis-mobile:review` e `/reis-mobile:debate` instruem o modelo a não editar arquivos; o debate só escreve as rodadas em `.reis-mobile/debates/`, fora do seu código.
 
 **Secrets mascarados.** O diff passa por [`core/security/redact.mjs`](core/security/redact.mjs) antes de chegar ao modelo. Lock files e código gerado (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) ficam fora do diff. A redação é uma camada de proteção, não uma garantia. Veja [SECURITY.md](SECURITY.md).
 
 **Sem telemetria.** `detect`, `doctor`, `route` e `review` não fazem chamadas de rede. Só a instalação acessa a rede, para baixar a release e registrar o plugin. A análise por IA usa o modelo da sessão em que você trabalha, como Claude Code ou Codex.
+
+**Exceção: `/reis-mobile:debate --external`.** Essa flag, e só ela, envia o contexto do debate — incluindo trechos dos arquivos citados na questão — para as CLIs `codex` e `gemini`, que são de terceiros e têm as próprias políticas de dados. Sem a flag, nada sai da sua sessão. O diff do `review` é mascarado por `redact.mjs`, mas o contexto que você cita numa questão de debate não passa por essa camada: confira o que está mandando antes de usar `--external`.
 
 **Custo de contexto.** As descrições dos 7 agents e das 67 skills somam cerca de 4.800 tokens fixos por sessão (medido com `claude plugin details reis-mobile`). O conteúdo completo de cada skill só é carregado quando ela é usada.
 
