@@ -1,0 +1,8 @@
+{
+  "id": "react-native",
+  "name": "React Native",
+  "languages": ["typescript", "javascript", "kotlin", "java", "swift", "objective-c"],
+  "platforms": ["android", "ios"],
+  "markers": ["package.json depending on react-native", "app.json (Expo)"],
+  "toolchain": ["node", "java", "android-sdk", "xcode", "cocoapods"]
+}

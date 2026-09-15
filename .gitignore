@@ -1,0 +1,23 @@
+# Dependencies and tooling
+node_modules/
+coverage/
+.DS_Store
+*.log
+
+# Local reis-mobile state
+.reis-mobile/logs/
+
+# Secrets — never commit (see SECURITY.md)
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.p8
+*.pem
+*.mobileprovision
+*.provisionprofile
+key.properties
+google-services.json
+GoogleService-Info.plist

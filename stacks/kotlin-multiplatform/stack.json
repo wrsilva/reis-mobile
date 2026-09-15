@@ -1,0 +1,8 @@
+{
+  "id": "kotlin-multiplatform",
+  "name": "Kotlin Multiplatform",
+  "languages": ["kotlin", "swift"],
+  "platforms": ["android", "ios", "desktop", "web"],
+  "markers": ["build.gradle.kts applying kotlin(\"multiplatform\")"],
+  "toolchain": ["java", "android-sdk", "xcode"]
+}

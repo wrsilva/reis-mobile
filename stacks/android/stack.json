@@ -1,0 +1,8 @@
+{
+  "id": "android",
+  "name": "Android (native)",
+  "languages": ["kotlin", "java"],
+  "platforms": ["android"],
+  "markers": ["settings.gradle(.kts)", "build.gradle(.kts) with com.android.application", "AndroidManifest.xml"],
+  "toolchain": ["java", "android-sdk"]
+}

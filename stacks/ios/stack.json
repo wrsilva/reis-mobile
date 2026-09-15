@@ -1,0 +1,8 @@
+{
+  "id": "ios",
+  "name": "iOS (native)",
+  "languages": ["swift", "objective-c"],
+  "platforms": ["ios"],
+  "markers": ["*.xcodeproj", "*.xcworkspace", "Podfile", "Package.swift with .iOS platform"],
+  "toolchain": ["xcode", "swift", "cocoapods"]
+}
