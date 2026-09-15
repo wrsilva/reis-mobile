@@ -69,6 +69,15 @@ describe('/debate', () => {
     assert.match(debate.body, /--external/, 'external providers must stay behind the --external flag');
   });
 
+  it('assigns more than one model across the participants', () => {
+    // A debate where every participant runs the same model inherits one set of blind
+    // spots, so the disagreement stays on the surface of the role.
+    const models = new Set([...debate.body.matchAll(/^\| `reis-mobile:[a-z0-9-]+` \|[^|]+\| `([a-z]+)` \|$/gm)].map((m) => m[1]));
+
+    assert.ok(models.size >= 2, `participants must span at least two models, found: ${[...models].join(', ') || 'none'}`);
+    assert.match(debate.body, /pelo menos dois modelos diferentes/, 'the escalation rule must enforce the mix');
+  });
+
   it('runs the blind round before the rebuttal round', () => {
     assert.ok(
       debate.body.indexOf('Rodada 1') < debate.body.indexOf('Rodada 2'),

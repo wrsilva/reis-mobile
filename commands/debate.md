@@ -32,23 +32,27 @@ Se a questão citar arquivos ou diretórios, resolva os caminhos e leia-os agora
 
 Escolha **três** agents cujas prioridades conflitem de verdade na questão. Debate entre papéis que concordam não produz decisão.
 
-| Agent | Defende |
-|---|---|
-| `reis-mobile:flutter-architect` | Limites de camada, modularização, custo de manutenção a longo prazo |
-| `reis-mobile:flutter-performance-engineer` | Frames, rebuilds, memória, tempo de startup — hostil a indireção |
-| `reis-mobile:flutter-test-engineer` | Testabilidade, costuras de injeção, custo de cobertura |
-| `reis-mobile:plugin-native-expert` | Fronteira Flutter–nativo, platform channels, ciclo de vida |
-| `reis-mobile:mobile-staff-engineer` | Build, release, migração, trade-offs entre plataformas |
-| `reis-mobile:mobile-code-reviewer` | Risco concreto no código que já existe |
+| Agent | Defende | Modelo |
+|---|---|---|
+| `reis-mobile:flutter-architect` | Limites de camada, modularização, custo de manutenção a longo prazo | `opus` |
+| `reis-mobile:flutter-performance-engineer` | Frames, rebuilds, memória, tempo de startup — hostil a indireção | `sonnet` |
+| `reis-mobile:flutter-test-engineer` | Testabilidade, costuras de injeção, custo de cobertura | `sonnet` |
+| `reis-mobile:plugin-native-expert` | Fronteira Flutter–nativo, platform channels, ciclo de vida | `opus` |
+| `reis-mobile:mobile-staff-engineer` | Build, release, migração, trade-offs entre plataformas | `opus` |
+| `reis-mobile:mobile-code-reviewer` | Risco concreto no código que já existe | `sonnet` |
+
+Passe o `model` da tabela em cada chamada do `Agent`. Ele sobrescreve o `model: inherit` que os agents declaram, e é isso que impede o debate de virar um monólogo: com todos no mesmo modelo, os participantes herdam os mesmos vieses e as mesmas lacunas, e a discordância fica só na superfície do papel. Os modelos da tabela pareiam a força do modelo com o papel — `opus` onde a questão é trade-off de longo prazo, `sonnet` onde é detalhe concreto de implementação.
+
+A escalação automática precisa terminar com **pelo menos dois modelos diferentes** entre os participantes. Se a questão levar a três agents do mesmo modelo, troque um deles pelo agent adjacente mais relevante que use o outro modelo, e diga ao usuário que fez isso.
 
 Regras de escalação:
 
 - A stack detectada manda. Os agents `flutter-*` só entram em projeto Flutter; em Android ou iOS nativo, use `mobile-staff-engineer` e `mobile-code-reviewer`.
 - Sem código nativo no projeto, não convoque `plugin-native-expert`.
-- `--agents` sobrescreve a escolha automática. Nome desconhecido: avise e pare.
-- `reis-mobile:lead-mobile` nunca debate — ele modera na etapa 7.
+- `--agents` sobrescreve a escolha automática, mas não os modelos: cada agent mantém o da tabela. Nome desconhecido: avise e pare.
+- `reis-mobile:lead-mobile` nunca debate — ele modera na etapa 7, sempre em `opus`, porque sintetizar posições conflitantes é o trabalho mais pesado do fluxo.
 
-Anuncie ao usuário, em uma linha, a stack, os participantes e o número de rodadas antes de começar.
+Anuncie ao usuário, em uma linha, a stack, os participantes com seus modelos e o número de rodadas antes de começar.
 
 ## 4. Preparar a pasta
 
@@ -60,7 +64,7 @@ mkdir -p ".reis-mobile/debates/<NNN-slug-da-questao>/rounds"
 
 ## 5. Rodada 1 — posições às cegas
 
-Dispare os participantes **em paralelo**, cada um com `Agent(run_in_background: true)`, num único bloco de ferramentas. Nenhum vê a posição do outro nesta rodada: é o que impede o primeiro a responder de ancorar os demais.
+Dispare os participantes **em paralelo**, cada um com `Agent(subagent_type: "<agent>", model: "<modelo da tabela>", run_in_background: true)`, num único bloco de ferramentas. Nenhum vê a posição do outro nesta rodada: é o que impede o primeiro a responder de ancorar os demais.
 
 Briefing de cada um, autocontido:
 
@@ -99,7 +103,7 @@ Eles não têm as skills do plugin nem conhecem o projeto: dê o contexto inteir
 
 ## 6. Rodada 2 — réplica
 
-Para cada rodada além da primeira, dispare os mesmos participantes de novo, em paralelo, agora com as posições dos outros:
+Para cada rodada além da primeira, dispare os mesmos participantes de novo, em paralelo e com os mesmos modelos da rodada 1 — trocar o modelo de um participante no meio do debate troca o debatedor, e a réplica deixa de ser dele. Agora cada um recebe as posições dos outros:
 
 ```text
 Estas são as posições dos outros participantes na rodada anterior:

@@ -309,6 +309,8 @@ As duas devem mostrar a mesma versão.
 
 `/reis-mobile:debate` coloca três especialistas com prioridades conflitantes para defender posições sobre a mesma questão. A rodada 1 é às cegas, para que o primeiro a responder não ancore os demais; na rodada 2 cada um refuta pontos específicos dos outros; no fim, o `lead-mobile` decide e entrega o plano de ação. As rodadas ficam em `.reis-mobile/debates/`.
 
+Os participantes variam em dois eixos ao mesmo tempo. O **papel** dá a cada um um incentivo diferente: o `flutter-architect` defende limites de camada, o `flutter-performance-engineer` é hostil a indireção, o `flutter-test-engineer` quer costuras de injeção que os outros dois consideram ruído. O **modelo** impede que essa discordância fique só na superfície — o comando distribui `opus` e `sonnet` entre os participantes, porque três instâncias do mesmo modelo herdam as mesmas lacunas e tendem a convergir por motivos que nada têm a ver com a sua questão. Com `--external`, entra um terceiro eixo: **provedores** de fora, em processos separados.
+
 É caro: são vários agents em duas rodadas. Use em decisão de arquitetura com trade-off real — *migrar para Riverpod*, *offline-first no Firestore ou cache local*, *plugin nativo ou pacote pronto* — e não em pergunta com resposta única, onde `/reis-mobile <pedido>` resolve por menos.
 
 Com `--external`, o comando confere se as CLIs `codex` e `gemini` existem e segue sem elas se faltarem. Os provedores externos não conhecem o projeto nem têm as skills do plugin: entram como opinião de fora, conferida no código antes da síntese.
