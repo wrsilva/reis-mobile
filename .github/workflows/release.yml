@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Check versions match the tag
+        run: node scripts/versions.mjs "$TAG"
+
+      - name: Validate and test
+        run: npm run check
+
+      - name: Build release archive
+        run: |
+          asset="reis-mobile-${TAG}.tar.gz"
+          git archive --format=tar.gz --prefix="reis-mobile-${TAG#v}/" -o "$asset" "$TAG"
+          sha256sum "$asset" > SHA256SUMS
+          node scripts/homebrew-formula.mjs "$TAG" "$(cut -d ' ' -f 1 SHA256SUMS)" > reis-mobile.rb
+          {
+            echo "## Homebrew formula"
+            echo 'Copy to `Formula/reis-mobile.rb` in `wrsilva/homebrew-tap`:'
+            echo '```ruby'
+            cat reis-mobile.rb
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" "reis-mobile-${TAG}.tar.gz" SHA256SUMS reis-mobile.rb \
+            --title "reis-mobile ${TAG}" \
+            --generate-notes
+
+      - name: Publish to npm
+        if: env.NPM_TOKEN != ''
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public

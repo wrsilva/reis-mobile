@@ -1,0 +1,10 @@
+# Release archives (git archive) ship only what runs: the CLI, the plugin and its docs.
+/.github export-ignore
+/.gitattributes export-ignore
+/scripts export-ignore
+/tests export-ignore
+/install.sh export-ignore
+/install.ps1 export-ignore
+
+*.sh text eol=lf
+*.mjs text eol=lf

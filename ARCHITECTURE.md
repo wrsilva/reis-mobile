@@ -47,6 +47,8 @@ core/
 │   └── context-engine.mjs       arquivos alterados e diff (working tree, range ou projeto)
 ├── diagnostics/
 │   └── doctor.mjs               ferramentas e configuração do projeto
+├── install/
+│   └── claude-plugin.mjs        registra o plugin no Claude Code (reis-mobile init)
 └── security/
     └── redact.mjs               mascaramento de secrets
 ```
@@ -102,6 +104,20 @@ stacks: [flutter]
 ```
 
 `reis-mobile validate` (e o CI) rejeita nome divergente do arquivo, descrição ausente, intent ou stack desconhecidas e duplicatas.
+
+## Distribuição
+
+A CLI e o plugin são o mesmo código. O plugin do Claude Code é instalado a partir do repositório (marketplace GitHub). A CLI chega por:
+
+| Canal | Origem | Plugin |
+|---|---|---|
+| `install.sh` / `install.ps1` | Asset `reis-mobile-vX.Y.Z.tar.gz` da release, conferido contra `SHA256SUMS` | Chama `reis-mobile init` se o `claude` existir |
+| Homebrew (`wrsilva/homebrew-tap`) | Mesmo asset, fórmula gerada por `scripts/homebrew-formula.mjs` | `reis-mobile init` (caveat) |
+| npm | `npm publish` no workflow de release, se houver `NPM_TOKEN` | `reis-mobile init` |
+
+O tarball é gerado por `git archive`. O `.gitattributes` exclui `tests/`, `scripts/`, `.github/` e os instaladores.
+
+Não há binário nativo: o reis-mobile depende de Node.js, então Homebrew declara `depends_on "node"` e os instaladores verificam a versão antes de instalar.
 
 ## Fora do escopo desta versão
 

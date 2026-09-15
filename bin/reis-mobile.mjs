@@ -6,6 +6,7 @@ import { parseArgs } from 'node:util';
 import { collectReviewContext } from '../core/context/context-engine.mjs';
 import { detectStack } from '../core/detection/stack-detector.mjs';
 import { runDoctor } from '../core/diagnostics/doctor.mjs';
+import { installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
@@ -16,6 +17,7 @@ const USAGE = `reis-mobile — AI agents for mobile engineering
 Usage: reis-mobile <command> [options]
 
 Commands:
+  init                       Install the reis-mobile plugin into Claude Code
   detect                     Detect the mobile stack of a project
   doctor                     Diagnose the environment for the detected stack
   route <prompt...>          Show which intent, agent and skills a prompt resolves to
@@ -29,6 +31,9 @@ Options:
   --base <ref>      review: compare <ref>...HEAD instead of the working tree
   --all             doctor: check every tool, not only the relevant ones
   --strict          doctor: exit with code 1 when there are warnings
+  --local           init: install the plugin from this installation instead of GitHub
+  --scope <scope>   init: user (default), project or local
+  --uninstall       init: remove the plugin and its marketplace from Claude Code
   --json            Machine-readable output
   -v, --version     Print the version
   -h, --help        Show this help`;
@@ -39,12 +44,16 @@ const OPTIONS = {
   base: { type: 'string' },
   all: { type: 'boolean' },
   strict: { type: 'boolean' },
+  local: { type: 'boolean' },
+  scope: { type: 'string' },
+  uninstall: { type: 'boolean' },
   json: { type: 'boolean' },
   version: { type: 'boolean', short: 'v' },
   help: { type: 'boolean', short: 'h' },
 };
 
 const COMMANDS = {
+  init: commandInit,
   detect: commandDetect,
   doctor: commandDoctor,
   route: commandRoute,
@@ -61,7 +70,7 @@ async function main(argv) {
 
   if (options.version) {
     const pkg = JSON.parse(await readFile(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
-    console.log(pkg.version);
+    console.log(`reis-mobile ${pkg.version}`);
     return 0;
   }
   if (options.help || !name) {
@@ -75,6 +84,23 @@ async function main(argv) {
     return 1;
   }
   return (await command({ ...options, dir: options.dir ?? process.cwd(), prompt: rest.join(' ') })) ?? 0;
+}
+
+async function commandInit({ local, scope, uninstall }) {
+  const result = uninstall
+    ? uninstallClaudePlugin({ scope })
+    : installClaudePlugin({ scope, ...(local && { source: PLUGIN_ROOT }) });
+
+  if (!result.ok) {
+    console.error(`✗ ${result.failedStep} failed (exit ${result.status})`);
+    return 1;
+  }
+  console.log(
+    uninstall
+      ? '✓ reis-mobile removed from Claude Code'
+      : '✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /reis-mobile:doctor',
+  );
+  return 0;
 }
 
 async function commandDetect({ dir, json }) {
