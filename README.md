@@ -6,7 +6,7 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.1.0-blue" alt="Version 0.1.0">
+  <img src="https://img.shields.io/badge/Version-0.2.0-blue" alt="Version 0.2.0">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -39,17 +39,17 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 ## Novidades
 
-> 🆕 **v0.1.0: fundação.** Detecção de stack, router, `/reis-mobile:doctor` e `/reis-mobile:review` de ponta a ponta para projetos Flutter, com o agent `mobile-code-reviewer` e as skills de auditoria de projeto, widgets e segurança.
+> 🆕 **v0.2.0: time de especialistas.** 6 novos agents e 63 novas skills de Flutter, Dart e Firebase. O router passa a acionar `flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer` e `mobile-staff-engineer` conforme o pedido, e o `lead-mobile` coordena auditorias completas.
 >
 > ```bash
-> /reis-mobile:doctor
-> /reis-mobile:review --base main foco no fluxo de login
+> reis-mobile route "a lista está com jank no scroll"   # → flutter-performance-engineer
+> reis-mobile route "escreva testes para o login cubit" # → flutter-test-engineer
 > ```
 
 | Versão | Destaques |
 |--------|-----------|
-| **main** (próxima) | 6 novos agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) e 63 novas skills de Flutter, Dart e Firebase. O router passa a ter especialista para debug, test, architecture e performance. |
-| **v0.1.0** (atual) | Plugin `reis-mobile` para o Claude Code. Detecção de 5 stacks. Router intent + stack → agent + skills. Context engine com diff mascarado. `/reis-mobile:doctor` e `/reis-mobile:review`. CLI `reis-mobile`. |
+| **v0.2.0** (atual) | 6 novos agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) e 63 novas skills de Flutter, Dart e Firebase. O router passa a ter especialista para debug, test, architecture e performance. |
+| **v0.1.0** | Plugin `reis-mobile` para o Claude Code. Detecção de 5 stacks. Router intent + stack → agent + skills. Context engine com diff mascarado. `/reis-mobile:doctor` e `/reis-mobile:review`. CLI `reis-mobile`. |
 
 [Changelog completo →](CHANGELOG.md)
 
@@ -103,7 +103,7 @@ claude plugin install reis-mobile@reis-mobile
 ### Verificar a instalação
 
 ```bash
-reis-mobile --version   # reis-mobile 0.1.0
+reis-mobile --version   # reis-mobile 0.2.0
 ```
 
 Depois, reinicie o Claude Code e rode, na pasta do seu app:
@@ -118,13 +118,13 @@ Depois, reinicie o Claude Code e rode, na pasta do seu app:
 
 | Variável | Padrão | Uso |
 |----------|--------|-----|
-| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.1.0` |
+| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.2.0` |
 | `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Pasta de instalação |
 | `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Pasta do comando `reis-mobile` |
 | `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` instala só a CLI, sem registrar o plugin |
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.1.0 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.2.0 sh
 ```
 </details>
 
@@ -463,9 +463,8 @@ As skills de terceiros mantêm o nome e a licença originais. Veja [THIRD_PARTY_
 | Versão | Entrega | Status |
 |--------|---------|--------|
 | v0.1.0 | Fundação, detecção de stack, router, `/reis-mobile:doctor`, `/reis-mobile:review` para Flutter | ✅ |
-| v0.2.0 | Skills de review para Android e iOS nativos, `.reis-mobile/config.yaml` | ⏳ |
-| main | 6 agents e 63 skills de Flutter, Dart e Firebase | ✅ |
-| v0.3.0 | `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
+| v0.2.0 | 6 agents e 63 skills de Flutter, Dart e Firebase | ✅ |
+| v0.3.0 | Skills de Android e iOS nativos, `.reis-mobile/config.yaml` e `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
 | v0.4.0 | `/reis-mobile:test` e testes nativos (XCTest, Espresso) | ⏳ |
 | v0.5.0 | `/reis-mobile:release` com quality gates | ⏳ |
 | v0.6.0 | Pack React Native | ⏳ |
@@ -485,7 +484,7 @@ Não para o review, que só lê código. O `/reis-mobile:doctor` mostra o que fa
 Rode a partir da pasta do app, ou use `--dir apps/mobile` na CLI. O diff fica restrito a essa pasta.
 
 **Funciona com Android e iOS nativos?**
-A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`, `mobile-staff-engineer` e `lead-mobile` já funcionam. As skills específicas de Android e iOS chegam na v0.2.0; as 63 skills importadas são de Flutter, Dart e Firebase.
+A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`, `mobile-staff-engineer` e `lead-mobile` já funcionam. As skills específicas de Android e iOS chegam na v0.3.0; as 63 skills importadas são de Flutter, Dart e Firebase.
 
 **Já tenho skills com os mesmos nomes em `~/.claude/skills`.**
 As do plugin ficam no namespace `reis-mobile:` e não conflitam, mas o Claude Code carrega as duas descrições. Para economizar contexto, remova as cópias globais que o plugin já cobre.
