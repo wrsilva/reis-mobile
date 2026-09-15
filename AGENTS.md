@@ -29,6 +29,6 @@ npm run check    # validate + test
 |---|---|---|
 | Uma skill | `skills/<nome>/SKILL.md` | Um caso em `tests/router.test.mjs` se ela mudar a seleção de alguma rota |
 | Um agent | `agents/<nome>.md` | Um teste de roteamento para a intent |
-| Um comando | `commands/<nome>.md` (vira `/reis:<nome>`) | Documentação no README |
+| Um comando | `commands/<nome>.md` (vira `/reis-mobile:<nome>`) | Documentação no README |
 | Uma intent | Termos em `core/router/intents.mjs` | Casos em `tests/intent-detector.test.mjs` |
 | Uma stack | Regra em `stack-detector.mjs` + `stacks/<id>/stack.json` | Casos em `tests/stack-detector.test.mjs` |

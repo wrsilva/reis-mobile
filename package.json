@@ -10,8 +10,7 @@
     "url": "git+https://github.com/wrsilva/reis-mobile.git"
   },
   "bin": {
-    "reis-mobile": "bin/reis-mobile.mjs",
-    "reis": "bin/reis-mobile.mjs"
+    "reis-mobile": "bin/reis-mobile.mjs"
   },
   "files": [
     ".claude-plugin",

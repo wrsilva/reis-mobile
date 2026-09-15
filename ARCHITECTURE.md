@@ -3,7 +3,7 @@
 O reis-mobile é um plugin do Claude Code com um núcleo determinístico em Node.js. O núcleo decide **o que** carregar (stack, intent, agent, skills, contexto); o modelo decide **como** revisar, depurar ou implementar, seguindo as instruções carregadas.
 
 ```text
-USER ──► COMMAND (/reis:review)
+USER ──► COMMAND (/reis-mobile:review)
               │
               ▼
           ROUTER ◄──── Intent detector (prompt)
