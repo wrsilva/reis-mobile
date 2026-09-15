@@ -58,7 +58,7 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
 
 Requisitos: **Node.js 22+** e, para usar os comandos `/reis-mobile:*`, o **[Claude Code](https://claude.com/claude-code)**.
 
-Todos os métodos instalam a CLI `reis-mobile`. Quando o Claude Code está disponível, o instalador também registra o plugin. Se ele não estiver, rode `reis-mobile init` depois de instalá-lo.
+Os instaladores e o Homebrew instalam a CLI `reis-mobile`. Quando o Claude Code está disponível, o instalador também registra o plugin. Se ele não estiver, rode `reis-mobile init` depois de instalá-lo. Para instalar só o plugin, siga a seção do [Claude Code](#só-o-plugin-do-claude-code) ou do [Codex](#plugin-no-codex-via-github).
 
 ### Quick Install (macOS/Linux) — recomendado
 
@@ -103,7 +103,41 @@ claude plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 claude plugin install reis-mobile@reis-mobile
 ```
 
-### Verificar a instalação
+### Plugin no Codex via GitHub
+
+Com a CLI do Codex instalada e com suporte a `codex plugin`, execute no terminal:
+
+```bash
+codex plugin marketplace add https://github.com/wrsilva/reis-mobile.git
+codex plugin add reis-mobile@reis-mobile
+```
+
+O primeiro comando registra o marketplace com origem no GitHub; o segundo instala o plugin no cache do Codex. É o mesmo repositório usado pelo Claude Code, sem depender de um clone de desenvolvimento ou de links em `~/.agents/skills/`. A instalação do plugin `0.2.1` por esse fluxo foi verificada.
+
+Confira a origem, a instalação e se o plugin está habilitado:
+
+```bash
+codex plugin marketplace list --json
+codex plugin list --json
+```
+
+Procure `reis-mobile@reis-mobile` com `installed: true`, `enabled: true` e a origem Git `https://github.com/wrsilva/reis-mobile.git`.
+
+Reinicie o Codex e abra uma conversa na pasta do seu app mobile. Na CLI ou na extensão do IDE, digite `$` no campo de mensagem para procurar as skills, ou use `/skills`. Veja a [documentação oficial de skills do Codex](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills).
+
+O registro do plugin e a disponibilidade de cada recurso são verificações separadas: a instalação validada acima não confirma a execução dos agents nem dos comandos `/reis-mobile:*` do Claude Code no Codex. Para usar `doctor`, `route` e `review` pela CLI, instale também `reis-mobile` por um dos métodos acima e execute na pasta do app:
+
+```bash
+reis-mobile doctor
+reis-mobile route "revisar arquitetura" --json
+reis-mobile review --json
+```
+
+Você também pode pedir ao Codex: *"Execute `reis-mobile review --json`, leia as instruções dos arquivos retornados e revise as alterações usando esse contexto."* A CLI seleciona as instruções e coleta o contexto; o Codex faz a análise.
+
+`reis-mobile init` registra o plugin no Claude Code. Para registrar no Codex, use os comandos `codex plugin` desta seção, mesmo que a CLI `reis-mobile` já esteja instalada pelo Homebrew.
+
+### Verificar a CLI e o plugin do Claude Code
 
 ```bash
 reis-mobile --version   # reis-mobile 0.2.1
@@ -543,7 +577,7 @@ As skills de terceiros mantêm o nome e a licença originais. Veja [THIRD_PARTY_
 
 **Secrets mascarados.** O diff passa por [`core/security/redact.mjs`](core/security/redact.mjs) antes de chegar ao modelo. Lock files e código gerado (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) ficam fora do diff. A redação é uma camada de proteção, não uma garantia. Veja [SECURITY.md](SECURITY.md).
 
-**Sem telemetria.** `detect`, `doctor`, `route` e `review` não fazem chamadas de rede. Só a instalação acessa a rede, para baixar a release e registrar o plugin. O único modelo envolvido é o da sua sessão do Claude Code.
+**Sem telemetria.** `detect`, `doctor`, `route` e `review` não fazem chamadas de rede. Só a instalação acessa a rede, para baixar a release e registrar o plugin. A análise por IA usa o modelo da sessão em que você trabalha, como Claude Code ou Codex.
 
 **Custo de contexto.** As descrições dos 7 agents e das 67 skills somam cerca de 4.800 tokens fixos por sessão (medido com `claude plugin details reis-mobile`). O conteúdo completo de cada skill só é carregado quando ela é usada.
 
@@ -587,8 +621,11 @@ A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`
 **Já tenho skills com os mesmos nomes em `~/.claude/skills`.**
 As do plugin ficam no namespace `reis-mobile:` e não conflitam, mas o Claude Code carrega as duas descrições. Para economizar contexto, remova as cópias globais que o plugin já cobre.
 
-**Funciona no Codex ou no Cursor?**
-Ainda não. O suporte está planejado junto com o MCP server (v0.7.0).
+**Funciona no Codex?**
+O marketplace e o plugin `0.2.1` podem ser instalados diretamente pelo GitHub com `codex plugin`. Veja [instalação e uso no Codex](#plugin-no-codex-via-github). A instalação não confirma paridade com os agents e comandos do Claude Code; a CLI `reis-mobile` também pode ser executada pelo Codex para obter diagnósticos e contexto.
+
+**Funciona no Cursor?**
+A integração com o Cursor ainda não foi validada. O MCP server segue no roadmap para a v0.7.0.
 
 **O que o reis-mobile envia para fora da minha máquina?**
 A CLI não envia nada. O que o modelo lê durante o `/reis-mobile:review` segue as mesmas regras de qualquer sessão do Claude Code.
