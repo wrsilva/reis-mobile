@@ -21,3 +21,13 @@ coverage/
 key.properties
 google-services.json
 GoogleService-Info.plist
+.npmrc
+
+# Editors and local agent settings
+.idea/
+.vscode/
+Thumbs.db
+.claude/settings.local.json
+
+# npm pack output
+*.tgz

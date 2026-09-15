@@ -19,7 +19,7 @@ Para testar o plugin no Claude Code a partir do clone:
 
 ```text
 /plugin marketplace add /caminho/para/reis-mobile
-/plugin install reis@reis-mobile
+/plugin install reis-mobile@reis-mobile
 ```
 
 Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code para recarregar o plugin.
@@ -30,7 +30,7 @@ Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code p
 2. Crie um branch a partir de `main`.
 3. Siga as regras de [AGENTS.md](AGENTS.md).
 4. Rode `npm run check`.
-5. Abra o PR explicando o que mudou e como foi verificado, de preferência com a saída de `reis route` ou `reis review` num projeto real.
+5. Abra o PR explicando o que mudou e como foi verificado, de preferência com a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
 
 ## Commits
 
