@@ -111,6 +111,7 @@ reis-mobile --version   # reis-mobile 0.2.0
 Depois, reinicie o Claude Code e rode, na pasta do seu app:
 
 ```text
+/reis-mobile
 /reis-mobile:doctor
 /reis-mobile:review
 ```
@@ -258,6 +259,8 @@ As duas devem mostrar a mesma versão.
 ## Comandos
 
 ```bash
+/reis-mobile                                      # Lista os comandos (ponto de entrada; também aceita doctor, review ou pedido livre)
+/reis-mobile meu build android falha no gradle    # Pedido livre: detecta a stack e aplica o agent e as skills certas
 /reis-mobile:doctor                               # Ambiente e projeto: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
 /reis-mobile:doctor --all                         # Verifica todas as ferramentas, não só as da stack detectada
 /reis-mobile:review                               # Revisa as mudanças não commitadas (ou o projeto inteiro, se não houver)

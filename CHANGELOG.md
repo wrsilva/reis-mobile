@@ -2,6 +2,12 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). O projeto segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Unreleased]
+
+### Adicionado
+
+- Comando `/reis-mobile`: ponto de entrada que lista os comandos e encaminha para `doctor`, `review` ou, com um pedido livre, para o agent e as skills da stack detectada. Também aparece no menu de comandos da extensão do VS Code, que não encontra `/reis-mobile:doctor` ao digitar só `/reis-mobile`.
+
 ## [0.2.0] - 2026-09-15
 
 ### Adicionado
