@@ -16,8 +16,42 @@ describe('route', () => {
 
     assert.equal(result.stack, 'flutter');
     assert.equal(result.agent.name, 'mobile-code-reviewer');
-    assert.deepEqual(names(result.skills), ['flutter-project-audit', 'flutter-widget-review', 'mobile-security-audit']);
+    for (const skill of ['flutter-project-audit', 'flutter-widget-review', 'mobile-security-audit']) {
+      assert.ok(names(result.skills).includes(skill), `${skill} is selected`);
+    }
+    assert.equal(names(result.skills).at(-1), 'mobile-security-audit', 'stack-agnostic skills come last');
     assert.deepEqual(result.warnings, []);
+  });
+
+  for (const [intent, agent, skill] of [
+    ['architecture', 'flutter-architect', 'flutter-app-architecture'],
+    ['performance', 'flutter-performance-engineer', 'flutter-widget-review'],
+    ['test', 'flutter-test-engineer', 'flutter-add-widget-test'],
+    ['debug', 'mobile-staff-engineer', 'flutter-errors'],
+    ['accessibility', 'mobile-staff-engineer', 'flutter-improving-accessibility'],
+  ]) {
+    it(`routes ${intent} on Flutter to ${agent} with ${skill}`, async () => {
+      const result = await route({ intent, projectDir: await makeProject(FLUTTER_APP) });
+
+      assert.equal(result.agent.name, agent);
+      assert.ok(names(result.skills).includes(skill));
+    });
+  }
+
+  it('prefers the stack-agnostic staff engineer for native Android architecture', async () => {
+    const dir = await makeProject({ 'settings.gradle': '', 'app/src/main/AndroidManifest.xml': '<manifest/>' });
+
+    const result = await route({ intent: 'architecture', projectDir: dir });
+
+    assert.equal(result.agent.name, 'mobile-staff-engineer');
+    assert.ok(!result.skills.some((skill) => skill.stacks.includes('flutter')));
+  });
+
+  it('never auto-selects manual components', async () => {
+    const result = await route({ intent: 'architecture', projectDir: await makeProject(FLUTTER_APP) });
+
+    assert.ok(!names(result.skills).includes('bloc'));
+    assert.notEqual(result.agent.name, 'lead-mobile');
   });
 
   it('keeps Flutter-only skills out of native Android reviews', async () => {
@@ -43,9 +77,9 @@ describe('route', () => {
   });
 
   it('warns instead of guessing when no agent handles the intent', async () => {
-    const dir = await makeProject(FLUTTER_APP);
+    const registry = { stacks: [], agents: [], skills: [] };
 
-    const result = await route({ prompt: 'o app dá crash ao abrir', projectDir: dir });
+    const result = await route({ prompt: 'o app dá crash ao abrir', projectDir: await makeProject(FLUTTER_APP), registry });
 
     assert.equal(result.intent, 'debug');
     assert.equal(result.agent, null);

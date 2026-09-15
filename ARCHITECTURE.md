@@ -100,10 +100,12 @@ description: Reviews Flutter widget code for...
 intents: [review, performance]
 stacks: [flutter]
 # routing: manual                 # opcional: fora do roteamento automático
+# source: https://github.com/...  # skills de terceiros: origem
+# license: MIT                    # obrigatório quando há source
 ---
 ```
 
-`reis-mobile validate` (e o CI) rejeita nome divergente do arquivo, descrição ausente, intent ou stack desconhecidas e duplicatas.
+`reis-mobile validate` (e o CI) rejeita nome divergente do arquivo, descrição ausente, intent ou stack desconhecidas, `source` sem `license` e duplicatas. Um teste garante que toda skill com `source` aparece em `THIRD_PARTY_NOTICES.md`.
 
 ## Distribuição
 

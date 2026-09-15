@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
+import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { parseFrontmatter } from '../core/registry/frontmatter.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { makeProject } from './helpers/fixtures.mjs';
@@ -35,6 +38,29 @@ describe('parseFrontmatter', () => {
     assert.equal(body, '# Body');
   });
 
+  it('parses literal and folded block scalars and skips nested maps', () => {
+    const { data } = parseFrontmatter(
+      [
+        '---',
+        'name: dart-migrate-to-checks-package',
+        'description: |-',
+        '  Replace `expect`',
+        '  with `checks`.',
+        'summary: >-',
+        '  Folded into',
+        '  one line.',
+        'metadata:',
+        '  model: some-model',
+        'stacks: [flutter]',
+        '---',
+      ].join('\n'),
+    );
+
+    assert.equal(data.description, 'Replace `expect`\nwith `checks`.');
+    assert.equal(data.summary, 'Folded into one line.');
+    assert.deepEqual(data.stacks, ['flutter']);
+  });
+
   it('returns the whole source as body when there is no frontmatter', () => {
     assert.deepEqual(parseFrontmatter('# Title'), { data: {}, body: '# Title' });
   });
@@ -48,12 +74,23 @@ describe('plugin registry', () => {
     assert.ok(registry.agents.some((agent) => agent.name === 'mobile-code-reviewer'));
   });
 
+  it('credits every third-party component in THIRD_PARTY_NOTICES.md', async () => {
+    const notices = readFileSync(join(PLUGIN_ROOT, 'THIRD_PARTY_NOTICES.md'), 'utf8');
+    const { agents, skills } = await loadRegistry();
+
+    for (const component of [...agents, ...skills].filter((item) => item.source)) {
+      assert.ok(notices.includes(`Source: ${component.source}`), `${component.source} is listed`);
+      assert.ok(notices.includes(`\`${component.name}\``), `${component.name} is listed`);
+    }
+  });
+
   it('reports broken components', async () => {
     const root = await makeProject({
       'stacks/flutter/stack.json': JSON.stringify({ id: 'flutter' }),
       'agents/reviewer.md': '---\nname: other-name\nintents: [review]\nstacks: [flutter]\n---\n',
       'skills/bad-skill/SKILL.md': '---\nname: bad-skill\ndescription: x\nintents: [cook]\nstacks: [symbian]\n---\n',
       'skills/helper/SKILL.md': '---\nname: helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
+      'skills/vendored/SKILL.md': '---\nname: vendored\ndescription: x\nrouting: manual\nstacks: ["*"]\nsource: https://example.com\n---\n',
     });
 
     const errors = validateRegistry(await loadRegistry(root));
@@ -64,5 +101,6 @@ describe('plugin registry', () => {
     assert.ok(errors.some((error) => error.includes('unknown stack "symbian"')));
     assert.ok(errors.some((error) => error.includes('stack "android" has a detector but no stacks/android/stack.json')));
     assert.ok(!errors.some((error) => error.includes('helper')), 'manual skills need no intents');
+    assert.ok(errors.some((error) => error.includes('vendored/SKILL.md: "source" requires "license"')));
   });
 });
