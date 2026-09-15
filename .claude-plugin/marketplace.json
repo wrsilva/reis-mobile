@@ -1,0 +1,24 @@
+{
+  "name": "reis-mobile",
+  "owner": {
+    "name": "Warleson Reis"
+  },
+  "metadata": {
+    "description": "AI agents for mobile engineering",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "reis",
+      "source": "./",
+      "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Warleson Reis"
+      },
+      "repository": "https://github.com/wrsilva/reis-mobile",
+      "license": "MIT",
+      "category": "development"
+    }
+  ]
+}

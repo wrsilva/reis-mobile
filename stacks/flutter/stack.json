@@ -1,0 +1,8 @@
+{
+  "id": "flutter",
+  "name": "Flutter",
+  "languages": ["dart", "kotlin", "java", "swift", "objective-c"],
+  "platforms": ["android", "ios", "web", "macos", "linux", "windows"],
+  "markers": ["pubspec.yaml (sdk: flutter)", "lib/**/*.dart"],
+  "toolchain": ["flutter", "dart", "java", "android-sdk", "xcode", "cocoapods"]
+}
