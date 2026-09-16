@@ -2,6 +2,12 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- `reis-mobile init` updates the Claude Code plugin when it is already installed. It used to run `claude plugin install`, which leaves an installed plugin untouched, so `npm update -g reis-mobile` followed by `init` kept Claude Code on the old version.
+
 ## [0.6.0] - 2026-09-16
 
 ### Added

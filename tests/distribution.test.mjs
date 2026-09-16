@@ -44,6 +44,14 @@ describe('Claude Code plugin install', () => {
     ]);
   });
 
+  it('updates an installed plugin instead of reinstalling it, so a new release reaches Claude Code', () => {
+    const { calls, run } = recorder();
+
+    assert.deepEqual(installClaudePlugin({ run, list: () => [PLUGIN_ID] }), { ok: true });
+    assert.equal(calls.at(-1), `plugin update ${PLUGIN_ID} --scope user`);
+    assert.ok(!calls.some((call) => call.startsWith('plugin install')));
+  });
+
   it('removes the plugin installed as "mobile" by v0.3.2 and v0.3.3 after installing reis-mobile', () => {
     const { calls, run } = recorder();
 

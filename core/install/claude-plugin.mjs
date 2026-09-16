@@ -15,18 +15,25 @@ export const SCOPES = ['user', 'project', 'local'];
  * knows the plugin as `mobile`. A plugin installed under that name is removed once
  * reis-mobile is in place, so its commands do not show up twice.
  *
+ * `plugin install` does nothing for a plugin that is already installed, so an existing
+ * install is upgraded with `plugin update` instead; without it, `npm update -g` followed by
+ * `init` left Claude Code on the old plugin version.
+ *
  * `source` is the GitHub repository by default, so `claude plugin update` keeps working;
  * pass a local directory for offline or development installs.
  */
 export function installClaudePlugin({ source = MARKETPLACE_URL, scope = 'user', run = runClaude, list = listClaudePlugins } = {}) {
   assertScope(scope);
+  const installed = list();
   const result = runSteps(run, [
     ['plugin', 'marketplace', 'add', source, '--scope', scope],
     ['plugin', 'marketplace', 'update', MARKETPLACE_NAME],
-    ['plugin', 'install', PLUGIN_ID, '--scope', scope],
+    installed.includes(PLUGIN_ID)
+      ? ['plugin', 'update', PLUGIN_ID, '--scope', scope]
+      : ['plugin', 'install', PLUGIN_ID, '--scope', scope],
   ]);
   if (!result.ok) return result;
-  return runSteps(run, legacyUninstallSteps(list(), scope));
+  return runSteps(run, legacyUninstallSteps(installed, scope));
 }
 
 export function uninstallClaudePlugin({ scope = 'user', run = runClaude, list = listClaudePlugins } = {}) {
