@@ -1,10 +1,10 @@
-# Contribuindo
+# Contributing
 
-Obrigado pelo interesse no reis-mobile.
+Thanks for your interest in reis-mobile.
 
-## Ambiente
+## Environment
 
-- Node.js 22 ou superior
+- Node.js 22 or later
 - Git
 
 ```bash
@@ -13,54 +13,58 @@ cd reis-mobile
 npm run check
 ```
 
-Não há `npm install`: o projeto não tem dependências.
+There is no `npm install`: the project has no dependencies.
 
-Para testar o plugin no Claude Code a partir do clone:
+To test the plugin in Claude Code from the clone:
 
 ```text
-/plugin marketplace add /caminho/para/reis-mobile
+/plugin marketplace add /path/to/reis-mobile
 /plugin install reis-mobile@reis-mobile
 ```
 
-Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code para recarregar o plugin.
+After editing agents, skills or commands, restart the Claude Code session to reload the plugin.
 
-## Por onde começar
+## Where to start
 
-- Issues marcadas com [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) são pequenas e bem delimitadas.
-- [`help wanted`](https://github.com/wrsilva/reis-mobile/labels/help%20wanted) indica onde o projeto mais precisa de ajuda, como skills de Android, iOS e React Native.
-- Dúvidas e ideias ainda sem forma vão para as [Discussions](https://github.com/wrsilva/reis-mobile/discussions).
-- Leia o [Código de Conduta](CODE_OF_CONDUCT.md). Ele vale para issues, PRs e discussões.
+- Issues labeled [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) are small and well scoped.
+- [`help wanted`](https://github.com/wrsilva/reis-mobile/labels/help%20wanted) shows where the project needs help the most, such as Android, iOS and React Native skills.
+- Questions and not-yet-formed ideas go to [Discussions](https://github.com/wrsilva/reis-mobile/discussions).
+- Read the [Code of Conduct](CODE_OF_CONDUCT.md). It applies to issues, PRs and discussions.
 
-## Fluxo
+## Workflow
 
-1. Abra uma issue pelo template adequado (bug, funcionalidade ou nova skill/agent), descrevendo o problema mobile que a mudança resolve. Para mudanças pequenas e óbvias, como typos, pode ir direto ao PR.
-2. Crie um branch a partir de `main`.
-3. Siga as regras de [AGENTS.md](AGENTS.md).
-4. Rode `npm run check`.
-5. Faça um fork, crie o branch e abra o PR contra `main`. O template pede a verificação e um checklist, de preferência com a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
-6. O CI precisa passar e o mantenedor precisa aprovar. Os PRs entram por squash merge, e o título vira a mensagem do commit, então use Conventional Commits no título.
+1. Open an issue using the appropriate template (bug, feature or new skill/agent), describing the mobile problem the change solves. For small, obvious changes such as typos, you can go straight to a PR.
+2. Create a branch from `main`.
+3. Follow the rules in [AGENTS.md](AGENTS.md).
+4. Run `npm run check`.
+5. Fork, create the branch and open the PR against `main`. The template asks for verification and a checklist, preferably with the output of `reis-mobile route` or `reis-mobile review` on a real project.
+6. CI must pass and the maintainer must approve. PRs are squash merged and the title becomes the commit message, so use Conventional Commits in the title.
 
-## Licença das contribuições
+## License of contributions
 
-Ao contribuir, você concorda que sua contribuição seja distribuída sob a [licença MIT](LICENSE) do projeto. Conteúdo de terceiros só entra com licença compatível, declarando `source` e `license` e com o aviso em `THIRD_PARTY_NOTICES.md`.
+By contributing, you agree that your contribution is distributed under the project's [MIT license](LICENSE). Third-party content is only accepted with a compatible license, declaring `source` and `license` and with the notice in `THIRD_PARTY_NOTICES.md`.
+
+## Language
+
+Write everything in English: agents, skills, commands, documentation, code comments and commit messages. See [AGENTS.md](AGENTS.md) for the exceptions.
 
 ## Commits
 
 Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`.
 
-## Qualidade de skills
+## Skill quality
 
-Uma boa skill de reis-mobile:
+A good reis-mobile skill:
 
-- tem descrição que diz **o que faz e quando usar**, pois é o que o Claude Code usa para ativá-la;
-- é um checklist verificável, ordenado por impacto (crash e perda de dados primeiro);
-- não afirma versões, lints ou requisitos de loja de memória. Quando o valor muda com o tempo, manda verificar;
-- indica em que seção do relatório cada achado entra.
+- has a description that says **what it does and when to use it**, since that is what Claude Code uses to activate it;
+- is a verifiable checklist, ordered by impact (crashes and data loss first);
+- does not state versions, lints or store requirements from memory. When the value changes over time, it says to verify it;
+- states which report section each finding goes into.
 
-## Publicando uma versão
+## Releasing a version
 
-1. Atualize a versão em `package.json`, `.claude-plugin/plugin.json` e `.claude-plugin/marketplace.json`, e registre as mudanças no `CHANGELOG.md`.
-2. `node scripts/versions.mjs vX.Y.Z` confirma que tudo bate.
-3. Commit, `git tag vX.Y.Z` e `git push origin main vX.Y.Z`.
-4. O workflow **Release** roda os testes e publica na release o tarball, o `SHA256SUMS` e o `reis-mobile.rb`. Se o secret `NPM_TOKEN` existir, também publica no npm.
-5. Copie o `reis-mobile.rb` da release para `Formula/reis-mobile.rb` no repositório `wrsilva/homebrew-tap`.
+1. Update the version in `package.json`, `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, and record the changes in `CHANGELOG.md`.
+2. `node scripts/versions.mjs vX.Y.Z` confirms everything matches.
+3. Commit, `git tag vX.Y.Z` and `git push origin main vX.Y.Z`.
+4. The **Release** workflow runs the tests and publishes the tarball, `SHA256SUMS` and `reis-mobile.rb` to the release. If the `NPM_TOKEN` secret exists, it also publishes to npm.
+5. Copy `reis-mobile.rb` from the release to `Formula/reis-mobile.rb` in the `wrsilva/homebrew-tap` repository.

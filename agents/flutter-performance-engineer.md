@@ -1,6 +1,6 @@
 ---
 name: flutter-performance-engineer
-description: Use this agent to review Flutter/Dart code for performance problems — unnecessary rebuilds, jank and dropped frames, slow lists, memory leaks from undisposed resources, expensive painting, slow startup and app size. Typical triggers are a new screen with a large list, "a tela está travando no scroll", and a BLoC or provider change that may emit too often.
+description: Use this agent to review Flutter/Dart code for performance problems — unnecessary rebuilds, jank and dropped frames, slow lists, memory leaks from undisposed resources, expensive painting, slow startup and app size. Typical triggers are a new screen with a large list, "the screen stutters while scrolling", and a BLoC or provider change that may emit too often.
 model: inherit
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]

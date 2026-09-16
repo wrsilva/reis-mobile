@@ -1,17 +1,17 @@
-name: Nova skill ou agent
-description: Proponha uma skill ou um agent especializado em mobile.
+name: New skill or agent
+description: Propose a skill or an agent specialized in mobile.
 title: "[skill] "
 labels: ["skill", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Skills pequenas e específicas são mais úteis que skills genéricas: prefira `ios-signing-debug` a `mobile-development`.
-        Veja as regras em [AGENTS.md](https://github.com/wrsilva/reis-mobile/blob/main/AGENTS.md).
+        Small, specific skills are more useful than generic ones: prefer `ios-signing-debug` over `mobile-development`.
+        See the rules in [AGENTS.md](https://github.com/wrsilva/reis-mobile/blob/main/AGENTS.md).
   - type: dropdown
     id: kind
     attributes:
-      label: Tipo
+      label: Type
       options:
         - Skill
         - Agent
@@ -20,16 +20,16 @@ body:
   - type: input
     id: name
     attributes:
-      label: Nome sugerido
-      description: kebab-case com prefixo da stack (`flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`) ou `mobile-*`.
+      label: Suggested name
+      description: kebab-case with the stack prefix (`flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`) or `mobile-*`.
       placeholder: android-gradle-debug
     validations:
       required: true
   - type: textarea
     id: when
     attributes:
-      label: Quando deve ser usada
-      description: Situações e pedidos que devem acioná-la. Isso vira a `description` do frontmatter.
+      label: When it should be used
+      description: Situations and requests that should trigger it. This becomes the frontmatter `description`.
     validations:
       required: true
   - type: dropdown
@@ -43,13 +43,13 @@ body:
         - ios
         - react-native
         - kotlin-multiplatform
-        - "* (todas)"
+        - "* (all)"
     validations:
       required: true
   - type: dropdown
     id: intents
     attributes:
-      label: Intents em que o router deve carregá-la
+      label: Intents for which the router should load it
       multiple: true
       options:
         - review
@@ -64,11 +64,11 @@ body:
         - dependency
         - build
         - deployment
-        - Nenhuma (routing manual)
+        - None (manual routing)
   - type: textarea
     id: source
     attributes:
-      label: Origem
-      description: É conteúdo original? Se vier de outro projeto, informe o link e a licença. Só aceitamos licenças que permitam redistribuição.
+      label: Origin
+      description: Is it original content? If it comes from another project, provide the link and the license. We only accept licenses that allow redistribution.
     validations:
       required: true

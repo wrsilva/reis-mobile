@@ -1,77 +1,77 @@
 name: Bug
-description: Algo no reis-mobile não funciona como deveria.
+description: Something in reis-mobile does not work as it should.
 title: "[bug] "
 labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Obrigado por reportar. Antes de enviar, confira se já existe uma [issue parecida](https://github.com/wrsilva/reis-mobile/issues?q=is%3Aissue).
-        **Não cole secrets, tokens nem código proprietário.**
+        Thanks for reporting. Before submitting, check whether a [similar issue](https://github.com/wrsilva/reis-mobile/issues?q=is%3Aissue) already exists.
+        **Do not paste secrets, tokens or proprietary code.**
   - type: dropdown
     id: area
     attributes:
-      label: Área
+      label: Area
       options:
-        - Detecção de stack
-        - Router (intent, agent ou skills errados)
+        - Stack detection
+        - Router (wrong intent, agent or skills)
         - /reis-mobile:doctor
         - /reis-mobile:review
         - Agent
         - Skill
-        - Instalação ou atualização
+        - Installation or update
         - CLI
-        - Outra
+        - Other
     validations:
       required: true
   - type: textarea
     id: what-happened
     attributes:
-      label: O que aconteceu
-      description: Descreva o comportamento atual e o esperado.
+      label: What happened
+      description: Describe the current and the expected behavior.
     validations:
       required: true
   - type: textarea
     id: reproduce
     attributes:
-      label: Como reproduzir
-      description: Comando executado, prompt usado e tipo de projeto (Flutter, Android, iOS, React Native, KMP).
+      label: How to reproduce
+      description: Command run, prompt used and project type (Flutter, Android, iOS, React Native, KMP).
       placeholder: |
-        1. Num app Flutter com android/ e ios/
-        2. Rodar `reis-mobile route "..."`
+        1. In a Flutter app with android/ and ios/
+        2. Run `reis-mobile route "..."`
         3. ...
     validations:
       required: true
   - type: textarea
     id: output
     attributes:
-      label: Saída
-      description: Saída de `reis-mobile route`, `reis-mobile detect --json` ou `reis-mobile doctor`, quando relevante.
+      label: Output
+      description: Output of `reis-mobile route`, `reis-mobile detect --json` or `reis-mobile doctor`, when relevant.
       render: text
   - type: input
     id: version
     attributes:
-      label: Versão do reis-mobile
-      description: Saída de `reis-mobile --version` e/ou `claude plugin list | grep -A1 reis-mobile`.
+      label: reis-mobile version
+      description: Output of `reis-mobile --version` and/or `claude plugin list | grep -A1 reis-mobile`.
       placeholder: reis-mobile 0.2.0
     validations:
       required: true
   - type: dropdown
     id: install
     attributes:
-      label: Como instalou
+      label: How you installed it
       options:
         - curl (install.sh)
         - PowerShell (install.ps1)
         - Homebrew
         - npm
-        - Só o plugin do Claude Code
-        - Clone local
+        - Claude Code plugin only
+        - Local clone
     validations:
       required: true
   - type: input
     id: environment
     attributes:
-      label: Ambiente
-      description: Sistema operacional, `node --version` e versão do Claude Code.
+      label: Environment
+      description: Operating system, `node --version` and Claude Code version.
       placeholder: macOS 26, Node 22.12, Claude Code 2.x

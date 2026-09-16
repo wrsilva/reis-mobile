@@ -75,12 +75,12 @@ describe('/debate', () => {
     const models = new Set([...debate.body.matchAll(/^\| `reis-mobile:[a-z0-9-]+` \|[^|]+\| `([a-z]+)` \|$/gm)].map((m) => m[1]));
 
     assert.ok(models.size >= 2, `participants must span at least two models, found: ${[...models].join(', ') || 'none'}`);
-    assert.match(debate.body, /pelo menos dois modelos diferentes/, 'the escalation rule must enforce the mix');
+    assert.match(debate.body, /at least two different models/, 'the escalation rule must enforce the mix');
   });
 
   it('runs the blind round before the rebuttal round', () => {
     assert.ok(
-      debate.body.indexOf('Rodada 1') < debate.body.indexOf('Rodada 2'),
+      debate.body.indexOf('Round 1') < debate.body.indexOf('Round 2'),
       'round 1 (blind positions) must come before round 2 (rebuttals)',
     );
   });

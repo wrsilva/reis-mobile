@@ -1,33 +1,33 @@
 ---
 name: detect-mobile-stack
-description: Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its languages and target platforms, using the reis-mobile detector. Use when you need to know which mobile stack a project uses before reviewing, debugging or changing it, or when the user asks "que stack é esse projeto?".
+description: Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its languages and target platforms, using the reis-mobile detector. Use when you need to know which mobile stack a project uses before reviewing, debugging or changing it, or when the user asks "what stack is this project?".
 routing: manual
 stacks: ["*"]
 ---
 
 # Detect Mobile Stack
 
-Use o detector determinístico do reis-mobile em vez de adivinhar pela estrutura de pastas.
+Use the reis-mobile deterministic detector instead of guessing from the folder structure.
 
-## Como executar
+## How to run
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --json --dir "<diretório do projeto>"
+node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --json --dir "<project directory>"
 ```
 
-Campos do resultado:
+Result fields:
 
-| Campo | Significado |
+| Field | Meaning |
 |---|---|
-| `stack` | `flutter`, `react-native`, `kotlin-multiplatform`, `android`, `ios` ou `unknown` |
-| `variant` | `plugin` (Flutter), `expo` (React Native) ou `null` |
-| `languages` | Linguagens encontradas, a principal primeiro (inclui código nativo de apps cross-platform) |
-| `platforms` | Plataformas-alvo (`android`, `ios`, `web`, `macos`, `desktop`...) |
-| `evidence` | Arquivos que justificam a detecção |
-| `candidates` | Todas as stacks que casaram, em ordem de prioridade |
+| `stack` | `flutter`, `react-native`, `kotlin-multiplatform`, `android`, `ios` or `unknown` |
+| `variant` | `plugin` (Flutter), `expo` (React Native) or `null` |
+| `languages` | Languages found, the main one first (includes native code in cross-platform apps) |
+| `platforms` | Target platforms (`android`, `ios`, `web`, `macos`, `desktop`...) |
+| `evidence` | Files that justify the detection |
+| `candidates` | Every stack that matched, in priority order |
 
-## Interpretação
+## Interpretation
 
-- Stacks cross-platform têm prioridade: um app Flutter contém `android/` e `ios/`, mas a stack é `flutter`.
-- `unknown` significa que não há projeto mobile na raiz informada. Em monorepos, rode de novo com `--dir` apontando para o app.
-- Mais de um item em `candidates` indica projeto híbrido (por exemplo, KMP com módulo Android). Considere as duas stacks ao carregar skills.
+- Cross-platform stacks take priority: a Flutter app contains `android/` and `ios/`, but the stack is `flutter`.
+- `unknown` means there is no mobile project at the given root. In monorepos, run it again with `--dir` pointing at the app.
+- More than one item in `candidates` indicates a hybrid project (for example, KMP with an Android module). Consider both stacks when loading skills.

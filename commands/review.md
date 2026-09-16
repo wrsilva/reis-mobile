@@ -1,48 +1,48 @@
 ---
-description: Code review mobile — detecta a stack, seleciona o agent e as skills certas e revisa as mudanças (ou o projeto inteiro)
-argument-hint: "[--base <ref>] [foco da revisão]"
+description: Mobile code review — detects the stack, selects the right agent and skills, and reviews the changes (or the whole project)
+argument-hint: "[--base <ref>] [review focus]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
 ---
 
 # reis-mobile review
 
-Argumentos recebidos: `$ARGUMENTS`
+Arguments received: `$ARGUMENTS`
 
-## 1. Rotear e coletar contexto
+## 1. Route and gather context
 
-Separe dos argumentos a opção `--base <ref>` (se houver). O restante é o foco da revisão, em texto livre. Execute via Bash, com as aspas corretas:
+Extract the `--base <ref>` option from the arguments (if present). The rest is the review focus, as free text. Run via Bash, with correct quoting:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" review --dir "$PWD" [--base <ref>] -- "<foco da revisão>"
+node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" review --dir "$PWD" [--base <ref>] -- "<review focus>"
 ```
 
-A saída informa:
+The output reports:
 
-- `Intent`, `Stack` e `focus` (plataformas nativas citadas no foco);
-- `Agent`: o agent responsável;
-- `Skills`: as skills a aplicar, em ordem de prioridade;
-- `Context`: `working-tree`, `range` ou `project`, com a lista de arquivos alterados e o diff (secrets já mascarados).
+- `Intent`, `Stack` and `focus` (native platforms mentioned in the focus);
+- `Agent`: the responsible agent;
+- `Skills`: the skills to apply, in priority order;
+- `Context`: `working-tree`, `range` or `project`, with the list of changed files and the diff (secrets already masked).
 
-Se o comando falhar, mostre o erro ao usuário e pare.
+If the command fails, show the error to the user and stop.
 
-## 2. Carregar instruções
+## 2. Load the instructions
 
-Leia com a ferramenta Read, nesta ordem:
+Read with the Read tool, in this order:
 
-1. `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md`: papel, processo, regras e formato do relatório;
-2. `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` para cada skill listada.
+1. `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md`: role, process, rules and report format;
+2. `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` for each listed skill.
 
-## 3. Revisar
+## 3. Review
 
-Siga o processo do agent aplicando os checklists das skills:
+Follow the agent's process, applying the skills' checklists:
 
-- **working-tree / range:** revise os arquivos alterados. Leia o arquivo completo quando o diff não der contexto suficiente. Arquivos `untracked` não aparecem no diff: leia-os diretamente. Se o diff veio truncado, leia os arquivos restantes.
-- **project:** não há mudanças; faça a auditoria do projeto começando pelos pontos de entrada e pela camada de dados.
+- **working-tree / range:** review the changed files. Read the full file when the diff does not give enough context. `untracked` files do not appear in the diff: read them directly. If the diff was truncated, read the remaining files.
+- **project:** there are no changes; audit the project starting from the entry points and the data layer.
 
-Confirme cada achado no código antes de reportá-lo. Não altere arquivos: esta é uma revisão.
+Confirm every finding in the code before reporting it. Do not modify files: this is a review.
 
-## 4. Relatório
+## 4. Report
 
-Responda no formato definido pelo agent (Summary, Critical, Bugs, Architecture, Security, Performance, Maintainability, Suggested changes). Na primeira linha do Summary, informe a stack, o agent e as skills usadas, para deixar o roteamento visível.
+Answer in the format defined by the agent (Summary, Critical, Bugs, Architecture, Security, Performance, Maintainability, Suggested changes). On the first line of the Summary, state the stack, the agent and the skills used, so the routing is visible.
 
-Se o router emitiu avisos (linhas com `!`), mencione-os no Summary.
+If the router emitted warnings (lines starting with `!`), mention them in the Summary.

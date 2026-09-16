@@ -1,6 +1,6 @@
 ---
 name: flutter-architect
-description: Use this agent to analyze or design the architecture of a Flutter app — layer separation (presentation, domain, data), feature-first modularization, coupling between features, misplaced business logic, oversized widgets, state management boundaries and dependency injection. Typical triggers are "revise a arquitetura deste app Flutter", planning a new feature module and validating a Clean Architecture refactor.
+description: Use this agent to analyze or design the architecture of a Flutter app — layer separation (presentation, domain, data), feature-first modularization, coupling between features, misplaced business logic, oversized widgets, state management boundaries and dependency injection. Typical triggers are "review the architecture of this Flutter app", planning a new feature module and validating a Clean Architecture refactor.
 model: inherit
 color: cyan
 tools: ["Read", "Grep", "Glob"]

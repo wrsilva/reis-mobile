@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # O projeto não tem dependências npm; só as GitHub Actions dos workflows.
+  # The project has no npm dependencies; only the GitHub Actions used by the workflows.
   - package-ecosystem: github-actions
     directory: /
     schedule:

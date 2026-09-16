@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Dúvidas e ideias
+  - name: Questions and ideas
     url: https://github.com/wrsilva/reis-mobile/discussions
-    about: Perguntas de uso, ideias ainda sem forma e conversa com a comunidade.
-  - name: Vulnerabilidade de segurança
+    about: Usage questions, not-yet-formed ideas and conversation with the community.
+  - name: Security vulnerability
     url: https://github.com/wrsilva/reis-mobile/security/advisories/new
-    about: Reporte de forma privada. Não abra issue pública para falhas de segurança.
+    about: Report it privately. Do not open a public issue for security flaws.

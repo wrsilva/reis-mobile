@@ -1,44 +1,44 @@
 ---
-description: Ponto de entrada do reis-mobile — lista os comandos ou encaminha para doctor, review, debate ou para o agent certo a partir de um pedido livre
-argument-hint: "[doctor | review | debate | pedido livre]"
+description: reis-mobile entry point — lists the commands or forwards to doctor, review, debate or the right agent from a free-form request
+argument-hint: "[doctor | review | debate | free-form request]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
 ---
 
 # reis-mobile
 
-Argumentos recebidos: `$ARGUMENTS`
+Arguments received: `$ARGUMENTS`
 
-Escolha o caso pela primeira palavra dos argumentos.
+Pick the case by the first word of the arguments.
 
-## Sem argumentos
+## No arguments
 
-Responda apenas com esta lista, sem executar nada:
+Reply only with this list, without running anything:
 
 ```text
-/reis-mobile:doctor                  Ambiente e projeto: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
-/reis-mobile:review [--base <ref>]   Code review das mudanças (ou do projeto inteiro)
-/reis-mobile:debate <questão>        Debate entre os especialistas, com decisão do lead-mobile
-/reis-mobile <pedido livre>          Encaminha o pedido para o agent e as skills da stack detectada
+/reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
+/reis-mobile:review [--base <ref>]   Code review of the changes (or the whole project)
+/reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
+/reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
 
-## `doctor [opções]`
+## `doctor [options]`
 
-1. Execute via Bash: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor --dir "$PWD" <opções>`.
-2. Leia `${CLAUDE_PLUGIN_ROOT}/commands/doctor.md` e siga a seção **Instruções** sobre essa saída.
+1. Run via Bash: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor --dir "$PWD" <options>`.
+2. Read `${CLAUDE_PLUGIN_ROOT}/commands/doctor.md` and follow its **Instructions** section on that output.
 
-## `review [opções] [foco]`
+## `review [options] [focus]`
 
-Leia `${CLAUDE_PLUGIN_ROOT}/commands/review.md` e siga-o inteiro, tratando o restante dos argumentos (sem a palavra `review`) como `$ARGUMENTS`.
+Read `${CLAUDE_PLUGIN_ROOT}/commands/review.md` and follow all of it, treating the rest of the arguments (without the word `review`) as `$ARGUMENTS`.
 
-## `debate [opções] <questão>`
+## `debate [options] <question>`
 
-Leia `${CLAUDE_PLUGIN_ROOT}/commands/debate.md` e siga-o inteiro, tratando o restante dos argumentos (sem a palavra `debate`) como `$ARGUMENTS`.
+Read `${CLAUDE_PLUGIN_ROOT}/commands/debate.md` and follow all of it, treating the rest of the arguments (without the word `debate`) as `$ARGUMENTS`.
 
-## Qualquer outro texto
+## Any other text
 
-É um pedido livre, em português ou inglês.
+It is a free-form request, in English or Portuguese.
 
-1. Execute via Bash, com as aspas corretas: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" route --dir "$PWD" -- "<pedido>"`. Se falhar, mostre o erro e pare.
-2. Leia `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md` e, na ordem, `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` para cada skill listada.
-3. Atenda o pedido seguindo o processo do agent e os checklists das skills. Confirme no código tudo o que afirmar.
-4. Na primeira linha da resposta, informe a stack, o agent e as skills usadas. Se o router emitiu avisos (linhas com `!`), mencione-os.
+1. Run via Bash, with correct quoting: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" route --dir "$PWD" -- "<request>"`. If it fails, show the error and stop.
+2. Read `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md` and, in order, `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` for each listed skill.
+3. Handle the request following the agent's process and the skills' checklists. Confirm in the code everything you claim.
+4. On the first line of the answer, state the stack, the agent and the skills used. If the router emitted warnings (lines starting with `!`), mention them.

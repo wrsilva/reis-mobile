@@ -1,26 +1,26 @@
-name: Funcionalidade
-description: Proponha um comando, uma melhoria no router ou uma nova capacidade.
+name: Feature
+description: Propose a command, a router improvement or a new capability.
 title: "[feature] "
 labels: ["enhancement", "triage"]
 body:
   - type: textarea
     id: problem
     attributes:
-      label: Qual problema de desenvolvimento mobile isso resolve?
-      description: O reis-mobile é focado em mobile. Descreva a dor real antes da solução.
+      label: What mobile development problem does this solve?
+      description: reis-mobile is focused on mobile. Describe the real pain before the solution.
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Proposta
-      description: Como você imagina que funcione. Exemplos de comando ou de saída ajudam.
+      label: Proposal
+      description: How you imagine it working. Command or output examples help.
     validations:
       required: true
   - type: dropdown
     id: stacks
     attributes:
-      label: Stacks afetadas
+      label: Affected stacks
       multiple: true
       options:
         - Flutter
@@ -28,14 +28,14 @@ body:
         - iOS
         - React Native
         - Kotlin Multiplatform
-        - Todas
+        - All
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternativas consideradas
+      label: Alternatives considered
   - type: checkboxes
     id: contribute
     attributes:
-      label: Contribuição
+      label: Contribution
       options:
-        - label: Posso abrir o pull request dessa funcionalidade.
+        - label: I can open the pull request for this feature.

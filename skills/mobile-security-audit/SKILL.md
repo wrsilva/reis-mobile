@@ -7,88 +7,88 @@ stacks: ["*"]
 
 # Mobile Security Audit
 
-Organizado pelas categorias do OWASP MASVS. Aplique a seção geral e depois a da stack detectada (em apps cross-platform, aplique também Android e iOS às pastas nativas).
+Organized by the OWASP MASVS categories. Apply the general section and then the one for the detected stack (in cross-platform apps, also apply Android and iOS to the native folders).
 
-Todo achado precisa de evidência no código ou na configuração. Severidade:
+Every finding needs evidence in the code or configuration. Severity:
 
-- **Critical:** credencial ou dado sensível exposto, validação TLS desativada, componente exportado que executa ação privilegiada.
-- **High:** token em armazenamento não seguro, tráfego em texto claro para a API, WebView com bridge JavaScript exposto a conteúdo remoto.
-- **Medium/Low:** hardening ausente, logs verbosos, backup habilitado sem necessidade.
+- **Critical:** exposed credential or sensitive data, TLS validation disabled, exported component that performs a privileged action.
+- **High:** token in insecure storage, cleartext traffic to the API, WebView with a JavaScript bridge exposed to remote content.
+- **Medium/Low:** missing hardening, verbose logs, backup enabled without need.
 
-## Geral (todas as stacks)
+## General (all stacks)
 
 **MASVS-STORAGE**
-- [ ] Access token, refresh token e dados pessoais guardados em armazenamento não seguro (preferências, arquivos, banco sem criptografia).
-- [ ] Dados sensíveis em logs, analytics ou crash reports.
+- [ ] Access token, refresh token and personal data kept in insecure storage (preferences, files, unencrypted database).
+- [ ] Sensitive data in logs, analytics or crash reports.
 
 **MASVS-CRYPTO**
-- [ ] Chaves de API privadas, client secrets, chaves de assinatura ou senhas no código-fonte, em assets ou em arquivos de configuração empacotados. Tudo que vai no app é extraível; secret de verdade fica no backend.
-- [ ] Criptografia caseira, IV/chave fixos, MD5/SHA-1 para senhas.
+- [ ] Private API keys, client secrets, signing keys or passwords in source code, assets or bundled configuration files. Everything shipped in the app can be extracted; a real secret stays on the backend.
+- [ ] Homemade cryptography, fixed IV/key, MD5/SHA-1 for passwords.
 
 **MASVS-AUTH**
-- [ ] Autorização decidida só no cliente (flag `isAdmin` local, esconder botão como controle de acesso).
-- [ ] Sessão sem expiração ou refresh token nunca invalidado no logout.
-- [ ] Biometria usada só como booleano local, sem vínculo com chave criptográfica.
+- [ ] Authorization decided only on the client (local `isAdmin` flag, hiding a button as access control).
+- [ ] Session without expiration or refresh token never invalidated on logout.
+- [ ] Biometrics used only as a local boolean, without binding to a cryptographic key.
 
 **MASVS-NETWORK**
-- [ ] URLs `http://` para APIs.
-- [ ] Validação de certificado desativada.
-- [ ] Pinning, se existir, sem estratégia de rotação (pin único sem backup).
+- [ ] `http://` URLs for APIs.
+- [ ] Certificate validation disabled.
+- [ ] Pinning, if present, without a rotation strategy (single pin with no backup).
 
 **MASVS-PLATFORM**
-- [ ] Deep links e universal links que executam ação sem validar parâmetros ou sem autenticação.
-- [ ] WebView carregando conteúdo remoto com JavaScript e bridge nativo habilitados.
-- [ ] Dados sensíveis na área de transferência ou visíveis no snapshot do app switcher.
+- [ ] Deep links and universal links that perform actions without validating parameters or without authentication.
+- [ ] WebView loading remote content with JavaScript and a native bridge enabled.
+- [ ] Sensitive data on the clipboard or visible in the app switcher snapshot.
 
 **MASVS-CODE / RESILIENCE**
-- [ ] Build de release sem ofuscação/minificação quando o app tem lógica sensível.
-- [ ] Código ou endpoints de debug acessíveis em release.
+- [ ] Release build without obfuscation/minification when the app has sensitive logic.
+- [ ] Debug code or endpoints reachable in release.
 
 **MASVS-PRIVACY**
-- [ ] Permissões pedidas sem uso real no código.
-- [ ] SDKs de terceiros coletando dados não declarados (Privacy Manifest no iOS, Data safety na Play Store).
+- [ ] Permissions requested without real use in the code.
+- [ ] Third-party SDKs collecting undeclared data (Privacy Manifest on iOS, Data safety on the Play Store).
 
 ## Flutter
 
-- [ ] Tokens em `shared_preferences`, `hive` ou `sqflite` sem criptografia: use `flutter_secure_storage` (Keychain/Keystore).
-- [ ] `HttpClient.badCertificateCallback` retornando `true` ou `HttpOverrides.global` desativando validação: Critical se chegar ao build de release.
-- [ ] `print`/`debugPrint`/`log` com token, header `Authorization` ou payload de login. Interceptors do `dio` com `LogInterceptor` ativo em release.
-- [ ] Secrets passados por `--dart-define` e tratados como seguros: ficam no binário.
-- [ ] Build de release sem `--obfuscate --split-debug-info` quando o app precisa de ofuscação.
-- [ ] `webview_flutter` com `JavaScriptMode.unrestricted` e `addJavaScriptChannel` carregando URL não controlada.
+- [ ] Tokens in `shared_preferences`, `hive` or `sqflite` without encryption: use `flutter_secure_storage` (Keychain/Keystore).
+- [ ] `HttpClient.badCertificateCallback` returning `true` or `HttpOverrides.global` disabling validation: Critical if it reaches the release build.
+- [ ] `print`/`debugPrint`/`log` with a token, `Authorization` header or login payload. `dio` interceptors with `LogInterceptor` active in release.
+- [ ] Secrets passed via `--dart-define` and treated as safe: they end up in the binary.
+- [ ] Release build without `--obfuscate --split-debug-info` when the app needs obfuscation.
+- [ ] `webview_flutter` with `JavaScriptMode.unrestricted` and `addJavaScriptChannel` loading an uncontrolled URL.
 
-## Android (Kotlin/Java, ou `android/` de apps cross-platform)
+## Android (Kotlin/Java, or `android/` in cross-platform apps)
 
-- [ ] `AndroidManifest.xml`: `android:usesCleartextTraffic="true"` ou `network_security_config` com `cleartextTrafficPermitted="true"` para domínios de produção.
-- [ ] `network_security_config` confiando em certificados de usuário (`<certificates src="user"/>`) em release.
-- [ ] `android:allowBackup="true"` (ou ausente) em app com dados sensíveis, sem regras de exclusão.
-- [ ] `activity`/`service`/`receiver`/`provider` com `android:exported="true"` sem permissão e sem validar o `Intent`.
-- [ ] `android:debuggable="true"` fixo no manifest.
-- [ ] Tokens em `SharedPreferences` sem criptografia.
-- [ ] `WebView` com `setJavaScriptEnabled(true)` + `addJavascriptInterface` ou `setAllowFileAccess(true)`.
-- [ ] `TrustManager`/`HostnameVerifier` customizado que aceita tudo.
-- [ ] `Log.d`/`Log.v` com dados sensíveis sem remoção em release (regras R8 ou wrapper de log).
-- [ ] Senhas de keystore em `build.gradle` versionado em vez de `key.properties`/variáveis de ambiente.
+- [ ] `AndroidManifest.xml`: `android:usesCleartextTraffic="true"` or `network_security_config` with `cleartextTrafficPermitted="true"` for production domains.
+- [ ] `network_security_config` trusting user certificates (`<certificates src="user"/>`) in release.
+- [ ] `android:allowBackup="true"` (or absent) in an app with sensitive data, without exclusion rules.
+- [ ] `activity`/`service`/`receiver`/`provider` with `android:exported="true"` without a permission and without validating the `Intent`.
+- [ ] `android:debuggable="true"` hardcoded in the manifest.
+- [ ] Tokens in `SharedPreferences` without encryption.
+- [ ] `WebView` with `setJavaScriptEnabled(true)` + `addJavascriptInterface` or `setAllowFileAccess(true)`.
+- [ ] Custom `TrustManager`/`HostnameVerifier` that accepts everything.
+- [ ] `Log.d`/`Log.v` with sensitive data not stripped in release (R8 rules or a log wrapper).
+- [ ] Keystore passwords in a committed `build.gradle` instead of `key.properties`/environment variables.
 
-## iOS (Swift/Objective-C, ou `ios/` de apps cross-platform)
+## iOS (Swift/Objective-C, or `ios/` in cross-platform apps)
 
-- [ ] `Info.plist`: `NSAppTransportSecurity` com `NSAllowsArbitraryLoads = true` sem exceção justificada por domínio.
-- [ ] Tokens em `UserDefaults` ou arquivos em vez do Keychain.
-- [ ] Itens do Keychain com acessibilidade permissiva (`kSecAttrAccessibleAlways*`, já descontinuada) em vez de `...WhenUnlocked`/`...AfterFirstUnlock`.
-- [ ] `URLSessionDelegate` aceitando qualquer `serverTrust` sem avaliar.
-- [ ] URL schemes customizados executando ação sem validação (prefira universal links).
-- [ ] `NSLog`/`print` com dados sensíveis.
-- [ ] Tela com dado sensível sem proteção de snapshot ao ir para background.
+- [ ] `Info.plist`: `NSAppTransportSecurity` with `NSAllowsArbitraryLoads = true` without a justified per-domain exception.
+- [ ] Tokens in `UserDefaults` or files instead of the Keychain.
+- [ ] Keychain items with permissive accessibility (`kSecAttrAccessibleAlways*`, already deprecated) instead of `...WhenUnlocked`/`...AfterFirstUnlock`.
+- [ ] `URLSessionDelegate` accepting any `serverTrust` without evaluating it.
+- [ ] Custom URL schemes performing actions without validation (prefer universal links).
+- [ ] `NSLog`/`print` with sensitive data.
+- [ ] Screen with sensitive data without snapshot protection when going to background.
 
 ## React Native
 
-- [ ] Tokens em `AsyncStorage`: use Keychain/Keystore (`react-native-keychain`, `expo-secure-store`).
-- [ ] `.env` via `react-native-config`/`expo-constants` com secrets: vão para o bundle JS, legível no APK/IPA.
-- [ ] `react-native-webview` com `originWhitelist={['*']}` e `onMessage` executando ações.
-- [ ] `console.log` com dados sensíveis sem remoção em release (por exemplo, `babel-plugin-transform-remove-console`).
-- [ ] Deep links tratados em `Linking` sem validar origem e parâmetros.
+- [ ] Tokens in `AsyncStorage`: use Keychain/Keystore (`react-native-keychain`, `expo-secure-store`).
+- [ ] `.env` via `react-native-config`/`expo-constants` with secrets: they go into the JS bundle, readable in the APK/IPA.
+- [ ] `react-native-webview` with `originWhitelist={['*']}` and `onMessage` performing actions.
+- [ ] `console.log` with sensitive data not stripped in release (for example, `babel-plugin-transform-remove-console`).
+- [ ] Deep links handled in `Linking` without validating origin and parameters.
 
-## Comandos úteis (somente leitura)
+## Useful commands (read-only)
 
 ```bash
 git ls-files | grep -Ei '\.(jks|keystore|p12|p8|mobileprovision|env)$|key\.properties|google-services\.json|GoogleService-Info\.plist'
@@ -96,6 +96,6 @@ grep -rn --include='*.xml' -E 'usesCleartextTraffic|allowBackup|exported="true"|
 grep -rn -E 'NSAllowsArbitraryLoads' --include='*.plist' . 2>/dev/null
 ```
 
-## Saída
+## Output
 
-Reporte em **Security** (ou **Critical**, quando a severidade for Critical), com categoria MASVS, `arquivo:linha`, impacto e correção.
+Report under **Security** (or **Critical**, when the severity is Critical), with the MASVS category, `file:line`, impact and fix.

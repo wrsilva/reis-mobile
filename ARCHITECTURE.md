@@ -1,93 +1,93 @@
-# Arquitetura
+# Architecture
 
-O reis-mobile é um plugin do Claude Code com um núcleo determinístico em Node.js. O núcleo decide **o que** carregar (stack, intent, agent, skills, contexto); o modelo decide **como** revisar, depurar ou implementar, seguindo as instruções carregadas.
+reis-mobile is a Claude Code plugin with a deterministic Node.js core. The core decides **what** to load (stack, intent, agent, skills, context); the model decides **how** to review, debug or implement, following the loaded instructions.
 
 ```text
 USER ──► COMMAND (/reis-mobile:review)
               │
               ▼
           ROUTER ◄──── Intent detector (prompt)
-              │  ◄──── Stack detector (arquivos do projeto)
+              │  ◄──── Stack detector (project files)
               │  ◄──── Registry (agents, skills, stacks)
               ▼
-     AGENT + SKILLS ◄── Context engine (git diff, redação de secrets)
+     AGENT + SKILLS ◄── Context engine (git diff, secret redaction)
               │
               ▼
-     Claude Code (Read/Grep/Bash) ──► relatório
+     Claude Code (Read/Grep/Bash) ──► report
 ```
 
-## Decisões
+## Decisions
 
-| Decisão | Motivo |
+| Decision | Reason |
 |---|---|
-| **Zero dependências npm** | O plugin roda direto do cache do Claude Code, onde ninguém executa `npm install`. Por isso existem um parser de frontmatter próprio e testes com `node:test`. |
-| **Metadados de roteamento no frontmatter** | `intents` e `stacks` ficam no mesmo arquivo que o Claude Code lê. O router e o plugin não conseguem divergir sobre o que existe. |
-| **Detecção determinística, não por LLM** | Stack detection precisa ser previsível, testável e barata. O modelo recebe o resultado pronto. |
-| **Projeto no disco decide a stack** | O prompt só preenche uma stack desconhecida ou foca uma plataforma nativa de um app cross-platform. "O build Android" num app Flutter continua sendo Flutter, com foco em Android. |
-| **Sem agent, sem chute** | Quando nenhuma intent tem agent registrado, o router emite um aviso em vez de escolher o "mais parecido". |
-| **Estrutura plana de skills** | `skills/<nome>/SKILL.md`, com prefixo da stack no nome (`flutter-*`, `android-*`). É o layout que o Claude Code descobre automaticamente. |
-| **Secrets mascarados antes do modelo** | O diff passa por `redactSecrets` antes de sair da CLI. Os padrões miram literais (`apiKey = "AIza..."`), não identificadores (`final token = await read()`), para não prejudicar a revisão. |
+| **Zero npm dependencies** | The plugin runs straight from the Claude Code cache, where nobody runs `npm install`. That is why there is a custom frontmatter parser and tests with `node:test`. |
+| **Routing metadata in the frontmatter** | `intents` and `stacks` live in the same file Claude Code reads. The router and the plugin cannot disagree about what exists. |
+| **Deterministic detection, not LLM-based** | Stack detection must be predictable, testable and cheap. The model receives the finished result. |
+| **The project on disk decides the stack** | The prompt only fills in an unknown stack or focuses on a native platform of a cross-platform app. "The Android build" in a Flutter app is still Flutter, with focus on Android. |
+| **No agent, no guess** | When no intent has a registered agent, the router emits a warning instead of picking the "closest" one. |
+| **Flat skill structure** | `skills/<name>/SKILL.md`, with the stack prefix in the name (`flutter-*`, `android-*`). It is the layout Claude Code discovers automatically. |
+| **Secrets masked before the model** | The diff goes through `redactSecrets` before leaving the CLI. The patterns target literals (`apiKey = "AIza..."`), not identifiers (`final token = await read()`), so the review is not harmed. |
 
-## Módulos
+## Modules
 
 ```text
 core/
-├── paths.mjs                    raiz do plugin
+├── paths.mjs                    plugin root
 ├── detection/
-│   ├── project-probe.mjs        leitura limitada do projeto (ignora build/, Pods/, node_modules/...)
-│   └── stack-detector.mjs       regras por stack, em ordem de prioridade
+│   ├── project-probe.mjs        bounded project reading (skips build/, Pods/, node_modules/...)
+│   └── stack-detector.mjs       per-stack rules, in priority order
 ├── registry/
-│   ├── frontmatter.mjs          subconjunto de YAML usado nos frontmatters
-│   └── registry.mjs             carrega e valida stacks, agents e skills
+│   ├── frontmatter.mjs          YAML subset used in the frontmatters
+│   └── registry.mjs             loads and validates stacks, agents and skills
 ├── router/
-│   ├── intents.mjs              vocabulário: intents, hints de stack, áreas
-│   ├── intent-detector.mjs      prompt → intent, stack, área
+│   ├── intents.mjs              vocabulary: intents, stack hints, areas
+│   ├── intent-detector.mjs      prompt → intent, stack, area
 │   └── router.mjs               intent + stack → agent + skills
 ├── context/
-│   └── context-engine.mjs       arquivos alterados e diff (working tree, range ou projeto)
+│   └── context-engine.mjs       changed files and diff (working tree, range or project)
 ├── diagnostics/
-│   └── doctor.mjs               ferramentas e configuração do projeto
+│   └── doctor.mjs               tools and project configuration
 ├── install/
-│   └── claude-plugin.mjs        registra o plugin no Claude Code (reis-mobile init)
+│   └── claude-plugin.mjs        registers the plugin in Claude Code (reis-mobile init)
 └── security/
-    └── redact.mjs               mascaramento de secrets
+    └── redact.mjs               secret masking
 ```
 
-## Detecção de stack
+## Stack detection
 
-As regras rodam em ordem de prioridade. Stacks cross-platform vêm primeiro porque contêm pastas nativas:
+Rules run in priority order. Cross-platform stacks come first because they contain native folders:
 
-| Ordem | Stack | Evidência exigida |
+| Order | Stack | Required evidence |
 |---|---|---|
-| 1 | `flutter` | `pubspec.yaml` com `sdk: flutter` (um pacote Dart puro não conta) |
-| 2 | `react-native` | `package.json` dependendo de `react-native` (variante `expo` se depender de `expo`) |
-| 3 | `kotlin-multiplatform` | `build.gradle.kts` na raiz ou um nível abaixo aplicando o plugin multiplatform |
-| 4 | `android` | Gradle na raiz **e** (`AndroidManifest.xml` ou plugin `com.android.*`) |
-| 5 | `ios` | `*.xcodeproj`/`*.xcworkspace`, `Podfile` ou `Package.swift` com `.iOS(...)` |
+| 1 | `flutter` | `pubspec.yaml` with `sdk: flutter` (a pure Dart package does not count) |
+| 2 | `react-native` | `package.json` depending on `react-native` (`expo` variant if it depends on `expo`) |
+| 3 | `kotlin-multiplatform` | `build.gradle.kts` at the root or one level below applying the multiplatform plugin |
+| 4 | `android` | Gradle at the root **and** (`AndroidManifest.xml` or a `com.android.*` plugin) |
+| 5 | `ios` | `*.xcodeproj`/`*.xcworkspace`, `Podfile` or `Package.swift` with `.iOS(...)` |
 
-Todas as stacks que casam aparecem em `candidates`. A primeira é a principal.
+Every matching stack appears in `candidates`. The first one is the main stack.
 
-## Roteamento
+## Routing
 
-1. **Intent.** A intent explícita do comando vence. Sem ela, os termos do prompt são normalizados (minúsculas, sem acento) e contados. Termos mais longos reservam seu trecho primeiro, então "testflight" não conta como "test". Falha de build, deploy, dependência ou migração vira `debug`.
-2. **Stack.** A stack detectada no disco vence. As plataformas citadas no prompt, ou implicadas pela área (`gradle` → android, `xcode` → ios), viram `platformFocus` quando o projeto as tem.
-3. **Agent.** Precisa declarar a intent. Um agent específico da stack vence um agent `"*"`.
-4. **Skills.** Precisam declarar a intent. A ordem é: stack principal, depois plataformas em foco, depois `"*"`.
+1. **Intent.** The command's explicit intent wins. Without one, the prompt terms are normalized (lowercase, no accents) and counted, in English and Portuguese. Longer terms claim their span first, so "testflight" does not count as "test". Build, deploy, dependency or migration failures become `debug`.
+2. **Stack.** The stack detected on disk wins. Platforms mentioned in the prompt, or implied by the area (`gradle` → android, `xcode` → ios), become `platformFocus` when the project has them.
+3. **Agent.** Must declare the intent. A stack-specific agent beats a `"*"` agent.
+4. **Skills.** Must declare the intent. The order is: main stack, then focused platforms, then `"*"`.
 
-Componentes com `routing: manual` nunca são selecionados pelo router. O Claude Code os invoca apenas pela descrição.
+Components with `routing: manual` are never selected by the router. Claude Code invokes them only by their description.
 
-## Contrato dos componentes
+## Component contract
 
 Agent (`agents/<name>.md`):
 
 ```yaml
 ---
-name: mobile-code-reviewer        # igual ao nome do arquivo
-description: Use this agent to... # usado pelo Claude Code para decidir quando delegar
+name: mobile-code-reviewer        # same as the file name
+description: Use this agent to... # used by Claude Code to decide when to delegate
 model: inherit
 tools: ["Read", "Grep", "Glob", "Bash"]
-intents: [review]                 # reis-mobile: intents atendidas
-stacks: ["*"]                     # reis-mobile: stacks atendidas ("*" = todas)
+intents: [review]                 # reis-mobile: intents served
+stacks: ["*"]                     # reis-mobile: stacks served ("*" = all)
 ---
 ```
 
@@ -95,32 +95,32 @@ Skill (`skills/<name>/SKILL.md`):
 
 ```yaml
 ---
-name: flutter-widget-review       # igual ao nome da pasta
+name: flutter-widget-review       # same as the folder name
 description: Reviews Flutter widget code for...
 intents: [review, performance]
 stacks: [flutter]
-# routing: manual                 # opcional: fora do roteamento automático
-# source: https://github.com/...  # skills de terceiros: origem
-# license: MIT                    # obrigatório quando há source
+# routing: manual                 # optional: out of automatic routing
+# source: https://github.com/...  # third-party skills: origin
+# license: MIT                    # required when source is present
 ---
 ```
 
-`reis-mobile validate` (e o CI) rejeita nome divergente do arquivo, descrição ausente, intent ou stack desconhecidas, `source` sem `license` e duplicatas. Um teste garante que toda skill com `source` aparece em `THIRD_PARTY_NOTICES.md`.
+`reis-mobile validate` (and CI) rejects a name that differs from the file, a missing description, unknown intents or stacks, `source` without `license`, and duplicates. A test ensures every skill with `source` appears in `THIRD_PARTY_NOTICES.md`.
 
-## Distribuição
+## Distribution
 
-A CLI e o plugin são o mesmo código. O plugin do Claude Code é instalado a partir do repositório (marketplace GitHub). A CLI chega por:
+The CLI and the plugin are the same code. The Claude Code plugin is installed from the repository (GitHub marketplace). The CLI ships through:
 
-| Canal | Origem | Plugin |
+| Channel | Origin | Plugin |
 |---|---|---|
-| `install.sh` / `install.ps1` | Asset `reis-mobile-vX.Y.Z.tar.gz` da release, conferido contra `SHA256SUMS` | Chama `reis-mobile init` se o `claude` existir |
-| Homebrew (`wrsilva/homebrew-tap`) | Mesmo asset, fórmula gerada por `scripts/homebrew-formula.mjs` | `reis-mobile init` (caveat) |
-| npm | `npm publish` no workflow de release, se houver `NPM_TOKEN` | `reis-mobile init` |
+| `install.sh` / `install.ps1` | Release asset `reis-mobile-vX.Y.Z.tar.gz`, checked against `SHA256SUMS` | Calls `reis-mobile init` if `claude` exists |
+| Homebrew (`wrsilva/homebrew-tap`) | Same asset, formula generated by `scripts/homebrew-formula.mjs` | `reis-mobile init` (caveat) |
+| npm | `npm publish` in the release workflow, if `NPM_TOKEN` exists | `reis-mobile init` |
 
-O tarball é gerado por `git archive`. O `.gitattributes` exclui `tests/`, `scripts/`, `.github/` e os instaladores.
+The tarball is generated by `git archive`. `.gitattributes` excludes `tests/`, `scripts/`, `.github/` and the installers.
 
-Não há binário nativo: o reis-mobile depende de Node.js, então Homebrew declara `depends_on "node"` e os instaladores verificam a versão antes de instalar.
+There is no native binary: reis-mobile depends on Node.js, so Homebrew declares `depends_on "node"` and the installers check the version before installing.
 
-## Fora do escopo desta versão
+## Out of scope for this version
 
-Estes itens seguem o plano, mas ainda não foram implementados: `.codex-plugin/` (o formato do manifest ainda não foi verificado), `.reis-mobile/config.yaml`, providers, MCP server, hooks, multi-agent e logs de execução.
+These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), `.reis-mobile/config.yaml`, providers, MCP server, hooks, multi-agent and execution logs.

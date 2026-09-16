@@ -1,6 +1,6 @@
 ---
 name: lead-mobile
-description: Use this agent to coordinate several reis-mobile specialists on one mobile request — full project audits, a new feature that needs architecture, tests and performance input, or a problem spanning Flutter and native code. It delegates to the right agents, removes duplicated findings and delivers one prioritized action plan. Typical triggers are "faça uma auditoria completa do app" and "planeje esta feature com os especialistas".
+description: Use this agent to coordinate several reis-mobile specialists on one mobile request — full project audits, a new feature that needs architecture, tests and performance input, or a problem spanning Flutter and native code. It delegates to the right agents, removes duplicated findings and delivers one prioritized action plan. Typical triggers are "run a full audit of the app" and "plan this feature with the specialists".
 model: inherit
 color: purple
 tools: ["Read", "Grep", "Glob", "Bash", "Agent"]

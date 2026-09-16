@@ -1,22 +1,22 @@
 ---
-description: Diagnostica o ambiente mobile (Flutter, Android SDK, Java, Xcode, CocoaPods, Node...) e a configuração do projeto detectado
+description: Diagnoses the mobile environment (Flutter, Android SDK, Java, Xcode, CocoaPods, Node...) and the configuration of the detected project
 argument-hint: "[--all] [--dir <path>]"
 allowed-tools: ["Bash(node:*)", "Read"]
 ---
 
 # reis-mobile doctor
 
-Resultado do diagnóstico:
+Diagnostic result:
 
 !`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor $ARGUMENTS`
 
-## Instruções
+## Instructions
 
-1. Mostre o relatório acima ao usuário exatamente como veio, dentro de um bloco de código.
-2. Para cada linha marcada com `✗`, explique em uma frase a causa provável e o comando para corrigir, considerando o sistema operacional e a stack detectada. Exemplos:
+1. Show the report above to the user exactly as it came, inside a code block.
+2. For each line marked with `✗`, explain in one sentence the likely cause and the command to fix it, taking the operating system and the detected stack into account. Examples:
    - `pubspec.lock missing` → `flutter pub get`
    - `Podfile.lock missing` → `cd ios && pod install`
-   - `Android SDK not found` → instalar pelo Android Studio e exportar `ANDROID_HOME`
-   - `Java` falhando num projeto Flutter → `flutter doctor -v` mostra qual JDK o Flutter usa; o `java` do PATH pode ser diferente
-3. Não execute comandos de instalação ou correção sem o usuário pedir.
-4. Se não houver `✗`, diga apenas que o ambiente está pronto para a stack detectada.
+   - `Android SDK not found` → install it through Android Studio and export `ANDROID_HOME`
+   - `Java` failing in a Flutter project → `flutter doctor -v` shows which JDK Flutter uses; the `java` on the PATH may be a different one
+3. Do not run install or fix commands unless the user asks.
+4. If there is no `✗`, just say the environment is ready for the detected stack.

@@ -7,48 +7,48 @@ stacks: [flutter]
 
 # Flutter Widget Review
 
-Aplique aos arquivos Dart com widgets (`StatelessWidget`, `StatefulWidget`, `ConsumerWidget`, `HookWidget`...). Os itens estão ordenados por impacto: os primeiros causam crash ou bug visível.
+Apply to Dart files with widgets (`StatelessWidget`, `StatefulWidget`, `ConsumerWidget`, `HookWidget`...). Items are ordered by impact: the first ones cause crashes or visible bugs.
 
-## 1. Ciclo de vida e async (crash / bug)
+## 1. Lifecycle and async (crash / bug)
 
-- [ ] **`BuildContext` depois de `await`.** Uso de `context` (`Navigator.of`, `ScaffoldMessenger.of`, `Theme.of`) após um `await` sem checar `if (!context.mounted) return;` (ou `mounted` num `State`). O lint `use_build_context_synchronously` cobre parte dos casos.
-- [ ] **`setState` após `dispose`.** Callbacks de `Future`, `Stream` ou `Timer` que chamam `setState` sem checar `mounted`.
-- [ ] **Recursos sem `dispose`.** `TextEditingController`, `AnimationController`, `ScrollController`, `PageController`, `FocusNode`, `StreamSubscription`, `Timer` e `ChangeNotifier` criados no `State` precisam ser liberados em `dispose()`.
-- [ ] **Controller criado dentro de `build`.** Recria o controller a cada rebuild e perde o estado (texto digitado, posição do scroll).
-- [ ] **`Future` criado dentro de `build`.** `FutureBuilder(future: api.fetch())` refaz a requisição a cada rebuild. O `Future` deve ser criado em `initState`, no state management ou memoizado.
-- [ ] **Efeitos colaterais em `build`.** Navegação, `showDialog`, analytics ou chamadas de rede dentro de `build`. Devem ficar em listeners (`BlocListener`, `ref.listen`) ou em `addPostFrameCallback`.
+- [ ] **`BuildContext` after `await`.** Using `context` (`Navigator.of`, `ScaffoldMessenger.of`, `Theme.of`) after an `await` without checking `if (!context.mounted) return;` (or `mounted` in a `State`). The `use_build_context_synchronously` lint covers some of the cases.
+- [ ] **`setState` after `dispose`.** `Future`, `Stream` or `Timer` callbacks that call `setState` without checking `mounted`.
+- [ ] **Resources without `dispose`.** `TextEditingController`, `AnimationController`, `ScrollController`, `PageController`, `FocusNode`, `StreamSubscription`, `Timer` and `ChangeNotifier` created in the `State` must be released in `dispose()`.
+- [ ] **Controller created inside `build`.** Recreates the controller on every rebuild and loses state (typed text, scroll position).
+- [ ] **`Future` created inside `build`.** `FutureBuilder(future: api.fetch())` repeats the request on every rebuild. The `Future` should be created in `initState`, in the state management layer or memoized.
+- [ ] **Side effects in `build`.** Navigation, `showDialog`, analytics or network calls inside `build`. They belong in listeners (`BlocListener`, `ref.listen`) or in `addPostFrameCallback`.
 
-## 2. Estado e identidade
+## 2. State and identity
 
-- [ ] Itens de lista reordenáveis ou removíveis sem `Key` estável (`ValueKey(item.id)`): o estado vai parar no item errado.
-- [ ] `GlobalKey` criada dentro de `build`.
-- [ ] Estado de negócio guardado em `StatefulWidget` quando o projeto já usa um gerenciador de estado.
+- [ ] Reorderable or removable list items without a stable `Key` (`ValueKey(item.id)`): state ends up on the wrong item.
+- [ ] `GlobalKey` created inside `build`.
+- [ ] Business state kept in a `StatefulWidget` when the project already uses a state manager.
 
-## 3. Performance de renderização
+## 3. Rendering performance
 
-- [ ] Construtores `const` ausentes em subárvores estáticas (só reporte em widgets reconstruídos com frequência).
-- [ ] Listas longas com `ListView(children: [...])` / `Column` dentro de `SingleChildScrollView`: use `ListView.builder` ou `SliverList`.
-- [ ] `shrinkWrap: true` em lista grande dentro de outro scroll: força o layout de todos os itens.
-- [ ] Escopo de rebuild grande demais: `setState`, `BlocBuilder` ou `Consumer` no topo da tela quando só um trecho muda. Use `buildWhen`, `select` ou extraia o widget.
-- [ ] `MediaQuery.of(context)` usado só para o tamanho: `MediaQuery.sizeOf(context)` reconstrói menos. Confirme a versão do Flutter no `pubspec.lock` antes de sugerir.
-- [ ] Imagens de rede sem `cacheWidth`/`cacheHeight` ou sem cache, decodificadas em resolução total para exibir miniaturas.
-- [ ] `Opacity` animada ou `ClipRRect`/`BackdropFilter` em itens de lista: prefira `FadeTransition`/`AnimatedOpacity` e evite clip desnecessário.
-- [ ] Trabalho pesado (parse de JSON grande, criptografia, processamento de imagem) na UI thread: use `compute`/`Isolate.run`.
+- [ ] Missing `const` constructors in static subtrees (only report in widgets that rebuild often).
+- [ ] Long lists with `ListView(children: [...])` / `Column` inside `SingleChildScrollView`: use `ListView.builder` or `SliverList`.
+- [ ] `shrinkWrap: true` on a large list inside another scroll view: forces layout of every item.
+- [ ] Rebuild scope too large: `setState`, `BlocBuilder` or `Consumer` at the top of the screen when only one part changes. Use `buildWhen`, `select` or extract the widget.
+- [ ] `MediaQuery.of(context)` used only for the size: `MediaQuery.sizeOf(context)` rebuilds less. Confirm the Flutter version in `pubspec.lock` before suggesting it.
+- [ ] Network images without `cacheWidth`/`cacheHeight` or without caching, decoded at full resolution to display thumbnails.
+- [ ] Animated `Opacity` or `ClipRRect`/`BackdropFilter` in list items: prefer `FadeTransition`/`AnimatedOpacity` and avoid unnecessary clipping.
+- [ ] Heavy work (parsing large JSON, cryptography, image processing) on the UI thread: use `compute`/`Isolate.run`.
 
 ## 4. Layout
 
-- [ ] `Row` com `Text` sem `Expanded`/`Flexible`: overflow com texto longo ou fonte do sistema aumentada.
-- [ ] Altura ou largura fixas para conteúdo de texto: quebram com `textScaler` alto.
-- [ ] Ausência de `SafeArea` em telas sem `Scaffold`/`AppBar`.
-- [ ] Teclado cobrindo campos: formulário fora de um scroll.
+- [ ] `Row` with `Text` without `Expanded`/`Flexible`: overflow with long text or a larger system font.
+- [ ] Fixed height or width for text content: breaks with a high `textScaler`.
+- [ ] Missing `SafeArea` on screens without `Scaffold`/`AppBar`.
+- [ ] Keyboard covering fields: form outside a scroll view.
 
-## 5. Acessibilidade e i18n
+## 5. Accessibility and i18n
 
-- [ ] `IconButton` e `GestureDetector` sem `tooltip` ou `Semantics(label: ...)`.
-- [ ] Área de toque menor que 48x48 dp.
-- [ ] Textos visíveis hardcoded quando o projeto já usa `intl`/`AppLocalizations`.
-- [ ] Informação transmitida só por cor.
+- [ ] `IconButton` and `GestureDetector` without `tooltip` or `Semantics(label: ...)`.
+- [ ] Touch target smaller than 48x48 dp.
+- [ ] Hardcoded visible strings when the project already uses `intl`/`AppLocalizations`.
+- [ ] Information conveyed by color alone.
 
-## Saída
+## Output
 
-Reporte na seção adequada do relatório (Bugs para a seção 1, Performance para a 3...), sempre com `arquivo:linha` e o trecho corrigido quando a correção for curta.
+Report in the appropriate section of the report (Bugs for section 1, Performance for section 3...), always with `file:line` and the corrected snippet when the fix is short.

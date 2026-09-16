@@ -1,8 +1,8 @@
 # 📱 reis-mobile
 
-Um app mobile não é um projeto genérico. Um code review que não conhece `BuildContext` após `await`, `android:exported`, `NSAllowsArbitraryLoads` ou `Podfile.lock` deixa passar justamente os bugs que só aparecem no dispositivo. O **reis-mobile** detecta a stack do seu projeto, escolhe o especialista certo e carrega só as skills que se aplicam a Flutter, Android, iOS ou React Native.
+A mobile app is not a generic project. A code review that does not know about `BuildContext` after `await`, `android:exported`, `NSAllowsArbitraryLoads` or `Podfile.lock` lets through exactly the bugs that only show up on the device. **reis-mobile** detects your project's stack, picks the right specialist and loads only the skills that apply to Flutter, Android, iOS or React Native.
 
-**AI agents for mobile engineering.** Um plugin do Claude Code com agents, skills e workflows especializados em desenvolvimento mobile.
+**AI agents for mobile engineering.** A Claude Code plugin with agents, skills and workflows specialized in mobile development.
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -21,58 +21,58 @@ Um app mobile não é um projeto genérico. Um code review que não conhece `Bui
   <img src="https://img.shields.io/badge/Kotlin_Multiplatform-7F52FF?logo=kotlin&logoColor=white" alt="Kotlin Multiplatform">
 </p>
 
-🔎 **Detecta a stack sozinho.** Flutter (app ou plugin), React Native (incluindo Expo), Kotlin Multiplatform, Android e iOS nativos, com linguagens e plataformas-alvo. Um app Flutter com `android/` e `ios/` continua sendo Flutter.
+🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **7 agents e 67 skills de mobile.** Arquiteto Flutter, engenheiros de performance e de testes, staff engineer Flutter/Android/iOS, especialista em plugins nativos, revisor de código e um lead que coordena todos, além de skills para BLoC, Riverpod, Firebase, testes, layout, plugins e segurança.
+👥 **7 agents and 67 mobile skills.** Flutter architect, performance and test engineers, Flutter/Android/iOS staff engineer, native plugin specialist, code reviewer and a lead that coordinates them all, plus skills for BLoC, Riverpod, Firebase, testing, layout, plugins and security.
 
-🧭 **Roteia para o especialista certo.** Descreva o problema em português ou inglês, e o router identifica a intent, a stack e a plataforma em foco. "O build Android do meu app Flutter quebrou" carrega o contexto de Flutter **e** de Android.
+🧭 **Routes to the right specialist.** Describe the problem in English or Portuguese, and the router identifies the intent, the stack and the platform in focus. "The Android build of my Flutter app broke" loads Flutter **and** Android context.
 
-🛡️ **Segurança mobile de verdade.** Checklist baseado no OWASP MASVS, com verificações concretas por stack: `flutter_secure_storage`, `network_security_config`, ATS, Keychain e `AsyncStorage`.
+🛡️ **Real mobile security.** Checklist based on OWASP MASVS, with concrete per-stack checks: `flutter_secure_storage`, `network_security_config`, ATS, Keychain and `AsyncStorage`.
 
-🩺 **Doctor que entende mobile.** Verifica Flutter, Dart, Java, Android SDK, Xcode, CocoaPods, Gradle wrapper e lock files, mas só o que importa para a stack detectada.
+🩺 **A doctor that understands mobile.** Checks Flutter, Dart, Java, Android SDK, Xcode, CocoaPods, Gradle wrapper and lock files, but only what matters for the detected stack.
 
-🔒 **Secrets nunca chegam ao modelo.** O diff enviado para revisão passa por uma camada que mascara API keys, tokens, JWTs, chaves privadas e senhas de keystore.
+🔒 **Secrets never reach the model.** The diff sent for review goes through a layer that masks API keys, tokens, JWTs, private keys and keystore passwords.
 
-🪶 **Sem dependências.** Instala com um comando, zero dependências npm, nenhum hook, nenhum provider externo.
+🪶 **No dependencies.** Installs with one command, zero npm dependencies, no hooks, no external provider.
 
 ---
 
-## Novidades
+## What's new
 
-> 🆕 **v0.3.0: os especialistas debatem.** Numa decisão de arquitetura, um só especialista te dá a resposta da especialidade dele. `/reis-mobile:debate` põe três deles para defender posições incompatíveis sobre a mesma questão — e o `lead-mobile` decide, em vez de listar prós e contras.
+> 🆕 **v0.3.0: the specialists debate.** On an architecture decision, a single specialist gives you the answer of their specialty. `/reis-mobile:debate` puts three of them to defend incompatible positions on the same question — and `lead-mobile` decides, instead of listing pros and cons.
 >
 > ```bash
-> /reis-mobile:debate Riverpod ou BLoC para o estado deste app?
-> /reis-mobile:debate --rounds 3 offline-first no Firestore ou cache local?
+> /reis-mobile:debate Riverpod or BLoC for this app's state?
+> /reis-mobile:debate --rounds 3 offline-first with Firestore or a local cache?
 > ```
 >
-> A rodada 1 é às cegas, para que ninguém ancore os outros. Os participantes não variam só de papel: variam de modelo, porque três instâncias do mesmo modelo concordam pelos mesmos motivos errados.
+> Round 1 is blind, so nobody anchors the others. Participants do not vary only in role: they vary in model, because three instances of the same model agree for the same wrong reasons.
 
-| Versão | Destaques |
+| Version | Highlights |
 |--------|-----------|
-| **v0.3.0** (atual) | Comando `/reis-mobile:debate`: três especialistas com prioridades conflitantes debatem em duas rodadas e o `lead-mobile` decide. Participantes variam em papel e em modelo; `--external` soma Codex e Gemini. Antecipa o `council` previsto para a v0.8.0. |
-| **v0.2.1** | Comando `/reis-mobile`: lista os comandos e encaminha para `doctor`, `review` ou, com um pedido livre, para o agent e as skills da stack detectada. Aparece no menu de comandos da extensão do VS Code. |
-| **v0.2.0** | 6 novos agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) e 63 novas skills de Flutter, Dart e Firebase. O router passa a ter especialista para debug, test, architecture e performance. |
-| **v0.1.0** | Plugin `reis-mobile` para o Claude Code. Detecção de 5 stacks. Router intent + stack → agent + skills. Context engine com diff mascarado. `/reis-mobile:doctor` e `/reis-mobile:review`. CLI `reis-mobile`. |
+| **v0.3.0** (current) | `/reis-mobile:debate` command: three specialists with conflicting priorities debate over two rounds and `lead-mobile` decides. Participants vary in role and model; `--external` adds Codex and Gemini. Brings forward the `council` planned for v0.8.0. |
+| **v0.2.1** | `/reis-mobile` command: lists the commands and forwards to `doctor`, `review` or, with a free-form request, to the agent and skills for the detected stack. Shows up in the VS Code extension command menu. |
+| **v0.2.0** | 6 new agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) and 63 new Flutter, Dart and Firebase skills. The router now has a specialist for debug, test, architecture and performance. |
+| **v0.1.0** | `reis-mobile` plugin for Claude Code. Detection of 5 stacks. Intent + stack → agent + skills router. Context engine with masked diff. `/reis-mobile:doctor` and `/reis-mobile:review`. `reis-mobile` CLI. |
 
-[Changelog completo →](CHANGELOG.md)
+[Full changelog →](CHANGELOG.md)
 
-## Instalação
+## Installation
 
-Requisitos: **Node.js 22+** e, para usar os comandos `/reis-mobile:*`, o **[Claude Code](https://claude.com/claude-code)**.
+Requirements: **Node.js 22+** and, to use the `/reis-mobile:*` commands, **[Claude Code](https://claude.com/claude-code)**.
 
-Os instaladores e o Homebrew instalam a CLI `reis-mobile`. Quando o Claude Code está disponível, o instalador também registra o plugin. Se ele não estiver, rode `reis-mobile init` depois de instalá-lo. Para instalar só o plugin, siga a seção do [Claude Code](#só-o-plugin-do-claude-code) ou do [Codex](#plugin-no-codex-via-github).
+The installers and Homebrew install the `reis-mobile` CLI. When Claude Code is available, the installer also registers the plugin. If it is not, run `reis-mobile init` after installing it. To install only the plugin, follow the [Claude Code](#claude-code-plugin-only) or [Codex](#codex-plugin-from-github) section.
 
-### Quick Install (macOS/Linux) — recomendado
+### Quick Install (macOS/Linux) — recommended
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
 ```
 
-Instala em `~/.local/share/reis-mobile`, cria o comando em `~/.local/bin` e confere o SHA-256 do download. Se `~/.local/bin` não estiver no `PATH`:
+Installs to `~/.local/share/reis-mobile`, creates the command in `~/.local/bin` and checks the download's SHA-256. If `~/.local/bin` is not on your `PATH`:
 
 ```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # ou ~/.bashrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # or ~/.bashrc
 ```
 
 ### Windows (PowerShell)
@@ -81,7 +81,7 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # ou ~/.bashrc
 irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
-Instala em `%LOCALAPPDATA%\reis-mobile`, cria `reis-mobile.cmd` em `%USERPROFILE%\.local\bin` e adiciona essa pasta ao `PATH` do usuário. Abra um novo terminal depois.
+Installs to `%LOCALAPPDATA%\reis-mobile`, creates `reis-mobile.cmd` in `%USERPROFILE%\.local\bin` and adds that folder to the user `PATH`. Open a new terminal afterwards.
 
 ### Homebrew
 
@@ -90,63 +90,63 @@ brew install wrsilva/tap/reis-mobile
 reis-mobile init
 ```
 
-### npm (em breve)
+### npm (coming soon)
 
-O pacote ainda não foi publicado no npm. Quando for:
+The package has not been published to npm yet. Once it is:
 
 ```bash
 npm install -g reis-mobile
 reis-mobile init
 ```
 
-### Só o plugin do Claude Code
+### Claude Code plugin only
 
 ```bash
 claude plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 claude plugin install reis-mobile@reis-mobile
 ```
 
-### Plugin no Codex via GitHub
+### Codex plugin from GitHub
 
-Com a CLI do Codex instalada e com suporte a `codex plugin`, execute no terminal:
+With the Codex CLI installed and supporting `codex plugin`, run in the terminal:
 
 ```bash
 codex plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 codex plugin add reis-mobile@reis-mobile
 ```
 
-O primeiro comando registra o marketplace com origem no GitHub; o segundo instala o plugin no cache do Codex. É o mesmo repositório usado pelo Claude Code, sem depender de um clone de desenvolvimento ou de links em `~/.agents/skills/`. A instalação do plugin `0.2.1` por esse fluxo foi verificada.
+The first command registers the marketplace with GitHub as its source; the second installs the plugin into the Codex cache. It is the same repository used by Claude Code, with no need for a development clone or links in `~/.agents/skills/`. Installing plugin `0.2.1` through this flow has been verified.
 
-Confira a origem, a instalação e se o plugin está habilitado:
+Check the source, the installation and whether the plugin is enabled:
 
 ```bash
 codex plugin marketplace list --json
 codex plugin list --json
 ```
 
-Procure `reis-mobile@reis-mobile` com `installed: true`, `enabled: true` e a origem Git `https://github.com/wrsilva/reis-mobile.git`.
+Look for `reis-mobile@reis-mobile` with `installed: true`, `enabled: true` and the Git source `https://github.com/wrsilva/reis-mobile.git`.
 
-Reinicie o Codex e abra uma conversa na pasta do seu app mobile. Na CLI ou na extensão do IDE, digite `$` no campo de mensagem para procurar as skills, ou use `/skills`. Veja a [documentação oficial de skills do Codex](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills).
+Restart Codex and open a conversation in your mobile app folder. In the CLI or the IDE extension, type `$` in the message field to search for skills, or use `/skills`. See the [official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills).
 
-O registro do plugin e a disponibilidade de cada recurso são verificações separadas: a instalação validada acima não confirma a execução dos agents nem dos comandos `/reis-mobile:*` do Claude Code no Codex. Para usar `doctor`, `route` e `review` pela CLI, instale também `reis-mobile` por um dos métodos acima e execute na pasta do app:
+Registering the plugin and the availability of each feature are separate checks: the installation validated above does not confirm that the agents or the Claude Code `/reis-mobile:*` commands run in Codex. To use `doctor`, `route` and `review` through the CLI, also install `reis-mobile` with one of the methods above and run it in the app folder:
 
 ```bash
 reis-mobile doctor
-reis-mobile route "revisar arquitetura" --json
+reis-mobile route "review architecture" --json
 reis-mobile review --json
 ```
 
-Você também pode pedir ao Codex: *"Execute `reis-mobile review --json`, leia as instruções dos arquivos retornados e revise as alterações usando esse contexto."* A CLI seleciona as instruções e coleta o contexto; o Codex faz a análise.
+You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis.
 
-`reis-mobile init` registra o plugin no Claude Code. Para registrar no Codex, use os comandos `codex plugin` desta seção, mesmo que a CLI `reis-mobile` já esteja instalada pelo Homebrew.
+`reis-mobile init` registers the plugin in Claude Code. To register it in Codex, use the `codex plugin` commands in this section, even if the `reis-mobile` CLI is already installed through Homebrew.
 
-### Verificar a CLI e o plugin do Claude Code
+### Verify the CLI and the Claude Code plugin
 
 ```bash
 reis-mobile --version   # reis-mobile 0.2.1
 ```
 
-Depois, reinicie o Claude Code e rode, na pasta do seu app:
+Then restart Claude Code and run, in your app folder:
 
 ```text
 /reis-mobile
@@ -155,14 +155,14 @@ Depois, reinicie o Claude Code e rode, na pasta do seu app:
 ```
 
 <details>
-<summary>Opções do instalador</summary>
+<summary>Installer options</summary>
 
-| Variável | Padrão | Uso |
+| Variable | Default | Use |
 |----------|--------|-----|
-| `REIS_MOBILE_VERSION` | última release | Instala uma tag específica, por exemplo `v0.3.0` |
-| `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Pasta de instalação |
-| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Pasta do comando `reis-mobile` |
-| `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` instala só a CLI, sem registrar o plugin |
+| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.0` |
+| `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Installation folder |
+| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `reis-mobile` command |
+| `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` installs only the CLI, without registering the plugin |
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.0 sh
@@ -170,14 +170,14 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 </details>
 
 <details>
-<summary>Desinstalar</summary>
+<summary>Uninstall</summary>
 
-Remova primeiro o plugin do Claude Code e depois a CLI, pelo mesmo método usado na instalação.
+Remove the Claude Code plugin first and then the CLI, using the same method used to install it.
 
 ```bash
-# Plugin do Claude Code (qualquer plataforma)
+# Claude Code plugin (any platform)
 reis-mobile init --uninstall
-# ou, sem a CLI:
+# or, without the CLI:
 claude plugin uninstall reis-mobile && claude plugin marketplace remove reis-mobile
 
 # macOS/Linux (curl)
@@ -185,7 +185,7 @@ rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile
 
 # Homebrew
 brew uninstall reis-mobile
-brew untap wrsilva/tap            # opcional
+brew untap wrsilva/tap            # optional
 ```
 
 ```powershell
@@ -196,59 +196,59 @@ Remove-Item -Force "$HOME\.local\bin\reis-mobile.cmd"
 </details>
 
 <details>
-<summary>Desenvolvimento a partir do clone</summary>
+<summary>Development from the clone</summary>
 
 ```bash
 git clone https://github.com/wrsilva/reis-mobile.git
 cd reis-mobile
-npm link                      # CLI apontando para o clone
-reis-mobile init --local      # plugin apontando para o clone
-npm run check                 # valida e roda os testes
+npm link                      # CLI pointing at the clone
+reis-mobile init --local      # plugin pointing at the clone
+npm run check                 # validates and runs the tests
 ```
 
-Depois de editar agents, skills ou commands, reinicie a sessão do Claude Code.
+After editing agents, skills or commands, restart the Claude Code session.
 </details>
 
 ---
 
-## Atualização
+## Updating
 
-O reis-mobile tem duas partes que se atualizam separadamente: o **plugin do Claude Code** (agents, skills e comandos `/reis-mobile:*`) e a **CLI** (`reis-mobile`). Atualize as duas.
+reis-mobile has two parts that update separately: the **Claude Code plugin** (agents, skills and `/reis-mobile:*` commands) and the **CLI** (`reis-mobile`). Update both.
 
-Para ver o que mudou, consulte o [CHANGELOG](CHANGELOG.md) ou as [releases](https://github.com/wrsilva/reis-mobile/releases).
+To see what changed, check the [CHANGELOG](CHANGELOG.md) or the [releases](https://github.com/wrsilva/reis-mobile/releases).
 
-### Plugin do Claude Code (todas as plataformas)
+### Claude Code plugin (all platforms)
 
 ```bash
 claude plugin marketplace update reis-mobile
 claude plugin update reis-mobile@reis-mobile
 ```
 
-Depois, **reinicie o Claude Code**. O update só acontece quando sai uma nova versão; se já estiver na última, o comando responde `already at the latest version`.
+Then **restart Claude Code**. The update only happens when a new version is out; if you are already on the latest, the command answers `already at the latest version`.
 
-### CLI no macOS/Linux (curl)
+### CLI on macOS/Linux (curl)
 
-Rode o instalador de novo. Ele baixa a última release, confere o SHA-256 e substitui a versão anterior:
+Run the installer again. It downloads the latest release, checks the SHA-256 and replaces the previous version:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
 ```
 
-Para instalar uma versão específica:
+To install a specific version:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.0 sh
 ```
 
-### CLI no Windows (PowerShell)
+### CLI on Windows (PowerShell)
 
-Rode o instalador de novo:
+Run the installer again:
 
 ```powershell
 irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
-Para uma versão específica:
+For a specific version:
 
 ```powershell
 $env:REIS_MOBILE_VERSION = 'v0.3.0'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
@@ -261,64 +261,64 @@ brew update
 brew upgrade reis-mobile
 ```
 
-### CLI via npm (em breve)
+### CLI via npm (coming soon)
 
-Disponível quando o pacote for publicado no npm:
+Available once the package is published to npm:
 
 ```bash
 npm update -g reis-mobile
 ```
 
-### Conferir as versões
+### Check the versions
 
 ```bash
 reis-mobile --version                  # CLI
 claude plugin list | grep -A1 reis-mobile  # plugin
 ```
 
-As duas devem mostrar a mesma versão.
+Both should show the same version.
 
 <details>
-<summary>Problemas ao atualizar</summary>
+<summary>Update troubleshooting</summary>
 
-| Sintoma | Solução |
+| Symptom | Solution |
 |---------|---------|
-| `claude plugin update` diz que já está na última versão, mas a release é mais nova | Rode `claude plugin marketplace update reis-mobile` antes do `update` |
-| Agents ou skills novos não aparecem | Reinicie o Claude Code: plugins só recarregam em uma nova sessão |
-| `brew upgrade` não encontra a versão nova | Rode `brew update` antes; a fórmula do tap é atualizada logo após cada release |
-| `reis-mobile --version` continua antiga depois do curl | Outro `reis-mobile` vem antes no `PATH`; confira com `which -a reis-mobile` |
-| Windows continua com a versão antiga | Abra um novo terminal e confira com `where.exe reis-mobile` |
-| Plugin quebrado depois de atualizar | Reinstale: `reis-mobile init --uninstall` e depois `reis-mobile init` |
+| `claude plugin update` says it is already on the latest version, but the release is newer | Run `claude plugin marketplace update reis-mobile` before `update` |
+| New agents or skills do not show up | Restart Claude Code: plugins only reload in a new session |
+| `brew upgrade` does not find the new version | Run `brew update` first; the tap formula is updated right after each release |
+| `reis-mobile --version` is still old after curl | Another `reis-mobile` comes first on the `PATH`; check with `which -a reis-mobile` |
+| Windows is still on the old version | Open a new terminal and check with `where.exe reis-mobile` |
+| Plugin broken after updating | Reinstall: `reis-mobile init --uninstall` and then `reis-mobile init` |
 
 </details>
 
 ---
 
-## Comandos
+## Commands
 
 ```bash
-/reis-mobile                                      # Lista os comandos (ponto de entrada; também aceita doctor, review ou pedido livre)
-/reis-mobile meu build android falha no gradle    # Pedido livre: detecta a stack e aplica o agent e as skills certas
-/reis-mobile:doctor                               # Ambiente e projeto: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
-/reis-mobile:doctor --all                         # Verifica todas as ferramentas, não só as da stack detectada
-/reis-mobile:review                               # Revisa as mudanças não commitadas (ou o projeto inteiro, se não houver)
-/reis-mobile:review --base main                   # Revisa o branch atual contra main, no estilo de pull request
-/reis-mobile:review --base main foco em segurança # Foco livre, em português ou inglês
-/reis-mobile:debate Riverpod ou BLoC neste app?   # Debate entre os especialistas, com decisão do lead-mobile
-/reis-mobile:debate --rounds 3 --external ...     # Mais rodadas; --external soma Codex e Gemini, se instalados
+/reis-mobile                                      # Lists the commands (entry point; also accepts doctor, review or a free-form request)
+/reis-mobile my android build fails on gradle     # Free-form request: detects the stack and applies the right agent and skills
+/reis-mobile:doctor                               # Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
+/reis-mobile:doctor --all                         # Checks every tool, not only those for the detected stack
+/reis-mobile:review                               # Reviews uncommitted changes (or the whole project, if there are none)
+/reis-mobile:review --base main                   # Reviews the current branch against main, pull request style
+/reis-mobile:review --base main focus on security # Free-form focus, in English or Portuguese
+/reis-mobile:debate Riverpod or BLoC in this app? # Debate between the specialists, with a decision by lead-mobile
+/reis-mobile:debate --rounds 3 --external ...     # More rounds; --external adds Codex and Gemini, if installed
 ```
 
 ### Debate
 
-`/reis-mobile:debate` coloca três especialistas com prioridades conflitantes para defender posições sobre a mesma questão. A rodada 1 é às cegas, para que o primeiro a responder não ancore os demais; na rodada 2 cada um refuta pontos específicos dos outros; no fim, o `lead-mobile` decide e entrega o plano de ação. As rodadas ficam em `.reis-mobile/debates/`.
+`/reis-mobile:debate` puts three specialists with conflicting priorities to defend positions on the same question. Round 1 is blind, so the first to answer does not anchor the others; in round 2 each one rebuts specific points from the others; at the end, `lead-mobile` decides and delivers the action plan. The rounds are stored in `.reis-mobile/debates/`.
 
-Os participantes variam em dois eixos ao mesmo tempo. O **papel** dá a cada um um incentivo diferente: o `flutter-architect` defende limites de camada, o `flutter-performance-engineer` é hostil a indireção, o `flutter-test-engineer` quer costuras de injeção que os outros dois consideram ruído. O **modelo** impede que essa discordância fique só na superfície — o comando distribui `opus` e `sonnet` entre os participantes, porque três instâncias do mesmo modelo herdam as mesmas lacunas e tendem a convergir por motivos que nada têm a ver com a sua questão. Com `--external`, entra um terceiro eixo: **provedores** de fora, em processos separados.
+Participants vary along two axes at once. The **role** gives each one a different incentive: `flutter-architect` defends layer boundaries, `flutter-performance-engineer` is hostile to indirection, `flutter-test-engineer` wants injection seams the other two consider noise. The **model** keeps that disagreement from staying on the surface — the command spreads `opus` and `sonnet` across the participants, because three instances of the same model inherit the same blind spots and tend to converge for reasons that have nothing to do with your question. With `--external`, a third axis comes in: outside **providers**, in separate processes.
 
-É caro: são vários agents em duas rodadas. Use em decisão de arquitetura com trade-off real — *migrar para Riverpod*, *offline-first no Firestore ou cache local*, *plugin nativo ou pacote pronto* — e não em pergunta com resposta única, onde `/reis-mobile <pedido>` resolve por menos.
+It is expensive: several agents over two rounds. Use it for architecture decisions with a real trade-off — *migrate to Riverpod*, *offline-first with Firestore or a local cache*, *native plugin or an off-the-shelf package* — and not for questions with a single answer, where `/reis-mobile <request>` solves it for less.
 
-Com `--external`, o comando confere se as CLIs `codex` e `gemini` existem e segue sem elas se faltarem. Os provedores externos não conhecem o projeto nem têm as skills do plugin: entram como opinião de fora, conferida no código antes da síntese.
+With `--external`, the command checks whether the `codex` and `gemini` CLIs exist and carries on without them if they are missing. External providers do not know the project and do not have the plugin skills: they come in as an outside opinion, checked against the code before the synthesis.
 
-Não sabe o que o router vai escolher? Pergunte à CLI:
+Not sure what the router will pick? Ask the CLI:
 
 ```text
 $ reis-mobile route "Execution failed for task ':app:compileDebugKotlin'"
@@ -327,57 +327,57 @@ Stack       flutter · focus android
 Agent       mobile-staff-engineer
 Skills      dart-fix-runtime-errors, dart-resolve-package-conflicts, flutter-errors, flutter-fix-layout-issues
 
-$ reis-mobile route "escreva testes para o login cubit"
+$ reis-mobile route "write tests for the login cubit"
 Intent      test (confidence 1)
 Stack       flutter
 Agent       flutter-test-engineer
 Skills      dart-add-unit-test, dart-collect-coverage, dart-generate-test-mocks, flutter-add-integration-test, flutter-add-widget-test, mockito, mocktail, patrol-e2e-testing, testing
 ```
 
-O router nunca inventa um especialista: se nenhum agent atende a intent, ele avisa. Você não precisa chamar os agents pelo nome, porque o Claude Code os aciona pela descrição quando o pedido se encaixa. Para forçar um deles, peça: *"use o reis-mobile:flutter-architect para revisar a arquitetura"*.
+The router never invents a specialist: if no agent serves the intent, it warns you. You do not need to call agents by name, because Claude Code triggers them by their description when the request fits. To force one of them, ask: *"use reis-mobile:flutter-architect to review the architecture"*.
 
 ---
 
-## Escolha pelo objetivo
+## Choose by goal
 
-| Quero... | Use | Status |
+| I want to... | Use | Status |
 |----------|-----|--------|
-| Saber se meu ambiente está pronto para buildar | `/reis-mobile:doctor` | ✅ |
-| Revisar um PR ou minhas mudanças | `/reis-mobile:review` | ✅ |
-| Auditar um projeto Flutter inteiro | `/reis-mobile:review` sem mudanças pendentes | ✅ |
-| Descobrir a stack de um projeto | `reis-mobile detect` | ✅ |
-| Revisar a arquitetura de um app Flutter | agent `flutter-architect` | ✅ |
-| Achar a causa de jank, rebuilds ou vazamentos | agent `flutter-performance-engineer` | ✅ |
-| Escrever ou auditar testes Flutter | agent `flutter-test-engineer` | ✅ |
-| Depurar build do Gradle, Xcode ou CocoaPods | agent `mobile-staff-engineer` | ✅ |
-| Criar um plugin ou depurar MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
-| Auditoria completa com vários especialistas | agent `lead-mobile` | ✅ |
-| Decidir entre duas arquiteturas com trade-off real | `/reis-mobile:debate` | ✅ |
-| Comando dedicado de debug | `/reis-mobile:debug` | 🔜 v0.4 |
-| Comando dedicado de testes (incluindo XCTest e Espresso) | `/reis-mobile:test` | 🔜 v0.4 |
-| Checar se o app está pronto para a loja | `/reis-mobile:release` | 🔜 v0.5 |
-| Decisão consolidada por consenso entre agents | `/reis-mobile:council` | 🔜 v0.8 |
+| Know if my environment is ready to build | `/reis-mobile:doctor` | ✅ |
+| Review a PR or my changes | `/reis-mobile:review` | ✅ |
+| Audit an entire Flutter project | `/reis-mobile:review` with no pending changes | ✅ |
+| Find out a project's stack | `reis-mobile detect` | ✅ |
+| Review the architecture of a Flutter app | agent `flutter-architect` | ✅ |
+| Find the cause of jank, rebuilds or leaks | agent `flutter-performance-engineer` | ✅ |
+| Write or audit Flutter tests | agent `flutter-test-engineer` | ✅ |
+| Debug a Gradle, Xcode or CocoaPods build | agent `mobile-staff-engineer` | ✅ |
+| Build a plugin or debug MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
+| Full audit with several specialists | agent `lead-mobile` | ✅ |
+| Decide between two architectures with a real trade-off | `/reis-mobile:debate` | ✅ |
+| Dedicated debug command | `/reis-mobile:debug` | 🔜 v0.4 |
+| Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | 🔜 v0.4 |
+| Check whether the app is ready for the store | `/reis-mobile:release` | 🔜 v0.5 |
+| Consolidated decision by consensus between agents | `/reis-mobile:council` | 🔜 v0.8 |
 
 <details>
-<summary><strong>Qual a diferença para o Claude Code puro?</strong></summary>
+<summary><strong>How is it different from plain Claude Code?</strong></summary>
 
-| | Claude Code puro | reis-mobile |
+| | Plain Claude Code | reis-mobile |
 |---|---|---|
-| **Domínio** | Genérico | Flutter, Android, iOS, React Native, KMP |
-| **Contexto do projeto** | Você explica a stack | Detecção determinística de stack, plataforma e variante |
-| **Review** | Genérico | Checklists mobile: ciclo de vida, `BuildContext`, MASVS, manifest, ATS |
-| **Secrets no diff** | Enviados como estão | Mascarados antes de chegar ao modelo |
-| **Especialistas** | Nenhum | 7 agents e 67 skills de mobile |
-| **Custo de contexto** | Zero | ~4.800 tokens fixos (descrições de agents e skills), sem hooks |
-| **Melhor para** | Tarefas gerais | Times e devs que trabalham com apps mobile |
+| **Domain** | Generic | Flutter, Android, iOS, React Native, KMP |
+| **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
+| **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
+| **Secrets in the diff** | Sent as they are | Masked before reaching the model |
+| **Specialists** | None | 7 agents and 67 mobile skills |
+| **Context cost** | Zero | ~4,800 fixed tokens (agent and skill descriptions), no hooks |
+| **Best for** | General tasks | Teams and developers working on mobile apps |
 
-**Resumindo:** o Claude Code já sabe programar. O reis-mobile faz ele olhar para o que importa num app mobile.
+**In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
 
 </details>
 
 ---
 
-## Como funciona
+## How it works
 
 ```text
 /reis-mobile:review
@@ -386,44 +386,44 @@ O router nunca inventa um especialista: se nenhum agent atende a intent, ele avi
      ├─ detect intent ─────── review
      ├─ select agent ──────── mobile-code-reviewer
      ├─ select skills ─────── code-review · effective-dart · flutter-project-audit · flutter-widget-review · mobile-security-audit …
-     ├─ collect context ───── git diff (lock files fora, secrets mascarados)
+     ├─ collect context ───── git diff (lock files out, secrets masked)
      └─ review report ─────── Summary · Critical · Bugs · Architecture · Security · Performance · Maintainability
 ```
 
-O núcleo em Node.js decide **o que** carregar. O modelo decide **como** revisar, seguindo as instruções carregadas. Detalhes em [ARCHITECTURE.md](ARCHITECTURE.md).
+The Node.js core decides **what** to load. The model decides **how** to review, following the loaded instructions. Details in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-### Detecção de stack
+### Stack detection
 
-| Stack | Evidência |
+| Stack | Evidence |
 |-------|-----------|
-| Flutter | `pubspec.yaml` com `sdk: flutter` (variante `plugin` quando aplicável) |
-| React Native | `package.json` dependendo de `react-native` (variante `expo`) |
-| Kotlin Multiplatform | `build.gradle.kts` com o plugin multiplatform |
-| Android | Gradle na raiz + `AndroidManifest.xml` ou plugin `com.android.*` |
-| iOS | `*.xcodeproj`, `*.xcworkspace`, `Podfile` ou `Package.swift` com `.iOS` |
+| Flutter | `pubspec.yaml` with `sdk: flutter` (`plugin` variant when applicable) |
+| React Native | `package.json` depending on `react-native` (`expo` variant) |
+| Kotlin Multiplatform | `build.gradle.kts` with the multiplatform plugin |
+| Android | Gradle at the root + `AndroidManifest.xml` or a `com.android.*` plugin |
+| iOS | `*.xcodeproj`, `*.xcworkspace`, `Podfile` or `Package.swift` with `.iOS` |
 
 ### Agents
 
-| Agent | Stack | Acionado para | O que faz |
+| Agent | Stack | Triggered for | What it does |
 |-------|-------|---------------|-----------|
-| `mobile-code-reviewer` | todas | review | Review com evidência `arquivo:linha`, focado no que quebra em produção |
-| `flutter-architect` | Flutter | architecture | Camadas, feature-first, acoplamento, lógica fora do lugar, plano de refatoração |
-| `flutter-performance-engineer` | Flutter | performance | Rebuilds, jank, listas, vazamentos, paint, startup, com score e top 3 correções |
-| `flutter-test-engineer` | Flutter | test | Unit, BLoC/Cubit, widget e integração, auditoria de cobertura e testes frágeis |
-| `mobile-staff-engineer` | todas | debug, architecture, performance, test, security, release, migration, dependency, build, deployment, accessibility | Especialista sênior Flutter/Android/iOS para o que nenhum agent específico cobre |
-| `plugin-native-expert` | Flutter | sob demanda | MethodChannel, EventChannel, Pigeon e bridges Kotlin/Swift, threading e ciclo de vida |
-| `lead-mobile` | todas | sob demanda | Coordena os demais agents e consolida um plano de ação único |
+| `mobile-code-reviewer` | all | review | Review with `file:line` evidence, focused on what breaks in production |
+| `flutter-architect` | Flutter | architecture | Layers, feature-first, coupling, misplaced logic, refactoring plan |
+| `flutter-performance-engineer` | Flutter | performance | Rebuilds, jank, lists, leaks, paint, startup, with a score and top 3 fixes |
+| `flutter-test-engineer` | Flutter | test | Unit, BLoC/Cubit, widget and integration, coverage audit and fragile tests |
+| `mobile-staff-engineer` | all | debug, architecture, performance, test, security, release, migration, dependency, build, deployment, accessibility | Senior Flutter/Android/iOS specialist for whatever no specific agent covers |
+| `plugin-native-expert` | Flutter | on demand | MethodChannel, EventChannel, Pigeon and Kotlin/Swift bridges, threading and lifecycle |
+| `lead-mobile` | all | on demand | Coordinates the other agents and consolidates a single action plan |
 
-Quando mais de um agent atende a intent, vence o específico da stack. Num app Flutter, `performance` vai para o `flutter-performance-engineer`; num app Android nativo, vai para o `mobile-staff-engineer`.
+When more than one agent serves the intent, the stack-specific one wins. In a Flutter app, `performance` goes to `flutter-performance-engineer`; in a native Android app, it goes to `mobile-staff-engineer`.
 
 ### Skills
 
-Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demais (—) são acionadas pelo Claude Code quando o pedido combina com a descrição, por exemplo *"adicione push notifications com FCM"* → `firebase-messaging`.
+**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `firebase-messaging`.
 
 <details>
-<summary><strong>Review e qualidade</strong> (7)</summary>
+<summary><strong>Review and quality</strong> (7)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `code-review` | Performs thorough code reviews for Flutter/Dart pull requests and merge requests. | review | Flutter | evanca/flutter-ai-rules |
 | `effective-dart` | Applies Effective Dart guidelines in Flutter/Dart code. | review | Flutter | evanca/flutter-ai-rules |
@@ -436,9 +436,9 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Arquitetura e estado</strong> (9)</summary>
+<summary><strong>Architecture and state</strong> (9)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `architecture-feature-first` | Structures Flutter apps using layered architecture (UI / Logic / Data) with feature-first file organization. | architecture | Flutter | evanca/flutter-ai-rules |
 | `flutter-app-architecture` | Provides best practices for Flutter app architecture, including layered architecture, data flow, state management… | architecture | Flutter | evanca/flutter-ai-rules |
@@ -453,9 +453,9 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Testes</strong> (10)</summary>
+<summary><strong>Testing</strong> (10)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `testing` | Writes and reviews Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
 | `dart-add-unit-test` | Write and organize unit tests for functions, methods, and classes using `package:test`. | test | Flutter | dart-lang/skills |
@@ -473,7 +473,7 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 <details>
 <summary><strong>Debug</strong> (4)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-errors` | Diagnoses and fixes common Flutter errors. | debug | Flutter | evanca/flutter-ai-rules |
 | `flutter-fix-layout-issues` | Fixes Flutter layout errors (overflows, unbounded constraints) using Dart and Flutter MCP tools. | debug | Flutter | flutter/skills |
@@ -485,7 +485,7 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 <details>
 <summary><strong>Performance</strong> (3)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-reducing-app-size` | Measures and optimizes the size of Flutter application bundles for deployment. | performance | Flutter | flutter/skills |
 | `flutter-handling-concurrency` | Executes long-running tasks in background isolates to keep the UI responsive. | performance | Flutter | flutter/skills |
@@ -494,9 +494,9 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>UI, layout e navegação</strong> (8)</summary>
+<summary><strong>UI, layout and navigation</strong> (8)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-building-layouts` | Builds Flutter layouts using the constraint system and layout widgets. | — | Flutter | flutter/skills |
 | `flutter-build-responsive-layout` | Use `LayoutBuilder`, `MediaQuery`, or `Expanded/Flexible` to create a layout that adapts to different screen sizes. | — | Flutter | flutter/skills |
@@ -510,9 +510,9 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Dados e rede</strong> (3)</summary>
+<summary><strong>Data and networking</strong> (3)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-use-http-package` | Use the `http` package to execute GET, POST, PUT, or DELETE requests. | — | Flutter | flutter/skills |
 | `flutter-implement-json-serialization` | Create model classes with `fromJson` and `toJson` methods using `dart:convert`. | — | Flutter | flutter/skills |
@@ -521,9 +521,9 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Nativo e plugins</strong> (3)</summary>
+<summary><strong>Native and plugins</strong> (3)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-building-plugins` | Builds Flutter plugins that provide native interop for other apps to use. | — | Flutter | flutter/skills |
 | `flutter-interoperating-with-native-apis` | Interoperates with native platform APIs on Android, iOS, and the web. | — | Flutter | flutter/skills |
@@ -532,20 +532,20 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Segurança</strong> (3)</summary>
+<summary><strong>Security</strong> (3)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | todas | reis-mobile |
+| `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | all | reis-mobile |
 | `flutter-secure-token-store` | Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on… | security | Flutter | reis-mobile |
 | `firebase-app-check` | Integrates Firebase App Check into Flutter apps. | security | Flutter | evanca/flutter-ai-rules |
 
 </details>
 
 <details>
-<summary><strong>Acessibilidade e internacionalização</strong> (2)</summary>
+<summary><strong>Accessibility and internationalization</strong> (2)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-improving-accessibility` | Configures a Flutter app to support assistive technologies like Screen Readers. | accessibility | Flutter | flutter/skills |
 | `flutter-setup-localization` | Add `flutter_localizations` and `intl` dependencies, enable "generate true" in `pubspec.yaml`, and create an… | — | Flutter | flutter/skills |
@@ -555,7 +555,7 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 <details>
 <summary><strong>Firebase</strong> (13)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutterfire-configure` | Sets up Firebase for Flutter apps using FlutterFire CLI. | — | Flutter | evanca/flutter-ai-rules |
 | `firebase-auth` | Integrates Firebase Authentication into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
@@ -574,120 +574,120 @@ Skills **auto-roteadas** são carregadas pelo router junto com o agent. As demai
 </details>
 
 <details>
-<summary><strong>Ambiente</strong> (2)</summary>
+<summary><strong>Environment</strong> (2)</summary>
 
-| Skill | O que faz | Auto-roteada para | Stack | Origem |
+| Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-setting-up-on-macos` | Sets up a macOS environment for Flutter development. | — | Flutter | flutter/skills |
-| `detect-mobile-stack` | Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its… | — | todas | reis-mobile |
+| `detect-mobile-stack` | Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its… | — | all | reis-mobile |
 
 </details>
 
-As skills de terceiros mantêm o nome e a licença originais. Veja [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 
-## Confiança, segurança e limites
+## Trust, security and limits
 
-**Somente leitura.** `doctor`, `detect`, `route` e `review` não alteram seu projeto. Os comandos `/reis-mobile:review` e `/reis-mobile:debate` instruem o modelo a não editar arquivos; o debate só escreve as rodadas em `.reis-mobile/debates/`, fora do seu código.
+**Read-only.** `doctor`, `detect`, `route` and `review` do not modify your project. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit files; the debate only writes its rounds to `.reis-mobile/debates/`, outside your code.
 
-**Secrets mascarados.** O diff passa por [`core/security/redact.mjs`](core/security/redact.mjs) antes de chegar ao modelo. Lock files e código gerado (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) ficam fora do diff. A redação é uma camada de proteção, não uma garantia. Veja [SECURITY.md](SECURITY.md).
+**Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**Sem telemetria.** `detect`, `doctor`, `route` e `review` não fazem chamadas de rede. Só a instalação acessa a rede, para baixar a release e registrar o plugin. A análise por IA usa o modelo da sessão em que você trabalha, como Claude Code ou Codex.
+**No telemetry.** `detect`, `doctor`, `route` and `review` make no network calls. Only installation touches the network, to download the release and register the plugin. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
-**Exceção: `/reis-mobile:debate --external`.** Essa flag, e só ela, envia o contexto do debate — incluindo trechos dos arquivos citados na questão — para as CLIs `codex` e `gemini`, que são de terceiros e têm as próprias políticas de dados. Sem a flag, nada sai da sua sessão. O diff do `review` é mascarado por `redact.mjs`, mas o contexto que você cita numa questão de debate não passa por essa camada: confira o que está mandando antes de usar `--external`.
+**Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Custo de contexto.** As descrições dos 7 agents e das 67 skills somam cerca de 4.800 tokens fixos por sessão (medido com `claude plugin details reis-mobile`). O conteúdo completo de cada skill só é carregado quando ela é usada.
+**Context cost.** The descriptions of the 7 agents and 67 skills add up to about 4,800 fixed tokens per session (measured with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
-**Sem hooks.** O plugin não se prende a eventos do Claude Code. Ele só age quando você chama um comando ou quando uma skill é relevante.
+**No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
-**Namespace próprio.** Os comandos ficam em `/reis-mobile:*` e não conflitam com `/review` nem com `/security-review` nativos.
+**Own namespace.** Commands live under `/reis-mobile:*` and do not conflict with the built-in `/review` or `/security-review`.
 
-**Instalação verificável.** Os instaladores conferem o SHA-256 da release e não pedem `sudo`. `reis-mobile init --uninstall` remove o plugin sem deixar configuração para trás.
+**Verifiable installation.** The installers check the release SHA-256 and do not ask for `sudo`. `reis-mobile init --uninstall` removes the plugin without leaving configuration behind.
 
 ---
 
 ## Roadmap
 
-| Versão | Entrega | Status |
+| Version | Delivery | Status |
 |--------|---------|--------|
-| v0.1.0 | Fundação, detecção de stack, router, `/reis-mobile:doctor`, `/reis-mobile:review` para Flutter | ✅ |
-| v0.2.0 | 6 agents e 63 skills de Flutter, Dart e Firebase | ✅ |
-| v0.2.1 | Comando de entrada `/reis-mobile` | ✅ |
-| v0.3.0 | `/reis-mobile:debate`: multi-agent com decisão, em papéis e modelos distintos — entregue no lugar do `council` que estava previsto para a v0.8.0 | ✅ |
-| v0.4.0 | Skills de Android e iOS nativos, `.reis-mobile/config.yaml` e `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
-| v0.5.0 | `/reis-mobile:test` e testes nativos (XCTest, Espresso) | ⏳ |
-| v0.6.0 | `/reis-mobile:release` com quality gates | ⏳ |
-| v0.7.0 | Pack React Native | ⏳ |
+| v0.1.0 | Foundation, stack detection, router, `/reis-mobile:doctor`, `/reis-mobile:review` for Flutter | ✅ |
+| v0.2.0 | 6 agents and 63 Flutter, Dart and Firebase skills | ✅ |
+| v0.2.1 | `/reis-mobile` entry command | ✅ |
+| v0.3.0 | `/reis-mobile:debate`: multi-agent with a decision, across distinct roles and models — delivered in place of the `council` planned for v0.8.0 | ✅ |
+| v0.4.0 | Native Android and iOS skills, `.reis-mobile/config.yaml` and `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
+| v0.5.0 | `/reis-mobile:test` and native tests (XCTest, Espresso) | ⏳ |
+| v0.6.0 | `/reis-mobile:release` with quality gates | ⏳ |
+| v0.7.0 | React Native pack | ⏳ |
 | v0.8.0 | MCP server | ⏳ |
-| v0.9.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) além do `--external` do debate | ⏳ |
-| v1.0.0 | Primeira versão estável: Flutter, Android, iOS e React Native | ⏳ |
+| v0.9.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |
+| v1.0.0 | First stable version: Flutter, Android, iOS and React Native | ⏳ |
 
 ---
 
 ## FAQ
 
-**Preciso ter Flutter, Xcode ou Android SDK instalados?**
-Não para o review, que só lê código. O `/reis-mobile:doctor` mostra o que falta caso você queira buildar.
+**Do I need Flutter, Xcode or the Android SDK installed?**
+Not for the review, which only reads code. `/reis-mobile:doctor` shows what is missing in case you want to build.
 
-**Meu app está dentro de um monorepo.**
-Rode a partir da pasta do app, ou use `--dir apps/mobile` na CLI. O diff fica restrito a essa pasta.
+**My app lives inside a monorepo.**
+Run it from the app folder, or use `--dir apps/mobile` in the CLI. The diff is restricted to that folder.
 
-**Funciona com Android e iOS nativos?**
-A detecção, o doctor, a skill de segurança e os agents `mobile-code-reviewer`, `mobile-staff-engineer` e `lead-mobile` já funcionam. As skills específicas de Android e iOS chegam na v0.4.0; as 63 skills importadas são de Flutter, Dart e Firebase.
+**Does it work with native Android and iOS?**
+Detection, the doctor, the security skill and the `mobile-code-reviewer`, `mobile-staff-engineer` and `lead-mobile` agents already work. Android- and iOS-specific skills arrive in v0.4.0; the 63 imported skills are for Flutter, Dart and Firebase.
 
-**Já tenho skills com os mesmos nomes em `~/.claude/skills`.**
-As do plugin ficam no namespace `reis-mobile:` e não conflitam, mas o Claude Code carrega as duas descrições. Para economizar contexto, remova as cópias globais que o plugin já cobre.
+**I already have skills with the same names in `~/.claude/skills`.**
+The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
 
-**Funciona no Codex?**
-O marketplace e o plugin `0.2.1` podem ser instalados diretamente pelo GitHub com `codex plugin`. Veja [instalação e uso no Codex](#plugin-no-codex-via-github). A instalação não confirma paridade com os agents e comandos do Claude Code; a CLI `reis-mobile` também pode ser executada pelo Codex para obter diagnósticos e contexto.
+**Does it work in Codex?**
+The marketplace and plugin `0.2.1` can be installed straight from GitHub with `codex plugin`. See [installation and usage in Codex](#codex-plugin-from-github). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
 
-**Funciona no Cursor?**
-A integração com o Cursor ainda não foi validada. O MCP server segue no roadmap para a v0.7.0.
+**Does it work in Cursor?**
+The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.8.0.
 
-**O que o reis-mobile envia para fora da minha máquina?**
-A CLI não envia nada. O que o modelo lê durante o `/reis-mobile:review` segue as mesmas regras de qualquer sessão do Claude Code.
-
----
-
-## Contribuindo
-
-Contribuições são bem-vindas, principalmente skills de Android, iOS e React Native.
-
-1. Leia o [CONTRIBUTING.md](CONTRIBUTING.md), as regras em [AGENTS.md](AGENTS.md) e o [Código de Conduta](CODE_OF_CONDUCT.md).
-2. Escolha uma [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) ou [proponha uma skill](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml).
-3. `git clone https://github.com/<seu-usuario>/reis-mobile.git && cd reis-mobile && npm run check`
-4. Abra um PR mostrando a saída de `reis-mobile route` ou `reis-mobile review` num projeto real.
-
-Dúvidas: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Onde pedir ajuda: [SUPPORT.md](SUPPORT.md).
+**What does reis-mobile send outside my machine?**
+The CLI sends nothing. What the model reads during `/reis-mobile:review` follows the same rules as any Claude Code session.
 
 ---
 
-## Documentação
+## Contributing
 
-- [Arquitetura](ARCHITECTURE.md): módulos, detecção, roteamento e contrato de agents e skills
-- [AGENTS.md](AGENTS.md): regras para quem (ou qual IA) contribui com o repositório
-- [Contribuindo](CONTRIBUTING.md)
-- [Código de Conduta](CODE_OF_CONDUCT.md)
-- [Suporte](SUPPORT.md)
-- [Segurança](SECURITY.md)
-- [Third-Party Notices](THIRD_PARTY_NOTICES.md): origem e licença das skills de terceiros
+Contributions are welcome, especially Android, iOS and React Native skills.
+
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md), the rules in [AGENTS.md](AGENTS.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+2. Pick a [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) or [propose a skill](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml).
+3. `git clone https://github.com/<your-username>/reis-mobile.git && cd reis-mobile && npm run check`
+4. Open a PR showing the output of `reis-mobile route` or `reis-mobile review` on a real project.
+
+Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Where to ask for help: [SUPPORT.md](SUPPORT.md).
+
+---
+
+## Documentation
+
+- [Architecture](ARCHITECTURE.md): modules, detection, routing and the agent and skill contract
+- [AGENTS.md](AGENTS.md): rules for whoever (or whichever AI) contributes to the repository
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Support](SUPPORT.md)
+- [Security](SECURITY.md)
+- [Third-Party Notices](THIRD_PARTY_NOTICES.md): origin and license of third-party skills
 - [Changelog](CHANGELOG.md)
 
 ---
 
-## Atribuição
+## Attribution
 
-- **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 skills de Flutter.
-- **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 skills de Dart.
-- **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 skills de Flutter, testes e Firebase.
-- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categorias usadas na skill `mobile-security-audit`.
+- **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
+- **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
+- **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
+- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security-audit` skill.
 
 ---
 
-## Licença
+## License
 
-MIT. Veja [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
 
 <p align="center">
   <a href="https://github.com/wrsilva">wrsilva</a> | MIT License | <a href="https://github.com/wrsilva/reis-mobile/issues">Report Issues</a>

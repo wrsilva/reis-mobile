@@ -1,55 +1,61 @@
 # Changelog
 
-Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). O projeto segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
+Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Changed
+
+- All agents, skills, commands, documentation and GitHub templates are now written in English. Intent detection still accepts prompts in English and Portuguese.
 
 ## [0.3.0] - 2026-09-15
 
-### Adicionado
+### Added
 
-- Comando `/reis-mobile:debate`: debate estruturado entre três especialistas com prioridades conflitantes. Rodada 1 às cegas (evita ancoragem), rodada 2 de réplica a pontos específicos, e decisão final pelo `lead-mobile`. Flags `--rounds`, `--agents` e `--external`.
-- Participantes heterogêneos em modelo: o comando distribui `opus` e `sonnet` conforme o papel, sobrescrevendo o `model: inherit` dos agents. Três instâncias do mesmo modelo compartilham os mesmos vieses e convergem por motivos alheios à questão debatida; a escalação garante ao menos dois modelos distintos.
-- Seção **Debate moderation** no agent `lead-mobile`: como pesar evidência contra posição e fechar numa decisão em vez de um empate.
-- `tests/commands.test.mjs`: valida o frontmatter de todo comando e garante que agents e skills citados por eles existem de fato — o `validate` cobria agents, skills e stacks, mas não `commands/`.
+- `/reis-mobile:debate` command: structured debate between three specialists with conflicting priorities. Blind round 1 (avoids anchoring), round 2 rebutting specific points, and a final decision by `lead-mobile`. Flags `--rounds`, `--agents` and `--external`.
+- Model-heterogeneous participants: the command assigns `opus` and `sonnet` by role, overriding the agents' `model: inherit`. Three instances of the same model share the same biases and converge for reasons unrelated to the question being debated; selection guarantees at least two distinct models.
+- **Debate moderation** section in the `lead-mobile` agent: how to weigh evidence against position and close on a decision instead of a tie.
+- `tests/commands.test.mjs`: validates the frontmatter of every command and ensures the agents and skills they reference actually exist — `validate` covered agents, skills and stacks, but not `commands/`.
 
-### Segurança
+### Security
 
-- `/reis-mobile:debate --external` envia o contexto do debate para as CLIs `codex` e `gemini`, de terceiros. Sem a flag, nada sai da sessão. Documentado em README.md.
+- `/reis-mobile:debate --external` sends the debate context to the third-party `codex` and `gemini` CLIs. Without the flag, nothing leaves the session. Documented in README.md.
 
 ## [0.2.1] - 2026-09-15
 
-### Adicionado
+### Added
 
-- Comando `/reis-mobile`: ponto de entrada que lista os comandos e encaminha para `doctor`, `review` ou, com um pedido livre, para o agent e as skills da stack detectada. Também aparece no menu de comandos da extensão do VS Code, que não encontra `/reis-mobile:doctor` ao digitar só `/reis-mobile`.
+- `/reis-mobile` command: entry point that lists the commands and forwards to `doctor`, `review` or, with a free-form request, to the agent and skills for the detected stack. It also appears in the VS Code extension command menu, which does not find `/reis-mobile:doctor` when typing only `/reis-mobile`.
 
 ## [0.2.0] - 2026-09-15
 
-### Adicionado
+### Added
 
-- Agents `flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert` e `lead-mobile`.
-- 63 skills de Flutter, Dart e Firebase: 25 de `flutter/skills`, 8 de `dart-lang/skills`, 28 de `evanca/flutter-ai-rules` e 2 próprias (`flutter-login-usecase`, `flutter-secure-token-store`).
-- `THIRD_PARTY_NOTICES.md` com origem e licença; frontmatter com `source` e `license` nas skills de terceiros.
-- Parser de frontmatter com suporte a blocos `|` e `>`.
+- Agents `flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert` and `lead-mobile`.
+- 63 Flutter, Dart and Firebase skills: 25 from `flutter/skills`, 8 from `dart-lang/skills`, 28 from `evanca/flutter-ai-rules` and 2 original ones (`flutter-login-usecase`, `flutter-secure-token-store`).
+- `THIRD_PARTY_NOTICES.md` with origin and license; frontmatter with `source` and `license` in third-party skills.
+- Frontmatter parser with support for `|` and `>` blocks.
 
-### Alterado
+### Changed
 
-- O router agora encontra agent para `debug`, `test`, `architecture`, `performance` e demais intents, e não só para `review`.
-- `/reis-mobile:review` em projetos Flutter também carrega `code-review`, `effective-dart` e `dart-run-static-analysis`.
+- The router now finds an agent for `debug`, `test`, `architecture`, `performance` and the other intents, not only for `review`.
+- `/reis-mobile:review` in Flutter projects also loads `code-review`, `effective-dart` and `dart-run-static-analysis`.
 
 ## [0.1.0] - 2026-09-15
 
-### Adicionado
+### Added
 
-- Plugin do Claude Code `reis-mobile`, com marketplace local.
-- Detector de stack: Flutter (app e plugin), React Native (incluindo Expo), Kotlin Multiplatform, Android e iOS nativos.
-- Registries de stacks, agents e skills, com validação (`reis-mobile validate`).
-- Detector de intents em português e inglês, e router intent + stack → agent + skills.
-- Context engine com diff do working tree ou de um range, lock files excluídos e secrets mascarados.
-- `/reis-mobile:doctor` e `reis-mobile doctor`.
-- `/reis-mobile:review` e `reis-mobile review`.
-- Agent `mobile-code-reviewer`.
-- Skills `flutter-project-audit`, `flutter-widget-review`, `mobile-security-audit` e `detect-mobile-stack`.
-- CLI `reis-mobile`: `init`, `detect`, `doctor`, `route`, `review`, `agents`, `skills`, `stacks`, `validate`.
-- `reis-mobile init`: registra (ou remove, com `--uninstall`) o plugin no Claude Code.
-- Instaladores `install.sh` (macOS/Linux) e `install.ps1` (Windows), com verificação SHA-256.
-- Workflow de release: tarball, `SHA256SUMS`, fórmula do Homebrew e publicação no npm.
-- CI no GitHub Actions (Node 22 e 24, Ubuntu e macOS) e teste dos instaladores em Ubuntu, macOS e Windows.
+- `reis-mobile` Claude Code plugin, with a local marketplace.
+- Stack detector: Flutter (app and plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS.
+- Registries for stacks, agents and skills, with validation (`reis-mobile validate`).
+- Intent detector in Portuguese and English, and intent + stack → agent + skills router.
+- Context engine with working tree or range diff, lock files excluded and secrets masked.
+- `/reis-mobile:doctor` and `reis-mobile doctor`.
+- `/reis-mobile:review` and `reis-mobile review`.
+- `mobile-code-reviewer` agent.
+- Skills `flutter-project-audit`, `flutter-widget-review`, `mobile-security-audit` and `detect-mobile-stack`.
+- `reis-mobile` CLI: `init`, `detect`, `doctor`, `route`, `review`, `agents`, `skills`, `stacks`, `validate`.
+- `reis-mobile init`: registers (or removes, with `--uninstall`) the plugin in Claude Code.
+- `install.sh` (macOS/Linux) and `install.ps1` (Windows) installers, with SHA-256 verification.
+- Release workflow: tarball, `SHA256SUMS`, Homebrew formula and npm publishing.
+- CI on GitHub Actions (Node 22 and 24, Ubuntu and macOS) and installer tests on Ubuntu, macOS and Windows.

@@ -1,25 +1,25 @@
-# Segurança
+# Security
 
-## Reportando vulnerabilidades
+## Reporting vulnerabilities
 
-Não abra issue pública. Use o [private vulnerability reporting do GitHub](https://github.com/wrsilva/reis-mobile/security/advisories/new) com a descrição, os passos para reproduzir e o impacto.
+Do not open a public issue. Use [GitHub private vulnerability reporting](https://github.com/wrsilva/reis-mobile/security/advisories/new) with the description, steps to reproduce and impact.
 
-## O que nunca versionar
+## What to never commit
 
-Este repositório e os projetos analisados pelo reis-mobile não devem conter:
+This repository and the projects analyzed by reis-mobile must not contain:
 
-- API keys, tokens e senhas
-- `.env` com valores reais
-- keystores (`*.jks`, `*.keystore`) e `key.properties`
-- certificados e chaves (`*.p12`, `*.p8`, `*.pem`)
+- API keys, tokens and passwords
+- `.env` with real values
+- keystores (`*.jks`, `*.keystore`) and `key.properties`
+- certificates and keys (`*.p12`, `*.p8`, `*.pem`)
 - provisioning profiles (`*.mobileprovision`)
 
-O `.gitignore` já bloqueia esses padrões.
+`.gitignore` already blocks these patterns.
 
-## Como o reis-mobile trata dados
+## How reis-mobile handles data
 
-- **Somente leitura.** `detect`, `doctor`, `route` e `review` não alteram o projeto analisado.
-- **Secrets mascarados.** O diff enviado ao modelo passa por `core/security/redact.mjs`, que mascara headers `Authorization`, JWTs, chaves AWS, Google e GitHub, blocos de chave privada e atribuições como `apiKey = "..."`, `API_KEY=...` e `storePassword=...`.
-- **Lock files e código gerado** ficam fora do corpo do diff.
-- **Instaladores verificam integridade.** `install.sh` e `install.ps1` baixam o asset da release e abortam se o SHA-256 não bater com `SHA256SUMS`. Para auditar antes de executar, baixe o script e leia: `curl -fsSL .../install.sh -o install.sh`.
-- A redação é uma camada de proteção, não uma garantia. Não confie nela para expor repositórios com secrets versionados.
+- **Read-only.** `detect`, `doctor`, `route` and `review` do not modify the analyzed project.
+- **Secrets masked.** The diff sent to the model goes through `core/security/redact.mjs`, which masks `Authorization` headers, JWTs, AWS, Google and GitHub keys, private key blocks and assignments such as `apiKey = "..."`, `API_KEY=...` and `storePassword=...`.
+- **Lock files and generated code** stay out of the diff body.
+- **Installers verify integrity.** `install.sh` and `install.ps1` download the release asset and abort if the SHA-256 does not match `SHA256SUMS`. To audit before running, download the script and read it: `curl -fsSL .../install.sh -o install.sh`.
+- Redaction is a protection layer, not a guarantee. Do not rely on it to expose repositories with committed secrets.

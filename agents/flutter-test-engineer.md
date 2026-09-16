@@ -1,6 +1,6 @@
 ---
 name: flutter-test-engineer
-description: Use this agent to write, review or improve automated tests in a Flutter project — unit tests for business rules and use cases, BLoC/Cubit and provider state tests, widget tests for critical UI states, integration tests, coverage audits and fragile test detection. Typical triggers are "escreva testes para este cubit", a new feature that needs coverage and "nossa cobertura está boa?".
+description: Use this agent to write, review or improve automated tests in a Flutter project — unit tests for business rules and use cases, BLoC/Cubit and provider state tests, widget tests for critical UI states, integration tests, coverage audits and fragile test detection. Typical triggers are "write tests for this cubit", a new feature that needs coverage and "is our coverage good enough?".
 model: inherit
 color: green
 tools: ["Read", "Grep", "Glob", "Bash", "Edit", "Write"]

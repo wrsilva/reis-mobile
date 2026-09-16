@@ -1,35 +1,36 @@
 # AGENTS.md
 
-Instruções para agentes de IA (Claude Code, Codex, Gemini) que trabalham **neste repositório**.
+Instructions for AI agents (Claude Code, Codex, Gemini) working **in this repository**.
 
-## Projeto
+## Project
 
-reis-mobile é um plugin do Claude Code com uma CLI em Node.js que orquestra agents e skills para desenvolvimento mobile. Leia [ARCHITECTURE.md](ARCHITECTURE.md) antes de mudar o núcleo.
+reis-mobile is a Claude Code plugin with a Node.js CLI that orchestrates agents and skills for mobile development. Read [ARCHITECTURE.md](ARCHITECTURE.md) before changing the core.
 
-## Regras
+## Rules
 
-- **Mobile first.** Todo agent, skill ou comando novo precisa ajudar diretamente no desenvolvimento mobile.
-- **Zero dependências.** `core/` e `bin/` usam apenas a biblioteca padrão do Node.js 22+. Não adicione pacotes npm.
-- **ES modules** (`.mjs`), 2 espaços, aspas simples, ponto e vírgula.
-- **Não invente.** Checklists de skills citam APIs, lints, flags e requisitos de loja que existem de fato. Na dúvida, instrua o modelo a verificar a versão no lock file do projeto em vez de afirmar.
-- **Skills pequenas.** Uma skill resolve um problema (`flutter-widget-review`), não um domínio inteiro (`mobile-development`).
-- **Nomes com prefixo de stack**: `flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`. Skills agnósticas usam `mobile-*`.
-- **Skills de terceiros** mantêm o nome original, declaram `source` e `license` no frontmatter e aparecem em `THIRD_PARTY_NOTICES.md` com o texto da licença. Só importe de fontes com licença que permita redistribuição, e nunca copie agents ou skills com dados de clientes, caminhos locais ou código proprietário.
-- Todo agent e skill declara `intents` e `stacks` no frontmatter, ou `routing: manual`.
-- Mudança no detector, no router ou na redação exige teste em `tests/`.
+- **English only.** Agents, skills, commands, documentation, templates, comments and commit messages are written in English. Portuguese stays only where it is functional: the intent vocabulary in `core/router/intents.mjs` and the tests that cover Portuguese prompts.
+- **Mobile first.** Every new agent, skill or command must directly help mobile development.
+- **Zero dependencies.** `core/` and `bin/` use only the Node.js 22+ standard library. Do not add npm packages.
+- **ES modules** (`.mjs`), 2 spaces, single quotes, semicolons.
+- **Do not invent.** Skill checklists cite APIs, lints, flags and store requirements that actually exist. When in doubt, tell the model to check the version in the project's lock file instead of asserting it.
+- **Small skills.** A skill solves one problem (`flutter-widget-review`), not a whole domain (`mobile-development`).
+- **Stack-prefixed names**: `flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`. Stack-agnostic skills use `mobile-*`.
+- **Third-party skills** keep their original name, declare `source` and `license` in the frontmatter and appear in `THIRD_PARTY_NOTICES.md` with the license text. Only import from sources whose license allows redistribution, and never copy agents or skills containing customer data, local paths or proprietary code.
+- Every agent and skill declares `intents` and `stacks` in the frontmatter, or `routing: manual`.
+- Changes to the detector, the router or the redaction require a test in `tests/`.
 
-## Verificação
+## Verification
 
 ```bash
 npm run check    # validate + test
 ```
 
-## Adicionando componentes
+## Adding components
 
-| Quero... | Crie | E também |
+| I want... | Create | And also |
 |---|---|---|
-| Uma skill | `skills/<nome>/SKILL.md` | Um caso em `tests/router.test.mjs` se ela mudar a seleção de alguma rota |
-| Um agent | `agents/<nome>.md` | Um teste de roteamento para a intent |
-| Um comando | `commands/<nome>.md` (vira `/reis-mobile:<nome>`) | Documentação no README |
-| Uma intent | Termos em `core/router/intents.mjs` | Casos em `tests/intent-detector.test.mjs` |
-| Uma stack | Regra em `stack-detector.mjs` + `stacks/<id>/stack.json` | Casos em `tests/stack-detector.test.mjs` |
+| A skill | `skills/<name>/SKILL.md` | A case in `tests/router.test.mjs` if it changes the selection for any route |
+| An agent | `agents/<name>.md` | A routing test for the intent |
+| A command | `commands/<name>.md` (becomes `/reis-mobile:<name>`) | Documentation in the README |
+| An intent | Terms in `core/router/intents.mjs` | Cases in `tests/intent-detector.test.mjs` |
+| A stack | Rule in `stack-detector.mjs` + `stacks/<id>/stack.json` | Cases in `tests/stack-detector.test.mjs` |

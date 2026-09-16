@@ -1,18 +1,18 @@
-## O que muda
+## What changes
 
-<!-- Resumo em poucas linhas e o problema mobile que isso resolve. Referencie a issue: Closes #123 -->
+<!-- A short summary and the mobile problem this solves. Reference the issue: Closes #123 -->
 
-## Tipo
+## Type
 
 - [ ] Bug fix
-- [ ] Nova skill ou agent
-- [ ] Melhoria no core (detecção, router, context, doctor)
-- [ ] Instalação, release ou CI
-- [ ] Documentação
+- [ ] New skill or agent
+- [ ] Core improvement (detection, router, context, doctor)
+- [ ] Installation, release or CI
+- [ ] Documentation
 
-## Como foi verificado
+## How it was verified
 
-<!-- Cole a saída relevante: `npm run check`, `reis-mobile route "..."`, `reis-mobile review` num projeto real. -->
+<!-- Paste the relevant output: `npm run check`, `reis-mobile route "..."`, `reis-mobile review` on a real project. -->
 
 ```text
 
@@ -20,9 +20,9 @@
 
 ## Checklist
 
-- [ ] `npm run check` passa (validação do registry e testes)
-- [ ] Mudanças no detector, no router ou na redação têm teste em `tests/`
-- [ ] Agents e skills novos declaram `intents` e `stacks` (ou `routing: manual`)
-- [ ] Conteúdo de terceiros declara `source` e `license` e está em `THIRD_PARTY_NOTICES.md`
-- [ ] Nenhum dado de cliente, caminho local, secret ou código proprietário
-- [ ] README e CHANGELOG (`[Unreleased]`) atualizados quando o comportamento muda
+- [ ] `npm run check` passes (registry validation and tests)
+- [ ] Changes to the detector, the router or the redaction have a test in `tests/`
+- [ ] New agents and skills declare `intents` and `stacks` (or `routing: manual`)
+- [ ] Third-party content declares `source` and `license` and is listed in `THIRD_PARTY_NOTICES.md`
+- [ ] No customer data, local paths, secrets or proprietary code
+- [ ] README and CHANGELOG (`[Unreleased]`) updated when behavior changes

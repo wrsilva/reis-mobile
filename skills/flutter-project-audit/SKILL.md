@@ -7,60 +7,60 @@ stacks: [flutter]
 
 # Flutter Project Audit
 
-Checklist de saúde do projeto. Cada item deve ser confirmado lendo o arquivo citado; não reporte o que não conseguiu verificar.
+Project health checklist. Every item must be confirmed by reading the cited file; do not report what you could not verify.
 
-## 1. `pubspec.yaml` e dependências
+## 1. `pubspec.yaml` and dependencies
 
-- [ ] `environment.sdk` com limite inferior compatível com os recursos usados (records, patterns e sealed classes exigem Dart 3).
-- [ ] Dependências com constraint de caret (`^x.y.z`). `any` ou versões sem limite superior são achado.
-- [ ] `dependency_overrides` presente sem comentário justificando: achado (mascara conflitos e costuma ficar esquecido).
-- [ ] Pacotes de dev (`build_runner`, `mocktail`, `flutter_lints`/`very_good_analysis`) em `dev_dependencies`, não em `dependencies`.
-- [ ] Dependências via `git:` ou `path:` num app publicado: confirme se é intencional e se o `ref` está fixado.
-- [ ] `pubspec.lock` versionado em **apps** (garante build reproduzível). Em **packages/plugins**, versionar é opcional.
-- [ ] Pacotes descontinuados ou substituídos: só reporte se tiver evidência (aviso do `pub`, README do pacote). Não afirme de memória.
+- [ ] `environment.sdk` with a lower bound compatible with the features used (records, patterns and sealed classes require Dart 3).
+- [ ] Dependencies with caret constraints (`^x.y.z`). `any` or versions without an upper bound are a finding.
+- [ ] `dependency_overrides` present without a comment justifying it: finding (it masks conflicts and tends to be forgotten).
+- [ ] Dev packages (`build_runner`, `mocktail`, `flutter_lints`/`very_good_analysis`) in `dev_dependencies`, not in `dependencies`.
+- [ ] Dependencies via `git:` or `path:` in a published app: confirm it is intentional and that the `ref` is pinned.
+- [ ] `pubspec.lock` committed in **apps** (guarantees reproducible builds). In **packages/plugins**, committing it is optional.
+- [ ] Discontinued or replaced packages: only report with evidence (`pub` warning, package README). Do not claim it from memory.
 
-Comando útil, se o Flutter estiver disponível: `flutter pub outdated`.
+Useful command, if Flutter is available: `flutter pub outdated`.
 
-## 2. Análise estática
+## 2. Static analysis
 
-- [ ] `analysis_options.yaml` existe e inclui um conjunto de lints (`package:flutter_lints/flutter.yaml`, `package:lints/recommended.yaml` ou `very_good_analysis`).
-- [ ] Regras desativadas em massa (`ignore:` no topo de arquivos, `// ignore_for_file:`) sem justificativa.
-- [ ] Arquivos gerados (`*.g.dart`, `*.freezed.dart`, `*.mocks.dart`) excluídos da análise e consistentes com as anotações. Gerado desatualizado é bug de build.
+- [ ] `analysis_options.yaml` exists and includes a lint set (`package:flutter_lints/flutter.yaml`, `package:lints/recommended.yaml` or `very_good_analysis`).
+- [ ] Rules disabled in bulk (`ignore:` at the top of files, `// ignore_for_file:`) without justification.
+- [ ] Generated files (`*.g.dart`, `*.freezed.dart`, `*.mocks.dart`) excluded from analysis and consistent with the annotations. Stale generated code is a build bug.
 
-Comando útil: `flutter analyze`.
+Useful command: `flutter analyze`.
 
-## 3. Configuração nativa
+## 3. Native configuration
 
-**Android** (`android/app/build.gradle` ou `build.gradle.kts`):
-- [ ] `applicationId` não é o padrão `com.example.*` (a Play Store rejeita).
-- [ ] `minSdk`/`targetSdk`/`compileSdk`: valores explícitos ou `flutter.*`. `targetSdk` defasado bloqueia publicação; confirme o requisito atual da Play Store antes de citar número.
-- [ ] `signingConfig` de release não usa a debug key; senhas vêm de `key.properties` fora do versionamento.
-- [ ] `minifyEnabled`/`shrinkResources` e regras ProGuard/R8 coerentes com os plugins que usam reflexão.
+**Android** (`android/app/build.gradle` or `build.gradle.kts`):
+- [ ] `applicationId` is not the default `com.example.*` (the Play Store rejects it).
+- [ ] `minSdk`/`targetSdk`/`compileSdk`: explicit values or `flutter.*`. An outdated `targetSdk` blocks publishing; confirm the current Play Store requirement before citing a number.
+- [ ] The release `signingConfig` does not use the debug key; passwords come from `key.properties` outside version control.
+- [ ] `minifyEnabled`/`shrinkResources` and ProGuard/R8 rules consistent with plugins that use reflection.
 
 **iOS** (`ios/Runner.xcodeproj`, `ios/Podfile`, `ios/Runner/Info.plist`):
-- [ ] `PRODUCT_BUNDLE_IDENTIFIER` não é `com.example.*`.
-- [ ] `platform :ios` do Podfile alinhado ao `IPHONEOS_DEPLOYMENT_TARGET` do projeto.
-- [ ] Cada permissão usada tem sua `NS*UsageDescription` com texto real (texto vazio ou genérico gera rejeição na App Store).
+- [ ] `PRODUCT_BUNDLE_IDENTIFIER` is not `com.example.*`.
+- [ ] The Podfile `platform :ios` aligned with the project's `IPHONEOS_DEPLOYMENT_TARGET`.
+- [ ] Every permission used has its `NS*UsageDescription` with real text (empty or generic text causes App Store rejection).
 
-## 4. Ambientes e flavors
+## 4. Environments and flavors
 
-- [ ] URLs e chaves de ambiente não estão hardcoded em `lib/`. O padrão é `--dart-define`/`--dart-define-from-file` ou flavors.
-- [ ] Valores passados por `--dart-define` **não são secretos**: ficam no binário. Chave privada de API nunca deve estar no app.
-- [ ] Arquivos `.env`, `key.properties`, `*.jks`, `*.keystore`, `google-services.json` e `GoogleService-Info.plist` de produção: confira `.gitignore` e `git ls-files`.
+- [ ] Environment URLs and keys are not hardcoded in `lib/`. The standard is `--dart-define`/`--dart-define-from-file` or flavors.
+- [ ] Values passed via `--dart-define` **are not secret**: they end up in the binary. A private API key must never be in the app.
+- [ ] Production `.env`, `key.properties`, `*.jks`, `*.keystore`, `google-services.json` and `GoogleService-Info.plist` files: check `.gitignore` and `git ls-files`.
 
-## 5. Estrutura e arquitetura
+## 5. Structure and architecture
 
-- [ ] Organização consistente (feature-first ou por camadas). Misturar os dois sem critério é achado de manutenção.
-- [ ] UI não chama HTTP, banco ou plugins de plataforma diretamente; existe uma camada de dados/repositório.
-- [ ] Uma única abordagem de state management predominante (BLoC, Riverpod, Provider...). Várias sem motivo é achado.
-- [ ] Injeção de dependência centralizada (construtores, `get_it`, providers), sem singletons globais espalhados.
+- [ ] Consistent organization (feature-first or by layers). Mixing both without criteria is a maintainability finding.
+- [ ] The UI does not call HTTP, the database or platform plugins directly; there is a data/repository layer.
+- [ ] A single predominant state management approach (BLoC, Riverpod, Provider...). Several without reason is a finding.
+- [ ] Centralized dependency injection (constructors, `get_it`, providers), without global singletons scattered around.
 
-## 6. Testes e CI
+## 6. Tests and CI
 
-- [ ] Existe `test/` com testes que correspondem à lógica de negócio (não só o `widget_test.dart` padrão do template).
-- [ ] Se há `integration_test/`, ele está no CI.
-- [ ] Pipeline (`.github/workflows`, `codemagic.yaml`, `bitrise.yml`...) roda pelo menos `flutter analyze` e `flutter test`.
+- [ ] There is a `test/` folder with tests matching the business logic (not just the template's default `widget_test.dart`).
+- [ ] If there is an `integration_test/`, it runs in CI.
+- [ ] The pipeline (`.github/workflows`, `codemagic.yaml`, `bitrise.yml`...) runs at least `flutter analyze` and `flutter test`.
 
-## Saída
+## Output
 
-Reporte cada achado na seção correspondente do relatório do `mobile-code-reviewer` (Architecture, Security, Maintainability...), com `arquivo:linha` e a correção proposta.
+Report each finding in the matching section of the `mobile-code-reviewer` report (Architecture, Security, Maintainability...), with `file:line` and the proposed fix.

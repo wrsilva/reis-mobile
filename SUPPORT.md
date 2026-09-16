@@ -1,11 +1,11 @@
-# Suporte
+# Support
 
-| Preciso de... | Onde |
+| I need... | Where |
 |---|---|
-| Ajuda para usar, dúvidas, ideias | [Discussions](https://github.com/wrsilva/reis-mobile/discussions) |
-| Reportar um bug | [Issue de bug](https://github.com/wrsilva/reis-mobile/issues/new?template=bug_report.yml) |
-| Propor funcionalidade | [Issue de funcionalidade](https://github.com/wrsilva/reis-mobile/issues/new?template=feature_request.yml) |
-| Propor skill ou agent | [Issue de skill ou agent](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml) |
-| Reportar vulnerabilidade | [Aviso privado de segurança](https://github.com/wrsilva/reis-mobile/security/advisories/new) (nunca em issue pública) |
+| Help using it, questions, ideas | [Discussions](https://github.com/wrsilva/reis-mobile/discussions) |
+| To report a bug | [Bug issue](https://github.com/wrsilva/reis-mobile/issues/new?template=bug_report.yml) |
+| To propose a feature | [Feature issue](https://github.com/wrsilva/reis-mobile/issues/new?template=feature_request.yml) |
+| To propose a skill or agent | [Skill or agent issue](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml) |
+| To report a vulnerability | [Private security advisory](https://github.com/wrsilva/reis-mobile/security/advisories/new) (never in a public issue) |
 
-Antes de abrir uma issue, rode `reis-mobile doctor` e confira a seção [Problemas ao atualizar](README.md#atualização) do README.
+Before opening an issue, run `reis-mobile doctor` and check the [Update troubleshooting](README.md#updating) section of the README.
