@@ -13,8 +13,9 @@ reis-mobile is a Claude Code plugin with a Node.js CLI that orchestrates agents 
 - **Zero dependencies.** `core/` and `bin/` use only the Node.js 22+ standard library. Do not add npm packages.
 - **ES modules** (`.mjs`), 2 spaces, single quotes, semicolons.
 - **Do not invent.** Skill checklists cite APIs, lints, flags and store requirements that actually exist. When in doubt, tell the model to check the version in the project's lock file instead of asserting it.
-- **Small skills.** A skill solves one problem (`flutter-widget-review`), not a whole domain (`mobile-development`).
-- **Stack-prefixed names**: every skill starts with the prefix of its stack — `flutter-*`, `android-*`, `ios-*`, `rn-*` — and stack-agnostic skills (`stacks: ["*"]`) start with `mobile-*`. Firebase skills for Flutter keep `firebase-*` (and `flutterfire-configure`). `reis-mobile validate` rejects a skill that does not. Agents follow the same prefixes for stack specialists.
+- **One skill per topic, one reference per platform.** When a topic exists on several stacks (tests, Firebase, push notifications), create a single `mobile-<topic>` skill with `stacks: ["*"]`: `SKILL.md` holds what is true on every platform and a table pointing to `references/flutter.md`, `references/android.md`, `references/ios.md` and `references/react-native.md`. A platform with a lot of material gets an index file plus a folder (`references/android.md` → `references/android/<subtopic>.md`), so the model loads only what the task needs. Stack-prefixed skills (`android-gradle-build-debug`, `ios-cocoapods-debug`) are only for problems that exist on one platform. Tests check that every platform reference is linked and every relative link resolves.
+- **Focused skills.** A skill solves one topic (`mobile-test`, `flutter-widget-review`), not a whole domain (`mobile-development`).
+- **Stack-prefixed names**: every skill starts with the prefix of its stack — `flutter-*`, `android-*`, `ios-*`, `rn-*` — and stack-agnostic skills (`stacks: ["*"]`) start with `mobile-*`. `reis-mobile validate` rejects a skill that does not. Agents follow the same prefixes for stack specialists.
 - **Third-party skills** are renamed to the stack prefix when needed, declare `source` and `license` in the frontmatter and appear in `THIRD_PARTY_NOTICES.md` with the license text and their upstream name. Only the folder and the `name` field change; the instructions stay as upstream wrote them. Only import from sources whose license allows redistribution, and never copy agents or skills containing customer data, local paths or proprietary code.
 - Every agent and skill declares `intents` and `stacks` in the frontmatter, or `routing: manual`.
 - Changes to the detector, the router or the redaction require a test in `tests/`.
@@ -29,7 +30,7 @@ npm run check    # validate + test
 
 | I want... | Create | And also |
 |---|---|---|
-| A skill | `skills/<name>/SKILL.md` | A case in `tests/router.test.mjs` if it changes the selection for any route |
+| A skill | `skills/mobile-<topic>/SKILL.md` + `references/<platform>.md`, or `skills/<stack>-<name>/SKILL.md` for a single-platform problem | A case in `tests/router.test.mjs` if it changes the selection for any route |
 | An agent | `agents/<name>.md` | A routing test for the intent |
 | A command | `commands/<name>.md` (becomes `/reis-mobile:<name>`) | Documentation in the README |
 | An intent | Terms in `core/router/intents.mjs` | Cases in `tests/intent-detector.test.mjs` |

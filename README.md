@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 87 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **16 agents and 74 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -275,8 +275,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 87 mobile skills |
-| **Context cost** | Zero | ~9,200 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 74 mobile skills |
+| **Context cost** | Zero | ~8,400 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -335,7 +335,7 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 ### Skills
 
-**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `firebase-messaging`.
+**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `mobile-firebase`.
 
 <details>
 <summary><strong>Review and quality</strong> (7)</summary>
@@ -441,13 +441,12 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Security</strong> (3)</summary>
+<summary><strong>Security</strong> (2)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | all | reis-mobile |
 | `flutter-secure-token-store` | Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on… | security | Flutter | reis-mobile |
-| `firebase-app-check` | Integrates Firebase App Check into Flutter, native Android, native iOS and React Native apps. | security | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
 
 </details>
 
@@ -462,23 +461,11 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Firebase</strong> (13)</summary>
+<summary><strong>Firebase</strong> (1)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `flutterfire-configure` | Sets up Firebase for Flutter apps using FlutterFire CLI. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-auth` | Integrates Firebase Authentication into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-cloud-firestore` | Integrates Cloud Firestore into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-database` | Integrates Firebase Realtime Database into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-storage` | Integrates Firebase Cloud Storage into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-cloud-functions` | Calls Firebase Cloud Functions from Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-messaging` | Integrates Firebase Cloud Messaging (FCM) into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-in-app-messaging` | Integrates Firebase In-App Messaging into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-remote-config` | Integrates Firebase Remote Config into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-analytics` | Integrates Firebase Analytics into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-crashlytics` | Integrates Firebase Crashlytics into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-ai` | Integrates Firebase AI Logic into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
-| `firebase-data-connect` | Integrates Firebase SQL Connect (formerly Data Connect) into Flutter, Android and iOS apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `mobile-firebase` | Firebase on Flutter, native Android, native iOS and React Native: setup, Authentication, Firestore, Realtime Database, Storage, Functions, Messaging, Analytics, Crashlytics, Remote Config, App Check, In-App Messaging, AI Logic and SQL Connect, with a guide per platform and product. | — | all | reis-mobile, evanca/flutter-ai-rules |
 
 </details>
 
@@ -550,7 +537,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 87 skills add up to about 9,200 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 74 skills add up to about 8,400 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 

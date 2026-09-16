@@ -8,13 +8,10 @@ import { parseFrontmatter } from './frontmatter.mjs';
 
 export const ANY_STACK = '*';
 
-/**
- * Every skill name starts with a prefix of the first stack it declares. Firebase skills for
- * Flutter keep the names Firebase developers search for.
- */
+/** Every skill name starts with the prefix of the first stack it declares. */
 export const SKILL_PREFIXES = {
   [ANY_STACK]: ['mobile-'],
-  flutter: ['flutter-', 'firebase-', 'flutterfire-'],
+  flutter: ['flutter-'],
   android: ['android-'],
   ios: ['ios-'],
   'react-native': ['rn-'],

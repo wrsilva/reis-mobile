@@ -56,6 +56,8 @@ Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:
 
 A good reis-mobile skill:
 
+- covers a topic once for every platform where it applies — `mobile-<topic>` with `references/flutter.md`, `android.md`, `ios.md` and `react-native.md` (see `skills/mobile-test` and `skills/mobile-firebase`) — instead of one skill per stack;
+
 - has a description that says **what it does and when to use it**, since that is what Claude Code uses to activate it;
 - is a verifiable checklist, ordered by impact (crashes and data loss first);
 - does not state versions, lints or store requirements from memory. When the value changes over time, it says to verify it;

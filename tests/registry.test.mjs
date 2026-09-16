@@ -94,17 +94,29 @@ describe('plugin registry', () => {
     }
   });
 
-  it('gives every multi-platform Firebase skill a reference for each native platform', async () => {
+  it('links every platform reference a multi-platform skill ships', async () => {
     const { skills } = await loadRegistry();
-    const firebase = skills.filter((skill) => skill.name.startsWith('firebase-'));
+    const platformGuides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md'];
 
-    assert.ok(firebase.length >= 13);
-    for (const skill of firebase) {
-      assert.deepEqual(skill.stacks, ['flutter', 'android', 'ios', 'react-native'], `${skill.name} stacks`);
+    for (const skill of skills.filter((item) => item.name.startsWith('mobile-'))) {
       const body = readFileSync(skill.path, 'utf8');
-      for (const reference of ['android.md', 'ios.md', 'react-native.md']) {
-        assert.ok(existsSync(join(dirname(skill.path), 'references', reference)), `${skill.name}: references/${reference}`);
-        assert.ok(body.includes(`(references/${reference})`), `${skill.name} links references/${reference}`);
+      for (const guide of platformGuides) {
+        if (existsSync(join(dirname(skill.path), 'references', guide))) {
+          assert.ok(body.includes(`(references/${guide})`), `${skill.name} links references/${guide}`);
+        }
+      }
+    }
+  });
+
+  it('keeps every relative Markdown link inside skills pointing at a file', () => {
+    const root = join(PLUGIN_ROOT, 'skills');
+    const files = readdirSync(root, { recursive: true }).filter((file) => file.endsWith('.md'));
+
+    for (const file of files) {
+      const text = readFileSync(join(root, file), 'utf8').replace(/```[\s\S]*?```/g, '');
+      for (const [, target] of text.matchAll(/\]\(([^)\s#]+\.md)(?:#[^)]*)?\)/g)) {
+        if (/^[a-z]+:\/\//.test(target)) continue;
+        assert.ok(existsSync(join(root, dirname(file), target)), `${file} links ${target}`);
       }
     }
   });
@@ -122,7 +134,7 @@ describe('plugin registry', () => {
       assert.ok(notices.includes(`Source: ${match[2]}`), `${file}: ${match[2]} is listed`);
       assert.ok(notices.includes(`\`${match[1]}\` → `), `${file}: upstream skill ${match[1]} is listed`);
     }
-    assert.ok(adapted >= 11, 'the consolidated test guides are credited');
+    assert.ok(adapted >= 25, 'the consolidated test and Firebase guides are credited');
   });
 
   it('reports broken components', async () => {
