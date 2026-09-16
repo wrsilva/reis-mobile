@@ -34,7 +34,7 @@ Apply to Kotlin and Java sources under `src/main` (and `androidMain` in KMP). It
 
 ## 5. Platform
 
-- [ ] **Exported components.** `android:exported="true"` on activities, services, receivers or providers without a permission, that act on the incoming `Intent` without validating it. Details in `mobile-security-audit`.
+- [ ] **Exported components.** `android:exported="true"` on activities, services, receivers or providers without a permission, that act on the incoming `Intent` without validating it. Details in `mobile-security`.
 - [ ] **Runtime permissions.** Features used without checking the permission, or denial ("don't ask again") not handled.
 - [ ] **Background work.** Long work started from an Activity or a plain `Service` that the system will stop; persistent or deferrable work belongs in `WorkManager`. Starting foreground services and exact alarms have restrictions that depend on `targetSdk`; check it before reviewing.
 - [ ] **`PendingIntent` mutability.** Flags must include `FLAG_IMMUTABLE` or `FLAG_MUTABLE` explicitly on apps targeting Android 12 or higher.

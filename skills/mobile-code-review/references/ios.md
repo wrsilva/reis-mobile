@@ -32,7 +32,7 @@ Apply to Swift and Objective-C sources of the app and its extensions. Items are 
 
 ## 5. Platform and privacy
 
-- [ ] **Credentials and tokens** in `UserDefaults` or files instead of the Keychain. Details in `mobile-security-audit`.
+- [ ] **Credentials and tokens** in `UserDefaults` or files instead of the Keychain. Details in `mobile-security`.
 - [ ] **Permissions.** Each protected API used needs its `NS...UsageDescription` in `Info.plist`, and the code must handle denied and restricted states, not only granted.
 - [ ] **Background execution.** Work that must finish when the app goes to background without `beginBackgroundTask` or `BGTaskScheduler`.
 - [ ] **Deployment target.** APIs used without `#available` checks when the deployment target is lower than the API's availability.

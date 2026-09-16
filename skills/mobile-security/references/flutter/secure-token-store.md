@@ -1,11 +1,4 @@
----
-name: flutter-secure-token-store
-description: "Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on Android) via flutter_secure_storage. Use when persisting, reading or clearing auth tokens, or when replacing shared_preferences token storage."
-intents: [security]
-stacks: [flutter]
----
-
-# flutter-secure-token-store
+# Storing auth tokens securely in Flutter
 
 ## Description
 Store JWT tokens securely on Flutter using platform secure storage.

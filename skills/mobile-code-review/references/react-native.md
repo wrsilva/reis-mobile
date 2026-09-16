@@ -38,7 +38,7 @@ Apply to TypeScript and JavaScript sources of a React Native or Expo app, and to
 - [ ] Tokens or credentials in `AsyncStorage` instead of the Keychain/Keystore (`react-native-keychain`, `expo-secure-store`).
 - [ ] Secrets in `.env` files read through `react-native-config` or `EXPO_PUBLIC_*` variables: they are bundled into the app and readable.
 - [ ] `react-native-webview` with `originWhitelist={['*']}` and an `onMessage` handler that acts on messages.
-- [ ] Sensitive data in `console.log`, which stays in release builds unless removed. Details in `mobile-security-audit`.
+- [ ] Sensitive data in `console.log`, which stays in release builds unless removed. Details in `mobile-security`.
 
 ## 6. Expo and release
 

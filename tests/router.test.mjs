@@ -16,10 +16,10 @@ describe('route', () => {
 
     assert.equal(result.stack, 'flutter');
     assert.equal(result.agent.name, 'mobile-code-reviewer');
-    for (const skill of ['mobile-code-review', 'mobile-security-audit']) {
+    for (const skill of ['mobile-code-review', 'mobile-security']) {
       assert.ok(names(result.skills).includes(skill), `${skill} is selected`);
     }
-    assert.equal(names(result.skills).at(-1), 'mobile-security-audit', 'stack-agnostic skills come last');
+    assert.equal(names(result.skills).at(-1), 'mobile-security', 'stack-agnostic skills come last');
     assert.deepEqual(result.warnings, []);
   });
 
@@ -78,7 +78,7 @@ describe('route', () => {
     const result = await route({ intent: 'review', projectDir: dir });
 
     assert.equal(result.stack, 'android');
-    assert.deepEqual(names(result.skills), ['android-intent-security', 'mobile-code-review', 'mobile-security-audit']);
+    assert.deepEqual(names(result.skills), ['mobile-code-review', 'mobile-security']);
   });
 
   it('reviews native iOS with the cross-platform review and security skills', async () => {
@@ -87,7 +87,7 @@ describe('route', () => {
     const result = await route({ intent: 'review', projectDir: dir });
 
     assert.equal(result.stack, 'ios');
-    assert.deepEqual(names(result.skills), ['mobile-code-review', 'mobile-security-audit']);
+    assert.deepEqual(names(result.skills), ['mobile-code-review', 'mobile-security']);
   });
 
   it('debugs a CocoaPods failure with mobile-debug and reports the area it belongs to', async () => {

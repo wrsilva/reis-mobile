@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 62 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **16 agents and 60 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -276,8 +276,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 62 mobile skills |
-| **Context cost** | Zero | ~7,300 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 60 mobile skills |
+| **Context cost** | Zero | ~7,200 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -294,7 +294,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
      ├─ detect stack ──────── pubspec.yaml → flutter (android, ios)
      ├─ detect intent ─────── review
      ├─ select agent ──────── mobile-code-reviewer
-     ├─ select skills ─────── flutter-effective-dart · mobile-code-review · mobile-security-audit
+     ├─ select skills ─────── flutter-effective-dart · mobile-code-review · mobile-security
      ├─ collect context ───── git diff (lock files out, secrets masked)
      └─ review report ─────── Summary · Critical · Bugs · Architecture · Security · Performance · Maintainability
 ```
@@ -435,12 +435,11 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Security</strong> (2)</summary>
+<summary><strong>Security</strong> (1)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | all | reis-mobile |
-| `flutter-secure-token-store` | Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on… | security | Flutter | reis-mobile |
+| `mobile-security` | OWASP MASVS security review for Flutter, native Android, native iOS and React Native: token storage, secrets, TLS, exported components and intents, deep links, WebViews, biometrics, logs and release hardening, with a checklist per platform. | review, security, release | all | reis-mobile, android/skills |
 
 </details>
 
@@ -464,11 +463,10 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native Android</strong> (23)</summary>
+<summary><strong>Native Android</strong> (22)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `android-intent-security` | Best practices for Android Intent security. | security, review | Android | android/skills |
 | `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
 | `android-r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
 | `android-profiler` | Manages Android performance profiling and debugging. | performance | Android | android/skills |
@@ -518,7 +516,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 62 skills add up to about 7,300 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 60 skills add up to about 7,200 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
@@ -612,7 +610,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
 - **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
-- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security-audit` skill.
+- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---
 

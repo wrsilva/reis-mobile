@@ -1,31 +1,4 @@
----
-name: android-intent-security
-description: Best practices for Android Intent security. Use this skill when auditing
-  component configurations in AndroidManifest.xml activities, services, receivers)
-  or source code handling incoming Intents (getIntent, getParcelableExtra) to prevent
-  Intent Redirection and unauthorized access.
-license: Apache-2.0
-source: https://github.com/android/skills
-intents: [security, review]
-stacks: [android]
-metadata:
-  author: Google LLC
-  last-updated: '2026-08-14'
-  keywords:
-  - recipe
-  - Android
-  - Security
-  - Intent
-  - Redirection
-  - PendingIntent
-  - ContentProvider
-  - Service
-  - Signature
-  - Verification
-  - sanitizer
-  - Vulnerability
-  - Best Practices
----
+> Adapted from the `android-intent-security` skill in [android/skills](https://github.com/android/skills) (Apache-2.0). See `THIRD_PARTY_NOTICES.md`.
 
 This skill provides guidelines and patterns to secure Android components
 (Activities, Services, Broadcast Receivers, Content Providers) and handle

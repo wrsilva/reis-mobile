@@ -20,7 +20,7 @@ Detect the stack first, then apply the platform checklist to the files in scope:
 | Native iOS (Swift/Objective-C) | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
 
-In a cross-platform app, native code in `android/`, `ios/` or native modules gets the native checklist too. Security findings follow `mobile-security-audit` when it is loaded.
+In a cross-platform app, native code in `android/`, `ios/` or native modules gets the native checklist too. Security findings follow `mobile-security` when it is loaded.
 
 ## 2. Scope
 

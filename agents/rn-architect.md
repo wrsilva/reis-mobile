@@ -62,7 +62,7 @@ src/
 - Native modules called directly from many places instead of one wrapper
 
 **Configuration**
-- Secrets in `.env` files bundled into the app (see `mobile-security-audit`)
+- Secrets in `.env` files bundled into the app (see `mobile-security`)
 - Missing or loose TypeScript settings (`strict` off) in a codebase that relies on types
 
 ## Process
