@@ -21,9 +21,14 @@ The output reports:
 - `Intent`, `Stack` and `focus` (native platforms mentioned in the focus);
 - `Agent`: the responsible agent;
 - `Skills`: the skills to apply, in priority order;
+- `Language`: the language to answer in (see **Language**);
 - `Context`: `working-tree`, `range` or `project`, with the list of changed files and the diff (secrets already masked).
 
 If the command fails, show the error to the user and stop.
+
+## Language
+
+The CLI output has a `Language` line (`language` in JSON). Write everything the user reads — the answer, report headings and text, syntheses and files you create — in that language: `en` is English, `pt` is Brazilian Portuguese. With `-` or `null`, use the language of the user's request. Code, identifiers, file paths, commands and quoted tool output stay as they are.
 
 ## 2. Load the instructions
 
@@ -43,6 +48,6 @@ Confirm every finding in the code before reporting it. Do not modify files: this
 
 ## 4. Report
 
-Answer in the format defined by the agent (Summary, Critical, Bugs, Architecture, Security, Performance, Maintainability, Suggested changes). On the first line of the Summary, state the stack, the agent and the skills used, so the routing is visible.
+Answer in the format defined by the agent (Summary, Critical, Bugs, Architecture, Security, Performance, Maintainability, Suggested changes), translating the headings when the language is not English. On the first line of the Summary, state the stack, the agent and the skills used, so the routing is visible.
 
 If the router emitted warnings (lines starting with `!`), mention them in the Summary.

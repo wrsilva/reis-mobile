@@ -26,6 +26,8 @@ Whatever remains is the question, as free text. Without a question, explain the 
 node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --dir "$PWD" --json
 ```
 
+The JSON carries the stack and the `language` for the whole debate: `en` English, `pt` Brazilian Portuguese, `null` the language of the user's question. Use it in the announcements, the briefings, every round file and the synthesis, so participants write in it too. Code, identifiers and file paths stay as they are.
+
 If the question mentions files or directories, resolve the paths and read them now: participants receive the content in the briefing, not the path. If it fails, show the error and stop.
 
 ## 3. Pick the participants
@@ -60,7 +62,7 @@ Before starting, tell the user in one line the stack, the participants with thei
 mkdir -p ".reis-mobile/debates/<NNN-question-slug>/rounds"
 ```
 
-`NNN` is sequential within `.reis-mobile/debates/`. Write `context.md` in the folder with the question, the stack, the participants, the flags and the context read in step 2.
+`NNN` is sequential within `.reis-mobile/debates/`. Write `context.md` in the folder with the question, the stack, the language, the participants, the flags and the context read in step 2.
 
 ## 5. Round 1 — blind positions
 
@@ -73,6 +75,7 @@ You are taking part in a technical debate as <agent role>.
 
 QUESTION: <question>
 STACK: <detected stack>
+LANGUAGE: <language — write your position in it>
 CONTEXT: <content of the relevant files>
 
 Defend the position your specialty supports, in at most 400 words.
@@ -112,7 +115,7 @@ These are the other participants' positions from the previous round:
 
 Attack the specific points you disagree with, citing who said them and
 verifying the claim in the code. Where they are right and you were wrong,
-say so. At most 300 words.
+say so. At most 300 words, in the same language as round 1.
 
 Write to: .reis-mobile/debates/<id>/rounds/r<N>_<agent>.md
 ```

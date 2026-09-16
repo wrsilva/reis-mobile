@@ -10,9 +10,13 @@ Arguments received: `$ARGUMENTS`
 
 Pick the case by the first word of the arguments.
 
+## Language
+
+The CLI output has a `Language` line (`language` in JSON). Write everything the user reads — the answer, report headings and text, syntheses and files you create — in that language: `en` is English, `pt` is Brazilian Portuguese. With `-` or `null`, use the language of the user's request. Code, identifiers, file paths, commands and quoted tool output stay as they are.
+
 ## No arguments
 
-Reply only with this list, without running anything:
+Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" lang`, to find the language:
 
 ```text
 /reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
@@ -20,6 +24,8 @@ Reply only with this list, without running anything:
 /reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
 /reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
+
+When the language is `pt`, translate the descriptions and keep the commands as they are. When it is not set, use English.
 
 ## `doctor [options]`
 

@@ -33,6 +33,8 @@ USER ──► COMMAND (/reis-mobile:review)
 ```text
 core/
 ├── paths.mjs                    plugin root
+├── config/
+│   └── language.mjs             answer language: en | pt, saved outside the plugin cache
 ├── detection/
 │   ├── project-probe.mjs        bounded project reading (skips build/, Pods/, node_modules/...)
 │   └── stack-detector.mjs       per-stack rules, in priority order
@@ -106,6 +108,10 @@ stacks: [flutter]
 ```
 
 `reis-mobile validate` (and CI) rejects a name that differs from the file, a missing description, unknown intents or stacks, `source` without `license`, and duplicates. A test ensures every skill with `source` appears in `THIRD_PARTY_NOTICES.md`.
+
+## Language
+
+Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <en|pt>` or `reis-mobile lang <en|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route` and `review` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
 
 ## Distribution
 

@@ -20,3 +20,4 @@ Diagnostic result:
    - `Java` failing in a Flutter project → `flutter doctor -v` shows which JDK Flutter uses; the `java` on the PATH may be a different one
 3. Do not run install or fix commands unless the user asks.
 4. If there is no `✗`, just say the environment is ready for the detected stack.
+5. Write the explanations in the language on the report's `Language` line (`en` English, `pt` Brazilian Portuguese). With `-`, use the language of the user's request. The report itself stays exactly as it came.

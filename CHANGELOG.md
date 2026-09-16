@@ -4,6 +4,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- Answer language: `reis-mobile init pt|en` and `reis-mobile lang [pt|en]` save the language the `/reis-mobile:*` commands answer in to `~/.config/reis-mobile/config.json`. `detect`, `doctor`, `route` and `review` report it as `Language`, and it can be overridden with `--lang` or `REIS_MOBILE_LANG`, which the installers also honor. `init --uninstall` removes the saved file.
+
 ### Changed
 
 - All agents, skills, commands, documentation and GitHub templates are now written in English. Intent detection still accepts prompts in English and Portuguese.

@@ -25,6 +25,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 👥 **7 agents and 67 mobile skills.** Flutter architect, performance and test engineers, Flutter/Android/iOS staff engineer, native plugin specialist, code reviewer and a lead that coordinates them all, plus skills for BLoC, Riverpod, Firebase, testing, layout, plugins and security.
 
+🌐 **Answers in English or Portuguese.** `reis-mobile init pt` or `reis-mobile init en` sets the language of reports, explanations and debates.
+
 🧭 **Routes to the right specialist.** Describe the problem in English or Portuguese, and the router identifies the intent, the stack and the platform in focus. "The Android build of my Flutter app broke" loads Flutter **and** Android context.
 
 🛡️ **Real mobile security.** Checklist based on OWASP MASVS, with concrete per-stack checks: `flutter_secure_storage`, `network_security_config`, ATS, Keychain and `AsyncStorage`.
@@ -140,6 +142,21 @@ You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions
 
 `reis-mobile init` registers the plugin in Claude Code. To register it in Codex, use the `codex plugin` commands in this section, even if the `reis-mobile` CLI is already installed through Homebrew.
 
+### Language
+
+Agents, skills and commands are written in English, and that does not change. What you choose is the language reis-mobile **answers** in: `/reis-mobile:review` reports, `/reis-mobile:doctor` explanations, and debate rounds and syntheses.
+
+```bash
+reis-mobile init pt          # install the plugin and answer in Brazilian Portuguese
+reis-mobile init en          # install the plugin and answer in English (also: eng)
+reis-mobile lang pt          # change the language later, without reinstalling
+reis-mobile lang             # show the current language
+```
+
+With the installers, pass it through the environment: `curl -fsSL .../install.sh | REIS_MOBILE_LANG=pt sh`.
+
+The choice is saved to `~/.config/reis-mobile/config.json` (`%APPDATA%\reis-mobile\config.json` on Windows), so it survives `claude plugin update`. Precedence is `--lang` on a single run, then the `REIS_MOBILE_LANG` environment variable, then the saved file. With nothing set, each command answers in the language of your request. Agents that Claude Code triggers on its own, outside a `/reis-mobile:*` command, follow the language of the conversation.
+
 ### Verify the CLI and the Claude Code plugin
 
 ```bash
@@ -163,6 +180,7 @@ Then restart Claude Code and run, in your app folder:
 | `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Installation folder |
 | `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `reis-mobile` command |
 | `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` installs only the CLI, without registering the plugin |
+| `REIS_MOBILE_LANG` | not set | `en` or `pt`: the language the commands answer in (see [Language](#language)) |
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.0 sh
@@ -175,7 +193,7 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 Remove the Claude Code plugin first and then the CLI, using the same method used to install it.
 
 ```bash
-# Claude Code plugin (any platform)
+# Claude Code plugin and saved language (any platform)
 reis-mobile init --uninstall
 # or, without the CLI:
 claude plugin uninstall reis-mobile && claude plugin marketplace remove reis-mobile
