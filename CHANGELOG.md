@@ -2,7 +2,7 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.6.0] - 2026-09-16
 
 ### Added
 
@@ -11,6 +11,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 - `mobile-accessibility` topic skill, with references for Flutter (Semantics and `meetsGuideline` checks), native Android (Compose semantics and Views, Espresso accessibility checks), native iOS (SwiftUI, UIKit, `performAccessibilityAudit`) and React Native.
 - `mobile-release` topic skill: readiness checklist and report, references for Flutter, Android, iOS and React Native (versions, signing, symbols, store checks, rollout, over-the-air updates), release notes and store listing limits, and CI/CD with GitHub Actions, fastlane and EAS.
 - `mobile-debug` guides for Android ANRs (thread states, locks, `ApplicationExitInfo`), Android memory leaks (LeakCanary traces, heap dumps) and deep links on every stack (App Links verification, Universal Links and the Apple CDN, cold-start routing).
+
+### Changed
+
+- `mobile-staff-engineer` no longer declares the `release`, `deployment` and `accessibility` intents.
+- The plugin's fixed context cost rises to about 4,300 tokens per session.
 
 ## [0.5.0] - 2026-09-16
 
