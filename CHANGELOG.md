@@ -2,6 +2,15 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.6] - 2026-09-16
+
+### Changed
+
+- `reis-mobile init` installs the plugin in Claude Code **and Codex**, in whichever of the two is on the `PATH`, and reports each one as installed, skipped or failed. A failure in one tool does not stop the other. In Codex it adds the GitHub marketplace, refreshes its snapshot and adds `reis-mobile@reis-mobile`, which also fixes `plugin reis-mobile was not found in marketplace reis-mobile` on an outdated snapshot.
+- `reis-mobile init --uninstall` removes the plugin and the marketplace from both tools, and only removes a Codex marketplace that is configured, since Codex treats removing a missing one as an error.
+- `init` exits with an error when neither Claude Code nor Codex is found, without saving the language.
+- The README uses `reis-mobile init eng` in its examples.
+
 ## [0.3.5] - 2026-09-16
 
 ### Changed

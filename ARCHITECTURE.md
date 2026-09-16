@@ -50,7 +50,9 @@ core/
 ├── diagnostics/
 │   └── doctor.mjs               tools and project configuration
 ├── install/
-│   └── claude-plugin.mjs        registers the plugin in Claude Code (reis-mobile init)
+│   ├── init.mjs                 reis-mobile init: installs in every tool found on the PATH
+│   ├── claude-plugin.mjs        Claude Code steps
+│   └── codex-plugin.mjs         Codex steps
 └── security/
     └── redact.mjs               secret masking
 ```
@@ -111,7 +113,7 @@ stacks: [flutter]
 
 ## Language
 
-Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <en|pt>` or `reis-mobile lang <en|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route` and `review` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
+Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <eng|pt>` or `reis-mobile lang <eng|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route` and `review` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
 
 ## Distribution
 
@@ -121,7 +123,7 @@ The CLI and the plugins are the same code, published through three channels:
 |---|---|---|
 | Claude Code plugin | This repository, as a GitHub marketplace (`reis-mobile@reis-mobile`) | Agents, skills, commands, and the CLI under `${CLAUDE_PLUGIN_ROOT}/bin` |
 | Codex plugin | The same marketplace, through `codex plugin` | Skills |
-| npm (`reis-mobile`) | `npm publish` in the release workflow, when the `NPM_TOKEN` secret exists | The `reis-mobile` command; `reis-mobile init` registers the Claude Code plugin |
+| npm (`reis-mobile`) | `npm publish` in the release workflow, when the `NPM_TOKEN` secret exists | The `reis-mobile` command; `reis-mobile init` installs the plugin in Claude Code and Codex, whichever are on the `PATH` |
 
 `package.json` `files` decides what the npm package contains, including `THIRD_PARTY_NOTICES.md`, which the MIT and BSD-3-Clause licenses of the imported skills require. CI packs the package and installs it globally on Linux, macOS and Windows before running the CLI.
 

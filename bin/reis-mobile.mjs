@@ -7,7 +7,7 @@ import { LANGUAGES, configPath, removeConfig, resolveLanguage, saveLanguage } fr
 import { collectReviewContext } from '../core/context/context-engine.mjs';
 import { detectStack } from '../core/detection/stack-detector.mjs';
 import { runDoctor } from '../core/diagnostics/doctor.mjs';
-import { installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
+import { runInit } from '../core/install/init.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
@@ -18,7 +18,7 @@ const USAGE = `reis-mobile — AI agents for mobile engineering
 Usage: reis-mobile <command> [options]
 
 Commands:
-  init [en|pt]               Install the reis-mobile plugin into Claude Code, optionally setting the language
+  init [en|pt]               Install the reis-mobile plugin into Claude Code and Codex, optionally setting the language
   lang [en|pt]               Show or set the language the /reis-mobile commands answer in
   detect                     Detect the mobile stack of a project
   doctor                     Diagnose the environment for the detected stack
@@ -34,8 +34,8 @@ Options:
   --all             doctor: check every tool, not only the relevant ones
   --strict          doctor: exit with code 1 when there are warnings
   --local           init: install the plugin from this installation instead of GitHub
-  --scope <scope>   init: user (default), project or local
-  --uninstall       init: remove the plugin, its marketplace and the saved language
+  --scope <scope>   init: Claude Code scope, user (default), project or local
+  --uninstall       init: remove the plugin and its marketplace from Claude Code and Codex, and the saved language
   --lang <en|pt>    Override the saved language for this run
   --json            Machine-readable output
   -v, --version     Print the version
@@ -92,27 +92,35 @@ async function main(argv) {
 }
 
 async function commandInit({ local, scope, uninstall, lang, prompt }) {
-  // The installers pass the language through REIS_MOBILE_LANG.
   const requested = lang ?? (prompt || process.env.REIS_MOBILE_LANG || undefined);
-  // Validate before touching Claude Code, so a typo does not leave a half-done install.
+  // Validate before touching Claude Code or Codex, so a typo does not leave a half-done install.
   if (requested && !uninstall) await resolveLanguage({ flag: requested, env: {} });
 
-  const result = uninstall
-    ? uninstallClaudePlugin({ scope })
-    : installClaudePlugin({ scope, ...(local && { source: PLUGIN_ROOT }) });
+  const { ok, results } = runInit({ uninstall, scope, ...(local && { source: PLUGIN_ROOT }) });
 
-  if (!result.ok) {
-    console.error(`✗ ${result.failedStep} failed (exit ${result.status})`);
+  console.log('');
+  for (const result of results) {
+    if (result.skipped) console.log(`- ${result.name.padEnd(12)}not found, skipped`);
+    else if (result.ok) console.log(`✓ ${result.name.padEnd(12)}${uninstall ? 'removed' : 'installed'}`);
+    else console.error(`✗ ${result.name.padEnd(12)}${result.failedStep} failed (exit ${result.status})`);
+  }
+
+  if (!results.some((result) => !result.skipped)) {
+    console.error('\nNeither Claude Code nor Codex was found in PATH. Install one of them and run `reis-mobile init` again.');
     return 1;
   }
   if (uninstall) {
     await removeConfig();
-    console.log('✓ reis-mobile removed from Claude Code');
-    return 0;
+    console.log(`✓ ${'Language'.padEnd(12)}saved setting removed`);
+    return ok ? 0 : 1;
   }
-  if (requested) console.log(`✓ Language: ${await saveLanguage(requested)} (${configPath()})`);
-  console.log('✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /reis-mobile:doctor');
-  return 0;
+  if (requested && results.some((result) => result.ok)) {
+    console.log(`✓ ${'Language'.padEnd(12)}${await saveLanguage(requested)} (${configPath()})`);
+  }
+  if (results.some((result) => result.ok)) {
+    console.log('\nRestart Claude Code or Codex. In Claude Code, run /reis-mobile:doctor.');
+  }
+  return ok ? 0 : 1;
 }
 
 async function commandLang({ prompt, json }) {
