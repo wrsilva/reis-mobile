@@ -59,7 +59,7 @@ function runClaude(args) {
   // npm-based Claude Code installs expose `claude.cmd` on Windows, which needs a shell.
   const result = spawnSync('claude', args, { stdio: 'inherit', shell: process.platform === 'win32' });
   if (result.error?.code === 'ENOENT') {
-    throw new Error('Claude Code CLI not found in PATH. Install it from https://claude.com/claude-code and run `reis-mobile init` again.');
+    throw new Error('Claude Code CLI not found in PATH. Install it from https://claude.com/claude-code and run `mobile init` again.');
   }
   if (result.error) throw result.error;
   return result.status ?? 1;

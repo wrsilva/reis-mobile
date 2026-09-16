@@ -12,7 +12,7 @@ Use the reis-mobile deterministic detector instead of guessing from the folder s
 ## How to run
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --json --dir "<project directory>"
+node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" detect --json --dir "<project directory>"
 ```
 
 Result fields:

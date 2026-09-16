@@ -46,7 +46,7 @@ export async function readConfig(path = configPath()) {
   try {
     return JSON.parse(source);
   } catch {
-    throw new Error(`Invalid JSON in ${path}. Fix or delete the file and run \`reis-mobile lang <en|pt>\` again.`);
+    throw new Error(`Invalid JSON in ${path}. Fix or delete the file and run \`mobile lang <en|pt>\` again.`);
   }
 }
 

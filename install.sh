@@ -6,7 +6,7 @@
 # Environment variables:
 #   REIS_MOBILE_VERSION      Release tag to install (default: latest release)
 #   REIS_MOBILE_HOME         Installation directory (default: ~/.local/share/reis-mobile)
-#   REIS_MOBILE_BIN_DIR      Directory for the reis-mobile command (default: ~/.local/bin)
+#   REIS_MOBILE_BIN_DIR      Directory for the mobile command (default: ~/.local/bin)
 #   REIS_MOBILE_SKIP_PLUGIN  Set to 1 to skip installing the Claude Code plugin
 #   REIS_MOBILE_LANG         Language the /mobile commands answer in: en or pt
 #   REIS_MOBILE_ARCHIVE_URL  Install from this archive instead of a GitHub release (testing)
@@ -76,17 +76,35 @@ install_files() {
   staging="$TMP_DIR/reis-mobile"
   mkdir -p "$staging"
   tar -xzf "$archive" -C "$staging" --strip-components=1
-  [ -f "$staging/bin/reis-mobile.mjs" ] || fail "archive does not contain bin/reis-mobile.mjs"
+  # Releases up to v0.3.2 ship the entry point as bin/reis-mobile.mjs.
+  entry=""
+  for candidate in mobile.mjs reis-mobile.mjs; do
+    if [ -f "$staging/bin/$candidate" ]; then
+      entry="$candidate"
+      break
+    fi
+  done
+  [ -n "$entry" ] || fail "archive does not contain bin/mobile.mjs"
 
   version_dir="$INSTALL_ROOT/$(node -p 'require(process.argv[1]).version' "$staging/package.json")"
   mkdir -p "$INSTALL_ROOT" "$BIN_DIR"
   rm -rf "$version_dir"
   mv "$staging" "$version_dir"
   ln -sfn "$version_dir" "$INSTALL_ROOT/current"
-  chmod +x "$version_dir/bin/reis-mobile.mjs"
-  ln -sf "$INSTALL_ROOT/current/bin/reis-mobile.mjs" "$BIN_DIR/reis-mobile"
+  chmod +x "$version_dir/bin/$entry"
+  ln -sf "$INSTALL_ROOT/current/bin/$entry" "$BIN_DIR/mobile"
+  remove_legacy_command
 
-  say "Installed $("$BIN_DIR/reis-mobile" --version) to ${version_dir}"
+  say "Installed $("$BIN_DIR/mobile" --version) to ${version_dir}"
+}
+
+# Up to v0.3.2 the command was called reis-mobile. Only remove the link this installer created.
+remove_legacy_command() {
+  legacy="$BIN_DIR/reis-mobile"
+  [ -L "$legacy" ] || return 0
+  case "$(readlink "$legacy")" in
+    "$INSTALL_ROOT"/*) rm -f "$legacy" ;;
+  esac
 }
 
 install_plugin() {
@@ -94,11 +112,11 @@ install_plugin() {
     return
   fi
   if ! has claude; then
-    say "Claude Code not found. After installing it, run: reis-mobile init"
+    say "Claude Code not found. After installing it, run: mobile init"
     return
   fi
   say "Installing the Claude Code plugin"
-  "$BIN_DIR/reis-mobile" init || say "Plugin installation failed. Run 'reis-mobile init' to retry."
+  "$BIN_DIR/mobile" init || say "Plugin installation failed. Run 'mobile init' to retry."
 }
 
 print_path_hint() {
@@ -124,7 +142,7 @@ main() {
   install_plugin
   print_path_hint
   say ""
-  say "Done. Verify with: reis-mobile --version"
+  say "Done. Verify with: mobile --version"
 }
 
 main "$@"

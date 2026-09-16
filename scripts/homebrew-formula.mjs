@@ -21,19 +21,19 @@ export function renderFormula({ tag, sha256 }) {
 
   def install
     libexec.install Dir["*"], ".claude-plugin"
-    (bin/"reis-mobile").write_env_script libexec/"bin/reis-mobile.mjs", PATH: "#{Formula["node"].opt_bin}:$PATH"
+    (bin/"mobile").write_env_script libexec/"bin/mobile.mjs", PATH: "#{Formula["node"].opt_bin}:$PATH"
   end
 
   def caveats
     <<~EOS
-      To add the reis-mobile plugin to Claude Code, run:
-        reis-mobile init
+      To add the mobile plugin to Claude Code, run:
+        mobile init
     EOS
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/reis-mobile --version")
-    assert_match "stacks", shell_output("#{bin}/reis-mobile validate")
+    assert_match version.to_s, shell_output("#{bin}/mobile --version")
+    assert_match "stacks", shell_output("#{bin}/mobile validate")
   end
 end
 `;

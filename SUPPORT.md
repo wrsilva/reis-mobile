@@ -8,4 +8,4 @@
 | To propose a skill or agent | [Skill or agent issue](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml) |
 | To report a vulnerability | [Private security advisory](https://github.com/wrsilva/reis-mobile/security/advisories/new) (never in a public issue) |
 
-Before opening an issue, run `reis-mobile doctor` and check the [Update troubleshooting](README.md#updating) section of the README.
+Before opening an issue, run `mobile doctor` and check the [Update troubleshooting](README.md#updating) section of the README.

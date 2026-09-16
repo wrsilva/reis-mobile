@@ -37,7 +37,7 @@ After editing agents, skills or commands, restart the Claude Code session to rel
 2. Create a branch from `main`.
 3. Follow the rules in [AGENTS.md](AGENTS.md).
 4. Run `npm run check`.
-5. Fork, create the branch and open the PR against `main`. The template asks for verification and a checklist, preferably with the output of `reis-mobile route` or `reis-mobile review` on a real project.
+5. Fork, create the branch and open the PR against `main`. The template asks for verification and a checklist, preferably with the output of `mobile route` or `mobile review` on a real project.
 6. CI must pass and the maintainer must approve. PRs are squash merged and the title becomes the commit message, so use Conventional Commits in the title.
 
 ## License of contributions

@@ -23,7 +23,7 @@ Whatever remains is the question, as free text. Without a question, explain the 
 ## 2. Gather the context
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --dir "$PWD" --json
+node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" detect --dir "$PWD" --json
 ```
 
 The JSON carries the stack and the `language` for the whole debate: `en` English, `pt` Brazilian Portuguese, `null` the language of the user's question. Use it in the announcements, the briefings, every round file and the synthesis, so participants write in it too. Code, identifiers and file paths stay as they are.

@@ -2,6 +2,17 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.3] - 2026-09-16
+
+### Changed
+
+- **Breaking:** the CLI command is now `mobile` instead of `reis-mobile` (`mobile init`, `mobile doctor`, `mobile --version`...), and the entry point moves to `bin/mobile.mjs`. The npm package, the Homebrew formula (`wrsilva/tap/reis-mobile`), the release assets, the `REIS_MOBILE_*` variables and the install and config folders keep the `reis-mobile` name.
+- `install.sh` and `install.ps1` create `mobile` / `mobile.cmd` and remove the `reis-mobile` command they created before. They still install releases up to v0.3.2, which ship `bin/reis-mobile.mjs`.
+
+### Fixed
+
+- `lead-mobile` still told the model to address agents with the old `reis-mobile:` prefix.
+
 ## [0.3.2] - 2026-09-16
 
 ### Changed

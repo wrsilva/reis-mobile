@@ -13,12 +13,12 @@ import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
 import { route } from '../core/router/router.mjs';
 
-const USAGE = `reis-mobile — AI agents for mobile engineering
+const USAGE = `mobile — AI agents for mobile engineering (reis-mobile)
 
-Usage: reis-mobile <command> [options]
+Usage: mobile <command> [options]
 
 Commands:
-  init [en|pt]               Install the reis-mobile plugin into Claude Code, optionally setting the language
+  init [en|pt]               Install the mobile plugin into Claude Code, optionally setting the language
   lang [en|pt]               Show or set the language the /mobile commands answer in
   detect                     Detect the mobile stack of a project
   doctor                     Diagnose the environment for the detected stack
@@ -75,7 +75,7 @@ async function main(argv) {
 
   if (options.version) {
     const pkg = JSON.parse(await readFile(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
-    console.log(`reis-mobile ${pkg.version}`);
+    console.log(`mobile ${pkg.version}`);
     return 0;
   }
   if (options.help || !name) {
@@ -107,11 +107,11 @@ async function commandInit({ local, scope, uninstall, lang, prompt }) {
   }
   if (uninstall) {
     await removeConfig();
-    console.log('✓ reis-mobile removed from Claude Code');
+    console.log('✓ mobile plugin removed from Claude Code');
     return 0;
   }
   if (requested) console.log(`✓ Language: ${await saveLanguage(requested)} (${configPath()})`);
-  console.log('✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /mobile:doctor');
+  console.log('✓ mobile plugin installed in Claude Code. Restart Claude Code, then run /mobile:doctor');
   return 0;
 }
 
@@ -149,7 +149,7 @@ async function commandDoctor({ dir, all, strict, json, lang }) {
   if (json) {
     print({ ...report, language });
   } else {
-    console.log('reis-mobile doctor\n');
+    console.log('mobile doctor\n');
     for (const [section, title] of [['environment', 'Environment'], ['project', 'Project'], ['integrations', 'Integrations']]) {
       const checks = report.checks.filter((check) => check.section === section);
       if (!checks.length) continue;
@@ -250,7 +250,7 @@ main(process.argv.slice(2)).then(
     process.exitCode = code;
   },
   (error) => {
-    console.error(`reis-mobile: ${error.message}`);
+    console.error(`mobile: ${error.message}`);
     process.exitCode = 1;
   },
 );

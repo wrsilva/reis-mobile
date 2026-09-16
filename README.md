@@ -6,7 +6,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.3.2-blue" alt="Version 0.3.2">
+  <img src="https://img.shields.io/badge/Version-0.3.3-blue" alt="Version 0.3.3">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -25,7 +25,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 👥 **7 agents and 67 mobile skills.** Flutter architect, performance and test engineers, Flutter/Android/iOS staff engineer, native plugin specialist, code reviewer and a lead that coordinates them all, plus skills for BLoC, Riverpod, Firebase, testing, layout, plugins and security.
 
-🌐 **Answers in English or Portuguese.** `reis-mobile init pt` or `reis-mobile init en` sets the language of reports, explanations and debates.
+🌐 **Answers in English or Portuguese.** `mobile init pt` or `mobile init en` sets the language of reports, explanations and debates.
 
 🧭 **Routes to the right specialist.** Describe the problem in English or Portuguese, and the router identifies the intent, the stack and the platform in focus. "The Android build of my Flutter app broke" loads Flutter **and** Android context.
 
@@ -52,12 +52,13 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.3.2** (current) | Shorter namespace: commands and agents move from `/reis-mobile:*` to `/mobile:*`. Run `reis-mobile init` to migrate an existing install. |
-| **v0.3.1** | Answers in English or Portuguese: `reis-mobile init pt\|en` and `reis-mobile lang` save the language for reports, doctor explanations and debates. Agents, skills, commands and docs are now written in English. |
+| **v0.3.3** (current) | The CLI command is now `mobile` (`mobile init`, `mobile doctor`, `mobile --version`). Homebrew and the installers replace the old `reis-mobile` command. |
+| **v0.3.2** | Shorter namespace: commands and agents move from `/reis-mobile:*` to `/mobile:*`. Run `mobile init` to migrate an existing install. |
+| **v0.3.1** | Answers in English or Portuguese: `mobile init pt\|en` and `mobile lang` save the language for reports, doctor explanations and debates. Agents, skills, commands and docs are now written in English. |
 | **v0.3.0** | `/mobile:debate` command: three specialists with conflicting priorities debate over two rounds and `lead-mobile` decides. Participants vary in role and model; `--external` adds Codex and Gemini. Brings forward the `council` planned for v0.8.0. |
 | **v0.2.1** | `/mobile` command: lists the commands and forwards to `doctor`, `review` or, with a free-form request, to the agent and skills for the detected stack. Shows up in the VS Code extension command menu. |
 | **v0.2.0** | 6 new agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) and 63 new Flutter, Dart and Firebase skills. The router now has a specialist for debug, test, architecture and performance. |
-| **v0.1.0** | `reis-mobile` plugin for Claude Code. Detection of 5 stacks. Intent + stack → agent + skills router. Context engine with masked diff. `/mobile:doctor` and `/mobile:review`. `reis-mobile` CLI. |
+| **v0.1.0** | `reis-mobile` plugin for Claude Code. Detection of 5 stacks. Intent + stack → agent + skills router. Context engine with masked diff. `/mobile:doctor` and `/mobile:review`. `mobile` CLI. |
 
 [Full changelog →](CHANGELOG.md)
 
@@ -65,7 +66,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 Requirements: **Node.js 22+** and, to use the `/mobile:*` commands, **[Claude Code](https://claude.com/claude-code)**.
 
-The installers and Homebrew install the `reis-mobile` CLI. When Claude Code is available, the installer also registers the plugin. If it is not, run `reis-mobile init` after installing it. To install only the plugin, follow the [Claude Code](#claude-code-plugin-only) or [Codex](#codex-plugin-from-github) section.
+The installers and Homebrew install the `mobile` CLI. When Claude Code is available, the installer also registers the plugin. If it is not, run `mobile init` after installing it. To install only the plugin, follow the [Claude Code](#claude-code-plugin-only) or [Codex](#codex-plugin-from-github) section.
 
 ### Quick Install (macOS/Linux) — recommended
 
@@ -85,13 +86,13 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # or ~/.bashrc
 irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
-Installs to `%LOCALAPPDATA%\reis-mobile`, creates `reis-mobile.cmd` in `%USERPROFILE%\.local\bin` and adds that folder to the user `PATH`. Open a new terminal afterwards.
+Installs to `%LOCALAPPDATA%\reis-mobile`, creates `mobile.cmd` in `%USERPROFILE%\.local\bin` and adds that folder to the user `PATH`. Open a new terminal afterwards.
 
 ### Homebrew
 
 ```bash
 brew install wrsilva/tap/reis-mobile
-reis-mobile init
+mobile init
 ```
 
 ### npm (coming soon)
@@ -100,7 +101,7 @@ The package has not been published to npm yet. Once it is:
 
 ```bash
 npm install -g reis-mobile
-reis-mobile init
+mobile init
 ```
 
 ### Claude Code plugin only
@@ -132,27 +133,27 @@ Look for `mobile@reis-mobile` with `installed: true`, `enabled: true` and the Gi
 
 Restart Codex and open a conversation in your mobile app folder. In the CLI or the IDE extension, type `$` in the message field to search for skills, or use `/skills`. See the [official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills).
 
-Registering the plugin and the availability of each feature are separate checks: the installation validated above does not confirm that the agents or the Claude Code `/mobile:*` commands run in Codex. To use `doctor`, `route` and `review` through the CLI, also install `reis-mobile` with one of the methods above and run it in the app folder:
+Registering the plugin and the availability of each feature are separate checks: the installation validated above does not confirm that the agents or the Claude Code `/mobile:*` commands run in Codex. To use `doctor`, `route` and `review` through the CLI, also install the `mobile` CLI with one of the methods above and run it in the app folder:
 
 ```bash
-reis-mobile doctor
-reis-mobile route "review architecture" --json
-reis-mobile review --json
+mobile doctor
+mobile route "review architecture" --json
+mobile review --json
 ```
 
-You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis.
+You can also ask Codex: *"Run `mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis.
 
-`reis-mobile init` registers the plugin in Claude Code. To register it in Codex, use the `codex plugin` commands in this section, even if the `reis-mobile` CLI is already installed through Homebrew.
+`mobile init` registers the plugin in Claude Code. To register it in Codex, use the `codex plugin` commands in this section, even if the `mobile` CLI is already installed through Homebrew.
 
 ### Language
 
 Agents, skills and commands are written in English, and that does not change. What you choose is the language reis-mobile **answers** in: `/mobile:review` reports, `/mobile:doctor` explanations, and debate rounds and syntheses.
 
 ```bash
-reis-mobile init pt          # install the plugin and answer in Brazilian Portuguese
-reis-mobile init en          # install the plugin and answer in English (also: eng)
-reis-mobile lang pt          # change the language later, without reinstalling
-reis-mobile lang             # show the current language
+mobile init pt          # install the plugin and answer in Brazilian Portuguese
+mobile init en          # install the plugin and answer in English (also: eng)
+mobile lang pt          # change the language later, without reinstalling
+mobile lang             # show the current language
 ```
 
 With the installers, pass it through the environment: `curl -fsSL .../install.sh | REIS_MOBILE_LANG=pt sh`.
@@ -162,7 +163,7 @@ The choice is saved to `~/.config/reis-mobile/config.json` (`%APPDATA%\reis-mobi
 ### Verify the CLI and the Claude Code plugin
 
 ```bash
-reis-mobile --version   # reis-mobile 0.2.1
+mobile --version   # mobile 0.2.1
 ```
 
 Then restart Claude Code and run, in your app folder:
@@ -178,14 +179,14 @@ Then restart Claude Code and run, in your app folder:
 
 | Variable | Default | Use |
 |----------|--------|-----|
-| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.2` |
+| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.3` |
 | `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Installation folder |
-| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `reis-mobile` command |
+| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `mobile` command |
 | `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` installs only the CLI, without registering the plugin |
 | `REIS_MOBILE_LANG` | not set | `en` or `pt`: the language the commands answer in (see [Language](#language)) |
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.2 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.3 sh
 ```
 </details>
 
@@ -196,12 +197,12 @@ Remove the Claude Code plugin first and then the CLI, using the same method used
 
 ```bash
 # Claude Code plugin and saved language (any platform)
-reis-mobile init --uninstall
+mobile init --uninstall
 # or, without the CLI:
 claude plugin uninstall reis-mobile && claude plugin marketplace remove reis-mobile
 
 # macOS/Linux (curl)
-rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile
+rm -rf ~/.local/share/reis-mobile ~/.local/bin/mobile
 
 # Homebrew
 brew uninstall reis-mobile
@@ -211,7 +212,7 @@ brew untap wrsilva/tap            # optional
 ```powershell
 # Windows (PowerShell)
 Remove-Item -Recurse -Force "$env:LOCALAPPDATA\reis-mobile"
-Remove-Item -Force "$HOME\.local\bin\reis-mobile.cmd"
+Remove-Item -Force "$HOME\.local\bin\mobile.cmd"
 ```
 </details>
 
@@ -222,7 +223,7 @@ Remove-Item -Force "$HOME\.local\bin\reis-mobile.cmd"
 git clone https://github.com/wrsilva/reis-mobile.git
 cd reis-mobile
 npm link                      # CLI pointing at the clone
-reis-mobile init --local      # plugin pointing at the clone
+mobile init --local      # plugin pointing at the clone
 npm run check                 # validates and runs the tests
 ```
 
@@ -233,7 +234,7 @@ After editing agents, skills or commands, restart the Claude Code session.
 
 ## Updating
 
-reis-mobile has two parts that update separately: the **Claude Code plugin** (agents, skills and `/mobile:*` commands) and the **CLI** (`reis-mobile`). Update both.
+reis-mobile has two parts that update separately: the **Claude Code plugin** (agents, skills and `/mobile:*` commands) and the **CLI** (`mobile`). Update both.
 
 To see what changed, check the [CHANGELOG](CHANGELOG.md) or the [releases](https://github.com/wrsilva/reis-mobile/releases).
 
@@ -246,7 +247,9 @@ claude plugin update mobile@reis-mobile
 
 Then **restart Claude Code**. The update only happens when a new version is out; if you are already on the latest, the command answers `already at the latest version`.
 
-> **Coming from v0.3.1 or earlier?** The plugin was renamed from `reis-mobile` to `mobile`, so commands moved from `/reis-mobile:*` to `/mobile:*` and `claude plugin update` cannot carry the old install over. Update the CLI and run `reis-mobile init`: it installs `mobile@reis-mobile` and removes `reis-mobile@reis-mobile`. Without the CLI:
+> **Coming from v0.3.2 or earlier?** The CLI command is now `mobile` instead of `reis-mobile`. `brew upgrade reis-mobile` and the installers switch it for you and remove the old command; with npm, reinstall the package.
+>
+> **Coming from v0.3.1 or earlier?** The plugin was renamed from `reis-mobile` to `mobile`, so commands moved from `/reis-mobile:*` to `/mobile:*` and `claude plugin update` cannot carry the old install over. Update the CLI and run `mobile init`: it installs `mobile@reis-mobile` and removes `reis-mobile@reis-mobile`. Without the CLI:
 >
 > ```bash
 > claude plugin marketplace update reis-mobile
@@ -267,7 +270,7 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 To install a specific version:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.2 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.3 sh
 ```
 
 ### CLI on Windows (PowerShell)
@@ -281,7 +284,7 @@ irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 For a specific version:
 
 ```powershell
-$env:REIS_MOBILE_VERSION = 'v0.3.2'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+$env:REIS_MOBILE_VERSION = 'v0.3.3'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
 ### CLI via Homebrew (macOS/Linux)
@@ -302,7 +305,7 @@ npm update -g reis-mobile
 ### Check the versions
 
 ```bash
-reis-mobile --version                  # CLI
+mobile --version                  # CLI
 claude plugin list | grep -A1 reis-mobile  # plugin
 ```
 
@@ -316,10 +319,10 @@ Both should show the same version.
 | `claude plugin update` says it is already on the latest version, but the release is newer | Run `claude plugin marketplace update reis-mobile` before `update` |
 | New agents or skills do not show up | Restart Claude Code: plugins only reload in a new session |
 | `brew upgrade` does not find the new version | Run `brew update` first; the tap formula is updated right after each release |
-| `reis-mobile --version` is still old after curl | Another `reis-mobile` comes first on the `PATH`; check with `which -a reis-mobile` |
-| Windows is still on the old version | Open a new terminal and check with `where.exe reis-mobile` |
-| `/reis-mobile:*` commands still show up, or `/mobile:*` do not | The plugin was renamed after v0.3.1: run `reis-mobile init` (see the note above) and restart Claude Code |
-| Plugin broken after updating | Reinstall: `reis-mobile init --uninstall` and then `reis-mobile init` |
+| `mobile --version` is still old after curl | Another `mobile` comes first on the `PATH`; check with `which -a mobile` |
+| Windows is still on the old version | Open a new terminal and check with `where.exe mobile` |
+| `/reis-mobile:*` commands still show up, or `/mobile:*` do not | The plugin was renamed after v0.3.1: run `mobile init` (see the note above) and restart Claude Code |
+| Plugin broken after updating | Reinstall: `mobile init --uninstall` and then `mobile init` |
 
 </details>
 
@@ -352,13 +355,13 @@ With `--external`, the command checks whether the `codex` and `gemini` CLIs exis
 Not sure what the router will pick? Ask the CLI:
 
 ```text
-$ reis-mobile route "Execution failed for task ':app:compileDebugKotlin'"
+$ mobile route "Execution failed for task ':app:compileDebugKotlin'"
 Intent      debug (confidence 0.5) · area gradle
 Stack       flutter · focus android
 Agent       mobile-staff-engineer
 Skills      dart-fix-runtime-errors, dart-resolve-package-conflicts, flutter-errors, flutter-fix-layout-issues
 
-$ reis-mobile route "write tests for the login cubit"
+$ mobile route "write tests for the login cubit"
 Intent      test (confidence 1)
 Stack       flutter
 Agent       flutter-test-engineer
@@ -376,7 +379,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Know if my environment is ready to build | `/mobile:doctor` | ✅ |
 | Review a PR or my changes | `/mobile:review` | ✅ |
 | Audit an entire Flutter project | `/mobile:review` with no pending changes | ✅ |
-| Find out a project's stack | `reis-mobile detect` | ✅ |
+| Find out a project's stack | `mobile detect` | ✅ |
 | Review the architecture of a Flutter app | agent `flutter-architect` | ✅ |
 | Find the cause of jank, rebuilds or leaks | agent `flutter-performance-engineer` | ✅ |
 | Write or audit Flutter tests | agent `flutter-test-engineer` | ✅ |
@@ -628,13 +631,13 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 7 agents and 67 skills add up to about 4,800 fixed tokens per session (measured with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 7 agents and 67 skills add up to about 4,800 fixed tokens per session (measured with `claude plugin details mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
 **Own namespace.** Commands live under `/mobile:*` and do not conflict with the built-in `/review` or `/security-review`.
 
-**Verifiable installation.** The installers check the release SHA-256 and do not ask for `sudo`. `reis-mobile init --uninstall` removes the plugin without leaving configuration behind.
+**Verifiable installation.** The installers check the release SHA-256 and do not ask for `sudo`. `mobile init --uninstall` removes the plugin without leaving configuration behind.
 
 ---
 
@@ -646,8 +649,9 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 | v0.2.0 | 6 agents and 63 Flutter, Dart and Firebase skills | ✅ |
 | v0.2.1 | `/mobile` entry command | ✅ |
 | v0.3.0 | `/mobile:debate`: multi-agent with a decision, across distinct roles and models — delivered in place of the `council` planned for v0.8.0 | ✅ |
-| v0.3.1 | Answer language (`reis-mobile init pt\|en`, `reis-mobile lang`) and project content in English | ✅ |
+| v0.3.1 | Answer language (`mobile init pt\|en`, `mobile lang`) and project content in English | ✅ |
 | v0.3.2 | Plugin renamed to `mobile`: `/mobile:*` commands | ✅ |
+| v0.3.3 | CLI command renamed to `mobile` | ✅ |
 | v0.4.0 | Native Android and iOS skills, `.reis-mobile/config.yaml` and `/mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
 | v0.5.0 | `/mobile:test` and native tests (XCTest, Espresso) | ⏳ |
 | v0.6.0 | `/mobile:release` with quality gates | ⏳ |
@@ -670,10 +674,10 @@ Run it from the app folder, or use `--dir apps/mobile` in the CLI. The diff is r
 Detection, the doctor, the security skill and the `mobile-code-reviewer`, `mobile-staff-engineer` and `lead-mobile` agents already work. Android- and iOS-specific skills arrive in v0.4.0; the 63 imported skills are for Flutter, Dart and Firebase.
 
 **I already have skills with the same names in `~/.claude/skills`.**
-The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
+The plugin's skills live in the `mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
 
 **Does it work in Codex?**
-The marketplace and plugin `0.2.1` can be installed straight from GitHub with `codex plugin`. See [installation and usage in Codex](#codex-plugin-from-github). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
+The marketplace and plugin `0.2.1` can be installed straight from GitHub with `codex plugin`. See [installation and usage in Codex](#codex-plugin-from-github). Installation does not confirm parity with the Claude Code agents and commands; the `mobile` CLI can also be run by Codex to get diagnostics and context.
 
 **Does it work in Cursor?**
 The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.8.0.
@@ -690,7 +694,7 @@ Contributions are welcome, especially Android, iOS and React Native skills.
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md), the rules in [AGENTS.md](AGENTS.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 2. Pick a [`good first issue`](https://github.com/wrsilva/reis-mobile/labels/good%20first%20issue) or [propose a skill](https://github.com/wrsilva/reis-mobile/issues/new?template=new_skill_or_agent.yml).
 3. `git clone https://github.com/<your-username>/reis-mobile.git && cd reis-mobile && npm run check`
-4. Open a PR showing the output of `reis-mobile route` or `reis-mobile review` on a real project.
+4. Open a PR showing the output of `mobile route` or `mobile review` on a real project.
 
 Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Where to ask for help: [SUPPORT.md](SUPPORT.md).
 

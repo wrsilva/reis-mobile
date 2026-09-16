@@ -49,8 +49,8 @@ jobs:
           REIS_MOBILE_SKIP_PLUGIN: '1'
         run: |
           REIS_MOBILE_ARCHIVE_URL="file://$RUNNER_TEMP/reis-mobile.tar.gz" sh install.sh
-          "$HOME/.local/bin/reis-mobile" --version
-          "$HOME/.local/bin/reis-mobile" validate
+          "$HOME/.local/bin/mobile" --version
+          "$HOME/.local/bin/mobile" validate
 
       - name: install.ps1
         if: runner.os == 'Windows'
@@ -60,5 +60,5 @@ jobs:
         run: |
           $env:REIS_MOBILE_ARCHIVE_URL = Join-Path $env:RUNNER_TEMP 'reis-mobile.tar.gz'
           ./install.ps1
-          & (Join-Path $HOME '.local\bin\reis-mobile.cmd') validate
+          & (Join-Path $HOME '.local\bin\mobile.cmd') validate
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

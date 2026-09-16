@@ -77,9 +77,9 @@ describe('language config', () => {
   });
 });
 
-describe('reis-mobile CLI language', () => {
+describe('mobile CLI language', () => {
   const cli = (config, ...args) =>
-    spawnSync(process.execPath, [join(PLUGIN_ROOT, 'bin/reis-mobile.mjs'), ...args], {
+    spawnSync(process.execPath, [join(PLUGIN_ROOT, 'bin/mobile.mjs'), ...args], {
       encoding: 'utf8',
       env: { ...process.env, REIS_MOBILE_CONFIG: config, REIS_MOBILE_LANG: '' },
     });

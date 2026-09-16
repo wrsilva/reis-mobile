@@ -4,11 +4,11 @@ argument-hint: "[--all] [--dir <path>]"
 allowed-tools: ["Bash(node:*)", "Read"]
 ---
 
-# reis-mobile doctor
+# mobile doctor
 
 Diagnostic result:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor $ARGUMENTS`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" doctor $ARGUMENTS`
 
 ## Instructions
 

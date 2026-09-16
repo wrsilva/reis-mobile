@@ -38,7 +38,7 @@ body:
       description: Command run, prompt used and project type (Flutter, Android, iOS, React Native, KMP).
       placeholder: |
         1. In a Flutter app with android/ and ios/
-        2. Run `reis-mobile route "..."`
+        2. Run `mobile route "..."`
         3. ...
     validations:
       required: true
@@ -46,14 +46,14 @@ body:
     id: output
     attributes:
       label: Output
-      description: Output of `reis-mobile route`, `reis-mobile detect --json` or `reis-mobile doctor`, when relevant.
+      description: Output of `mobile route`, `mobile detect --json` or `mobile doctor`, when relevant.
       render: text
   - type: input
     id: version
     attributes:
       label: reis-mobile version
-      description: Output of `reis-mobile --version` and/or `claude plugin list | grep -A1 reis-mobile`.
-      placeholder: reis-mobile 0.2.0
+      description: Output of `mobile --version` and/or `claude plugin list | grep -A1 reis-mobile`.
+      placeholder: mobile 0.3.3
     validations:
       required: true
   - type: dropdown
