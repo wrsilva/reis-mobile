@@ -29,11 +29,20 @@ Agents from this plugin are addressed with the `reis-mobile:` prefix in the Agen
 | `reis-mobile:flutter-architect` | Architecture review, project structure, layer boundaries, feature modules |
 | `reis-mobile:flutter-performance-engineer` | Jank, rebuilds, slow lists, leaks, startup time |
 | `reis-mobile:flutter-test-engineer` | Writing or auditing tests, coverage gaps |
+| `reis-mobile:android-architect` | Native Android: layers, Gradle modules, ViewModel and data boundaries |
+| `reis-mobile:android-performance-engineer` | Native Android: Compose recomposition, ANRs, startup, leaks, app size |
+| `reis-mobile:android-test-engineer` | Native Android: ViewModel, coroutine, Compose and instrumented tests |
+| `reis-mobile:ios-architect` | Native iOS: SwiftUI/UIKit structure, packages, concurrency boundaries |
+| `reis-mobile:ios-performance-engineer` | Native iOS: hangs, SwiftUI updates, launch time, retain cycles |
+| `reis-mobile:ios-test-engineer` | Native iOS: Swift Testing, XCTest and XCUITest |
+| `reis-mobile:rn-architect` | React Native: feature structure, server vs client state, native modules |
+| `reis-mobile:rn-performance-engineer` | React Native: re-renders, lists, JS thread, startup, bundle size |
+| `reis-mobile:rn-test-engineer` | React Native: Jest, React Native Testing Library, Detox or Maestro |
 | `reis-mobile:mobile-code-reviewer` | Reviewing a diff or pull request |
 | `reis-mobile:plugin-native-expert` | Plugins, platform channels, native Android/iOS bridges |
 | `reis-mobile:mobile-staff-engineer` | Debugging, native apps, migrations, CI/CD, release, cross-platform trade-offs |
 
-Detect the stack first (`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`). Flutter specialists only apply to Flutter projects; for native Android or iOS, use `mobile-staff-engineer` and `mobile-code-reviewer`.
+Detect the stack first (`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`). Each architect, performance and test specialist applies only to its stack: `flutter-*` to Flutter, `android-*` to native Android, `ios-*` to native iOS and `rn-*` to React Native. In a cross-platform app, a native specialist joins only for the native folders (`android/`, `ios/`) when the problem lives there. `mobile-staff-engineer` and `mobile-code-reviewer` apply to every stack.
 
 ## Delegation
 

@@ -1,9 +1,10 @@
 // Minimal YAML frontmatter parser, dependency-free on purpose: the plugin must run
 // straight from the Claude Code plugin cache without `npm install`.
 //
-// Supported subset: `key: scalar`, `key: [a, b]`, block lists (`key:` followed by
-// `  - item` lines) and block scalars (`key: |`, `|-`, `>`, `>-`). Nested maps, such as
-// the `metadata:` block of upstream skills, are skipped.
+// Supported subset: `key: scalar` (continued on indented lines, as YAML folds plain
+// scalars), `key: [a, b]`, block lists (`key:` followed by `  - item` lines) and block
+// scalars (`key: |`, `|-`, `>`, `>-`). Nested maps, such as the `metadata:` block of
+// upstream skills, are skipped.
 
 const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)([\s\S]*)$/;
 const BLOCK_SCALAR = /^([|>])([+-]?)$/;
@@ -14,10 +15,12 @@ export function parseFrontmatter(source) {
   return { data: parseYamlSubset(match[1]), body: match[2] };
 }
 
-function parseYamlSubset(text) {
+/** Parses the same YAML subset outside frontmatter, for `.reis-mobile/config.yaml`. */
+export function parseYamlSubset(text) {
   const data = {};
   const lines = text.split(/\r?\n/);
   let listKey = null;
+  let plainKey = null;
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index];
@@ -29,11 +32,17 @@ function parseYamlSubset(text) {
       continue;
     }
 
+    if (plainKey && /^\s+\S/.test(line)) {
+      data[plainKey] = `${data[plainKey]} ${line.trim()}`;
+      continue;
+    }
+
     const pair = /^([A-Za-z0-9_-]+):\s*(.*)$/.exec(line);
     if (!pair) continue;
 
     const [, key, value] = pair;
     listKey = null;
+    plainKey = null;
     const block = BLOCK_SCALAR.exec(value);
 
     if (block) {
@@ -47,6 +56,8 @@ function parseYamlSubset(text) {
       listKey = key;
     } else {
       data[key] = parseValue(value);
+      // Only an unquoted scalar can continue on the next lines.
+      if (typeof data[key] === 'string' && !/^["'[]/.test(value)) plainKey = key;
     }
   }
   return data;

@@ -39,6 +39,15 @@ Choose **three** agents whose priorities genuinely conflict on the question. A d
 | `reis-mobile:flutter-architect` | Layer boundaries, modularization, long-term maintenance cost | `opus` |
 | `reis-mobile:flutter-performance-engineer` | Frames, rebuilds, memory, startup time — hostile to indirection | `sonnet` |
 | `reis-mobile:flutter-test-engineer` | Testability, injection seams, coverage cost | `sonnet` |
+| `reis-mobile:android-architect` | Native Android layers, Gradle modularization, long-term maintenance cost | `opus` |
+| `reis-mobile:android-performance-engineer` | Recomposition, ANRs, startup, memory — hostile to indirection | `sonnet` |
+| `reis-mobile:android-test-engineer` | Testability, injected dispatchers and fakes, coverage cost | `sonnet` |
+| `reis-mobile:ios-architect` | Native iOS structure, packages, concurrency isolation | `opus` |
+| `reis-mobile:ios-performance-engineer` | Hangs, view updates, launch time, retain cycles | `sonnet` |
+| `reis-mobile:ios-test-engineer` | Testability, protocol seams, coverage cost | `sonnet` |
+| `reis-mobile:rn-architect` | Feature boundaries, server vs client state, native module isolation | `opus` |
+| `reis-mobile:rn-performance-engineer` | Re-renders, lists, JavaScript thread, startup | `sonnet` |
+| `reis-mobile:rn-test-engineer` | Testability through the UI, mocks at boundaries, coverage cost | `sonnet` |
 | `reis-mobile:plugin-native-expert` | Flutter–native boundary, platform channels, lifecycle | `opus` |
 | `reis-mobile:mobile-staff-engineer` | Build, release, migration, cross-platform trade-offs | `opus` |
 | `reis-mobile:mobile-code-reviewer` | Concrete risk in the code that already exists | `sonnet` |
@@ -49,7 +58,7 @@ Automatic selection must end with **at least two different models** among the pa
 
 Selection rules:
 
-- The detected stack rules. The `flutter-*` agents only join Flutter projects; in native Android or iOS, use `mobile-staff-engineer` and `mobile-code-reviewer`.
+- The detected stack rules. The `flutter-*` agents only join Flutter projects, `android-*` native Android, `ios-*` native iOS and `rn-*` React Native. Pick the architect, performance and test specialists of the detected stack first; `mobile-staff-engineer` and `mobile-code-reviewer` fit any stack.
 - Without native code in the project, do not call `plugin-native-expert`.
 - `--agents` overrides the automatic choice, but not the models: each agent keeps the one from the table. Unknown name: warn and stop.
 - `reis-mobile:lead-mobile` never debates — it moderates in step 7, always on `opus`, because synthesizing conflicting positions is the heaviest work in the flow.

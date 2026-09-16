@@ -38,13 +38,27 @@ describe('route', () => {
     });
   }
 
-  it('prefers the stack-agnostic staff engineer for native Android architecture', async () => {
+  for (const [stack, files] of [
+    ['android', { 'settings.gradle': '', 'app/src/main/AndroidManifest.xml': '<manifest/>' }],
+    ['ios', { 'App.xcodeproj/project.pbxproj': '' }],
+    ['rn', { 'package.json': JSON.stringify({ dependencies: { 'react-native': '0.76.0' } }) }],
+  ]) {
+    for (const intent of ['architecture', 'performance', 'test']) {
+      const role = { architecture: 'architect', performance: 'performance-engineer', test: 'test-engineer' }[intent];
+
+      it(`routes ${intent} on ${stack} to ${stack}-${role}`, async () => {
+        const result = await route({ intent, projectDir: await makeProject(files) });
+
+        assert.equal(result.agent.name, `${stack}-${role}`);
+        assert.ok(!result.skills.some((skill) => skill.stacks.includes('flutter')));
+      });
+    }
+  }
+
+  it('keeps the staff engineer for native Android debugging', async () => {
     const dir = await makeProject({ 'settings.gradle': '', 'app/src/main/AndroidManifest.xml': '<manifest/>' });
 
-    const result = await route({ intent: 'architecture', projectDir: dir });
-
-    assert.equal(result.agent.name, 'mobile-staff-engineer');
-    assert.ok(!result.skills.some((skill) => skill.stacks.includes('flutter')));
+    assert.equal((await route({ intent: 'debug', projectDir: dir })).agent.name, 'mobile-staff-engineer');
   });
 
   it('never auto-selects manual components', async () => {
@@ -63,7 +77,35 @@ describe('route', () => {
     const result = await route({ intent: 'review', projectDir: dir });
 
     assert.equal(result.stack, 'android');
-    assert.deepEqual(names(result.skills), ['mobile-security-audit']);
+    assert.deepEqual(names(result.skills), ['android-code-review', 'android-intent-security', 'mobile-security-audit']);
+  });
+
+  it('reviews native iOS with the iOS checklist before the stack-agnostic one', async () => {
+    const dir = await makeProject({ 'App.xcodeproj/project.pbxproj': '', Podfile: "platform :ios, '15.0'\n" });
+
+    const result = await route({ intent: 'review', projectDir: dir });
+
+    assert.equal(result.stack, 'ios');
+    assert.deepEqual(names(result.skills), ['ios-code-review', 'mobile-security-audit']);
+  });
+
+  it('debugs a CocoaPods failure with the CocoaPods skill first', async () => {
+    const dir = await makeProject({ 'App.xcodeproj/project.pbxproj': '', Podfile: "platform :ios, '15.0'\n" });
+
+    const result = await route({ prompt: 'pod install falha: could not find compatible versions', intent: 'debug', projectDir: dir });
+
+    assert.equal(result.area, 'cocoapods');
+    assert.deepEqual(names(result.skills).slice(0, 2), ['ios-cocoapods-debug', 'ios-xcode-build-debug']);
+  });
+
+  it('debugs the Android build of a Flutter app with Flutter first, then Gradle', async () => {
+    const dir = await makeProject(FLUTTER_APP);
+
+    const result = await route({ prompt: 'the android gradle build fails', intent: 'debug', projectDir: dir });
+    const skills = names(result.skills);
+
+    assert.equal(skills[0], 'flutter-build-debug');
+    assert.ok(skills.indexOf('android-gradle-build-debug') > skills.lastIndexOf('flutter-errors'), 'native skills follow every Flutter skill');
   });
 
   it('focuses a cross-platform project on the native platform named in the prompt', async () => {
@@ -117,6 +159,33 @@ describe('selectSkills', () => {
       'flutter-build-debug',
       'gradle-debug',
       'generic',
+    ]);
+  });
+
+  it('puts the skill for the detected area first among skills of the same stack', () => {
+    const skills = [
+      { ...skill('ios-xcode-build-debug', ['ios']), areas: ['xcode', 'signing'] },
+      { ...skill('ios-cocoapods-debug', ['ios']), areas: ['cocoapods'] },
+      skill('ios-generic-debug', ['ios']),
+      { ...skill('flutter-build-debug', ['flutter']), areas: ['pub'] },
+    ];
+
+    assert.deepEqual(names(selectSkills(skills, 'debug', ['ios'], 'cocoapods')), [
+      'ios-cocoapods-debug',
+      'ios-generic-debug',
+      'ios-xcode-build-debug',
+    ]);
+  });
+
+  it('never lets the area outrank the primary stack', () => {
+    const skills = [
+      { ...skill('android-gradle-build-debug', ['android']), areas: ['gradle'] },
+      skill('flutter-build-debug', ['flutter']),
+    ];
+
+    assert.deepEqual(names(selectSkills(skills, 'debug', ['flutter', 'android'], 'gradle')), [
+      'flutter-build-debug',
+      'android-gradle-build-debug',
     ]);
   });
 });

@@ -80,6 +80,8 @@ export const AREAS = [
   ['pub', ['pub get', 'pubspec', 'version solving']],
 ];
 
+export const AREA_IDS = AREAS.map(([id]) => id);
+
 // Areas that only exist on one native platform, used to focus cross-platform projects.
 export const AREA_PLATFORM = {
   gradle: 'android',

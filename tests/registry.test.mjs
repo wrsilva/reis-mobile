@@ -61,6 +61,16 @@ describe('parseFrontmatter', () => {
     assert.deepEqual(data.stacks, ['flutter']);
   });
 
+  it('joins a plain scalar continued on indented lines, as upstream skills write descriptions', () => {
+    const { data } = parseFrontmatter(
+      '---\nname: r8-analyzer\ndescription: Analyzes build files and keep rules,\n  broad package-wide rules, and\n  library rules.\nlicense: Apache-2.0\nmetadata:\n  author: Google LLC\n  keywords:\n  - R8\n---\nBody',
+    );
+
+    assert.equal(data.description, 'Analyzes build files and keep rules, broad package-wide rules, and library rules.');
+    assert.equal(data.license, 'Apache-2.0');
+    assert.equal(data.name, 'r8-analyzer');
+  });
+
   it('returns the whole source as body when there is no frontmatter', () => {
     assert.deepEqual(parseFrontmatter('# Title'), { data: {}, body: '# Title' });
   });
@@ -88,7 +98,7 @@ describe('plugin registry', () => {
     const root = await makeProject({
       'stacks/flutter/stack.json': JSON.stringify({ id: 'flutter' }),
       'agents/reviewer.md': '---\nname: other-name\nintents: [review]\nstacks: [flutter]\n---\n',
-      'skills/bad-skill/SKILL.md': '---\nname: bad-skill\ndescription: x\nintents: [cook]\nstacks: [symbian]\n---\n',
+      'skills/bad-skill/SKILL.md': '---\nname: bad-skill\ndescription: x\nintents: [cook]\nstacks: [symbian]\nareas: [kitchen]\n---\n',
       'skills/helper/SKILL.md': '---\nname: helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
       'skills/vendored/SKILL.md': '---\nname: vendored\ndescription: x\nrouting: manual\nstacks: ["*"]\nsource: https://example.com\n---\n',
     });
@@ -98,6 +108,7 @@ describe('plugin registry', () => {
     assert.ok(errors.some((error) => error.includes('name "other-name" must match "reviewer"')));
     assert.ok(errors.some((error) => error.includes('reviewer.md: missing "description"')));
     assert.ok(errors.some((error) => error.includes('unknown intent "cook"')));
+    assert.ok(errors.some((error) => error.includes('unknown area "kitchen"')));
     assert.ok(errors.some((error) => error.includes('unknown stack "symbian"')));
     assert.ok(errors.some((error) => error.includes('stack "android" has a detector but no stacks/android/stack.json')));
     assert.ok(!errors.some((error) => error.includes('helper')), 'manual skills need no intents');

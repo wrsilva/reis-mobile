@@ -1,6 +1,6 @@
 ---
 name: mobile-staff-engineer
-description: Use this agent for senior-level guidance across Flutter/Dart, Android (Kotlin) and iOS (Swift) — debugging complex build and runtime issues, architecture decisions for native apps, migrations, dependency and build problems, CI/CD and release pipelines, security and cross-platform trade-offs. Typical triggers are "o build Android quebrou depois do upgrade do Gradle", planning a payment flow and choosing between native and cross-platform approaches.
+description: Use this agent for senior-level guidance across Flutter/Dart, Android (Kotlin) and iOS (Swift) — debugging complex build and runtime issues, architecture decisions for native apps, migrations, dependency and build problems, CI/CD and release pipelines, security and cross-platform trade-offs. Typical triggers are "the Android build broke after upgrading Gradle", planning a payment flow and choosing between native and cross-platform approaches.
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]

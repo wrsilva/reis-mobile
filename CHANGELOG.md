@@ -2,6 +2,26 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `/reis-mobile:debug` and `reis-mobile debug`: routes a build or runtime failure to the debug agent and skills, adds the doctor report, and answers with the cause, evidence, minimal fix and verification. It only changes the project after the user asks to apply the fix.
+- Architect, performance and test agents for native Android (`android-*`), native iOS (`ios-*`) and React Native (`rn-*`), alongside the Flutter ones. `lead-mobile` and `/reis-mobile:debate` pick the specialists of the detected stack.
+- Skills written for reis-mobile: `android-gradle-build-debug`, `ios-xcode-build-debug`, `ios-cocoapods-debug`, `flutter-build-debug`, `android-code-review` and `ios-code-review`.
+- 24 skills from [android/skills](https://github.com/android/skills) (Apache-2.0), credited in `THIRD_PARTY_NOTICES.md`: `agp-9-upgrade`, `r8-analyzer`, `android-intent-security`, `android-profiler`, `testing-setup` and `play-policy-insights` are routed automatically; the others (Compose, navigation, Play, camera, media, identity, on-device AI, Wear, TV, XR and the Android CLI) are triggered by their description.
+- `.reis-mobile/config.yaml` with `app: <folder>`, so every command analyzes the mobile app of a monorepo from anywhere in the repository.
+- Skills can declare `areas` (`gradle`, `xcode`, `cocoapods`, `signing`, `pub`...). The router ranks the skill for the area detected in the prompt first among skills of the same stack.
+
+### Changed
+
+- The frontmatter parser joins descriptions continued on indented lines, as the imported skills write them.
+- The package is larger (about 950 KB compressed) and the plugin's fixed context cost grows to about 9,500 tokens per session, since Claude Code loads every skill description.
+
+### Fixed
+
+- The `mobile-staff-engineer` description still had a Portuguese example.
+
 ## [0.3.6] - 2026-09-16
 
 ### Changed

@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'doctor', 'reis-mobile', 'review']);
+    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'reis-mobile', 'review']);
   });
 
   for (const command of commands) {

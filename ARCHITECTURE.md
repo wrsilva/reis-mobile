@@ -34,7 +34,8 @@ USER ──► COMMAND (/reis-mobile:review)
 core/
 ├── paths.mjs                    plugin root
 ├── config/
-│   └── language.mjs             answer language: en | pt, saved outside the plugin cache
+│   ├── language.mjs             answer language: en | pt, saved outside the plugin cache
+│   └── project.mjs              .reis-mobile/config.yaml: the app folder of a monorepo
 ├── detection/
 │   ├── project-probe.mjs        bounded project reading (skips build/, Pods/, node_modules/...)
 │   └── stack-detector.mjs       per-stack rules, in priority order
@@ -76,7 +77,7 @@ Every matching stack appears in `candidates`. The first one is the main stack.
 1. **Intent.** The command's explicit intent wins. Without one, the prompt terms are normalized (lowercase, no accents) and counted, in English and Portuguese. Longer terms claim their span first, so "testflight" does not count as "test". Build, deploy, dependency or migration failures become `debug`.
 2. **Stack.** The stack detected on disk wins. Platforms mentioned in the prompt, or implied by the area (`gradle` → android, `xcode` → ios), become `platformFocus` when the project has them.
 3. **Agent.** Must declare the intent. A stack-specific agent beats a `"*"` agent.
-4. **Skills.** Must declare the intent. The order is: main stack, then focused platforms, then `"*"`.
+4. **Skills.** Must declare the intent. The order is: main stack, then focused platforms, then `"*"`. Among skills of the same stack, one that declares the detected area (`areas: [cocoapods]`) comes first, so a CocoaPods failure reads `ios-cocoapods-debug` before `ios-xcode-build-debug`.
 
 Components with `routing: manual` are never selected by the router. Claude Code invokes them only by their description.
 
@@ -103,6 +104,7 @@ name: flutter-widget-review       # same as the folder name
 description: Reviews Flutter widget code for...
 intents: [review, performance]
 stacks: [flutter]
+# areas: [gradle]                 # optional: build areas it is specific to (ranks it first)
 # routing: manual                 # optional: out of automatic routing
 # source: https://github.com/...  # third-party skills: origin
 # license: MIT                    # required when source is present
@@ -110,6 +112,10 @@ stacks: [flutter]
 ```
 
 `reis-mobile validate` (and CI) rejects a name that differs from the file, a missing description, unknown intents or stacks, `source` without `license`, and duplicates. A test ensures every skill with `source` appears in `THIRD_PARTY_NOTICES.md`.
+
+## Project configuration
+
+`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review` and `debug` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
 
 ## Language
 

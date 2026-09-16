@@ -3,7 +3,7 @@ import { basename, join } from 'node:path';
 
 import { DETECTABLE_STACKS } from '../detection/stack-detector.mjs';
 import { PLUGIN_ROOT } from '../paths.mjs';
-import { INTENT_IDS } from '../router/intents.mjs';
+import { AREA_IDS, INTENT_IDS } from '../router/intents.mjs';
 import { parseFrontmatter } from './frontmatter.mjs';
 
 export const ANY_STACK = '*';
@@ -68,6 +68,8 @@ function toComponent(kind, path, fileName, source) {
     description: data.description,
     intents: asList(data.intents),
     stacks: asList(data.stacks),
+    // Optional: the build areas (gradle, xcode, cocoapods...) a skill is specific to.
+    areas: asList(data.areas),
     // `routing: manual` marks helpers that Claude invokes by description only.
     routed: data.routing !== 'manual',
     // Third-party components declare where they came from (see THIRD_PARTY_NOTICES.md).
@@ -109,6 +111,9 @@ export function validateRegistry({ stacks, agents, skills }) {
 
     for (const intent of component.intents) {
       if (!INTENT_IDS.includes(intent)) errors.push(`${label}: unknown intent "${intent}"`);
+    }
+    for (const area of component.areas) {
+      if (!AREA_IDS.includes(area)) errors.push(`${label}: unknown area "${area}"`);
     }
     for (const stack of component.stacks) {
       if (stack !== ANY_STACK && !stackIds.has(stack)) errors.push(`${label}: unknown stack "${stack}"`);

@@ -38,7 +38,7 @@ export async function route({ prompt = '', intent: explicitIntent, projectDir = 
   const agent = intent ? selectAgent(components.agents, intent, stack) : null;
   if (intent && !agent) warnings.push(`No agent handles intent "${intent}" yet.`);
 
-  const skills = intent ? selectSkills(components.skills, intent, [stack, ...platformFocus]) : [];
+  const skills = intent ? selectSkills(components.skills, intent, [stack, ...platformFocus], parsed.area) : [];
 
   return {
     intent,
@@ -64,13 +64,18 @@ export function selectAgent(agents, intent, stack) {
   );
 }
 
-/** Skills for the primary stack first, then focused platforms, then stack-agnostic ones. */
-export function selectSkills(skills, intent, stacks) {
+/**
+ * Skills for the primary stack first, then focused platforms, then stack-agnostic ones.
+ * Among skills of the same stack, one declaring the detected area ("gradle", "cocoapods"...)
+ * comes first, so the model reads the most specific checklist before the general one.
+ */
+export function selectSkills(skills, intent, stacks, area = null) {
+  const areaScore = (skill) => (area && skill.areas?.includes(area) ? 1 : 0);
   return skills
     .filter((skill) => skill.routed && skill.intents.includes(intent))
-    .map((skill) => ({ skill, score: stackScore(skill.stacks, stacks) }))
+    .map((skill) => ({ skill, score: stackScore(skill.stacks, stacks), area: areaScore(skill) }))
     .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || a.skill.name.localeCompare(b.skill.name))
+    .sort((a, b) => b.score - a.score || b.area - a.area || a.skill.name.localeCompare(b.skill.name))
     .map(({ skill }) => skill);
 }
 

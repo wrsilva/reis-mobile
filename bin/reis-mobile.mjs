@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
 import { LANGUAGES, configPath, removeConfig, resolveLanguage, saveLanguage } from '../core/config/language.mjs';
+import { resolveProjectDir } from '../core/config/project.mjs';
 import { collectReviewContext } from '../core/context/context-engine.mjs';
 import { detectStack } from '../core/detection/stack-detector.mjs';
 import { runDoctor } from '../core/diagnostics/doctor.mjs';
@@ -24,11 +25,12 @@ Commands:
   doctor                     Diagnose the environment for the detected stack
   route <prompt...>          Show which intent, agent and skills a prompt resolves to
   review [prompt...]         Route a code review and collect the git context for it
+  debug [problem...]         Route a build or runtime failure and report the toolchain it runs on
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
 
 Options:
-  --dir <path>      Project directory (default: current directory)
+  --dir <path>      Project directory (default: current directory, or "app" in .reis-mobile/config.yaml)
   --intent <id>     Force an intent (${INTENT_IDS.join(', ')})
   --base <ref>      review: compare <ref>...HEAD instead of the working tree
   --all             doctor: check every tool, not only the relevant ones
@@ -63,6 +65,7 @@ const COMMANDS = {
   doctor: commandDoctor,
   route: commandRoute,
   review: commandReview,
+  debug: commandDebug,
   agents: (options) => commandList('agents', options),
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
@@ -88,8 +91,15 @@ async function main(argv) {
     console.error(`Unknown command "${name}".\n\n${USAGE}`);
     return 1;
   }
-  return (await command({ ...options, dir: options.dir ?? process.cwd(), prompt: rest.join(' ') })) ?? 0;
+  const dir = options.dir ?? process.cwd();
+  // Commands that analyze a project honor `app:` from .reis-mobile/config.yaml.
+  const project = PROJECT_COMMANDS.has(name) ? resolveProjectDir(dir) : { projectDir: dir, config: null, warnings: [] };
+  for (const warning of project.warnings) console.error(`! ${warning}`);
+
+  return (await command({ ...options, dir: project.projectDir, project, prompt: rest.join(' ') })) ?? 0;
 }
+
+const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug']);
 
 async function commandInit({ local, scope, uninstall, lang, prompt }) {
   const requested = lang ?? (prompt || process.env.REIS_MOBILE_LANG || undefined);
@@ -136,10 +146,12 @@ async function commandLang({ prompt, json }) {
   return 0;
 }
 
-async function commandDetect({ dir, json, lang }) {
+async function commandDetect({ dir, project, json, lang }) {
   const detection = await detectStack(dir);
   const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...detection, language });
+  if (json) return print({ ...detection, language, projectConfig: project.config?.path ?? null });
+
+  printProject(project);
 
   console.log(`Stack       ${detection.stack}${detection.variant ? ` (${detection.variant})` : ''}`);
   console.log(`Languages   ${detection.languages.join(', ') || '-'}`);
@@ -151,53 +163,78 @@ async function commandDetect({ dir, json, lang }) {
   return detection.stack === 'unknown' ? 2 : 0;
 }
 
-async function commandDoctor({ dir, all, strict, json, lang }) {
+async function commandDoctor({ dir, project, all, strict, json, lang }) {
   const report = await runDoctor({ projectDir: dir, all });
   const language = await resolveLanguage({ flag: lang });
   if (json) {
-    print({ ...report, language });
+    print({ ...report, language, projectConfig: project.config?.path ?? null });
   } else {
     console.log('reis-mobile doctor\n');
-    for (const [section, title] of [['environment', 'Environment'], ['project', 'Project'], ['integrations', 'Integrations']]) {
-      const checks = report.checks.filter((check) => check.section === section);
-      if (!checks.length) continue;
-      console.log(`${title}\n${'-'.repeat(title.length)}`);
-      for (const check of checks) console.log(`${check.label.padEnd(16)}${SYMBOLS[check.status]} ${check.detail ?? ''}`.trimEnd());
-      console.log('');
-    }
+    printProject(project);
+    printDoctorChecks(report);
     console.log(report.warnings ? `${report.warnings} warning(s)` : 'No issues found');
     printLanguage(language);
   }
   return strict && report.warnings ? 1 : 0;
 }
 
+function printDoctorChecks(report) {
+  for (const [section, title] of [['environment', 'Environment'], ['project', 'Project'], ['integrations', 'Integrations']]) {
+    const checks = report.checks.filter((check) => check.section === section);
+    if (!checks.length) continue;
+    console.log(`${title}\n${'-'.repeat(title.length)}`);
+    for (const check of checks) console.log(`${check.label.padEnd(16)}${SYMBOLS[check.status]} ${check.detail ?? ''}`.trimEnd());
+    console.log('');
+  }
+}
+
 const SYMBOLS = { ok: '✓', warning: '✗', info: '-', skipped: '-' };
 
-async function commandRoute({ dir, intent, prompt, json, lang }) {
+async function commandRoute({ dir, project, intent, prompt, json, lang }) {
   if (!prompt && !intent) {
     console.error('route needs a prompt or --intent.');
     return 1;
   }
   const result = await route({ prompt, intent, projectDir: dir });
   const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language });
+  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null });
+  printProject(project);
   printRoute(result);
   printLanguage(language);
   return 0;
 }
 
-async function commandReview({ dir, base, prompt, json, lang }) {
+async function commandReview({ dir, project, base, prompt, json, lang }) {
   const result = await route({ prompt, intent: 'review', projectDir: dir });
   const context = collectReviewContext({ projectDir: dir, base });
   const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language, context });
+  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context });
 
+  printProject(project);
   printRoute(result);
   printLanguage(language);
   console.log(`\nContext     ${context.mode}${context.base ? ` (${context.base}...HEAD)` : ''}`);
   if (context.note) console.log(`            ${context.note}`);
   for (const file of context.files) console.log(`  ${file.status.padEnd(10)} ${file.path}`);
   if (context.diff) console.log(`\n${context.diff}`);
+  return 0;
+}
+
+/**
+ * Routes a failure to the debug agent and skills, and adds the doctor report: most build
+ * failures are toolchain mismatches (JDK, Gradle, Xcode, CocoaPods), which the report shows.
+ */
+async function commandDebug({ dir, project, prompt, json, lang }) {
+  const result = await route({ prompt, intent: 'debug', projectDir: dir });
+  const doctor = await runDoctor({ projectDir: dir });
+  const language = await resolveLanguage({ flag: lang });
+  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, doctor });
+
+  printProject(project);
+  printRoute(result);
+  printLanguage(language);
+  console.log('');
+  printDoctorChecks(doctor);
   return 0;
 }
 
@@ -241,6 +278,11 @@ function printRoute(result) {
   console.log(`Agent       ${result.agent?.name ?? '-'}`);
   console.log(`Skills      ${result.skills.map((skill) => skill.name).join(', ') || '-'}`);
   for (const warning of result.warnings) console.log(`! ${warning}`);
+}
+
+/** Only printed when .reis-mobile/config.yaml moved the command to another folder. */
+function printProject({ projectDir, config }) {
+  if (config?.data.app !== undefined) console.log(`Project     ${projectDir} (app from ${config.path})`);
 }
 
 /** `-` means no saved language: the commands follow the language of the request. */

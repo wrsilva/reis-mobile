@@ -1,6 +1,6 @@
 ---
-description: reis-mobile entry point — lists the commands or forwards to doctor, review, debate or the right agent from a free-form request
-argument-hint: "[doctor | review | debate | free-form request]"
+description: reis-mobile entry point — lists the commands or forwards to doctor, review, debug, debate or the right agent from a free-form request
+argument-hint: "[doctor | review | debug | debate | free-form request]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
 ---
 
@@ -21,6 +21,7 @@ Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}
 ```text
 /reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
 /reis-mobile:review [--base <ref>]   Code review of the changes (or the whole project)
+/reis-mobile:debug <problem>         Finds the cause of a build or runtime failure and proposes the fix
 /reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
 /reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
@@ -35,6 +36,10 @@ When the language is `pt`, translate the descriptions and keep the commands as t
 ## `review [options] [focus]`
 
 Read `${CLAUDE_PLUGIN_ROOT}/commands/review.md` and follow all of it, treating the rest of the arguments (without the word `review`) as `$ARGUMENTS`.
+
+## `debug <problem>`
+
+Read `${CLAUDE_PLUGIN_ROOT}/commands/debug.md` and follow all of it, treating the rest of the arguments (without the word `debug`) as `$ARGUMENTS`.
 
 ## `debate [options] <question>`
 
