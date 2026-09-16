@@ -1,11 +1,4 @@
----
-name: flutter-patrol-e2e-testing
-description: Generates and maintains end-to-end tests for Flutter apps using Patrol. Use when adding E2E coverage for new features, regression tests for UI bugs, or testing native interactions (permissions, system dialogs, deep links)
-intents: [test]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `patrol-e2e-testing` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Patrol E2E Testing Skill
 

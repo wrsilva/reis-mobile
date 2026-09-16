@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
@@ -107,6 +107,22 @@ describe('plugin registry', () => {
         assert.ok(body.includes(`(references/${reference})`), `${skill.name} links references/${reference}`);
       }
     }
+  });
+
+  it('credits every adapted reference file in THIRD_PARTY_NOTICES.md', () => {
+    const notices = readFileSync(join(PLUGIN_ROOT, 'THIRD_PARTY_NOTICES.md'), 'utf8');
+    const files = readdirSync(join(PLUGIN_ROOT, 'skills'), { recursive: true }).filter((file) => file.endsWith('.md'));
+    let adapted = 0;
+
+    for (const file of files) {
+      const firstLine = readFileSync(join(PLUGIN_ROOT, 'skills', file), 'utf8').split('\n', 1)[0];
+      const match = /^> Adapted from the `([^`]+)` skill in \[[^\]]+\]\((https:\/\/github\.com\/[^)]+)\)/.exec(firstLine);
+      if (!match) continue;
+      adapted++;
+      assert.ok(notices.includes(`Source: ${match[2]}`), `${file}: ${match[2]} is listed`);
+      assert.ok(notices.includes(`\`${match[1]}\` → `), `${file}: upstream skill ${match[1]} is listed`);
+    }
+    assert.ok(adapted >= 11, 'the consolidated test guides are credited');
   });
 
   it('reports broken components', async () => {

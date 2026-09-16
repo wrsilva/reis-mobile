@@ -1,14 +1,5 @@
----
-name: flutter-add-integration-test
-description: Configures Flutter Driver for app interaction and converts MCP actions into permanent integration tests. Use when adding integration testing to a project, exploring UI components via MCP, or automating user flows with the integration_test package.
-metadata:
-  model: models/gemini-3.1-pro-preview
-  last_modified: Tue, 21 Apr 2026 18:29:20 GMT
-intents: [test]
-stacks: [flutter]
-source: https://github.com/flutter/skills
-license: BSD-3-Clause
----
+> Adapted from the `flutter-add-integration-test` skill in [flutter/skills](https://github.com/flutter/skills) (BSD-3-Clause). See `THIRD_PARTY_NOTICES.md`.
+
 # Implementing Flutter Integration Tests
 
 ## Contents

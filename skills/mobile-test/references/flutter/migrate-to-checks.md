@@ -1,16 +1,5 @@
----
-name: flutter-dart-migrate-to-checks-package
-description: |-
-  Replace the usage of `expect` and similar functions from `package:matcher`
-  to `package:checks` equivalents.
-metadata:
-  model: models/gemini-3.1-pro-preview
-  last_modified: Tue, 09 Jun 2026 19:30:00 GMT
-intents: [migration]
-stacks: [flutter]
-source: https://github.com/dart-lang/skills
-license: BSD-3-Clause
----
+> Adapted from the `dart-migrate-to-checks-package` skill in [dart-lang/skills](https://github.com/dart-lang/skills) (BSD-3-Clause). See `THIRD_PARTY_NOTICES.md`.
+
 # Migrating Dart Tests to Package Checks
 
 Use this skill when you need to migrate a Dart test suite from the legacy

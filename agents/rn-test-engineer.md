@@ -73,6 +73,8 @@ test('shows the home greeting after a valid login', async () => {
 
 The names above are illustrative, and `toBeOnTheScreen` comes from the library's Jest matchers. Use the project's real components, providers and conventions, and wrap renders in the providers the screen needs.
 
+Read the `mobile-test` skill, and its `references/react-native.md`, for the platform's tools, APIs and commands.
+
 ## Workflow
 
 1. Read the target code, its dependencies and its public interface.

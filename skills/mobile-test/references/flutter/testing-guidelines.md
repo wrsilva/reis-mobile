@@ -1,11 +1,4 @@
----
-name: flutter-testing
-description: Writes and reviews Flutter/Dart tests. Use when writing unit tests, widget tests, or reviewing existing tests for correctness, structure, and naming conventions.
-intents: [test]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `testing` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Testing Skill
 

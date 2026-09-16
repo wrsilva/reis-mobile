@@ -70,6 +70,8 @@ struct LoginViewModelTests {
 
 The names above are illustrative. With XCTest, the same test is an `async` method on an `XCTestCase` subclass using `XCTAssertEqual`. Use the project's real types and conventions.
 
+Read the `mobile-test` skill, and its `references/ios.md`, for the platform's tools, APIs and commands.
+
 ## Workflow
 
 1. Read the target code, its dependencies and its public interface.

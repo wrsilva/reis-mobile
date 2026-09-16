@@ -1,22 +1,4 @@
----
-name: android-testing-setup
-description: Analyze and create a testing strategy for native Android apps - install
-  testing libraries, set up test infrastructure, create harnesses for unit tests,
-  UI tests, screenshot tests, and end-to-end tests.
-license: Apache-2.0
-source: https://github.com/android/skills
-intents: [test]
-stacks: [android]
-metadata:
-  author: Google LLC
-  last-updated: '2026-09-03'
-  keywords:
-  - android
-  - testing
-  - ui tests
-  - screenshot tests
-  - coverage
----
+> Adapted from the `testing-setup` skill in [android/skills](https://github.com/android/skills) (Apache-2.0). See `THIRD_PARTY_NOTICES.md`. Links below are relative to this folder.
 
 ## Step 1: analyze the current testing setup
 

@@ -1,14 +1,5 @@
----
-name: flutter-dart-collect-coverage
-description: Collect coverage using the coverage packge and create an LCOV report
-metadata:
-  model: models/gemini-3.1-pro-preview
-  last_modified: Fri, 24 Apr 2026 15:14:32 GMT
-intents: [test]
-stacks: [flutter]
-source: https://github.com/dart-lang/skills
-license: BSD-3-Clause
----
+> Adapted from the `dart-collect-coverage` skill in [dart-lang/skills](https://github.com/dart-lang/skills) (BSD-3-Clause). See `THIRD_PARTY_NOTICES.md`.
+
 # Implementing Dart and Flutter Test Coverage
 
 ## Contents

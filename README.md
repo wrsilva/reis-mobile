@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 97 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase, testing, plugins and security.
+👥 **16 agents and 87 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -234,13 +234,13 @@ $ reis-mobile route "Execution failed for task ':app:compileDebugKotlin'"
 Intent      debug (confidence 0.5) · area gradle
 Stack       flutter · focus android
 Agent       mobile-staff-engineer
-Skills      dart-fix-runtime-errors, dart-resolve-package-conflicts, flutter-errors, flutter-fix-layout-issues
+Skills      flutter-build-debug, flutter-dart-fix-runtime-errors, flutter-dart-resolve-package-conflicts, flutter-errors, flutter-fix-layout-issues, android-gradle-build-debug
 
 $ reis-mobile route "write tests for the login cubit"
 Intent      test (confidence 1)
 Stack       flutter
 Agent       flutter-test-engineer
-Skills      dart-add-unit-test, dart-collect-coverage, dart-generate-test-mocks, flutter-add-integration-test, flutter-add-widget-test, mockito, mocktail, patrol-e2e-testing, testing
+Skills      mobile-test
 ```
 
 The router never invents a specialist: if no agent serves the intent, it warns you. You do not need to call agents by name, because Claude Code triggers them by their description when the request fits. To force one of them, ask: *"use reis-mobile:flutter-architect to review the architecture"*.
@@ -275,8 +275,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 97 mobile skills |
-| **Context cost** | Zero | ~9,500 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 87 mobile skills |
+| **Context cost** | Zero | ~9,200 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -370,20 +370,11 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Testing</strong> (10)</summary>
+<summary><strong>Testing</strong> (1)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `flutter-testing` | Writes and reviews Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `flutter-dart-add-unit-test` | Write and organize unit tests for functions, methods, and classes using `package:test`. | test | Flutter | dart-lang/skills |
-| `flutter-add-widget-test` | Implement a component-level test using `WidgetTester` to verify UI rendering and user interactions (tapping,… | test | Flutter | flutter/skills |
-| `flutter-add-integration-test` | Configures Flutter Driver for app interaction and converts MCP actions into permanent integration tests. | test | Flutter | flutter/skills |
-| `flutter-patrol-e2e-testing` | Generates and maintains end-to-end tests for Flutter apps using Patrol. | test | Flutter | evanca/flutter-ai-rules |
-| `flutter-mocktail` | Uses the Mocktail package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `flutter-mockito` | Uses the Mockito package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `flutter-dart-generate-test-mocks` | Define and generate mock objects for external dependencies using `package:mockito` and `build_runner`. | test | Flutter | dart-lang/skills |
-| `flutter-dart-collect-coverage` | Collect coverage using the coverage packge and create an LCOV report | test | Flutter | dart-lang/skills |
-| `flutter-dart-migrate-to-checks-package` | Replace the usage of `expect` and similar functions from `package:matcher` to `package:checks` equivalents. | migration | Flutter | dart-lang/skills |
+| `mobile-test` | Unit, widget, integration and end-to-end tests, mocks and coverage for Flutter, native Android, native iOS and React Native, with one reference per platform. | test | all | reis-mobile, flutter/skills, dart-lang/skills, evanca/flutter-ai-rules, android/skills |
 
 </details>
 
@@ -492,7 +483,7 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native Android</strong> (26)</summary>
+<summary><strong>Native Android</strong> (25)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
@@ -502,7 +493,6 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 | `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
 | `android-r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
 | `android-profiler` | Manages Android performance profiling and debugging. | performance | Android | android/skills |
-| `android-testing-setup` | Analyze and create a testing strategy for native Android apps - install testing libraries, set up test… | test | Android | android/skills |
 | `android-play-policy-insights` | Automated auditor designed to verify Android applications against Google Play Policy domains. | release | Android | android/skills |
 | `android-play-billing-library-version-upgrade` | Use this skill when upgrading or migrating an Android project from any legacy Google Play Billing Library (PBL)… | — | Android | android/skills |
 | `android-engage-sdk-integration` | Helps developers integrate, debug, and resolve Play Engage SDK implementation issues. | — | Android | android/skills |
@@ -560,7 +550,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 97 skills add up to about 9,500 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 87 skills add up to about 9,200 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 

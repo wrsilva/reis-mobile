@@ -26,7 +26,7 @@ describe('route', () => {
   for (const [intent, agent, skill] of [
     ['architecture', 'flutter-architect', 'flutter-app-architecture'],
     ['performance', 'flutter-performance-engineer', 'flutter-widget-review'],
-    ['test', 'flutter-test-engineer', 'flutter-add-widget-test'],
+    ['test', 'flutter-test-engineer', 'mobile-test'],
     ['debug', 'mobile-staff-engineer', 'flutter-errors'],
     ['accessibility', 'mobile-staff-engineer', 'flutter-improving-accessibility'],
   ]) {
@@ -51,6 +51,7 @@ describe('route', () => {
 
         assert.equal(result.agent.name, `${stack}-${role}`);
         assert.ok(!result.skills.some((skill) => skill.stacks.includes('flutter')));
+        if (intent === 'test') assert.ok(result.skills.some((skill) => skill.name === 'mobile-test'), 'every stack gets the test skill');
       });
     }
   }

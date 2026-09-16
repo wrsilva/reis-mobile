@@ -1,11 +1,4 @@
----
-name: flutter-mockito
-description: Uses the Mockito package for mocking in Flutter/Dart tests. Use when generating mocks, stubbing methods, verifying interactions, capturing arguments, or deciding between mocks, fakes, and real objects.
-intents: [test]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `mockito` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Mockito Skill
 

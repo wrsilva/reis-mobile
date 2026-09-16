@@ -77,6 +77,8 @@ group('LoginCubit', () {
 
 The names above are illustrative. Use the project's real classes and conventions.
 
+Read the `mobile-test` skill, and its `references/flutter.md`, for the platform's tools, APIs and commands.
+
 ## Workflow
 
 1. Read the target code, its dependencies and its public interface.

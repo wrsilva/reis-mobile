@@ -1,11 +1,4 @@
----
-name: flutter-mocktail
-description: Uses the Mocktail package for mocking in Flutter/Dart tests. Use when creating mocks, stubbing methods, verifying interactions, registering fallback values, or deciding between mocks, fakes, and real objects.
-intents: [test]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `mocktail` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Mocktail Skill
 
