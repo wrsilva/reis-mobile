@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'doctor', 'mobile', 'review']);
+    assert.deepEqual(names, ['debate', 'doctor', 'reis-mobile', 'review']);
   });
 
   for (const command of commands) {
@@ -55,7 +55,7 @@ describe('/debate', () => {
   const agents = readdirSync(join(PLUGIN_ROOT, 'agents')).map((name) => basename(name, '.md'));
 
   it('names only agents this plugin ships', () => {
-    const mentioned = [...debate.body.matchAll(/`mobile:([a-z0-9-]+)`/g)].map((match) => match[1]);
+    const mentioned = [...debate.body.matchAll(/`reis-mobile:([a-z0-9-]+)`/g)].map((match) => match[1]);
 
     assert.ok(mentioned.length >= 3, 'a debate needs at least three participants to pick from');
     for (const name of mentioned) {
@@ -72,7 +72,7 @@ describe('/debate', () => {
   it('assigns more than one model across the participants', () => {
     // A debate where every participant runs the same model inherits one set of blind
     // spots, so the disagreement stays on the surface of the role.
-    const models = new Set([...debate.body.matchAll(/^\| `mobile:[a-z0-9-]+` \|[^|]+\| `([a-z]+)` \|$/gm)].map((m) => m[1]));
+    const models = new Set([...debate.body.matchAll(/^\| `reis-mobile:[a-z0-9-]+` \|[^|]+\| `([a-z]+)` \|$/gm)].map((m) => m[1]));
 
     assert.ok(models.size >= 2, `participants must span at least two models, found: ${[...models].join(', ') || 'none'}`);
     assert.match(debate.body, /at least two different models/, 'the escalation rule must enforce the mix');

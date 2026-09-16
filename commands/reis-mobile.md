@@ -16,20 +16,20 @@ The CLI output has a `Language` line (`language` in JSON). Write everything the 
 
 ## No arguments
 
-Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" lang`, to find the language:
+Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" lang`, to find the language:
 
 ```text
-/mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
-/mobile:review [--base <ref>]   Code review of the changes (or the whole project)
-/mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
-/mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
+/reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
+/reis-mobile:review [--base <ref>]   Code review of the changes (or the whole project)
+/reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
+/reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
 
 When the language is `pt`, translate the descriptions and keep the commands as they are. When it is not set, use English.
 
 ## `doctor [options]`
 
-1. Run via Bash: `node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" doctor --dir "$PWD" <options>`.
+1. Run via Bash: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor --dir "$PWD" <options>`.
 2. Read `${CLAUDE_PLUGIN_ROOT}/commands/doctor.md` and follow its **Instructions** section on that output.
 
 ## `review [options] [focus]`
@@ -44,7 +44,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/commands/debate.md` and follow all of it, treating t
 
 It is a free-form request, in English or Portuguese.
 
-1. Run via Bash, with correct quoting: `node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" route --dir "$PWD" -- "<request>"`. If it fails, show the error and stop.
+1. Run via Bash, with correct quoting: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" route --dir "$PWD" -- "<request>"`. If it fails, show the error and stop.
 2. Read `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md` and, in order, `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` for each listed skill.
 3. Handle the request following the agent's process and the skills' checklists. Confirm in the code everything you claim.
 4. On the first line of the answer, state the stack, the agent and the skills used. If the router emitted warnings (lines starting with `!`), mention them.

@@ -7,9 +7,9 @@ import { FLUTTER_APP, makeProject } from './helpers/fixtures.mjs';
 const names = (items) => items.map((item) => item.name);
 
 describe('route', () => {
-  // Plan §39: the MVP is proven when /mobile:review on a Flutter project selects the
+  // Plan §39: the MVP is proven when /reis-mobile:review on a Flutter project selects the
   // reviewer agent with the Flutter and security skills.
-  it('routes /mobile:review on a Flutter project to the MVP agent and skills', async () => {
+  it('routes /reis-mobile:review on a Flutter project to the MVP agent and skills', async () => {
     const dir = await makeProject(FLUTTER_APP);
 
     const result = await route({ intent: 'review', projectDir: dir });

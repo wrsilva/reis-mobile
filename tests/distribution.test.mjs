@@ -1,10 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { MARKETPLACE_URL, PLUGIN_ID, installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
-import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { renderFormula } from '../scripts/homebrew-formula.mjs';
 import { checkVersions, readVersions } from '../scripts/versions.mjs';
 
@@ -34,16 +31,6 @@ describe('Claude Code plugin install', () => {
 
   const nothingInstalled = () => [];
 
-  it('ships the plugin as "mobile" so commands live under /mobile:*', () => {
-    const manifest = JSON.parse(readFileSync(join(PLUGIN_ROOT, '.claude-plugin/plugin.json'), 'utf8'));
-    const marketplace = JSON.parse(readFileSync(join(PLUGIN_ROOT, '.claude-plugin/marketplace.json'), 'utf8'));
-
-    assert.equal(PLUGIN_ID, 'mobile@reis-mobile');
-    assert.equal(manifest.name, 'mobile');
-    assert.equal(marketplace.name, 'reis-mobile');
-    assert.deepEqual(marketplace.plugins.map((plugin) => plugin.name), ['mobile']);
-  });
-
   it('adds and refreshes the GitHub marketplace, then installs the plugin', () => {
     const { calls, run } = recorder();
 
@@ -55,18 +42,18 @@ describe('Claude Code plugin install', () => {
     ]);
   });
 
-  it('removes the plugin installed under its old name after installing the new one', () => {
+  it('removes the plugin installed as "mobile" by v0.3.2 and v0.3.3 after installing reis-mobile', () => {
     const { calls, run } = recorder();
 
-    installClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile', 'other@elsewhere'] });
+    installClaudePlugin({ run, list: () => ['mobile@reis-mobile', 'other@elsewhere'] });
 
-    assert.deepEqual(calls.slice(-2), [`plugin install ${PLUGIN_ID} --scope user`, 'plugin uninstall reis-mobile@reis-mobile --scope user']);
+    assert.deepEqual(calls.slice(-2), [`plugin install ${PLUGIN_ID} --scope user`, 'plugin uninstall mobile@reis-mobile --scope user']);
   });
 
-  it('keeps the old plugin when installing the new one fails', () => {
+  it('keeps the "mobile" plugin when installing reis-mobile fails', () => {
     const { calls, run } = recorder([0, 0, 1]);
 
-    assert.equal(installClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile'] }).ok, false);
+    assert.equal(installClaudePlugin({ run, list: () => ['mobile@reis-mobile'] }).ok, false);
     assert.ok(!calls.some((call) => call.includes('uninstall')));
   });
 
@@ -89,14 +76,14 @@ describe('Claude Code plugin install', () => {
     assert.equal(calls.length, 1);
   });
 
-  it('uninstalls the plugin before removing the marketplace', () => {
+  it('uninstalls the plugin, and the "mobile" one if present, before removing the marketplace', () => {
     const { calls, run } = recorder();
 
-    uninstallClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile'] });
+    uninstallClaudePlugin({ run, list: () => ['mobile@reis-mobile'] });
 
     assert.deepEqual(calls, [
       `plugin uninstall ${PLUGIN_ID} --scope user`,
-      'plugin uninstall reis-mobile@reis-mobile --scope user',
+      'plugin uninstall mobile@reis-mobile --scope user',
       'plugin marketplace remove reis-mobile',
     ]);
   });

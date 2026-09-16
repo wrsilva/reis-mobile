@@ -4,7 +4,7 @@ argument-hint: "[--base <ref>] [review focus]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
 ---
 
-# mobile review
+# reis-mobile review
 
 Arguments received: `$ARGUMENTS`
 
@@ -13,7 +13,7 @@ Arguments received: `$ARGUMENTS`
 Extract the `--base <ref>` option from the arguments (if present). The rest is the review focus, as free text. Run via Bash, with correct quoting:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/bin/mobile.mjs" review --dir "$PWD" [--base <ref>] -- "<review focus>"
+node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" review --dir "$PWD" [--base <ref>] -- "<review focus>"
 ```
 
 The output reports:

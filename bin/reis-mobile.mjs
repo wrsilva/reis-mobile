@@ -13,13 +13,13 @@ import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
 import { route } from '../core/router/router.mjs';
 
-const USAGE = `mobile — AI agents for mobile engineering (reis-mobile)
+const USAGE = `reis-mobile — AI agents for mobile engineering
 
-Usage: mobile <command> [options]
+Usage: reis-mobile <command> [options]
 
 Commands:
-  init [en|pt]               Install the mobile plugin into Claude Code, optionally setting the language
-  lang [en|pt]               Show or set the language the /mobile commands answer in
+  init [en|pt]               Install the reis-mobile plugin into Claude Code, optionally setting the language
+  lang [en|pt]               Show or set the language the /reis-mobile commands answer in
   detect                     Detect the mobile stack of a project
   doctor                     Diagnose the environment for the detected stack
   route <prompt...>          Show which intent, agent and skills a prompt resolves to
@@ -75,7 +75,7 @@ async function main(argv) {
 
   if (options.version) {
     const pkg = JSON.parse(await readFile(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
-    console.log(`mobile ${pkg.version}`);
+    console.log(`reis-mobile ${pkg.version}`);
     return 0;
   }
   if (options.help || !name) {
@@ -107,11 +107,11 @@ async function commandInit({ local, scope, uninstall, lang, prompt }) {
   }
   if (uninstall) {
     await removeConfig();
-    console.log('✓ mobile plugin removed from Claude Code');
+    console.log('✓ reis-mobile removed from Claude Code');
     return 0;
   }
   if (requested) console.log(`✓ Language: ${await saveLanguage(requested)} (${configPath()})`);
-  console.log('✓ mobile plugin installed in Claude Code. Restart Claude Code, then run /mobile:doctor');
+  console.log('✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /reis-mobile:doctor');
   return 0;
 }
 
@@ -149,7 +149,7 @@ async function commandDoctor({ dir, all, strict, json, lang }) {
   if (json) {
     print({ ...report, language });
   } else {
-    console.log('mobile doctor\n');
+    console.log('reis-mobile doctor\n');
     for (const [section, title] of [['environment', 'Environment'], ['project', 'Project'], ['integrations', 'Integrations']]) {
       const checks = report.checks.filter((check) => check.section === section);
       if (!checks.length) continue;
@@ -250,7 +250,7 @@ main(process.argv.slice(2)).then(
     process.exitCode = code;
   },
   (error) => {
-    console.error(`mobile: ${error.message}`);
+    console.error(`reis-mobile: ${error.message}`);
     process.exitCode = 1;
   },
 );

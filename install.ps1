@@ -5,9 +5,9 @@
 # Environment variables:
 #   REIS_MOBILE_VERSION      Release tag to install (default: latest release)
 #   REIS_MOBILE_HOME         Installation directory (default: %LOCALAPPDATA%\reis-mobile)
-#   REIS_MOBILE_BIN_DIR      Directory for mobile.cmd (default: %USERPROFILE%\.local\bin)
+#   REIS_MOBILE_BIN_DIR      Directory for reis-mobile.cmd (default: %USERPROFILE%\.local\bin)
 #   REIS_MOBILE_SKIP_PLUGIN  Set to 1 to skip installing the Claude Code plugin
-#   REIS_MOBILE_LANG         Language the /mobile commands answer in: en or pt
+#   REIS_MOBILE_LANG         Language the /reis-mobile commands answer in: en or pt
 #   REIS_MOBILE_ARCHIVE_URL  Install from this archive (URL or local path) instead of a release
 #
 # Errors use `throw`, never `exit`: under `irm | iex` exit would close the user's session.
@@ -74,9 +74,9 @@
     New-Item -ItemType Directory -Path $staging | Out-Null
     tar -xzf $archive -C $staging --strip-components=1
     if ($LASTEXITCODE -ne 0) { throw 'reis-mobile install: could not extract the archive' }
-    # Releases up to v0.3.2 ship the entry point as bin/reis-mobile.mjs.
-    $entryName = @('mobile.mjs', 'reis-mobile.mjs') | Where-Object { Test-Path (Join-Path $staging "bin\$_") } | Select-Object -First 1
-    if (-not $entryName) { throw 'reis-mobile install: archive does not contain bin/mobile.mjs' }
+    # The v0.3.3 release ships the entry point as bin/mobile.mjs.
+    $entryName = @('reis-mobile.mjs', 'mobile.mjs') | Where-Object { Test-Path (Join-Path $staging "bin\$_") } | Select-Object -First 1
+    if (-not $entryName) { throw 'reis-mobile install: archive does not contain bin/reis-mobile.mjs' }
 
     $installedVersion = (Get-Content (Join-Path $staging 'package.json') -Raw | ConvertFrom-Json).version
     $versionDir = Join-Path $InstallRoot $installedVersion
@@ -85,32 +85,32 @@
     Move-Item $staging $versionDir
 
     # Windows symlinks need admin or developer mode, so the shim points at the version directly.
-    $shim = Join-Path $BinDir 'mobile.cmd'
+    $shim = Join-Path $BinDir 'reis-mobile.cmd'
     $script = Join-Path $versionDir "bin\$entryName"
     Set-Content -Path $shim -Encoding ASCII -Value "@echo off`r`nnode `"$script`" %*"
-    # Up to v0.3.2 the command was called reis-mobile.
-    Remove-Item (Join-Path $BinDir 'reis-mobile.cmd') -Force -ErrorAction SilentlyContinue
+    # v0.3.3 installed the command as mobile.cmd.
+    Remove-Item (Join-Path $BinDir 'mobile.cmd') -Force -ErrorAction SilentlyContinue
     Write-Host "Installed $(& $shim --version) to $versionDir"
 
     $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
     if (-not (($userPath -split ';') -contains $BinDir)) {
       [Environment]::SetEnvironmentVariable('Path', (@($userPath, $BinDir) | Where-Object { $_ }) -join ';', 'User')
       $env:Path = "$env:Path;$BinDir"
-      Write-Host "Added $BinDir to your user PATH. Open a new terminal to use mobile."
+      Write-Host "Added $BinDir to your user PATH. Open a new terminal to use reis-mobile."
     }
 
     if ($env:REIS_MOBILE_SKIP_PLUGIN -ne '1') {
       if (Get-Command claude -ErrorAction SilentlyContinue) {
         Write-Host 'Installing the Claude Code plugin'
         & $shim init
-        if ($LASTEXITCODE -ne 0) { Write-Host "Plugin installation failed. Run 'mobile init' to retry." }
+        if ($LASTEXITCODE -ne 0) { Write-Host "Plugin installation failed. Run 'reis-mobile init' to retry." }
       } else {
-        Write-Host 'Claude Code not found. After installing it, run: mobile init'
+        Write-Host 'Claude Code not found. After installing it, run: reis-mobile init'
       }
     }
 
     Write-Host ''
-    Write-Host 'Done. Verify with: mobile --version'
+    Write-Host 'Done. Verify with: reis-mobile --version'
   } finally {
     Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }

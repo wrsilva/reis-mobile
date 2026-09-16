@@ -31,6 +31,6 @@ npm run check    # validate + test
 |---|---|---|
 | A skill | `skills/<name>/SKILL.md` | A case in `tests/router.test.mjs` if it changes the selection for any route |
 | An agent | `agents/<name>.md` | A routing test for the intent |
-| A command | `commands/<name>.md` (becomes `/mobile:<name>`) | Documentation in the README |
+| A command | `commands/<name>.md` (becomes `/reis-mobile:<name>`) | Documentation in the README |
 | An intent | Terms in `core/router/intents.mjs` | Cases in `tests/intent-detector.test.mjs` |
 | A stack | Rule in `stack-detector.mjs` + `stacks/<id>/stack.json` | Cases in `tests/stack-detector.test.mjs` |

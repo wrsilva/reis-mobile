@@ -1,10 +1,9 @@
 import { spawnSync } from 'node:child_process';
 
 export const MARKETPLACE_NAME = 'reis-mobile';
-export const PLUGIN_NAME = 'mobile';
-export const PLUGIN_ID = `${PLUGIN_NAME}@${MARKETPLACE_NAME}`;
-/** Up to v0.3.1 the plugin was called reis-mobile, which put every command under /reis-mobile:*. */
-export const LEGACY_PLUGIN_IDS = [`reis-mobile@${MARKETPLACE_NAME}`];
+export const PLUGIN_ID = `reis-mobile@${MARKETPLACE_NAME}`;
+/** v0.3.2 and v0.3.3 shipped the plugin as `mobile`, with commands under /mobile:*. */
+export const LEGACY_PLUGIN_IDS = [`mobile@${MARKETPLACE_NAME}`];
 export const MARKETPLACE_URL = 'https://github.com/wrsilva/reis-mobile.git';
 export const SCOPES = ['user', 'project', 'local'];
 
@@ -12,9 +11,9 @@ export const SCOPES = ['user', 'project', 'local'];
  * Registers the reis-mobile marketplace and installs the plugin through the `claude` CLI.
  * Both steps are idempotent in Claude Code, so running `init` twice is safe.
  *
- * The marketplace is refreshed after being added: an existing checkout from before the
- * rename does not know the `mobile` plugin yet. A plugin installed under a legacy name is
- * removed once the new one is in place, so its commands do not show up twice.
+ * The marketplace is refreshed after being added: a checkout from v0.3.2 or v0.3.3 only
+ * knows the plugin as `mobile`. A plugin installed under that name is removed once
+ * reis-mobile is in place, so its commands do not show up twice.
  *
  * `source` is the GitHub repository by default, so `claude plugin update` keeps working;
  * pass a local directory for offline or development installs.
@@ -59,7 +58,7 @@ function runClaude(args) {
   // npm-based Claude Code installs expose `claude.cmd` on Windows, which needs a shell.
   const result = spawnSync('claude', args, { stdio: 'inherit', shell: process.platform === 'win32' });
   if (result.error?.code === 'ENOENT') {
-    throw new Error('Claude Code CLI not found in PATH. Install it from https://claude.com/claude-code and run `mobile init` again.');
+    throw new Error('Claude Code CLI not found in PATH. Install it from https://claude.com/claude-code and run `reis-mobile init` again.');
   }
   if (result.error) throw result.error;
   return result.status ?? 1;

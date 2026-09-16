@@ -2,6 +2,14 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.4] - 2026-09-16
+
+### Changed
+
+- Back to the `reis-mobile` name everywhere: the CLI command is `reis-mobile` again and the plugin is `reis-mobile@reis-mobile`, with commands and agents under `/reis-mobile:*`. This reverts the renames from v0.3.2 and v0.3.3.
+- `reis-mobile init` refreshes the marketplace, installs `reis-mobile@reis-mobile` and then removes `mobile@reis-mobile`; `init --uninstall` removes both.
+- `install.sh` and `install.ps1` remove the `mobile` / `mobile.cmd` command created by v0.3.3, and can still install the v0.3.3 release.
+
 ## [0.3.3] - 2026-09-16
 
 ### Changed

@@ -39,8 +39,8 @@ describe('runDoctor', () => {
   });
 });
 
-describe('mobile CLI', () => {
-  const cli = (...args) => spawnSync(process.execPath, [join(PLUGIN_ROOT, 'bin/mobile.mjs'), ...args], { encoding: 'utf8' });
+describe('reis-mobile CLI', () => {
+  const cli = (...args) => spawnSync(process.execPath, [join(PLUGIN_ROOT, 'bin/reis-mobile.mjs'), ...args], { encoding: 'utf8' });
 
   it('validates the plugin', () => {
     const result = cli('validate');

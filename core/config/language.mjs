@@ -3,7 +3,7 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 
 /**
- * Language the /mobile:* commands answer in. Agents, skills and commands stay in
+ * Language the /reis-mobile:* commands answer in. Agents, skills and commands stay in
  * English; this only picks the language of reports, syntheses and debate files.
  */
 export const LANGUAGES = {
@@ -46,7 +46,7 @@ export async function readConfig(path = configPath()) {
   try {
     return JSON.parse(source);
   } catch {
-    throw new Error(`Invalid JSON in ${path}. Fix or delete the file and run \`mobile lang <en|pt>\` again.`);
+    throw new Error(`Invalid JSON in ${path}. Fix or delete the file and run \`reis-mobile lang <en|pt>\` again.`);
   }
 }
 

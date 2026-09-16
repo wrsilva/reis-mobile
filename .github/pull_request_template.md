@@ -12,7 +12,7 @@
 
 ## How it was verified
 
-<!-- Paste the relevant output: `npm run check`, `mobile route "..."`, `mobile review` on a real project. -->
+<!-- Paste the relevant output: `npm run check`, `reis-mobile route "..."`, `reis-mobile review` on a real project. -->
 
 ```text
 

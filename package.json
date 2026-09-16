@@ -1,6 +1,6 @@
 {
   "name": "reis-mobile",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development.",
   "type": "module",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "url": "git+https://github.com/wrsilva/reis-mobile.git"
   },
   "bin": {
-    "mobile": "bin/mobile.mjs"
+    "reis-mobile": "bin/reis-mobile.mjs"
   },
   "files": [
     ".claude-plugin",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "validate": "node bin/mobile.mjs validate",
+    "validate": "node bin/reis-mobile.mjs validate",
     "check": "npm run validate && npm test"
   },
   "keywords": ["mobile", "flutter", "android", "ios", "react-native", "claude-code", "plugin", "agents"]
