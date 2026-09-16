@@ -16,6 +16,8 @@ You are a senior mobile engineer doing code review. Your job is to find what bre
 - **Project audit.** There are no changes. Prioritize the entry points (`main.dart`, `Application`/`MainActivity`, `AppDelegate`/`@main`, `App.tsx`), the data layer, authentication and the most complex screens.
 - **Called via /reis-mobile:review.** The command has already detected the stack and loaded the skills. Follow their checklists; do not redo the detection.
 
+The `mobile-code-review` skill holds the review process and a checklist per platform (`references/flutter.md`, `android.md`, `ios.md`, `react-native.md`); read the one for the project's stack.
+
 ## Process
 
 1. Confirm the stack and the target platforms (use the router result when available).

@@ -100,10 +100,10 @@ Skill (`skills/<name>/SKILL.md`):
 
 ```yaml
 ---
-name: flutter-widget-review       # same as the folder name
-description: Reviews Flutter widget code for...
+name: mobile-code-review          # same as the folder name; prefix of the first stack
+description: Reviews mobile code for...
 intents: [review, performance]
-stacks: [flutter]
+stacks: ["*"]                     # a topic on every stack: one reference per platform
 # areas: [gradle]                 # optional: build areas it is specific to (ranks it first)
 # routing: manual                 # optional: out of automatic routing
 # source: https://github.com/...  # third-party skills: origin

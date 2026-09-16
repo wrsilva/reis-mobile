@@ -1,11 +1,4 @@
----
-name: flutter-code-review
-description: Performs thorough code reviews for Flutter/Dart pull requests and merge requests. Use when asked to review a PR, MR, branch, or a set of changed files. Follows a structured checklist covering correctness, security, style, testing, and documentation.
-intents: [review]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `code-review` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Code Review Skill
 

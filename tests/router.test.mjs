@@ -16,7 +16,7 @@ describe('route', () => {
 
     assert.equal(result.stack, 'flutter');
     assert.equal(result.agent.name, 'mobile-code-reviewer');
-    for (const skill of ['flutter-project-audit', 'flutter-widget-review', 'mobile-security-audit']) {
+    for (const skill of ['mobile-code-review', 'mobile-security-audit']) {
       assert.ok(names(result.skills).includes(skill), `${skill} is selected`);
     }
     assert.equal(names(result.skills).at(-1), 'mobile-security-audit', 'stack-agnostic skills come last');
@@ -25,7 +25,7 @@ describe('route', () => {
 
   for (const [intent, agent, skill] of [
     ['architecture', 'flutter-architect', 'flutter-app-architecture'],
-    ['performance', 'flutter-performance-engineer', 'flutter-widget-review'],
+    ['performance', 'flutter-performance-engineer', 'mobile-code-review'],
     ['test', 'flutter-test-engineer', 'mobile-test'],
     ['debug', 'mobile-staff-engineer', 'flutter-errors'],
     ['accessibility', 'mobile-staff-engineer', 'flutter-improving-accessibility'],
@@ -78,16 +78,16 @@ describe('route', () => {
     const result = await route({ intent: 'review', projectDir: dir });
 
     assert.equal(result.stack, 'android');
-    assert.deepEqual(names(result.skills), ['android-code-review', 'android-intent-security', 'mobile-security-audit']);
+    assert.deepEqual(names(result.skills), ['android-intent-security', 'mobile-code-review', 'mobile-security-audit']);
   });
 
-  it('reviews native iOS with the iOS checklist before the stack-agnostic one', async () => {
+  it('reviews native iOS with the cross-platform review and security skills', async () => {
     const dir = await makeProject({ 'App.xcodeproj/project.pbxproj': '', Podfile: "platform :ios, '15.0'\n" });
 
     const result = await route({ intent: 'review', projectDir: dir });
 
     assert.equal(result.stack, 'ios');
-    assert.deepEqual(names(result.skills), ['ios-code-review', 'mobile-security-audit']);
+    assert.deepEqual(names(result.skills), ['mobile-code-review', 'mobile-security-audit']);
   });
 
   it('debugs a CocoaPods failure with the CocoaPods skill first', async () => {

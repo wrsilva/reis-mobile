@@ -2,6 +2,12 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** the review skills are consolidated into `mobile-code-review`, with the review process in `SKILL.md` and a checklist per platform: Flutter (the former `flutter-code-review`, `flutter-widget-review`, `flutter-project-audit` and `flutter-dart-run-static-analysis`, in `references/flutter/`), native Android (the former `android-code-review`), native iOS (the former `ios-code-review`) and a new React Native checklist. `mobile-security-audit`, `android-intent-security` and `flutter-effective-dart` stay separate. A review request on a Flutter app loads 3 skills instead of 6.
+
 ## [0.4.0] - 2026-09-16
 
 ### Added

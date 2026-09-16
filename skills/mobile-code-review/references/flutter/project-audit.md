@@ -1,10 +1,3 @@
----
-name: flutter-project-audit
-description: Audits the health of a Flutter project as a whole — pubspec constraints and lock file, analysis_options and lints, SDK and platform configuration (minSdk, iOS deployment target), flavors and environments, generated code, folder structure and test setup. Use when reviewing or auditing a Flutter app or plugin, before a release, or when the user asks whether a Flutter project is well configured.
-intents: [review, architecture, dependency]
-stacks: [flutter]
----
-
 # Flutter Project Audit
 
 Project health checklist. Every item must be confirmed by reading the cited file; do not report what you could not verify.

@@ -1,10 +1,3 @@
----
-name: ios-code-review
-description: Reviews native iOS code in Swift and Objective-C for the bugs that reach production — retain cycles in closures, delegates, timers and observers, Swift concurrency mistakes such as UI updates off the main actor, uncancelled tasks and data races, SwiftUI ownership and identity bugs (@StateObject vs @ObservedObject, ForEach ids), force unwraps and try! in production paths, main-thread blocking, and privacy and permission handling. Use when reviewing Swift or Objective-C files in an iOS app, view controllers, SwiftUI views, view models, networking or persistence code, or when the user asks for an iOS code review or PR review.
-intents: [review, performance]
-stacks: [ios]
----
-
 # iOS Code Review
 
 Apply to Swift and Objective-C sources of the app and its extensions. Items are ordered by impact: the first sections cause crashes, leaks or data races. Before flagging an API, check the deployment target (`IPHONEOS_DEPLOYMENT_TARGET`) — `@Observable`, for example, requires iOS 17.

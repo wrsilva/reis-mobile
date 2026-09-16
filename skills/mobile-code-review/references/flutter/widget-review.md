@@ -1,10 +1,3 @@
----
-name: flutter-widget-review
-description: Reviews Flutter widget code for lifecycle bugs, BuildContext misuse across async gaps, missing dispose, side effects in build, unnecessary rebuilds, list and image performance, layout overflow risks and accessibility. Use when reviewing Dart files under lib/ that contain widgets, screens or pages, or when the user asks to review Flutter UI code.
-intents: [review, performance]
-stacks: [flutter]
----
-
 # Flutter Widget Review
 
 Apply to Dart files with widgets (`StatelessWidget`, `StatefulWidget`, `ConsumerWidget`, `HookWidget`...). Items are ordered by impact: the first ones cause crashes or visible bugs.

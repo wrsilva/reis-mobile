@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 74 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **16 agents and 69 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -276,8 +276,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 74 mobile skills |
-| **Context cost** | Zero | ~8,400 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 69 mobile skills |
+| **Context cost** | Zero | ~7,900 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -294,7 +294,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
      ├─ detect stack ──────── pubspec.yaml → flutter (android, ios)
      ├─ detect intent ─────── review
      ├─ select agent ──────── mobile-code-reviewer
-     ├─ select skills ─────── flutter-code-review · flutter-effective-dart · flutter-project-audit · flutter-widget-review · mobile-security-audit …
+     ├─ select skills ─────── flutter-effective-dart · mobile-code-review · mobile-security-audit
      ├─ collect context ───── git diff (lock files out, secrets masked)
      └─ review report ─────── Summary · Critical · Bugs · Architecture · Security · Performance · Maintainability
 ```
@@ -339,15 +339,12 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 **Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `mobile-firebase`.
 
 <details>
-<summary><strong>Review and quality</strong> (7)</summary>
+<summary><strong>Review and quality</strong> (4)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `flutter-code-review` | Performs thorough code reviews for Flutter/Dart pull requests and merge requests. | review | Flutter | evanca/flutter-ai-rules |
+| `mobile-code-review` | Code review for Flutter, native Android, native iOS and React Native: the review process and a checklist per platform (PR review, widgets, project audit and static analysis for Flutter; lifecycle, concurrency and UI for native; hooks and platform code for React Native). | review, performance | all | reis-mobile, evanca/flutter-ai-rules, dart-lang/skills |
 | `flutter-effective-dart` | Applies Effective Dart guidelines in Flutter/Dart code. | review | Flutter | evanca/flutter-ai-rules |
-| `flutter-dart-run-static-analysis` | Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve… | review | Flutter | dart-lang/skills |
-| `flutter-project-audit` | Audits the health of a Flutter project as a whole — pubspec constraints and lock file, analysis_options and lints,… | review, architecture, dependency | Flutter | reis-mobile |
-| `flutter-widget-review` | Reviews Flutter widget code for lifecycle bugs, BuildContext misuse across async gaps, missing dispose, side effects… | review, performance | Flutter | reis-mobile |
 | `flutter-dart-3-updates` | Applies Dart 3 language features in Flutter/Dart code. | migration | Flutter | evanca/flutter-ai-rules |
 | `flutter-dart-use-pattern-matching` | Applies Dart 3 pattern matching, switch expressions, and destructuring idiomatically to validate data schemas,… | — | Flutter | dart-lang/skills |
 
@@ -471,11 +468,10 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native Android</strong> (25)</summary>
+<summary><strong>Native Android</strong> (24)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `android-code-review` | Reviews native Android code in Kotlin and Java for the bugs that reach production — lifecycle and Context leaks… | review, performance | Android, kotlin-multiplatform | reis-mobile |
 | `android-gradle-build-debug` | Diagnoses failing Android Gradle builds — JDK, Gradle, Android Gradle Plugin and Kotlin version mismatches… | debug, build, dependency, migration | Android, kotlin-multiplatform | reis-mobile |
 | `android-intent-security` | Best practices for Android Intent security. | security, review | Android | android/skills |
 | `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
@@ -504,11 +500,10 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native iOS</strong> (3)</summary>
+<summary><strong>Native iOS</strong> (2)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `ios-code-review` | Reviews native iOS code in Swift and Objective-C for the bugs that reach production — retain cycles in closures… | review, performance | iOS | reis-mobile |
 | `ios-xcode-build-debug` | Diagnoses failing iOS builds in Xcode and xcodebuild — code signing and provisioning, deployment target… | debug, build, release, migration | iOS | reis-mobile |
 | `ios-cocoapods-debug` | Diagnoses CocoaPods failures in iOS, Flutter and React Native projects — "could not find compatible versions"… | debug, dependency, build, migration | iOS | reis-mobile |
 
@@ -538,7 +533,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 74 skills add up to about 8,400 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 69 skills add up to about 7,900 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 

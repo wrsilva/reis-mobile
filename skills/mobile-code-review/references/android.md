@@ -1,10 +1,3 @@
----
-name: android-code-review
-description: Reviews native Android code in Kotlin and Java for the bugs that reach production — lifecycle and Context leaks, coroutine scope, dispatcher and cancellation mistakes, Flow collection outside the lifecycle, Jetpack Compose state, recomposition and side effects, state lost on configuration change or process death, main-thread I/O, WorkManager and permission handling, and exported components. Use when reviewing Kotlin or Java files in an Android app or module, Activities, Fragments, ViewModels, Composables, repositories or Gradle modules, or when the user asks for an Android code review or PR review.
-intents: [review, performance]
-stacks: [android, kotlin-multiplatform]
----
-
 # Android Code Review
 
 Apply to Kotlin and Java sources under `src/main` (and `androidMain` in KMP). Items are ordered by impact: the first sections cause crashes, leaks or lost user data. Before flagging an API as missing or deprecated, check the library versions in the version catalog or build files.
