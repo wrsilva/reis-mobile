@@ -42,7 +42,7 @@ describe('parseFrontmatter', () => {
     const { data } = parseFrontmatter(
       [
         '---',
-        'name: dart-migrate-to-checks-package',
+        'name: flutter-dart-migrate-to-checks-package',
         'description: |-',
         '  Replace `expect`',
         '  with `checks`.',
@@ -99,7 +99,9 @@ describe('plugin registry', () => {
       'stacks/flutter/stack.json': JSON.stringify({ id: 'flutter' }),
       'agents/reviewer.md': '---\nname: other-name\nintents: [review]\nstacks: [flutter]\n---\n',
       'skills/bad-skill/SKILL.md': '---\nname: bad-skill\ndescription: x\nintents: [cook]\nstacks: [symbian]\nareas: [kitchen]\n---\n',
-      'skills/helper/SKILL.md': '---\nname: helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
+      'skills/mobile-helper/SKILL.md': '---\nname: mobile-helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
+      'skills/generic-helper/SKILL.md': '---\nname: generic-helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
+      'skills/flutter-helper/SKILL.md': '---\nname: flutter-helper\ndescription: x\nrouting: manual\nstacks: [ios]\n---\n',
       'skills/vendored/SKILL.md': '---\nname: vendored\ndescription: x\nrouting: manual\nstacks: ["*"]\nsource: https://example.com\n---\n',
     });
 
@@ -109,9 +111,11 @@ describe('plugin registry', () => {
     assert.ok(errors.some((error) => error.includes('reviewer.md: missing "description"')));
     assert.ok(errors.some((error) => error.includes('unknown intent "cook"')));
     assert.ok(errors.some((error) => error.includes('unknown area "kitchen"')));
+    assert.ok(errors.some((error) => error.includes('generic-helper/SKILL.md: skill name must start with "mobile-" for stack "*"')));
+    assert.ok(errors.some((error) => error.includes('flutter-helper/SKILL.md: skill name must start with "ios-" for stack "ios"')));
     assert.ok(errors.some((error) => error.includes('unknown stack "symbian"')));
     assert.ok(errors.some((error) => error.includes('stack "android" has a detector but no stacks/android/stack.json')));
-    assert.ok(!errors.some((error) => error.includes('helper')), 'manual skills need no intents');
+    assert.ok(!errors.some((error) => error.includes('mobile-helper')), 'manual skills need no intents');
     assert.ok(errors.some((error) => error.includes('vendored/SKILL.md: "source" requires "license"')));
   });
 });

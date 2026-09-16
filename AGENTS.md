@@ -14,8 +14,8 @@ reis-mobile is a Claude Code plugin with a Node.js CLI that orchestrates agents 
 - **ES modules** (`.mjs`), 2 spaces, single quotes, semicolons.
 - **Do not invent.** Skill checklists cite APIs, lints, flags and store requirements that actually exist. When in doubt, tell the model to check the version in the project's lock file instead of asserting it.
 - **Small skills.** A skill solves one problem (`flutter-widget-review`), not a whole domain (`mobile-development`).
-- **Stack-prefixed names**: `flutter-*`, `android-*`, `ios-*`, `rn-*`, `kmp-*`. Stack-agnostic skills use `mobile-*`.
-- **Third-party skills** keep their original name, declare `source` and `license` in the frontmatter and appear in `THIRD_PARTY_NOTICES.md` with the license text. Only import from sources whose license allows redistribution, and never copy agents or skills containing customer data, local paths or proprietary code.
+- **Stack-prefixed names**: every skill starts with the prefix of its stack — `flutter-*`, `android-*`, `ios-*`, `rn-*` — and stack-agnostic skills (`stacks: ["*"]`) start with `mobile-*`. `reis-mobile validate` rejects a skill that does not. Agents follow the same prefixes for stack specialists.
+- **Third-party skills** are renamed to the stack prefix when needed, declare `source` and `license` in the frontmatter and appear in `THIRD_PARTY_NOTICES.md` with the license text and their upstream name. Only the folder and the `name` field change; the instructions stay as upstream wrote them. Only import from sources whose license allows redistribution, and never copy agents or skills containing customer data, local paths or proprietary code.
 - Every agent and skill declares `intents` and `stacks` in the frontmatter, or `routing: manual`.
 - Changes to the detector, the router or the redaction require a test in `tests/`.
 

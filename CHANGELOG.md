@@ -15,6 +15,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ### Changed
 
+- **Breaking:** every skill name starts with the prefix of its stack — `flutter-`, `android-`, `ios-`, `rn-` — or `mobile-` for stack-agnostic skills, and `reis-mobile validate` enforces it. 55 skills were renamed, among them `bloc` → `flutter-bloc`, `riverpod` → `flutter-riverpod`, `testing` → `flutter-testing`, `firebase-auth` → `flutter-firebase-auth`, `dart-3-updates` → `flutter-dart-3-updates`, `flutterfire-configure` → `flutter-firebase-configure`, `detect-mobile-stack` → `mobile-detect-stack` and `agp-9-upgrade` → `android-agp-9-upgrade`. Update any instruction that calls a skill by its old `reis-mobile:<name>`. `THIRD_PARTY_NOTICES.md` lists the upstream name of each renamed third-party skill.
 - The frontmatter parser joins descriptions continued on indented lines, as the imported skills write them.
 - The package is larger (about 950 KB compressed) and the plugin's fixed context cost grows to about 9,500 tokens per session, since Claude Code loads every skill description.
 

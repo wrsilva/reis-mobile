@@ -64,7 +64,7 @@ describe('route', () => {
   it('never auto-selects manual components', async () => {
     const result = await route({ intent: 'architecture', projectDir: await makeProject(FLUTTER_APP) });
 
-    assert.ok(!names(result.skills).includes('bloc'));
+    assert.ok(!names(result.skills).includes('flutter-bloc'));
     assert.notEqual(result.agent.name, 'lead-mobile');
   });
 

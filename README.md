@@ -293,7 +293,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
      ├─ detect stack ──────── pubspec.yaml → flutter (android, ios)
      ├─ detect intent ─────── review
      ├─ select agent ──────── mobile-code-reviewer
-     ├─ select skills ─────── code-review · effective-dart · flutter-project-audit · flutter-widget-review · mobile-security-audit …
+     ├─ select skills ─────── flutter-code-review · flutter-effective-dart · flutter-project-audit · flutter-widget-review · mobile-security-audit …
      ├─ collect context ───── git diff (lock files out, secrets masked)
      └─ review report ─────── Summary · Critical · Bugs · Architecture · Security · Performance · Maintainability
 ```
@@ -335,20 +335,20 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 ### Skills
 
-**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `firebase-messaging`.
+**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `flutter-firebase-messaging`.
 
 <details>
 <summary><strong>Review and quality</strong> (7)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `code-review` | Performs thorough code reviews for Flutter/Dart pull requests and merge requests. | review | Flutter | evanca/flutter-ai-rules |
-| `effective-dart` | Applies Effective Dart guidelines in Flutter/Dart code. | review | Flutter | evanca/flutter-ai-rules |
-| `dart-run-static-analysis` | Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve… | review | Flutter | dart-lang/skills |
+| `flutter-code-review` | Performs thorough code reviews for Flutter/Dart pull requests and merge requests. | review | Flutter | evanca/flutter-ai-rules |
+| `flutter-effective-dart` | Applies Effective Dart guidelines in Flutter/Dart code. | review | Flutter | evanca/flutter-ai-rules |
+| `flutter-dart-run-static-analysis` | Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve… | review | Flutter | dart-lang/skills |
 | `flutter-project-audit` | Audits the health of a Flutter project as a whole — pubspec constraints and lock file, analysis_options and lints,… | review, architecture, dependency | Flutter | reis-mobile |
 | `flutter-widget-review` | Reviews Flutter widget code for lifecycle bugs, BuildContext misuse across async gaps, missing dispose, side effects… | review, performance | Flutter | reis-mobile |
-| `dart-3-updates` | Applies Dart 3 language features in Flutter/Dart code. | migration | Flutter | evanca/flutter-ai-rules |
-| `dart-use-pattern-matching` | Applies Dart 3 pattern matching, switch expressions, and destructuring idiomatically to validate data schemas,… | — | Flutter | dart-lang/skills |
+| `flutter-dart-3-updates` | Applies Dart 3 language features in Flutter/Dart code. | migration | Flutter | evanca/flutter-ai-rules |
+| `flutter-dart-use-pattern-matching` | Applies Dart 3 pattern matching, switch expressions, and destructuring idiomatically to validate data schemas,… | — | Flutter | dart-lang/skills |
 
 </details>
 
@@ -357,13 +357,13 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `architecture-feature-first` | Structures Flutter apps using layered architecture (UI / Logic / Data) with feature-first file organization. | architecture | Flutter | evanca/flutter-ai-rules |
+| `flutter-architecture-feature-first` | Structures Flutter apps using layered architecture (UI / Logic / Data) with feature-first file organization. | architecture | Flutter | evanca/flutter-ai-rules |
 | `flutter-app-architecture` | Provides best practices for Flutter app architecture, including layered architecture, data flow, state management… | architecture | Flutter | evanca/flutter-ai-rules |
 | `flutter-apply-architecture-best-practices` | Architects a Flutter application using the recommended layered approach (UI, Logic, Data). | architecture | Flutter | flutter/skills |
 | `flutter-managing-state` | Manages application and ephemeral state in a Flutter app. | architecture | Flutter | flutter/skills |
-| `bloc` | Implements Flutter state management using the bloc library (Bloc and Cubit). | — | Flutter | evanca/flutter-ai-rules |
-| `riverpod` | Uses Riverpod for state management in Flutter/Dart. | — | Flutter | evanca/flutter-ai-rules |
-| `provider` | Uses the Provider package for dependency injection and state management in Flutter. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-bloc` | Implements Flutter state management using the bloc library (Bloc and Cubit). | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-riverpod` | Uses Riverpod for state management in Flutter/Dart. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-provider` | Uses the Provider package for dependency injection and state management in Flutter. | — | Flutter | evanca/flutter-ai-rules |
 | `flutter-change-notifier` | Implements state management with ChangeNotifier and Provider in Flutter. | — | Flutter | evanca/flutter-ai-rules |
 | `flutter-login-usecase` | Implements a Flutter login use case that authenticates through an injected repository and persists the access token… | — | Flutter | reis-mobile |
 
@@ -374,16 +374,16 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `testing` | Writes and reviews Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `dart-add-unit-test` | Write and organize unit tests for functions, methods, and classes using `package:test`. | test | Flutter | dart-lang/skills |
+| `flutter-testing` | Writes and reviews Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
+| `flutter-dart-add-unit-test` | Write and organize unit tests for functions, methods, and classes using `package:test`. | test | Flutter | dart-lang/skills |
 | `flutter-add-widget-test` | Implement a component-level test using `WidgetTester` to verify UI rendering and user interactions (tapping,… | test | Flutter | flutter/skills |
 | `flutter-add-integration-test` | Configures Flutter Driver for app interaction and converts MCP actions into permanent integration tests. | test | Flutter | flutter/skills |
-| `patrol-e2e-testing` | Generates and maintains end-to-end tests for Flutter apps using Patrol. | test | Flutter | evanca/flutter-ai-rules |
-| `mocktail` | Uses the Mocktail package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `mockito` | Uses the Mockito package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
-| `dart-generate-test-mocks` | Define and generate mock objects for external dependencies using `package:mockito` and `build_runner`. | test | Flutter | dart-lang/skills |
-| `dart-collect-coverage` | Collect coverage using the coverage packge and create an LCOV report | test | Flutter | dart-lang/skills |
-| `dart-migrate-to-checks-package` | Replace the usage of `expect` and similar functions from `package:matcher` to `package:checks` equivalents. | migration | Flutter | dart-lang/skills |
+| `flutter-patrol-e2e-testing` | Generates and maintains end-to-end tests for Flutter apps using Patrol. | test | Flutter | evanca/flutter-ai-rules |
+| `flutter-mocktail` | Uses the Mocktail package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
+| `flutter-mockito` | Uses the Mockito package for mocking in Flutter/Dart tests. | test | Flutter | evanca/flutter-ai-rules |
+| `flutter-dart-generate-test-mocks` | Define and generate mock objects for external dependencies using `package:mockito` and `build_runner`. | test | Flutter | dart-lang/skills |
+| `flutter-dart-collect-coverage` | Collect coverage using the coverage packge and create an LCOV report | test | Flutter | dart-lang/skills |
+| `flutter-dart-migrate-to-checks-package` | Replace the usage of `expect` and similar functions from `package:matcher` to `package:checks` equivalents. | migration | Flutter | dart-lang/skills |
 
 </details>
 
@@ -394,8 +394,8 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 |---|---|---|---|---|
 | `flutter-errors` | Diagnoses and fixes common Flutter errors. | debug | Flutter | evanca/flutter-ai-rules |
 | `flutter-fix-layout-issues` | Fixes Flutter layout errors (overflows, unbounded constraints) using Dart and Flutter MCP tools. | debug | Flutter | flutter/skills |
-| `dart-fix-runtime-errors` | Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and verify… | debug | Flutter | dart-lang/skills |
-| `dart-resolve-package-conflicts` | Workflow for fixing package version conflicts. | debug, dependency | Flutter | dart-lang/skills |
+| `flutter-dart-fix-runtime-errors` | Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and verify… | debug | Flutter | dart-lang/skills |
+| `flutter-dart-resolve-package-conflicts` | Workflow for fixing package version conflicts. | debug, dependency | Flutter | dart-lang/skills |
 | `flutter-build-debug` | Diagnoses failing Flutter builds by locating the layer that broke — Dart compilation, pub version solving… | debug, build, dependency, migration | Flutter | reis-mobile |
 
 </details>
@@ -456,7 +456,7 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 |---|---|---|---|---|
 | `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | all | reis-mobile |
 | `flutter-secure-token-store` | Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on… | security | Flutter | reis-mobile |
-| `firebase-app-check` | Integrates Firebase App Check into Flutter apps. | security | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-app-check` | Integrates Firebase App Check into Flutter apps. | security | Flutter | evanca/flutter-ai-rules |
 
 </details>
 
@@ -475,19 +475,19 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `flutterfire-configure` | Sets up Firebase for Flutter apps using FlutterFire CLI. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-auth` | Integrates Firebase Authentication into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-cloud-firestore` | Integrates Cloud Firestore into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-database` | Integrates Firebase Realtime Database into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-storage` | Integrates Firebase Cloud Storage into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-cloud-functions` | Calls Firebase Cloud Functions from Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-messaging` | Integrates Firebase Cloud Messaging (FCM) into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-in-app-messaging` | Integrates Firebase In-App Messaging into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-remote-config` | Integrates Firebase Remote Config into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-analytics` | Integrates Firebase Analytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-crashlytics` | Integrates Firebase Crashlytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-ai` | Integrates Firebase AI Logic into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-data-connect` | Integrates Firebase Data Connect into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-configure` | Sets up Firebase for Flutter apps using FlutterFire CLI. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-auth` | Integrates Firebase Authentication into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-cloud-firestore` | Integrates Cloud Firestore into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-database` | Integrates Firebase Realtime Database into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-storage` | Integrates Firebase Cloud Storage into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-cloud-functions` | Calls Firebase Cloud Functions from Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-messaging` | Integrates Firebase Cloud Messaging (FCM) into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-in-app-messaging` | Integrates Firebase In-App Messaging into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-remote-config` | Integrates Firebase Remote Config into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-analytics` | Integrates Firebase Analytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-crashlytics` | Integrates Firebase Crashlytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-ai` | Integrates Firebase AI Logic into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `flutter-firebase-data-connect` | Integrates Firebase Data Connect into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
 
 </details>
 
@@ -499,28 +499,28 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 | `android-code-review` | Reviews native Android code in Kotlin and Java for the bugs that reach production — lifecycle and Context leaks… | review, performance | Android, kotlin-multiplatform | reis-mobile |
 | `android-gradle-build-debug` | Diagnoses failing Android Gradle builds — JDK, Gradle, Android Gradle Plugin and Kotlin version mismatches… | debug, build, dependency, migration | Android, kotlin-multiplatform | reis-mobile |
 | `android-intent-security` | Best practices for Android Intent security. | security, review | Android | android/skills |
-| `agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
-| `r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
+| `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
+| `android-r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
 | `android-profiler` | Manages Android performance profiling and debugging. | performance | Android | android/skills |
-| `testing-setup` | Analyze and create a testing strategy for native Android apps - install testing libraries, set up test… | test | Android | android/skills |
-| `play-policy-insights` | Automated auditor designed to verify Android applications against Google Play Policy domains. | release | Android | android/skills |
-| `play-billing-library-version-upgrade` | Use this skill when upgrading or migrating an Android project from any legacy Google Play Billing Library (PBL)… | — | Android | android/skills |
-| `engage-sdk-integration` | Helps developers integrate, debug, and resolve Play Engage SDK implementation issues. | — | Android | android/skills |
-| `migrate-xml-views-to-jetpack-compose` | Provides a structured workflow for migrating an Android XML View to Jetpack Compose. | — | Android | android/skills |
-| `adaptive` | Instructions to make or update an app's UI so that it adapts to different Android devices including phones… | — | Android | android/skills |
-| `edge-to-edge` | Use this skill to migrate your Jetpack Compose app to add adaptive edge-to-edge support and troubleshoot common… | — | Android | android/skills |
-| `styles` | Use this skill to integrate the Jetpack Compose Styles API into an Android project. | — | Android | android/skills |
-| `navigation-3` | Learn how to install and migrate to Jetpack Navigation 3, and how to implement features and patterns such as deep… | — | Android | android/skills |
-| `navigation-event` | Intercept back gestures and run Predictive Back animations using the NavigationEvent (androidx.navigationevent)… | — | Android | android/skills |
-| `camerax` | Provide technical guidance for Android camera development with CameraX. | — | Android | android/skills |
-| `media3-cast-integration` | Implements Google Cast support in Android apps using Jetpack Media3. | — | Android | android/skills |
-| `restore-credentials` | Provides knowledge and workflows to implement Android's Restore Credentials feature using the androidx.credentials… | — | Android | android/skills |
-| `verified-email` | Provides a complete workflow for implementing verified email retrieval on Android Credential Manager API. | — | Android | android/skills |
-| `appfunctions` | Analyzes Android apps to identify key user workflows for AppFunctions such as creating a note, playing media, or… | — | Android | android/skills |
-| `ml-kit-genai-prompt-api` | Analyzes Android codebases to implement ML Kit GenAI Prompt API. | — | Android | android/skills |
-| `wear-compose-m3` | Expert guidance for working with Wear OS Compose Material3. | — | Android | android/skills |
-| `leanback-to-compose-tv-migration` | Provides instructions and architectural patterns for migrating Android TV applications from legacy Leanback UI… | — | Android | android/skills |
-| `display-glasses-with-jetpack-compose-glimmer` | Provides guidelines for developing projected Android XR apps for display glasses using the Jetpack Compose Glimmer… | — | Android | android/skills |
+| `android-testing-setup` | Analyze and create a testing strategy for native Android apps - install testing libraries, set up test… | test | Android | android/skills |
+| `android-play-policy-insights` | Automated auditor designed to verify Android applications against Google Play Policy domains. | release | Android | android/skills |
+| `android-play-billing-library-version-upgrade` | Use this skill when upgrading or migrating an Android project from any legacy Google Play Billing Library (PBL)… | — | Android | android/skills |
+| `android-engage-sdk-integration` | Helps developers integrate, debug, and resolve Play Engage SDK implementation issues. | — | Android | android/skills |
+| `android-migrate-xml-views-to-jetpack-compose` | Provides a structured workflow for migrating an Android XML View to Jetpack Compose. | — | Android | android/skills |
+| `android-adaptive` | Instructions to make or update an app's UI so that it adapts to different Android devices including phones… | — | Android | android/skills |
+| `android-edge-to-edge` | Use this skill to migrate your Jetpack Compose app to add adaptive edge-to-edge support and troubleshoot common… | — | Android | android/skills |
+| `android-styles` | Use this skill to integrate the Jetpack Compose Styles API into an Android project. | — | Android | android/skills |
+| `android-navigation-3` | Learn how to install and migrate to Jetpack Navigation 3, and how to implement features and patterns such as deep… | — | Android | android/skills |
+| `android-navigation-event` | Intercept back gestures and run Predictive Back animations using the NavigationEvent (androidx.navigationevent)… | — | Android | android/skills |
+| `android-camerax` | Provide technical guidance for Android camera development with CameraX. | — | Android | android/skills |
+| `android-media3-cast-integration` | Implements Google Cast support in Android apps using Jetpack Media3. | — | Android | android/skills |
+| `android-restore-credentials` | Provides knowledge and workflows to implement Android's Restore Credentials feature using the androidx.credentials… | — | Android | android/skills |
+| `android-verified-email` | Provides a complete workflow for implementing verified email retrieval on Android Credential Manager API. | — | Android | android/skills |
+| `android-appfunctions` | Analyzes Android apps to identify key user workflows for AppFunctions such as creating a note, playing media, or… | — | Android | android/skills |
+| `android-ml-kit-genai-prompt-api` | Analyzes Android codebases to implement ML Kit GenAI Prompt API. | — | Android | android/skills |
+| `android-wear-compose-m3` | Expert guidance for working with Wear OS Compose Material3. | — | Android | android/skills |
+| `android-leanback-to-compose-tv-migration` | Provides instructions and architectural patterns for migrating Android TV applications from legacy Leanback UI… | — | Android | android/skills |
+| `android-display-glasses-with-jetpack-compose-glimmer` | Provides guidelines for developing projected Android XR apps for display glasses using the Jetpack Compose Glimmer… | — | Android | android/skills |
 | `android-cli` | Provides instructions for installing and using the `android` CLI. | — | Android | android/skills |
 
 </details>
@@ -542,7 +542,7 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutter-setting-up-on-macos` | Sets up a macOS environment for Flutter development. | — | Flutter | flutter/skills |
-| `detect-mobile-stack` | Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its… | — | all | reis-mobile |
+| `mobile-detect-stack` | Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its… | — | all | reis-mobile |
 
 </details>
 
@@ -556,7 +556,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review` and `debug` make no network calls. Only installation touches the network, to download the package and register the plugin. One imported skill, `play-policy-insights`, runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review` and `debug` make no network calls. Only installation touches the network, to download the package and register the plugin. One imported skill, `android-play-policy-insights`, runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 

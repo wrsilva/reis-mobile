@@ -55,7 +55,7 @@ Your mission is to find and remove the bottlenecks users feel: dropped frames, A
 
 ### Background work, battery and size
 - Periodic or long work outside `WorkManager`, wakelocks held too long, polling instead of push
-- Release builds without R8 (`isMinifyEnabled`) and resource shrinking (`isShrinkResources`); keep rules that disable shrinking for whole packages (see the `r8-analyzer` skill)
+- Release builds without R8 (`isMinifyEnabled`) and resource shrinking (`isShrinkResources`); keep rules that disable shrinking for whole packages (see the `android-r8-analyzer` skill)
 
 Confirm the AGP, Kotlin and Compose versions in the build files before recommending APIs or compiler options that depend on them.
 

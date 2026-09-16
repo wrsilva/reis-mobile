@@ -72,7 +72,7 @@ class LoginViewModelTest {
 }
 ```
 
-The names above are illustrative, and `test {}` comes from Turbine. Use the project's real classes, libraries and conventions. The `testing-setup` skill covers configuring a test stack from scratch.
+The names above are illustrative, and `test {}` comes from Turbine. Use the project's real classes, libraries and conventions. The `android-testing-setup` skill covers configuring a test stack from scratch.
 
 ## Workflow
 
