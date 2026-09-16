@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-crashlytics
+name: firebase-crashlytics
 description: Integrates Firebase Crashlytics into Flutter apps. Use when setting up crash reporting, handling fatal and non-fatal errors, customizing crash reports with keys/logs/user identifiers, or configuring opt-in reporting.
 routing: manual
 stacks: [flutter]

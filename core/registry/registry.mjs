@@ -8,14 +8,17 @@ import { parseFrontmatter } from './frontmatter.mjs';
 
 export const ANY_STACK = '*';
 
-/** Every skill name starts with the prefix of the first stack it declares. */
+/**
+ * Every skill name starts with a prefix of the first stack it declares. Firebase skills for
+ * Flutter keep the names Firebase developers search for.
+ */
 export const SKILL_PREFIXES = {
-  [ANY_STACK]: 'mobile-',
-  flutter: 'flutter-',
-  android: 'android-',
-  ios: 'ios-',
-  'react-native': 'rn-',
-  'kotlin-multiplatform': 'kmp-',
+  [ANY_STACK]: ['mobile-'],
+  flutter: ['flutter-', 'firebase-', 'flutterfire-'],
+  android: ['android-'],
+  ios: ['ios-'],
+  'react-native': ['rn-'],
+  'kotlin-multiplatform': ['kmp-'],
 };
 
 /**
@@ -119,9 +122,9 @@ export function validateRegistry({ stacks, agents, skills }) {
 
     if (component.source && !component.license) errors.push(`${label}: "source" requires "license"`);
 
-    const prefix = component.kind === 'skill' ? SKILL_PREFIXES[component.stacks[0]] : undefined;
-    if (prefix && component.name && !component.name.startsWith(prefix)) {
-      errors.push(`${label}: skill name must start with "${prefix}" for stack "${component.stacks[0]}"`);
+    const prefixes = component.kind === 'skill' ? SKILL_PREFIXES[component.stacks[0]] : undefined;
+    if (prefixes && component.name && !prefixes.some((prefix) => component.name.startsWith(prefix))) {
+      errors.push(`${label}: skill name must start with "${prefixes.join('" or "')}" for stack "${component.stacks[0]}"`);
     }
 
     for (const intent of component.intents) {

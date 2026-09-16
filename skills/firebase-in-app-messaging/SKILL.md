@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-in-app-messaging
+name: firebase-in-app-messaging
 description: Integrates Firebase In-App Messaging into Flutter apps. Use when setting up in-app messaging, triggering or suppressing messages, managing user privacy and opt-in data collection, or testing campaigns.
 routing: manual
 stacks: [flutter]

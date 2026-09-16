@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-data-connect
+name: firebase-data-connect
 description: Integrates Firebase Data Connect into Flutter apps. Use when setting up Data Connect, designing queries, handling errors, or applying security and performance best practices.
 routing: manual
 stacks: [flutter]

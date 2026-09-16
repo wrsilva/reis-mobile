@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-database
+name: firebase-database
 description: Integrates Firebase Realtime Database into Flutter apps. Use when setting up Realtime Database, structuring JSON data, querying, performing read/write operations, implementing offline capabilities, or applying security rules.
 routing: manual
 stacks: [flutter]

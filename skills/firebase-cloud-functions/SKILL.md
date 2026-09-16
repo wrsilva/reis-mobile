@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-cloud-functions
+name: firebase-cloud-functions
 description: Calls Firebase Cloud Functions from Flutter apps. Use when setting up callable functions, passing data to functions, handling errors from function calls, optimizing performance, or testing with the Firebase Emulator Suite.
 routing: manual
 stacks: [flutter]

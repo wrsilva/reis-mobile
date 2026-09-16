@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-app-check
+name: firebase-app-check
 description: Integrates Firebase App Check into Flutter apps. Use when setting up App Check, selecting providers per platform, using debug providers during development, enabling enforcement, or applying App Check security best practices.
 intents: [security]
 stacks: [flutter]

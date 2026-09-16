@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-ai
+name: firebase-ai
 description: Integrates Firebase AI Logic into Flutter apps. Use when setting up the firebase_ai plugin, calling Gemini models, handling AI service errors, or applying security and privacy considerations for AI features.
 routing: manual
 stacks: [flutter]

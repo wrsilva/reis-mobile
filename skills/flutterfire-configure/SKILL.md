@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-configure
+name: flutterfire-configure
 description: Sets up Firebase for Flutter apps using FlutterFire CLI. Use when initializing a Firebase project, running flutterfire configure, initializing Firebase in main.dart, or configuring multiple app flavors.
 routing: manual
 stacks: [flutter]

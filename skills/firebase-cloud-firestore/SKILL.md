@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-cloud-firestore
+name: firebase-cloud-firestore
 description: Integrates Cloud Firestore into Flutter apps. Use when setting up Firestore, designing document/collection structure, reading and writing data, working with real-time listeners, designing for scale, or applying security rules.
 routing: manual
 stacks: [flutter]

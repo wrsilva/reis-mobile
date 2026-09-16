@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-messaging
+name: firebase-messaging
 description: Integrates Firebase Cloud Messaging (FCM) into Flutter apps. Use when setting up push notifications, handling foreground/background messages, managing permissions, working with FCM tokens, or configuring platform-specific notification behavior.
 routing: manual
 stacks: [flutter]

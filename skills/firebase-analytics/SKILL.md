@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-analytics
+name: firebase-analytics
 description: Integrates Firebase Analytics into Flutter apps. Use when setting up analytics, logging events, setting user properties, or configuring event parameters.
 routing: manual
 stacks: [flutter]

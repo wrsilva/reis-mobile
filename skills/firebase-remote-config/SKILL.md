@@ -1,5 +1,5 @@
 ---
-name: flutter-firebase-remote-config
+name: firebase-remote-config
 description: Integrates Firebase Remote Config into Flutter apps. Use when setting up Remote Config, managing parameter defaults, fetching and activating values, implementing real-time updates, or handling throttling and testing.
 routing: manual
 stacks: [flutter]
