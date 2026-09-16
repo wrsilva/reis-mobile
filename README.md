@@ -6,7 +6,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.3.1-blue" alt="Version 0.3.1">
+  <img src="https://img.shields.io/badge/Version-0.3.2-blue" alt="Version 0.3.2">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -52,7 +52,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.3.1** (current) | Answers in English or Portuguese: `reis-mobile init pt\|en` and `reis-mobile lang` save the language for reports, doctor explanations and debates. Agents, skills, commands and docs are now written in English. |
+| **v0.3.2** (current) | Shorter namespace: commands and agents move from `/reis-mobile:*` to `/mobile:*`. Run `reis-mobile init` to migrate an existing install. |
+| **v0.3.1** | Answers in English or Portuguese: `reis-mobile init pt\|en` and `reis-mobile lang` save the language for reports, doctor explanations and debates. Agents, skills, commands and docs are now written in English. |
 | **v0.3.0** | `/mobile:debate` command: three specialists with conflicting priorities debate over two rounds and `lead-mobile` decides. Participants vary in role and model; `--external` adds Codex and Gemini. Brings forward the `council` planned for v0.8.0. |
 | **v0.2.1** | `/mobile` command: lists the commands and forwards to `doctor`, `review` or, with a free-form request, to the agent and skills for the detected stack. Shows up in the VS Code extension command menu. |
 | **v0.2.0** | 6 new agents (`flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert`, `lead-mobile`) and 63 new Flutter, Dart and Firebase skills. The router now has a specialist for debug, test, architecture and performance. |
@@ -177,14 +178,14 @@ Then restart Claude Code and run, in your app folder:
 
 | Variable | Default | Use |
 |----------|--------|-----|
-| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.1` |
+| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.2` |
 | `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Installation folder |
 | `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `reis-mobile` command |
 | `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` installs only the CLI, without registering the plugin |
 | `REIS_MOBILE_LANG` | not set | `en` or `pt`: the language the commands answer in (see [Language](#language)) |
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.1 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.2 sh
 ```
 </details>
 
@@ -266,7 +267,7 @@ curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh
 To install a specific version:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.1 sh
+curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.2 sh
 ```
 
 ### CLI on Windows (PowerShell)
@@ -280,7 +281,7 @@ irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 For a specific version:
 
 ```powershell
-$env:REIS_MOBILE_VERSION = 'v0.3.1'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
+$env:REIS_MOBILE_VERSION = 'v0.3.2'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
 ```
 
 ### CLI via Homebrew (macOS/Linux)
@@ -646,6 +647,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 | v0.2.1 | `/mobile` entry command | ✅ |
 | v0.3.0 | `/mobile:debate`: multi-agent with a decision, across distinct roles and models — delivered in place of the `council` planned for v0.8.0 | ✅ |
 | v0.3.1 | Answer language (`reis-mobile init pt\|en`, `reis-mobile lang`) and project content in English | ✅ |
+| v0.3.2 | Plugin renamed to `mobile`: `/mobile:*` commands | ✅ |
 | v0.4.0 | Native Android and iOS skills, `.reis-mobile/config.yaml` and `/mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
 | v0.5.0 | `/mobile:test` and native tests (XCTest, Espresso) | ⏳ |
 | v0.6.0 | `/mobile:release` with quality gates | ⏳ |
