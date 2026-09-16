@@ -1,11 +1,3 @@
----
-name: ios-cocoapods-debug
-description: Diagnoses CocoaPods failures in iOS, Flutter and React Native projects — "could not find compatible versions", outdated spec repos, "sandbox is not in sync with the Podfile.lock", deployment target conflicts, Ruby and CocoaPods installation problems on Apple Silicon, Bundler-managed CocoaPods, post_install hooks and private spec sources. Use whenever `pod install` or `pod update` fails, when an iOS build breaks inside the Pods project, when Podfile or Podfile.lock is involved, or when the user asks whether to delete Pods or run pod update, even if they only paste the error.
-intents: [debug, dependency, build, migration]
-stacks: [ios]
-areas: [cocoapods]
----
-
 # iOS CocoaPods Debug
 
 Most CocoaPods failures come from three places: the spec repository is out of date, the version constraints cannot be satisfied, or the Ruby installation running `pod` is broken. Identify which one before touching `Podfile.lock`.
@@ -44,7 +36,7 @@ In Flutter, run these from `ios/`; `flutter build ios` and `flutter run` already
 ## 4. Build errors inside Pods
 
 - [ ] Pods compiled with a lower deployment target than Xcode supports (warnings like `The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is ...`) → a `post_install` hook that sets the deployment target for the pod targets. Keep the existing hook content (Flutter's `flutter_additional_ios_build_settings` must stay).
-- [ ] Script phases failing with sandbox `deny` errors after moving to Xcode 15 or later → see `ios-xcode-build-debug` (user script sandboxing); updating CocoaPods is the first step.
+- [ ] Script phases failing with sandbox `deny` errors after moving to Xcode 15 or later → see [xcode-build.md](xcode-build.md) (user script sandboxing); updating CocoaPods is the first step.
 - [ ] `No such module` for a pod → the project was built as `.xcodeproj` instead of `.xcworkspace`, or the target is missing from the `Podfile`.
 - [ ] `use_frameworks!` changes (static vs dynamic) → some pods require one mode; changing it affects every pod. Check each pod's installation notes before switching.
 

@@ -1,11 +1,4 @@
----
-name: flutter-errors
-description: Diagnoses and fixes common Flutter errors. Use when encountering layout errors (RenderFlex overflow, unbounded constraints, RenderBox not laid out), scroll errors, or setState-during-build errors.
-intents: [debug]
-stacks: [flutter]
-source: https://github.com/evanca/flutter-ai-rules
-license: MIT
----
+> Adapted from the `flutter-errors` skill in [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) (MIT). See `THIRD_PARTY_NOTICES.md`.
 
 # Flutter Errors Skill
 

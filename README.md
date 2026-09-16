@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 69 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **16 agents and 62 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -235,7 +235,7 @@ $ reis-mobile route "Execution failed for task ':app:compileDebugKotlin'"
 Intent      debug (confidence 0.5) · area gradle
 Stack       flutter · focus android
 Agent       mobile-staff-engineer
-Skills      flutter-build-debug, flutter-dart-fix-runtime-errors, flutter-dart-resolve-package-conflicts, flutter-errors, flutter-fix-layout-issues, android-gradle-build-debug
+Skills      mobile-debug
 
 $ reis-mobile route "write tests for the login cubit"
 Intent      test (confidence 1)
@@ -276,8 +276,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 69 mobile skills |
-| **Context cost** | Zero | ~7,900 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 62 mobile skills |
+| **Context cost** | Zero | ~7,300 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -377,15 +377,11 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Debug</strong> (5)</summary>
+<summary><strong>Debug</strong> (1)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `flutter-errors` | Diagnoses and fixes common Flutter errors. | debug | Flutter | evanca/flutter-ai-rules |
-| `flutter-fix-layout-issues` | Fixes Flutter layout errors (overflows, unbounded constraints) using Dart and Flutter MCP tools. | debug | Flutter | flutter/skills |
-| `flutter-dart-fix-runtime-errors` | Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and verify… | debug | Flutter | dart-lang/skills |
-| `flutter-dart-resolve-package-conflicts` | Workflow for fixing package version conflicts. | debug, dependency | Flutter | dart-lang/skills |
-| `flutter-build-debug` | Diagnoses failing Flutter builds by locating the layer that broke — Dart compilation, pub version solving… | debug, build, dependency, migration | Flutter | reis-mobile |
+| `mobile-debug` | Failing builds and runtime errors on Flutter, native Android, native iOS and React Native: Gradle, Xcode, CocoaPods, Metro, pub, crash logs and ANRs, with a guide per platform and layer. | debug, build, dependency, migration | all | reis-mobile, evanca/flutter-ai-rules, flutter/skills, dart-lang/skills |
 
 </details>
 
@@ -468,11 +464,10 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native Android</strong> (24)</summary>
+<summary><strong>Native Android</strong> (23)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
-| `android-gradle-build-debug` | Diagnoses failing Android Gradle builds — JDK, Gradle, Android Gradle Plugin and Kotlin version mismatches… | debug, build, dependency, migration | Android, kotlin-multiplatform | reis-mobile |
 | `android-intent-security` | Best practices for Android Intent security. | security, review | Android | android/skills |
 | `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
 | `android-r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
@@ -500,16 +495,6 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 </details>
 
 <details>
-<summary><strong>Native iOS</strong> (2)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `ios-xcode-build-debug` | Diagnoses failing iOS builds in Xcode and xcodebuild — code signing and provisioning, deployment target… | debug, build, release, migration | iOS | reis-mobile |
-| `ios-cocoapods-debug` | Diagnoses CocoaPods failures in iOS, Flutter and React Native projects — "could not find compatible versions"… | debug, dependency, build, migration | iOS | reis-mobile |
-
-</details>
-
-<details>
 <summary><strong>Environment</strong> (2)</summary>
 
 | Skill | What it does | Auto-routed for | Stack | Origin |
@@ -533,7 +518,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 69 skills add up to about 7,900 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 62 skills add up to about 7,300 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
@@ -580,7 +565,7 @@ app: apps/mobile
 Every command then analyzes `apps/mobile`, wherever in the repository you run it, and the review diff is restricted to that folder. Without the file, run from the app folder or pass `--dir apps/mobile`.
 
 **Does it work with native Android and iOS?**
-Yes. Native Android has its own architect, performance and test agents, review and Gradle debugging skills, and the Android team's skills from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more). Native iOS has its own agents and skills for review, Xcode and CocoaPods. React Native has architect, performance and test agents; its skills are still on the roadmap.
+Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). Android also has the Android team's skills from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more).
 
 **I already have skills with the same names in `~/.claude/skills`.**
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.

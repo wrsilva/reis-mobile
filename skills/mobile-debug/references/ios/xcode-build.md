@@ -1,11 +1,3 @@
----
-name: ios-xcode-build-debug
-description: Diagnoses failing iOS builds in Xcode and xcodebuild — code signing and provisioning, deployment target mismatches, "No such module", Apple Silicon simulator architecture errors, script phases failing under user script sandboxing, Swift Package Manager resolution, duplicate build outputs and errors after upgrading Xcode or Swift. Use whenever an iOS, Flutter or React Native build fails in Xcode, when the log shows "Command PhaseScriptExecution failed", "Signing for ... requires a development team", "Undefined symbols" or "BUILD FAILED", or when an archive or TestFlight upload breaks, even if the user only pastes the error.
-intents: [debug, build, release, migration]
-stacks: [ios]
-areas: [xcode, signing, spm]
----
-
 # iOS Xcode Build Debug
 
 Xcode shows the last error loudly and the first one quietly. Work in this order: find the first real error, collect the versions, then match the error to a section below. Confirm every cause in the project files before proposing a fix.

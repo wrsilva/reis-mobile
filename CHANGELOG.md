@@ -7,6 +7,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 ### Changed
 
 - **Breaking:** the review skills are consolidated into `mobile-code-review`, with the review process in `SKILL.md` and a checklist per platform: Flutter (the former `flutter-code-review`, `flutter-widget-review`, `flutter-project-audit` and `flutter-dart-run-static-analysis`, in `references/flutter/`), native Android (the former `android-code-review`), native iOS (the former `ios-code-review`) and a new React Native checklist. `mobile-security-audit`, `android-intent-security` and `flutter-effective-dart` stay separate. A review request on a Flutter app loads 3 skills instead of 6.
+- **Breaking:** the debugging skills are consolidated into `mobile-debug`, with the debugging process in `SKILL.md` and a guide per platform and layer: Flutter (the former `flutter-build-debug`, `flutter-errors`, `flutter-fix-layout-issues`, `flutter-dart-fix-runtime-errors` and `flutter-dart-resolve-package-conflicts`, in `references/flutter/`), Android (the former `android-gradle-build-debug`, plus runtime crashes, R8 retrace and ANRs), iOS (the former `ios-xcode-build-debug` and `ios-cocoapods-debug`, plus crash logs and sanitizers) and a new React Native guide (Metro, native modules not found, Hermes). `/reis-mobile:debug` passes the detected area so the skill opens the right guide.
 
 ## [0.4.0] - 2026-09-16
 

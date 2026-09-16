@@ -1,11 +1,3 @@
----
-name: android-gradle-build-debug
-description: Diagnoses failing Android Gradle builds — JDK, Gradle, Android Gradle Plugin and Kotlin version mismatches, dependency resolution and duplicate classes, compileSdk and minSdk errors, manifest merger and namespace failures, kapt/KSP, R8 missing classes, signing and out-of-memory builds. Use whenever an Android, Kotlin Multiplatform, Flutter or React Native build fails in Gradle, when the log shows "What went wrong", "Execution failed for task" or "BUILD FAILED", or after upgrading AGP, Gradle, Kotlin or the JDK, even if the user only pastes the error.
-intents: [debug, build, dependency, migration]
-stacks: [android, kotlin-multiplatform]
-areas: [gradle, manifest, proguard, signing]
----
-
 # Android Gradle Build Debug
 
 A Gradle failure is usually one of a few causes wearing a long stack trace. Work in this order: find the first real error, check the toolchain versions, then match the error to a section below. Confirm every cause in the build files before proposing a fix.

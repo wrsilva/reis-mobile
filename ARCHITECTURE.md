@@ -77,7 +77,7 @@ Every matching stack appears in `candidates`. The first one is the main stack.
 1. **Intent.** The command's explicit intent wins. Without one, the prompt terms are normalized (lowercase, no accents) and counted, in English and Portuguese. Longer terms claim their span first, so "testflight" does not count as "test". Build, deploy, dependency or migration failures become `debug`.
 2. **Stack.** The stack detected on disk wins. Platforms mentioned in the prompt, or implied by the area (`gradle` → android, `xcode` → ios), become `platformFocus` when the project has them.
 3. **Agent.** Must declare the intent. A stack-specific agent beats a `"*"` agent.
-4. **Skills.** Must declare the intent. The order is: main stack, then focused platforms, then `"*"`. Among skills of the same stack, one that declares the detected area (`areas: [cocoapods]`) comes first, so a CocoaPods failure reads `ios-cocoapods-debug` before `ios-xcode-build-debug`.
+4. **Skills.** Must declare the intent. The order is: main stack, then focused platforms, then `"*"`. Among skills of the same stack, one that declares the detected area (`areas: [cocoapods]`) comes first. Cross-platform skills such as `mobile-debug` do not declare areas: they receive the detected `area` in the command output and pick the matching reference themselves.
 
 Components with `routing: manual` are never selected by the router. Claude Code invokes them only by their description.
 

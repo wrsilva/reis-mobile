@@ -27,7 +27,7 @@ describe('route', () => {
     ['architecture', 'flutter-architect', 'flutter-app-architecture'],
     ['performance', 'flutter-performance-engineer', 'mobile-code-review'],
     ['test', 'flutter-test-engineer', 'mobile-test'],
-    ['debug', 'mobile-staff-engineer', 'flutter-errors'],
+    ['debug', 'mobile-staff-engineer', 'mobile-debug'],
     ['accessibility', 'mobile-staff-engineer', 'flutter-improving-accessibility'],
   ]) {
     it(`routes ${intent} on Flutter to ${agent} with ${skill}`, async () => {
@@ -90,23 +90,23 @@ describe('route', () => {
     assert.deepEqual(names(result.skills), ['mobile-code-review', 'mobile-security-audit']);
   });
 
-  it('debugs a CocoaPods failure with the CocoaPods skill first', async () => {
+  it('debugs a CocoaPods failure with mobile-debug and reports the area it belongs to', async () => {
     const dir = await makeProject({ 'App.xcodeproj/project.pbxproj': '', Podfile: "platform :ios, '15.0'\n" });
 
     const result = await route({ prompt: 'pod install falha: could not find compatible versions', intent: 'debug', projectDir: dir });
 
     assert.equal(result.area, 'cocoapods');
-    assert.deepEqual(names(result.skills).slice(0, 2), ['ios-cocoapods-debug', 'ios-xcode-build-debug']);
+    assert.ok(names(result.skills).includes('mobile-debug'));
   });
 
-  it('debugs the Android build of a Flutter app with Flutter first, then Gradle', async () => {
+  it('debugs the Android build of a Flutter app with mobile-debug and an Android focus', async () => {
     const dir = await makeProject(FLUTTER_APP);
 
     const result = await route({ prompt: 'the android gradle build fails', intent: 'debug', projectDir: dir });
-    const skills = names(result.skills);
 
-    assert.equal(skills[0], 'flutter-build-debug');
-    assert.ok(skills.indexOf('android-gradle-build-debug') > skills.lastIndexOf('flutter-errors'), 'native skills follow every Flutter skill');
+    assert.equal(result.area, 'gradle');
+    assert.deepEqual(result.platformFocus, ['android']);
+    assert.ok(names(result.skills).includes('mobile-debug'));
   });
 
   it('focuses a cross-platform project on the native platform named in the prompt', async () => {

@@ -1,14 +1,5 @@
----
-name: flutter-dart-fix-runtime-errors
-description: Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and verify resolution via hot_reload.
-metadata:
-  model: models/gemini-3.1-pro-preview
-  last_modified: Fri, 24 Apr 2026 15:13:22 GMT
-intents: [debug]
-stacks: [flutter]
-source: https://github.com/dart-lang/skills
-license: BSD-3-Clause
----
+> Adapted from the `dart-fix-runtime-errors` skill in [dart-lang/skills](https://github.com/dart-lang/skills) (BSD-3-Clause). See `THIRD_PARTY_NOTICES.md`.
+
 # Resolving Dart Static Analysis Errors
 
 ## Contents

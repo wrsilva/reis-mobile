@@ -37,7 +37,7 @@ The CLI output has a `Language` line. Write everything the user reads in that la
 Read with the Read tool, in this order:
 
 1. `${CLAUDE_PLUGIN_ROOT}/agents/<Agent>.md`;
-2. `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` for each listed skill. The first skills are the most specific to the stack and area; read them all, since a failure often crosses layers (a Flutter build that fails inside Gradle).
+2. `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/SKILL.md` for each listed skill. `mobile-debug` maps the stack and the `area` from step 1 to its platform references; read the reference for each layer the failure crosses (a Flutter build that fails inside Gradle needs the Flutter and the Android references).
 
 ## 3. Diagnose
 

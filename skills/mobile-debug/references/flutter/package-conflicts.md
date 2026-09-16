@@ -1,14 +1,5 @@
----
-name: flutter-dart-resolve-package-conflicts
-description: Workflow for fixing package version conflicts. Use this when `pub get` fails due to incompatible package versions.
-metadata:
-  model: models/gemini-3.1-pro-preview
-  last_modified: Fri, 24 Apr 2026 15:11:14 GMT
-intents: [debug, dependency]
-stacks: [flutter]
-source: https://github.com/dart-lang/skills
-license: BSD-3-Clause
----
+> Adapted from the `dart-resolve-package-conflicts` skill in [dart-lang/skills](https://github.com/dart-lang/skills) (BSD-3-Clause). See `THIRD_PARTY_NOTICES.md`.
+
 # Managing Dart Dependencies
 
 ## Contents
