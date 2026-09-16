@@ -6,7 +6,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.3.4-blue" alt="Version 0.3.4">
+  <img src="https://img.shields.io/badge/Version-0.3.5-blue" alt="Version 0.3.5">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -35,7 +35,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔒 **Secrets never reach the model.** The diff sent for review goes through a layer that masks API keys, tokens, JWTs, private keys and keystore passwords.
 
-🪶 **No dependencies.** Installs with one command, zero npm dependencies, no hooks, no external provider.
+🪶 **No dependencies.** `npx reis-mobile init`, zero npm dependencies, no hooks, no external provider.
 
 ---
 
@@ -52,7 +52,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.3.4** (current) | Back to the `reis-mobile` name: `reis-mobile` CLI and `/reis-mobile:*` commands, undoing the `mobile` renames of v0.3.2 and v0.3.3. |
+| **v0.3.5** (current) | Installs through npm (`npx reis-mobile init`) and the Claude Code and Codex plugins. Homebrew and the curl/PowerShell installers are discontinued. |
+| **v0.3.4** | Back to the `reis-mobile` name: `reis-mobile` CLI and `/reis-mobile:*` commands, undoing the `mobile` renames of v0.3.2 and v0.3.3. |
 | **v0.3.1** | Answers in English or Portuguese: `reis-mobile init pt\|en` and `reis-mobile lang` save the language for reports, doctor explanations and debates. Agents, skills, commands and docs are now written in English. |
 | **v0.3.0** | `/reis-mobile:debate` command: three specialists with conflicting priorities debate over two rounds and `lead-mobile` decides. Participants vary in role and model; `--external` adds Codex and Gemini. Brings forward the `council` planned for v0.8.0. |
 | **v0.2.1** | `/reis-mobile` command: lists the commands and forwards to `doctor`, `review` or, with a free-form request, to the agent and skills for the detected stack. Shows up in the VS Code extension command menu. |
@@ -63,86 +64,67 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 ## Installation
 
-Requirements: **Node.js 22+** and, to use the `/reis-mobile:*` commands, **[Claude Code](https://claude.com/claude-code)**.
+reis-mobile ships through three channels:
 
-The installers and Homebrew install the `reis-mobile` CLI. When Claude Code is available, the installer also registers the plugin. If it is not, run `reis-mobile init` after installing it. To install only the plugin, follow the [Claude Code](#claude-code-plugin-only) or [Codex](#codex-plugin-from-github) section.
+| Channel | What you get |
+|---|---|
+| **Claude Code plugin** | Everything: 7 agents, 67 skills and the `/reis-mobile:*` commands |
+| **Codex plugin** | The skills, plus the CLI if you install it from npm |
+| **npm** | The `reis-mobile` CLI: `init`, `doctor`, `route`, `review`, `lang`, and the router the commands rely on |
 
-### Quick Install (macOS/Linux) — recommended
+Requirements: **Node.js 22+**. For the plugins, **[Claude Code](https://claude.com/claude-code)** or the **Codex CLI**.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
-```
-
-Installs to `~/.local/share/reis-mobile`, creates the command in `~/.local/bin` and checks the download's SHA-256. If `~/.local/bin` is not on your `PATH`:
-
-```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc   # or ~/.bashrc
-```
-
-### Windows (PowerShell)
-
-```powershell
-irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
-```
-
-Installs to `%LOCALAPPDATA%\reis-mobile`, creates `reis-mobile.cmd` in `%USERPROFILE%\.local\bin` and adds that folder to the user `PATH`. Open a new terminal afterwards.
-
-### Homebrew
+### Claude Code (recommended)
 
 ```bash
-brew install wrsilva/tap/reis-mobile
-reis-mobile init
+npx reis-mobile init pt      # registers the plugin and answers in Portuguese; use "en" for English
 ```
 
-### npm (coming soon)
-
-The package has not been published to npm yet. Once it is:
+Or install the CLI globally and keep it around for `doctor`, `route` and `review`:
 
 ```bash
 npm install -g reis-mobile
-reis-mobile init
+reis-mobile init pt
 ```
 
-### Claude Code plugin only
+Without Node.js tooling, add the plugin straight from GitHub:
 
 ```bash
 claude plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 claude plugin install reis-mobile@reis-mobile
 ```
 
-### Codex plugin from GitHub
+Restart Claude Code and run, in your app folder:
 
-With the Codex CLI installed and supporting `codex plugin`, run in the terminal:
+```text
+/reis-mobile
+/reis-mobile:doctor
+/reis-mobile:review
+```
+
+### Codex
+
+With the Codex CLI installed and supporting `codex plugin`:
 
 ```bash
 codex plugin marketplace add https://github.com/wrsilva/reis-mobile.git
 codex plugin add reis-mobile@reis-mobile
 ```
 
-The first command registers the marketplace with GitHub as its source; the second installs the plugin into the Codex cache. It is the same repository used by Claude Code, with no need for a development clone or links in `~/.agents/skills/`. Installing plugin `0.2.1` through this flow has been verified.
-
-Check the source, the installation and whether the plugin is enabled:
-
-```bash
-codex plugin marketplace list --json
-codex plugin list --json
-```
-
-Look for `reis-mobile@reis-mobile` with `installed: true`, `enabled: true` and the Git source `https://github.com/wrsilva/reis-mobile.git`.
+The first command registers the marketplace with GitHub as its source; the second installs the plugin into the Codex cache. Check it with `codex plugin list --json`: look for `reis-mobile@reis-mobile` with `installed: true` and `enabled: true`.
 
 Restart Codex and open a conversation in your mobile app folder. In the CLI or the IDE extension, type `$` in the message field to search for skills, or use `/skills`. See the [official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills#how-chatgpt-and-codex-use-skills).
 
-Registering the plugin and the availability of each feature are separate checks: the installation validated above does not confirm that the agents or the Claude Code `/reis-mobile:*` commands run in Codex. To use `doctor`, `route` and `review` through the CLI, also install `reis-mobile` with one of the methods above and run it in the app folder:
+The plugin gives Codex the skills; the agents and the `/reis-mobile:*` commands are Claude Code formats and have not been validated in Codex. For routing and review context, install the CLI from npm and run it in the app folder:
 
 ```bash
+npm install -g reis-mobile
 reis-mobile doctor
 reis-mobile route "review architecture" --json
 reis-mobile review --json
 ```
 
 You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis.
-
-`reis-mobile init` registers the plugin in Claude Code. To register it in Codex, use the `codex plugin` commands in this section, even if the `reis-mobile` CLI is already installed through Homebrew.
 
 ### Language
 
@@ -155,61 +137,35 @@ reis-mobile lang pt          # change the language later, without reinstalling
 reis-mobile lang             # show the current language
 ```
 
-With the installers, pass it through the environment: `curl -fsSL .../install.sh | REIS_MOBILE_LANG=pt sh`.
-
 The choice is saved to `~/.config/reis-mobile/config.json` (`%APPDATA%\reis-mobile\config.json` on Windows), so it survives `claude plugin update`. Precedence is `--lang` on a single run, then the `REIS_MOBILE_LANG` environment variable, then the saved file. With nothing set, each command answers in the language of your request. Agents that Claude Code triggers on its own, outside a `/reis-mobile:*` command, follow the language of the conversation.
-
-### Verify the CLI and the Claude Code plugin
-
-```bash
-reis-mobile --version   # reis-mobile 0.2.1
-```
-
-Then restart Claude Code and run, in your app folder:
-
-```text
-/reis-mobile
-/reis-mobile:doctor
-/reis-mobile:review
-```
-
-<details>
-<summary>Installer options</summary>
-
-| Variable | Default | Use |
-|----------|--------|-----|
-| `REIS_MOBILE_VERSION` | latest release | Installs a specific tag, for example `v0.3.4` |
-| `REIS_MOBILE_HOME` | `~/.local/share/reis-mobile` | Installation folder |
-| `REIS_MOBILE_BIN_DIR` | `~/.local/bin` | Folder for the `reis-mobile` command |
-| `REIS_MOBILE_SKIP_PLUGIN` | `0` | `1` installs only the CLI, without registering the plugin |
-| `REIS_MOBILE_LANG` | not set | `en` or `pt`: the language the commands answer in (see [Language](#language)) |
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.4 sh
-```
-</details>
 
 <details>
 <summary>Uninstall</summary>
 
-Remove the Claude Code plugin first and then the CLI, using the same method used to install it.
+```bash
+reis-mobile init --uninstall        # Claude Code plugin, its marketplace and the saved language
+npm uninstall -g reis-mobile        # CLI
+
+codex plugin remove reis-mobile@reis-mobile
+codex plugin marketplace remove reis-mobile
+```
+</details>
+
+<details>
+<summary>Installed with Homebrew or the curl/PowerShell installer?</summary>
+
+Those channels were discontinued after v0.3.4. Remove them and install from npm:
 
 ```bash
-# Claude Code plugin and saved language (any platform)
-reis-mobile init --uninstall
-# or, without the CLI:
-claude plugin uninstall reis-mobile && claude plugin marketplace remove reis-mobile
-
-# macOS/Linux (curl)
-rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile
-
 # Homebrew
-brew uninstall reis-mobile
-brew untap wrsilva/tap            # optional
+brew uninstall reis-mobile && brew untap wrsilva/tap
+
+# curl installer (macOS/Linux)
+rm -rf ~/.local/share/reis-mobile ~/.local/bin/reis-mobile
 ```
 
 ```powershell
-# Windows (PowerShell)
+# PowerShell installer (Windows)
 Remove-Item -Recurse -Force "$env:LOCALAPPDATA\reis-mobile"
 Remove-Item -Force "$HOME\.local\bin\reis-mobile.cmd"
 ```
@@ -233,72 +189,30 @@ After editing agents, skills or commands, restart the Claude Code session.
 
 ## Updating
 
-reis-mobile has two parts that update separately: the **Claude Code plugin** (agents, skills and `/reis-mobile:*` commands) and the **CLI** (`reis-mobile`). Update both.
-
 To see what changed, check the [CHANGELOG](CHANGELOG.md) or the [releases](https://github.com/wrsilva/reis-mobile/releases).
 
-### Claude Code plugin (all platforms)
-
 ```bash
+# Claude Code plugin
 claude plugin marketplace update reis-mobile
 claude plugin update reis-mobile@reis-mobile
-```
 
-Then **restart Claude Code**. The update only happens when a new version is out; if you are already on the latest, the command answers `already at the latest version`.
+# Codex plugin
+codex plugin marketplace upgrade reis-mobile
 
-> **Installed v0.3.2 or v0.3.3?** Those versions renamed the plugin and the CLI to `mobile`; v0.3.4 goes back to `reis-mobile`. Update the CLI (`brew upgrade reis-mobile` or the installer, which remove the `mobile` command) and run `reis-mobile init`: it installs `reis-mobile@reis-mobile` and removes `mobile@reis-mobile`. In Codex: `codex plugin marketplace upgrade reis-mobile`, `codex plugin add reis-mobile@reis-mobile` and `codex plugin remove mobile@reis-mobile`.
-
-### CLI on macOS/Linux (curl)
-
-Run the installer again. It downloads the latest release, checks the SHA-256 and replaces the previous version:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | sh
-```
-
-To install a specific version:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.sh | REIS_MOBILE_VERSION=v0.3.4 sh
-```
-
-### CLI on Windows (PowerShell)
-
-Run the installer again:
-
-```powershell
-irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
-```
-
-For a specific version:
-
-```powershell
-$env:REIS_MOBILE_VERSION = 'v0.3.4'; irm https://raw.githubusercontent.com/wrsilva/reis-mobile/main/install.ps1 | iex
-```
-
-### CLI via Homebrew (macOS/Linux)
-
-```bash
-brew update
-brew upgrade reis-mobile
-```
-
-### CLI via npm (coming soon)
-
-Available once the package is published to npm:
-
-```bash
+# CLI
 npm update -g reis-mobile
 ```
 
-### Check the versions
+Then **restart Claude Code or Codex**. The plugin update only happens when a new version is out; if you are already on the latest, Claude Code answers `already at the latest version`.
+
+Check that the CLI and the plugin match:
 
 ```bash
-reis-mobile --version                  # CLI
-claude plugin list | grep -A1 reis-mobile  # plugin
+reis-mobile --version
+claude plugin list | grep -A1 reis-mobile
 ```
 
-Both should show the same version.
+> **Installed v0.3.2 or v0.3.3?** Those versions renamed the plugin and the CLI to `mobile`; v0.3.4 goes back to `reis-mobile`. Run `reis-mobile init`: it installs `reis-mobile@reis-mobile` and removes `mobile@reis-mobile`. In Codex: `codex plugin add reis-mobile@reis-mobile` and `codex plugin remove mobile@reis-mobile`.
 
 <details>
 <summary>Update troubleshooting</summary>
@@ -307,9 +221,7 @@ Both should show the same version.
 |---------|---------|
 | `claude plugin update` says it is already on the latest version, but the release is newer | Run `claude plugin marketplace update reis-mobile` before `update` |
 | New agents or skills do not show up | Restart Claude Code: plugins only reload in a new session |
-| `brew upgrade` does not find the new version | Run `brew update` first; the tap formula is updated right after each release |
-| `reis-mobile --version` is still old after curl | Another `reis-mobile` comes first on the `PATH`; check with `which -a reis-mobile` |
-| Windows is still on the old version | Open a new terminal and check with `where.exe reis-mobile` |
+| `reis-mobile --version` is still old after `npm update -g` | Another `reis-mobile` comes first on the `PATH`, often from Homebrew or the old installers; check with `which -a reis-mobile` (`where.exe reis-mobile` on Windows) |
 | Plugin broken after updating | Reinstall: `reis-mobile init --uninstall` and then `reis-mobile init` |
 
 </details>
@@ -615,7 +527,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route` and `review` make no network calls. Only installation touches the network, to download the release and register the plugin. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route` and `review` make no network calls. Only installation touches the network, to download the package and register the plugin. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
@@ -625,7 +537,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Own namespace.** Commands live under `/reis-mobile:*` and do not conflict with the built-in `/review` or `/security-review`.
 
-**Verifiable installation.** The installers check the release SHA-256 and do not ask for `sudo`. `reis-mobile init --uninstall` removes the plugin without leaving configuration behind.
+**Clean uninstall.** `reis-mobile init --uninstall` removes the plugin, its marketplace and the saved language without leaving configuration behind.
 
 ---
 
@@ -639,6 +551,7 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 | v0.3.0 | `/reis-mobile:debate`: multi-agent with a decision, across distinct roles and models — delivered in place of the `council` planned for v0.8.0 | ✅ |
 | v0.3.1 | Answer language (`reis-mobile init pt\|en`, `reis-mobile lang`) and project content in English | ✅ |
 | v0.3.4 | Back to the `reis-mobile` name after the `mobile` renames of v0.3.2 and v0.3.3 | ✅ |
+| v0.3.5 | Distribution through npm and the Claude Code and Codex plugins only | ✅ |
 | v0.4.0 | Native Android and iOS skills, `.reis-mobile/config.yaml` and `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ⏳ |
 | v0.5.0 | `/reis-mobile:test` and native tests (XCTest, Espresso) | ⏳ |
 | v0.6.0 | `/reis-mobile:release` with quality gates | ⏳ |
@@ -664,7 +577,7 @@ Detection, the doctor, the security skill and the `mobile-code-reviewer`, `mobil
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
 
 **Does it work in Codex?**
-The marketplace and plugin `0.2.1` can be installed straight from GitHub with `codex plugin`. See [installation and usage in Codex](#codex-plugin-from-github). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
+The marketplace and plugin `0.2.1` can be installed straight from GitHub with `codex plugin`. See [installation and usage in Codex](#codex). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
 
 **Does it work in Cursor?**
 The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.8.0.

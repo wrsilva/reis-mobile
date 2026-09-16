@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { MARKETPLACE_URL, PLUGIN_ID, installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
-import { renderFormula } from '../scripts/homebrew-formula.mjs';
+import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { checkVersions, readVersions } from '../scripts/versions.mjs';
 
 describe('versions', () => {
@@ -93,19 +95,17 @@ describe('Claude Code plugin install', () => {
   });
 });
 
-describe('Homebrew formula', () => {
-  const sha256 = 'a'.repeat(64);
+describe('npm package', () => {
+  const manifest = JSON.parse(readFileSync(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
 
-  it('points at the release asset verified by install.sh', () => {
-    const formula = renderFormula({ tag: 'v0.1.0', sha256 });
-
-    assert.match(formula, /url "https:\/\/github\.com\/wrsilva\/reis-mobile\/releases\/download\/v0\.1\.0\/reis-mobile-v0\.1\.0\.tar\.gz"/);
-    assert.match(formula, new RegExp(`sha256 "${sha256}"`));
-    assert.match(formula, /depends_on "node"/);
+  it('ships the license notices of the third-party skills it redistributes', () => {
+    assert.ok(manifest.files.includes('THIRD_PARTY_NOTICES.md'));
   });
 
-  it('refuses invalid input', () => {
-    assert.throws(() => renderFormula({ tag: '0.1.0', sha256 }), /Invalid tag/);
-    assert.throws(() => renderFormula({ tag: 'v0.1.0', sha256: 'abc' }), /Invalid sha256/);
+  it('ships everything the plugins and the CLI load at runtime', () => {
+    for (const path of ['.claude-plugin', 'agents', 'bin', 'commands', 'core', 'skills', 'stacks']) {
+      assert.ok(manifest.files.includes(path), `package.json "files" is missing ${path}`);
+    }
+    assert.equal(manifest.bin['reis-mobile'], 'bin/reis-mobile.mjs');
   });
 });

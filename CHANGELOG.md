@@ -2,6 +2,18 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.5] - 2026-09-16
+
+### Changed
+
+- reis-mobile now ships only as the Claude Code plugin, the Codex plugin and the `reis-mobile` npm package (`npx reis-mobile init`). The Homebrew formula and the `install.sh` / `install.ps1` installers are discontinued; the README explains how to remove them.
+- Releases no longer attach a tarball, `SHA256SUMS` or a Homebrew formula. The release workflow can run twice for the same tag without failing: it skips a GitHub release or npm version that already exists.
+- CI packs the npm package and installs it globally on Linux, macOS and Windows, replacing the installer tests.
+
+### Fixed
+
+- The npm package did not include `THIRD_PARTY_NOTICES.md`, which the licenses of the imported skills require. It now ships it, along with `CHANGELOG.md`.
+
 ## [0.3.4] - 2026-09-16
 
 ### Changed

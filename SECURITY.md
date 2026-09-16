@@ -21,5 +21,5 @@ This repository and the projects analyzed by reis-mobile must not contain:
 - **Read-only.** `detect`, `doctor`, `route` and `review` do not modify the analyzed project.
 - **Secrets masked.** The diff sent to the model goes through `core/security/redact.mjs`, which masks `Authorization` headers, JWTs, AWS, Google and GitHub keys, private key blocks and assignments such as `apiKey = "..."`, `API_KEY=...` and `storePassword=...`.
 - **Lock files and generated code** stay out of the diff body.
-- **Installers verify integrity.** `install.sh` and `install.ps1` download the release asset and abort if the SHA-256 does not match `SHA256SUMS`. To audit before running, download the script and read it: `curl -fsSL .../install.sh -o install.sh`.
+- **Published with provenance.** The release workflow publishes to npm with `--provenance`, so each version links back to the commit and workflow run that built it. Inspect the package before installing with `npm pack reis-mobile --dry-run`.
 - Redaction is a protection layer, not a guarantee. Do not rely on it to expose repositories with committed secrets.

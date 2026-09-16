@@ -61,12 +61,11 @@ body:
     attributes:
       label: How you installed it
       options:
-        - curl (install.sh)
-        - PowerShell (install.ps1)
-        - Homebrew
-        - npm
+        - npm (npm install -g or npx)
         - Claude Code plugin only
+        - Codex plugin
         - Local clone
+        - Homebrew or curl/PowerShell installer (discontinued)
     validations:
       required: true
   - type: input

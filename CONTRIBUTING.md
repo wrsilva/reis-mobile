@@ -65,6 +65,8 @@ A good reis-mobile skill:
 
 1. Update the version in `package.json`, `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, and record the changes in `CHANGELOG.md`.
 2. `node scripts/versions.mjs vX.Y.Z` confirms everything matches.
-3. Commit, `git tag vX.Y.Z` and `git push origin main vX.Y.Z`.
-4. The **Release** workflow runs the tests and publishes the tarball, `SHA256SUMS` and `reis-mobile.rb` to the release. If the `NPM_TOKEN` secret exists, it also publishes to npm.
-5. Copy `reis-mobile.rb` from the release to `Formula/reis-mobile.rb` in the `wrsilva/homebrew-tap` repository.
+3. `npm pack --dry-run` lists what the npm package will contain.
+4. Commit, `git tag -a vX.Y.Z` and `git push origin main vX.Y.Z`.
+5. The **Release** workflow runs the tests, creates the GitHub release and publishes to npm with the `NPM_TOKEN` secret. Both steps skip what already exists, so re-running the workflow is safe.
+
+The Claude Code and Codex plugins update from the repository itself: there is nothing else to publish.

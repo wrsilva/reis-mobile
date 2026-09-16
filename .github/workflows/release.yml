@@ -8,6 +8,10 @@ permissions:
   contents: write
   id-token: write
 
+# GitHub has delivered the same tag push twice; the steps below are safe to repeat.
+concurrency:
+  group: release-${{ github.ref }}
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -27,30 +31,18 @@ jobs:
       - name: Validate and test
         run: npm run check
 
-      - name: Build release archive
-        run: |
-          asset="reis-mobile-${TAG}.tar.gz"
-          git archive --format=tar.gz --prefix="reis-mobile-${TAG#v}/" -o "$asset" "$TAG"
-          sha256sum "$asset" > SHA256SUMS
-          node scripts/homebrew-formula.mjs "$TAG" "$(cut -d ' ' -f 1 SHA256SUMS)" > reis-mobile.rb
-          {
-            echo "## Homebrew formula"
-            echo 'Copy to `Formula/reis-mobile.rb` in `wrsilva/homebrew-tap`:'
-            echo '```ruby'
-            cat reis-mobile.rb
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "$TAG" "reis-mobile-${TAG}.tar.gz" SHA256SUMS reis-mobile.rb \
-            --title "reis-mobile ${TAG}" \
-            --generate-notes
+        run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "reis-mobile ${TAG}" --generate-notes
 
       - name: Publish to npm
         if: env.NPM_TOKEN != ''
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
+        run: |
+          if npm view "reis-mobile@${TAG#v}" version >/dev/null 2>&1; then
+            echo "reis-mobile@${TAG#v} is already on npm"
+          else
+            npm publish --provenance --access public
+          fi
