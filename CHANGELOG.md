@@ -2,7 +2,7 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.5.0] - 2026-09-16
 
 ### Changed
 
@@ -15,6 +15,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 - `mobile-android` holds the 22 remaining guides from `android/skills`, grouped by theme, each as a folder with its references and scripts.
 - New `mobile-ios` and `mobile-rn` skills with guides for UI and navigation, data and networking, platform features, and performance and release.
 - The plugin's fixed context cost drops to about 3,900 tokens per session.
+- The npm description and keywords, and the README introduction, name the stacks and tools people search for (Flutter, iOS, React Native, Claude Code, Codex, agent skills).
 
 ## [0.4.0] - 2026-09-16
 

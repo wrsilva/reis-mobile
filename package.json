@@ -1,7 +1,7 @@
 {
   "name": "reis-mobile",
-  "version": "0.4.0",
-  "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development.",
+  "version": "0.5.0",
+  "description": "AI agents and skills for mobile development — Flutter, Android, iOS and React Native — as a plugin for Claude Code and Codex: code review, debugging, tests, architecture, security and Firebase.",
   "type": "module",
   "license": "MIT",
   "author": "Warleson Reis",
@@ -31,5 +31,26 @@
     "validate": "node bin/reis-mobile.mjs validate",
     "check": "npm run validate && npm test"
   },
-  "keywords": ["mobile", "flutter", "android", "ios", "react-native", "claude-code", "plugin", "agents"]
+  "keywords": [
+    "flutter",
+    "android",
+    "ios",
+    "react-native",
+    "expo",
+    "swift",
+    "swiftui",
+    "kotlin",
+    "jetpack-compose",
+    "dart",
+    "firebase",
+    "mobile",
+    "mobile-development",
+    "claude-code",
+    "claude-code-plugin",
+    "codex",
+    "agent-skills",
+    "skills",
+    "ai-agents",
+    "code-review"
+  ]
 }
