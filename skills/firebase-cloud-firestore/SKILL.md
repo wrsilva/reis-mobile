@@ -1,13 +1,26 @@
 ---
 name: firebase-cloud-firestore
-description: Integrates Cloud Firestore into Flutter apps. Use when setting up Firestore, designing document/collection structure, reading and writing data, working with real-time listeners, designing for scale, or applying security rules.
+description: Integrates Cloud Firestore into Flutter, native Android, native iOS and React Native apps. Use when setting up Firestore, designing document/collection structure, reading and writing data, working with real-time listeners, designing for scale, or applying security rules.
 routing: manual
-stacks: [flutter]
+stacks: [flutter, android, ios, react-native]
 source: https://github.com/evanca/flutter-ai-rules
 license: MIT
 ---
 
 # Firebase Cloud Firestore Skill
+
+## Platforms
+
+The instructions below are written for **Flutter** (FlutterFire, Dart). For other platforms, read the matching reference before writing code:
+
+| Project | Read |
+|---|---|
+| Flutter | this file |
+| Native Android (Kotlin), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md) |
+| Native iOS (Swift) | [references/ios.md](references/ios.md) |
+| React Native or Expo | [references/react-native.md](references/react-native.md) |
+
+The product concepts here — security rules, data modeling, error handling and testing with the Firebase Local Emulator Suite — apply to every platform; the Dart code and `flutter` commands do not. In a Flutter app, native code in `android/` and `ios/` follows the native references.
 
 This skill defines how to correctly use Cloud Firestore in Flutter applications.
 

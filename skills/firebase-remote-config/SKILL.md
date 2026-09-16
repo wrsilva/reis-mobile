@@ -1,13 +1,26 @@
 ---
 name: firebase-remote-config
-description: Integrates Firebase Remote Config into Flutter apps. Use when setting up Remote Config, managing parameter defaults, fetching and activating values, implementing real-time updates, or handling throttling and testing.
+description: Integrates Firebase Remote Config into Flutter, native Android, native iOS and React Native apps. Use when setting up Remote Config, managing parameter defaults, fetching and activating values, implementing real-time updates, or handling throttling and testing.
 routing: manual
-stacks: [flutter]
+stacks: [flutter, android, ios, react-native]
 source: https://github.com/evanca/flutter-ai-rules
 license: MIT
 ---
 
 # Firebase Remote Config Skill
+
+## Platforms
+
+The instructions below are written for **Flutter** (FlutterFire, Dart). For other platforms, read the matching reference before writing code:
+
+| Project | Read |
+|---|---|
+| Flutter | this file |
+| Native Android (Kotlin), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md) |
+| Native iOS (Swift) | [references/ios.md](references/ios.md) |
+| React Native or Expo | [references/react-native.md](references/react-native.md) |
+
+The product concepts here — security rules, data modeling, error handling and testing with the Firebase Local Emulator Suite — apply to every platform; the Dart code and `flutter` commands do not. In a Flutter app, native code in `android/` and `ios/` follows the native references.
 
 This skill defines how to correctly use Firebase Remote Config in Flutter applications.
 

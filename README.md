@@ -456,7 +456,7 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 |---|---|---|---|---|
 | `mobile-security-audit` | Security audit for mobile apps based on the OWASP MASVS categories — insecure token storage, hardcoded secrets,… | review, security, release | all | reis-mobile |
 | `flutter-secure-token-store` | Stores JWT access tokens on Flutter with platform secure storage (Keychain on iOS, Keystore-backed storage on… | security | Flutter | reis-mobile |
-| `firebase-app-check` | Integrates Firebase App Check into Flutter apps. | security | Flutter | evanca/flutter-ai-rules |
+| `firebase-app-check` | Integrates Firebase App Check into Flutter, native Android, native iOS and React Native apps. | security | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
 
 </details>
 
@@ -476,18 +476,18 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 | Skill | What it does | Auto-routed for | Stack | Origin |
 |---|---|---|---|---|
 | `flutterfire-configure` | Sets up Firebase for Flutter apps using FlutterFire CLI. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-auth` | Integrates Firebase Authentication into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-cloud-firestore` | Integrates Cloud Firestore into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-database` | Integrates Firebase Realtime Database into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-storage` | Integrates Firebase Cloud Storage into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-cloud-functions` | Calls Firebase Cloud Functions from Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-messaging` | Integrates Firebase Cloud Messaging (FCM) into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-in-app-messaging` | Integrates Firebase In-App Messaging into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-remote-config` | Integrates Firebase Remote Config into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-analytics` | Integrates Firebase Analytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-crashlytics` | Integrates Firebase Crashlytics into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-ai` | Integrates Firebase AI Logic into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
-| `firebase-data-connect` | Integrates Firebase Data Connect into Flutter apps. | — | Flutter | evanca/flutter-ai-rules |
+| `firebase-auth` | Integrates Firebase Authentication into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-cloud-firestore` | Integrates Cloud Firestore into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-database` | Integrates Firebase Realtime Database into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-storage` | Integrates Firebase Cloud Storage into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-cloud-functions` | Calls Firebase Cloud Functions from Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-messaging` | Integrates Firebase Cloud Messaging (FCM) into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-in-app-messaging` | Integrates Firebase In-App Messaging into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-remote-config` | Integrates Firebase Remote Config into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-analytics` | Integrates Firebase Analytics into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-crashlytics` | Integrates Firebase Crashlytics into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-ai` | Integrates Firebase AI Logic into Flutter, native Android, native iOS and React Native apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
+| `firebase-data-connect` | Integrates Firebase SQL Connect (formerly Data Connect) into Flutter, Android and iOS apps. | — | Flutter, Android, iOS, React Native | evanca/flutter-ai-rules |
 
 </details>
 

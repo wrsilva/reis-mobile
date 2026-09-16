@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { PLUGIN_ROOT } from '../core/paths.mjs';
@@ -91,6 +91,21 @@ describe('plugin registry', () => {
     for (const component of [...agents, ...skills].filter((item) => item.source)) {
       assert.ok(notices.includes(`Source: ${component.source}`), `${component.source} is listed`);
       assert.ok(notices.includes(`\`${component.name}\``), `${component.name} is listed`);
+    }
+  });
+
+  it('gives every multi-platform Firebase skill a reference for each native platform', async () => {
+    const { skills } = await loadRegistry();
+    const firebase = skills.filter((skill) => skill.name.startsWith('firebase-'));
+
+    assert.ok(firebase.length >= 13);
+    for (const skill of firebase) {
+      assert.deepEqual(skill.stacks, ['flutter', 'android', 'ios', 'react-native'], `${skill.name} stacks`);
+      const body = readFileSync(skill.path, 'utf8');
+      for (const reference of ['android.md', 'ios.md', 'react-native.md']) {
+        assert.ok(existsSync(join(dirname(skill.path), 'references', reference)), `${skill.name}: references/${reference}`);
+        assert.ok(body.includes(`(references/${reference})`), `${skill.name} links references/${reference}`);
+      }
     }
   });
 

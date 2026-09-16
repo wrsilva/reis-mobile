@@ -2,7 +2,7 @@
 
 reis-mobile is distributed under the MIT License (see [LICENSE](LICENSE)). The skills listed below were derived from third-party projects and remain under their original licenses. Each of these skills declares `source` and `license` in its `SKILL.md` frontmatter.
 
-Changes made by reis-mobile: routing metadata (`intents`, `stacks`, `routing`, `source`, `license`) added to the frontmatter, and skills renamed to start with the prefix of their stack (`flutter-`, `android-`, `ios-`, `rn-`, or `mobile-` for stack-agnostic skills; Firebase skills keep `firebase-` and `flutterfire-`). Each section lists the upstream name of every renamed skill; its folder and the `name` field changed, the instructions did not. Some copies correspond to earlier revisions of the upstream files.
+Changes made by reis-mobile: routing metadata (`intents`, `stacks`, `routing`, `source`, `license`) added to the frontmatter, and skills renamed to start with the prefix of their stack (`flutter-`, `android-`, `ios-`, `rn-`, or `mobile-` for stack-agnostic skills; Firebase skills keep `firebase-` and `flutterfire-`). Each section lists the upstream name of every renamed skill; its folder and the `name` field changed, the instructions did not. The Firebase skills from evanca/flutter-ai-rules also gained a *Platforms* section, `references/android.md`, `references/ios.md` and `references/react-native.md` written by reis-mobile, broader `stacks` and descriptions that name those platforms; their Flutter instructions are unchanged. Some copies correspond to earlier revisions of the upstream files.
 
 ## evanca/flutter-ai-rules
 
