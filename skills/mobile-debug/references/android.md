@@ -24,3 +24,9 @@ In Flutter and React Native apps, run Gradle from `android/` to see the full out
 - An ANR means the main thread was blocked for about five seconds (input) or a broadcast receiver or service ran too long.
 - Get the main thread's stack from Play Console vitals, or from `adb bugreport` (the ANR traces are included), and look at what the main thread was waiting on: disk, network, a lock, `runBlocking`, a binder call.
 - `StrictMode` in debug builds flags disk and network access on the main thread before it becomes an ANR.
+
+Full investigation — evidence sources, reading thread states, locks and deadlocks, fixes and verification: [android/anr.md](android/anr.md).
+
+## Memory leaks and OutOfMemoryError
+
+Retained Activities, Fragments and Contexts, reading LeakCanary traces and heap dumps: [android/memory-leaks.md](android/memory-leaks.md).

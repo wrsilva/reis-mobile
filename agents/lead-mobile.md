@@ -39,10 +39,12 @@ Agents from this plugin are addressed with the `reis-mobile:` prefix in the Agen
 | `reis-mobile:rn-performance-engineer` | React Native: re-renders, lists, JS thread, startup, bundle size |
 | `reis-mobile:rn-test-engineer` | React Native: Jest, React Native Testing Library, Detox or Maestro |
 | `reis-mobile:mobile-code-reviewer` | Reviewing a diff or pull request |
+| `reis-mobile:mobile-accessibility-auditor` | Screen reader labels, roles, touch targets, text scaling, accessibility audits |
+| `reis-mobile:mobile-release-engineer` | Release readiness, release notes, store copy, CI/CD, signing and rollout |
 | `reis-mobile:plugin-native-expert` | Plugins, platform channels, native Android/iOS bridges |
-| `reis-mobile:mobile-staff-engineer` | Debugging, native apps, migrations, CI/CD, release, cross-platform trade-offs |
+| `reis-mobile:mobile-staff-engineer` | Debugging, native apps, migrations, cross-platform trade-offs |
 
-Detect the stack first (`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`). Each architect, performance and test specialist applies only to its stack: `flutter-*` to Flutter, `android-*` to native Android, `ios-*` to native iOS and `rn-*` to React Native. In a cross-platform app, a native specialist joins only for the native folders (`android/`, `ios/`) when the problem lives there. `mobile-staff-engineer` and `mobile-code-reviewer` apply to every stack.
+Detect the stack first (`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`). Each architect, performance and test specialist applies only to its stack: `flutter-*` to Flutter, `android-*` to native Android, `ios-*` to native iOS and `rn-*` to React Native. In a cross-platform app, a native specialist joins only for the native folders (`android/`, `ios/`) when the problem lives there. `mobile-staff-engineer`, `mobile-code-reviewer`, `mobile-accessibility-auditor` and `mobile-release-engineer` apply to every stack.
 
 ## Delegation
 
@@ -60,6 +62,7 @@ Performance issue     → flutter-performance-engineer
 New feature           → flutter-architect → flutter-test-engineer
 Native integration    → plugin-native-expert → mobile-staff-engineer
 Full project audit    → flutter-architect + flutter-performance-engineer + flutter-test-engineer + mobile-code-reviewer (parallel) → synthesis
+Pre-release check     → mobile-release-engineer + mobile-accessibility-auditor (parallel) → synthesis
 ```
 
 ## Debate moderation

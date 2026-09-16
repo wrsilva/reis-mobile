@@ -28,7 +28,9 @@ describe('route', () => {
     ['performance', 'flutter-performance-engineer', 'mobile-code-review'],
     ['test', 'flutter-test-engineer', 'mobile-test'],
     ['debug', 'mobile-staff-engineer', 'mobile-debug'],
-    ['accessibility', 'mobile-staff-engineer', 'mobile-flutter'],
+    ['accessibility', 'mobile-accessibility-auditor', 'mobile-accessibility'],
+    ['release', 'mobile-release-engineer', 'mobile-release'],
+    ['deployment', 'mobile-release-engineer', 'mobile-release'],
   ]) {
     it(`routes ${intent} on Flutter to ${agent} with ${skill}`, async () => {
       const result = await route({ intent, projectDir: await makeProject(FLUTTER_APP) });
@@ -55,6 +57,14 @@ describe('route', () => {
       });
     }
   }
+
+  it('sends release work on native iOS to the release engineer with the iOS and release skills', async () => {
+    const result = await route({ intent: 'release', projectDir: await makeProject({ 'App.xcodeproj/project.pbxproj': '' }) });
+
+    assert.equal(result.agent.name, 'mobile-release-engineer');
+    assert.deepEqual(names(result.skills).slice(0, 1), ['mobile-ios'], 'the platform skill comes first');
+    assert.ok(names(result.skills).includes('mobile-release'));
+  });
 
   it('keeps the staff engineer for native Android debugging', async () => {
     const dir = await makeProject({ 'settings.gradle': '', 'app/src/main/AndroidManifest.xml': '<manifest/>' });

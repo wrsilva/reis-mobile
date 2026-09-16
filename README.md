@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 11 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **18 agents and 13 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins, security, accessibility and releases.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -262,6 +262,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Write or audit tests | agent `flutter-`, `android-`, `ios-` or `rn-test-engineer` | ✅ |
 | Debug a Gradle, Xcode, CocoaPods or Flutter build | `/reis-mobile:debug` | ✅ |
 | Build a plugin or debug MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
+| Audit a screen for TalkBack, VoiceOver, touch targets and text scaling | agent `mobile-accessibility-auditor` | ✅ |
+| Check release readiness, write release notes or set up CI/CD | agent `mobile-release-engineer` | ✅ |
 | Full audit with several specialists | agent `lead-mobile` | ✅ |
 | Decide between two architectures with a real trade-off | `/reis-mobile:debate` | ✅ |
 | Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | 🔜 v0.6 |
@@ -277,8 +279,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 11 mobile skills |
-| **Context cost** | Zero | ~3,900 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 18 agents and 13 mobile skills |
+| **Context cost** | Zero | ~4,300 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -329,11 +331,13 @@ The Node.js core decides **what** to load. The model decides **how** to review, 
 | `rn-architect` | React Native | architecture | Feature structure, server vs client state, navigation, native modules |
 | `rn-performance-engineer` | React Native | performance | Re-renders, lists, JavaScript thread, animations, startup, bundle size |
 | `rn-test-engineer` | React Native | test | Jest, React Native Testing Library, native module mocks, Detox or Maestro |
-| `mobile-staff-engineer` | all | debug, architecture, performance, test, security, release, migration, dependency, build, deployment, accessibility | Senior Flutter/Android/iOS specialist for whatever no specific agent covers |
+| `mobile-accessibility-auditor` | all | accessibility | Screen reader labels, roles and states, touch targets, text scaling, focus and announcements, with fixes per platform |
+| `mobile-release-engineer` | all | release, deployment | Go/no-go readiness, versions and signing, crash symbols, release notes and store copy, CI/CD, staged rollout |
+| `mobile-staff-engineer` | all | debug, architecture, performance, test, security, migration, dependency, build | Senior Flutter/Android/iOS specialist for whatever no specific agent covers |
 | `plugin-native-expert` | Flutter | on demand | MethodChannel, EventChannel, Pigeon and Kotlin/Swift bridges, threading and lifecycle |
 | `lead-mobile` | all | on demand | Coordinates the other agents and consolidates a single action plan |
 
-When more than one agent serves the intent, the stack-specific one wins. In a Flutter app, `performance` goes to `flutter-performance-engineer`; in a native Android app, to `android-performance-engineer`. Intents without a stack specialist, such as `debug` or `release`, go to `mobile-staff-engineer`.
+When more than one agent serves the intent, the stack-specific one wins. In a Flutter app, `performance` goes to `flutter-performance-engineer`; in a native Android app, to `android-performance-engineer`. `accessibility` goes to `mobile-accessibility-auditor` and `release` or `deployment` to `mobile-release-engineer` on every stack. Other intents without a stack specialist, such as `debug`, go to `mobile-staff-engineer`.
 
 ### Skills
 
@@ -343,9 +347,11 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 |---|---|---|---|
 | `mobile-architecture` | Layers, state management, modularization, DI, navigation | architecture | Flutter (BLoC, Riverpod, Provider, ChangeNotifier...), Android, iOS, React Native |
 | `mobile-code-review` | Review process and checklists | review, performance | Flutter (PR review, widgets, project audit, static analysis), Android, iOS, React Native |
-| `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules) |
+| `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs, memory leaks), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules), deep links |
 | `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native |
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native |
+| `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native |
+| `mobile-release` | Release readiness, store copy and CI/CD | release, deployment | Flutter, Android, iOS, React Native, release notes and store listing, CI/CD |
 | `mobile-firebase` | Firebase setup and 13 products | — | Flutter, Android, iOS, React Native, each with a guide per product |
 | `mobile-flutter` | Flutter and Dart specifics | review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
 | `mobile-android` | Native Android specifics, from the Android team | performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
@@ -369,7 +375,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 11 skills add up to about 3,900 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 18 agents and 13 skills add up to about 4,300 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
