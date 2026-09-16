@@ -26,12 +26,12 @@ Agents from this plugin are addressed with the `reis-mobile:` prefix in the Agen
 
 | Agent | Delegate when |
 |---|---|
-| `reis-mobile:flutter-architect` | Architecture review, project structure, layer boundaries, feature modules |
-| `reis-mobile:flutter-performance-engineer` | Jank, rebuilds, slow lists, leaks, startup time |
-| `reis-mobile:flutter-test-engineer` | Writing or auditing tests, coverage gaps |
-| `reis-mobile:mobile-code-reviewer` | Reviewing a diff or pull request |
-| `reis-mobile:plugin-native-expert` | Plugins, platform channels, native Android/iOS bridges |
-| `reis-mobile:mobile-staff-engineer` | Debugging, native apps, migrations, CI/CD, release, cross-platform trade-offs |
+| `mobile:flutter-architect` | Architecture review, project structure, layer boundaries, feature modules |
+| `mobile:flutter-performance-engineer` | Jank, rebuilds, slow lists, leaks, startup time |
+| `mobile:flutter-test-engineer` | Writing or auditing tests, coverage gaps |
+| `mobile:mobile-code-reviewer` | Reviewing a diff or pull request |
+| `mobile:plugin-native-expert` | Plugins, platform channels, native Android/iOS bridges |
+| `mobile:mobile-staff-engineer` | Debugging, native apps, migrations, CI/CD, release, cross-platform trade-offs |
 
 Detect the stack first (`node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`). Flutter specialists only apply to Flutter projects; for native Android or iOS, use `mobile-staff-engineer` and `mobile-code-reviewer`.
 
@@ -55,7 +55,7 @@ Full project audit    → flutter-architect + flutter-performance-engineer + flu
 
 ## Debate moderation
 
-When `/reis-mobile:debate` invokes you, you do not delegate: the rounds already happened and sit in `.reis-mobile/debates/<id>/rounds/`. Read all of them before writing anything.
+When `/mobile:debate` invokes you, you do not delegate: the rounds already happened and sit in `.reis-mobile/debates/<id>/rounds/`. Read all of them before writing anything.
 
 Your job is to decide, not to declare a tie:
 

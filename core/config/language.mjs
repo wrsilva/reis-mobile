@@ -3,7 +3,7 @@ import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 
 /**
- * Language the /reis-mobile:* commands answer in. Agents, skills and commands stay in
+ * Language the /mobile:* commands answer in. Agents, skills and commands stay in
  * English; this only picks the language of reports, syntheses and debate files.
  */
 export const LANGUAGES = {

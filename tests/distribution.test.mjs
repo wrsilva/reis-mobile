@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { MARKETPLACE_URL, PLUGIN_ID, installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
+import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { renderFormula } from '../scripts/homebrew-formula.mjs';
 import { checkVersions, readVersions } from '../scripts/versions.mjs';
 
@@ -29,20 +32,48 @@ describe('Claude Code plugin install', () => {
     return { calls, run };
   };
 
-  it('adds the GitHub marketplace, then installs the plugin', () => {
+  const nothingInstalled = () => [];
+
+  it('ships the plugin as "mobile" so commands live under /mobile:*', () => {
+    const manifest = JSON.parse(readFileSync(join(PLUGIN_ROOT, '.claude-plugin/plugin.json'), 'utf8'));
+    const marketplace = JSON.parse(readFileSync(join(PLUGIN_ROOT, '.claude-plugin/marketplace.json'), 'utf8'));
+
+    assert.equal(PLUGIN_ID, 'mobile@reis-mobile');
+    assert.equal(manifest.name, 'mobile');
+    assert.equal(marketplace.name, 'reis-mobile');
+    assert.deepEqual(marketplace.plugins.map((plugin) => plugin.name), ['mobile']);
+  });
+
+  it('adds and refreshes the GitHub marketplace, then installs the plugin', () => {
     const { calls, run } = recorder();
 
-    assert.deepEqual(installClaudePlugin({ run }), { ok: true });
+    assert.deepEqual(installClaudePlugin({ run, list: nothingInstalled }), { ok: true });
     assert.deepEqual(calls, [
       `plugin marketplace add ${MARKETPLACE_URL} --scope user`,
+      'plugin marketplace update reis-mobile',
       `plugin install ${PLUGIN_ID} --scope user`,
     ]);
+  });
+
+  it('removes the plugin installed under its old name after installing the new one', () => {
+    const { calls, run } = recorder();
+
+    installClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile', 'other@elsewhere'] });
+
+    assert.deepEqual(calls.slice(-2), [`plugin install ${PLUGIN_ID} --scope user`, 'plugin uninstall reis-mobile@reis-mobile --scope user']);
+  });
+
+  it('keeps the old plugin when installing the new one fails', () => {
+    const { calls, run } = recorder([0, 0, 1]);
+
+    assert.equal(installClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile'] }).ok, false);
+    assert.ok(!calls.some((call) => call.includes('uninstall')));
   });
 
   it('installs from a local directory and scope', () => {
     const { calls, run } = recorder();
 
-    installClaudePlugin({ source: '/opt/reis-mobile', scope: 'project', run });
+    installClaudePlugin({ source: '/opt/reis-mobile', scope: 'project', run, list: nothingInstalled });
 
     assert.equal(calls[0], 'plugin marketplace add /opt/reis-mobile --scope project');
   });
@@ -50,7 +81,7 @@ describe('Claude Code plugin install', () => {
   it('stops at the first failing step', () => {
     const { calls, run } = recorder([1]);
 
-    assert.deepEqual(installClaudePlugin({ run }), {
+    assert.deepEqual(installClaudePlugin({ run, list: nothingInstalled }), {
       ok: false,
       failedStep: `claude plugin marketplace add ${MARKETPLACE_URL} --scope user`,
       status: 1,
@@ -61,13 +92,17 @@ describe('Claude Code plugin install', () => {
   it('uninstalls the plugin before removing the marketplace', () => {
     const { calls, run } = recorder();
 
-    uninstallClaudePlugin({ run });
+    uninstallClaudePlugin({ run, list: () => ['reis-mobile@reis-mobile'] });
 
-    assert.deepEqual(calls, [`plugin uninstall ${PLUGIN_ID} --scope user`, 'plugin marketplace remove reis-mobile']);
+    assert.deepEqual(calls, [
+      `plugin uninstall ${PLUGIN_ID} --scope user`,
+      'plugin uninstall reis-mobile@reis-mobile --scope user',
+      'plugin marketplace remove reis-mobile',
+    ]);
   });
 
   it('rejects unknown scopes', () => {
-    assert.throws(() => installClaudePlugin({ scope: 'global', run: () => 0 }), /Unknown scope "global"/);
+    assert.throws(() => installClaudePlugin({ scope: 'global', run: () => 0, list: nothingInstalled }), /Unknown scope "global"/);
   });
 });
 

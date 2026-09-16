@@ -8,7 +8,7 @@
 #   REIS_MOBILE_HOME         Installation directory (default: ~/.local/share/reis-mobile)
 #   REIS_MOBILE_BIN_DIR      Directory for the reis-mobile command (default: ~/.local/bin)
 #   REIS_MOBILE_SKIP_PLUGIN  Set to 1 to skip installing the Claude Code plugin
-#   REIS_MOBILE_LANG         Language the /reis-mobile commands answer in: en or pt
+#   REIS_MOBILE_LANG         Language the /mobile commands answer in: en or pt
 #   REIS_MOBILE_ARCHIVE_URL  Install from this archive instead of a GitHub release (testing)
 
 set -eu

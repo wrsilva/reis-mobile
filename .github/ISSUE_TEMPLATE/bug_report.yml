@@ -15,8 +15,8 @@ body:
       options:
         - Stack detection
         - Router (wrong intent, agent or skills)
-        - /reis-mobile:doctor
-        - /reis-mobile:review
+        - /mobile:doctor
+        - /mobile:review
         - Agent
         - Skill
         - Installation or update

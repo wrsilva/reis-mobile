@@ -19,7 +19,7 @@ Usage: reis-mobile <command> [options]
 
 Commands:
   init [en|pt]               Install the reis-mobile plugin into Claude Code, optionally setting the language
-  lang [en|pt]               Show or set the language the /reis-mobile commands answer in
+  lang [en|pt]               Show or set the language the /mobile commands answer in
   detect                     Detect the mobile stack of a project
   doctor                     Diagnose the environment for the detected stack
   route <prompt...>          Show which intent, agent and skills a prompt resolves to
@@ -111,7 +111,7 @@ async function commandInit({ local, scope, uninstall, lang, prompt }) {
     return 0;
   }
   if (requested) console.log(`✓ Language: ${await saveLanguage(requested)} (${configPath()})`);
-  console.log('✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /reis-mobile:doctor');
+  console.log('✓ reis-mobile installed in Claude Code. Restart Claude Code, then run /mobile:doctor');
   return 0;
 }
 

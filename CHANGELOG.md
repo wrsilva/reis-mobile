@@ -2,6 +2,13 @@
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** the plugin is now called `mobile`, so commands and agents move from `/reis-mobile:*` and `reis-mobile:<agent>` to `/mobile:*` and `mobile:<agent>`, and the entry command from `/reis-mobile` to `/mobile`. The plugin id is `mobile@reis-mobile`. The CLI, the repository, the marketplace, the Homebrew formula and the `.reis-mobile/` folder keep the `reis-mobile` name.
+- `reis-mobile init` refreshes the marketplace before installing and removes `reis-mobile@reis-mobile` once `mobile@reis-mobile` is installed; `init --uninstall` removes both.
+
 ## [0.3.1] - 2026-09-16
 
 ### Added

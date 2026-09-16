@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "reis-mobile",
+      "name": "mobile",
       "source": "./",
       "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development.",
       "version": "0.3.1",

@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { PLUGIN_NAME } from '../core/install/claude-plugin.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 
 export function readVersions(root = PLUGIN_ROOT) {
@@ -16,7 +17,7 @@ export function readVersions(root = PLUGIN_ROOT) {
     'package.json': json('package.json').version,
     '.claude-plugin/plugin.json': json('.claude-plugin/plugin.json').version,
     '.claude-plugin/marketplace.json (metadata)': marketplace.metadata.version,
-    '.claude-plugin/marketplace.json (plugin)': marketplace.plugins.find((plugin) => plugin.name === 'reis-mobile')?.version,
+    '.claude-plugin/marketplace.json (plugin)': marketplace.plugins.find((plugin) => plugin.name === PLUGIN_NAME)?.version,
   };
 }
 

@@ -36,12 +36,12 @@ Choose **three** agents whose priorities genuinely conflict on the question. A d
 
 | Agent | Defends | Model |
 |---|---|---|
-| `reis-mobile:flutter-architect` | Layer boundaries, modularization, long-term maintenance cost | `opus` |
-| `reis-mobile:flutter-performance-engineer` | Frames, rebuilds, memory, startup time — hostile to indirection | `sonnet` |
-| `reis-mobile:flutter-test-engineer` | Testability, injection seams, coverage cost | `sonnet` |
-| `reis-mobile:plugin-native-expert` | Flutter–native boundary, platform channels, lifecycle | `opus` |
-| `reis-mobile:mobile-staff-engineer` | Build, release, migration, cross-platform trade-offs | `opus` |
-| `reis-mobile:mobile-code-reviewer` | Concrete risk in the code that already exists | `sonnet` |
+| `mobile:flutter-architect` | Layer boundaries, modularization, long-term maintenance cost | `opus` |
+| `mobile:flutter-performance-engineer` | Frames, rebuilds, memory, startup time — hostile to indirection | `sonnet` |
+| `mobile:flutter-test-engineer` | Testability, injection seams, coverage cost | `sonnet` |
+| `mobile:plugin-native-expert` | Flutter–native boundary, platform channels, lifecycle | `opus` |
+| `mobile:mobile-staff-engineer` | Build, release, migration, cross-platform trade-offs | `opus` |
+| `mobile:mobile-code-reviewer` | Concrete risk in the code that already exists | `sonnet` |
 
 Pass the `model` from the table on every `Agent` call. It overrides the `model: inherit` the agents declare, and that is what keeps the debate from turning into a monologue: with everyone on the same model, participants inherit the same biases and the same blind spots, and the disagreement stays on the surface of the role. The table pairs model strength with role — `opus` where the question is a long-term trade-off, `sonnet` where it is concrete implementation detail.
 
@@ -52,7 +52,7 @@ Selection rules:
 - The detected stack rules. The `flutter-*` agents only join Flutter projects; in native Android or iOS, use `mobile-staff-engineer` and `mobile-code-reviewer`.
 - Without native code in the project, do not call `plugin-native-expert`.
 - `--agents` overrides the automatic choice, but not the models: each agent keeps the one from the table. Unknown name: warn and stop.
-- `reis-mobile:lead-mobile` never debates — it moderates in step 7, always on `opus`, because synthesizing conflicting positions is the heaviest work in the flow.
+- `mobile:lead-mobile` never debates — it moderates in step 7, always on `opus`, because synthesizing conflicting positions is the heaviest work in the flow.
 
 Before starting, tell the user in one line the stack, the participants with their models and the number of rounds.
 
@@ -124,7 +124,7 @@ Rebutting the generic thesis does not count: every rebuttal cites a concrete cla
 
 ## 7. Synthesis
 
-Invoke `reis-mobile:lead-mobile` with all rounds, following the **Debate moderation** section of `${CLAUDE_PLUGIN_ROOT}/agents/lead-mobile.md`. It resolves the disagreements and produces the action plan.
+Invoke `mobile:lead-mobile` with all rounds, following the **Debate moderation** section of `${CLAUDE_PLUGIN_ROOT}/agents/lead-mobile.md`. It resolves the disagreements and produces the action plan.
 
 Before accepting the synthesis, confirm any decisive claim in the code yourself: participants do not verify each other. Write the result to `.reis-mobile/debates/<id>/synthesis.md`.
 

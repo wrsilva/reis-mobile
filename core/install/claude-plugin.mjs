@@ -1,7 +1,10 @@
 import { spawnSync } from 'node:child_process';
 
 export const MARKETPLACE_NAME = 'reis-mobile';
-export const PLUGIN_ID = `reis-mobile@${MARKETPLACE_NAME}`;
+export const PLUGIN_NAME = 'mobile';
+export const PLUGIN_ID = `${PLUGIN_NAME}@${MARKETPLACE_NAME}`;
+/** Up to v0.3.1 the plugin was called reis-mobile, which put every command under /reis-mobile:*. */
+export const LEGACY_PLUGIN_IDS = [`reis-mobile@${MARKETPLACE_NAME}`];
 export const MARKETPLACE_URL = 'https://github.com/wrsilva/reis-mobile.git';
 export const SCOPES = ['user', 'project', 'local'];
 
@@ -9,23 +12,35 @@ export const SCOPES = ['user', 'project', 'local'];
  * Registers the reis-mobile marketplace and installs the plugin through the `claude` CLI.
  * Both steps are idempotent in Claude Code, so running `init` twice is safe.
  *
+ * The marketplace is refreshed after being added: an existing checkout from before the
+ * rename does not know the `mobile` plugin yet. A plugin installed under a legacy name is
+ * removed once the new one is in place, so its commands do not show up twice.
+ *
  * `source` is the GitHub repository by default, so `claude plugin update` keeps working;
  * pass a local directory for offline or development installs.
  */
-export function installClaudePlugin({ source = MARKETPLACE_URL, scope = 'user', run = runClaude } = {}) {
+export function installClaudePlugin({ source = MARKETPLACE_URL, scope = 'user', run = runClaude, list = listClaudePlugins } = {}) {
   assertScope(scope);
-  return runSteps(run, [
+  const result = runSteps(run, [
     ['plugin', 'marketplace', 'add', source, '--scope', scope],
+    ['plugin', 'marketplace', 'update', MARKETPLACE_NAME],
     ['plugin', 'install', PLUGIN_ID, '--scope', scope],
   ]);
+  if (!result.ok) return result;
+  return runSteps(run, legacyUninstallSteps(list(), scope));
 }
 
-export function uninstallClaudePlugin({ scope = 'user', run = runClaude } = {}) {
+export function uninstallClaudePlugin({ scope = 'user', run = runClaude, list = listClaudePlugins } = {}) {
   assertScope(scope);
   return runSteps(run, [
     ['plugin', 'uninstall', PLUGIN_ID, '--scope', scope],
+    ...legacyUninstallSteps(list(), scope),
     ['plugin', 'marketplace', 'remove', MARKETPLACE_NAME],
   ]);
+}
+
+function legacyUninstallSteps(installed, scope) {
+  return LEGACY_PLUGIN_IDS.filter((id) => installed.includes(id)).map((id) => ['plugin', 'uninstall', id, '--scope', scope]);
 }
 
 function runSteps(run, steps) {
@@ -48,4 +63,15 @@ function runClaude(args) {
   }
   if (result.error) throw result.error;
   return result.status ?? 1;
+}
+
+/** Installed plugin ids. An unreadable list only means there is nothing to migrate. */
+function listClaudePlugins() {
+  const result = spawnSync('claude', ['plugin', 'list', '--json'], { encoding: 'utf8', shell: process.platform === 'win32' });
+  if (result.status !== 0) return [];
+  try {
+    return JSON.parse(result.stdout).map((plugin) => plugin.id);
+  } catch {
+    return [];
+  }
 }

@@ -19,10 +19,10 @@ The CLI output has a `Language` line (`language` in JSON). Write everything the 
 Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" lang`, to find the language:
 
 ```text
-/reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
-/reis-mobile:review [--base <ref>]   Code review of the changes (or the whole project)
-/reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
-/reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
+/mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
+/mobile:review [--base <ref>]   Code review of the changes (or the whole project)
+/mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
+/mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
 
 When the language is `pt`, translate the descriptions and keep the commands as they are. When it is not set, use English.

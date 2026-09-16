@@ -7,7 +7,7 @@
 #   REIS_MOBILE_HOME         Installation directory (default: %LOCALAPPDATA%\reis-mobile)
 #   REIS_MOBILE_BIN_DIR      Directory for reis-mobile.cmd (default: %USERPROFILE%\.local\bin)
 #   REIS_MOBILE_SKIP_PLUGIN  Set to 1 to skip installing the Claude Code plugin
-#   REIS_MOBILE_LANG         Language the /reis-mobile commands answer in: en or pt
+#   REIS_MOBILE_LANG         Language the /mobile commands answer in: en or pt
 #   REIS_MOBILE_ARCHIVE_URL  Install from this archive (URL or local path) instead of a release
 #
 # Errors use `throw`, never `exit`: under `irm | iex` exit would close the user's session.

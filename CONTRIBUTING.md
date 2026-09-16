@@ -19,7 +19,7 @@ To test the plugin in Claude Code from the clone:
 
 ```text
 /plugin marketplace add /path/to/reis-mobile
-/plugin install reis-mobile@reis-mobile
+/plugin install mobile@reis-mobile
 ```
 
 After editing agents, skills or commands, restart the Claude Code session to reload the plugin.
