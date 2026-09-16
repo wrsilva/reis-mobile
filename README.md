@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **16 agents and 60 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
+👥 **16 agents and 11 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS and React Native, a staff engineer, a native plugin specialist, a code reviewer and a lead that coordinates them all, plus skills for Gradle, Xcode and CocoaPods builds, Jetpack Compose, BLoC, Riverpod, Firebase and testing on every platform, plugins and security.
 
 🌐 **Answers in English or Portuguese.** `reis-mobile init eng` or `reis-mobile init pt` sets the language of reports, explanations and debates.
 
@@ -276,8 +276,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 16 agents and 60 mobile skills |
-| **Context cost** | Zero | ~7,200 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 16 agents and 11 mobile skills |
+| **Context cost** | Zero | ~3,900 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -294,7 +294,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
      ├─ detect stack ──────── pubspec.yaml → flutter (android, ios)
      ├─ detect intent ─────── review
      ├─ select agent ──────── mobile-code-reviewer
-     ├─ select skills ─────── flutter-effective-dart · mobile-code-review · mobile-security
+     ├─ select skills ─────── mobile-code-review · mobile-flutter · mobile-security
      ├─ collect context ───── git diff (lock files out, secrets masked)
      └─ review report ─────── Summary · Critical · Bugs · Architecture · Security · Performance · Maintainability
 ```
@@ -336,173 +336,25 @@ When more than one agent serves the intent, the stack-specific one wins. In a Fl
 
 ### Skills
 
-**Auto-routed** skills are loaded by the router together with the agent. The others (—) are triggered by Claude Code when the request matches the description, for example *"add push notifications with FCM"* → `mobile-firebase`.
+Every skill starts with `mobile-`. **Topic** skills cover every stack with one reference per platform; **platform** skills hold what exists only on one stack. A request loads the skill, and the model then opens only the reference for your stack and task.
 
-<details>
-<summary><strong>Review and quality</strong> (4)</summary>
+| Skill | Covers | Auto-routed for | References |
+|---|---|---|---|
+| `mobile-architecture` | Layers, state management, modularization, DI, navigation | architecture | Flutter (BLoC, Riverpod, Provider, ChangeNotifier...), Android, iOS, React Native |
+| `mobile-code-review` | Review process and checklists | review, performance | Flutter (PR review, widgets, project audit, static analysis), Android, iOS, React Native |
+| `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules) |
+| `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native |
+| `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native |
+| `mobile-firebase` | Firebase setup and 13 products | — | Flutter, Android, iOS, React Native, each with a guide per product |
+| `mobile-flutter` | Flutter and Dart specifics | review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
+| `mobile-android` | Native Android specifics, from the Android team | performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
+| `mobile-ios` | Native iOS specifics | performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
+| `mobile-rn` | React Native and Expo specifics | performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
+| `mobile-detect-stack` | Deterministic stack detection with the CLI | — | — |
 
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `mobile-code-review` | Code review for Flutter, native Android, native iOS and React Native: the review process and a checklist per platform (PR review, widgets, project audit and static analysis for Flutter; lifecycle, concurrency and UI for native; hooks and platform code for React Native). | review, performance | all | reis-mobile, evanca/flutter-ai-rules, dart-lang/skills |
-| `flutter-effective-dart` | Applies Effective Dart guidelines in Flutter/Dart code. | review | Flutter | evanca/flutter-ai-rules |
-| `flutter-dart-3-updates` | Applies Dart 3 language features in Flutter/Dart code. | migration | Flutter | evanca/flutter-ai-rules |
-| `flutter-dart-use-pattern-matching` | Applies Dart 3 pattern matching, switch expressions, and destructuring idiomatically to validate data schemas,… | — | Flutter | dart-lang/skills |
+Skills marked — are triggered by Claude Code when the request matches their description, for example *"add push notifications with FCM"* → `mobile-firebase`.
 
-</details>
-
-<details>
-<summary><strong>Architecture and state</strong> (9)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-architecture-feature-first` | Structures Flutter apps using layered architecture (UI / Logic / Data) with feature-first file organization. | architecture | Flutter | evanca/flutter-ai-rules |
-| `flutter-app-architecture` | Provides best practices for Flutter app architecture, including layered architecture, data flow, state management… | architecture | Flutter | evanca/flutter-ai-rules |
-| `flutter-apply-architecture-best-practices` | Architects a Flutter application using the recommended layered approach (UI, Logic, Data). | architecture | Flutter | flutter/skills |
-| `flutter-managing-state` | Manages application and ephemeral state in a Flutter app. | architecture | Flutter | flutter/skills |
-| `flutter-bloc` | Implements Flutter state management using the bloc library (Bloc and Cubit). | — | Flutter | evanca/flutter-ai-rules |
-| `flutter-riverpod` | Uses Riverpod for state management in Flutter/Dart. | — | Flutter | evanca/flutter-ai-rules |
-| `flutter-provider` | Uses the Provider package for dependency injection and state management in Flutter. | — | Flutter | evanca/flutter-ai-rules |
-| `flutter-change-notifier` | Implements state management with ChangeNotifier and Provider in Flutter. | — | Flutter | evanca/flutter-ai-rules |
-| `flutter-login-usecase` | Implements a Flutter login use case that authenticates through an injected repository and persists the access token… | — | Flutter | reis-mobile |
-
-</details>
-
-<details>
-<summary><strong>Testing</strong> (1)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `mobile-test` | Unit, widget, integration and end-to-end tests, mocks and coverage for Flutter, native Android, native iOS and React Native, with one reference per platform. | test | all | reis-mobile, flutter/skills, dart-lang/skills, evanca/flutter-ai-rules, android/skills |
-
-</details>
-
-<details>
-<summary><strong>Debug</strong> (1)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `mobile-debug` | Failing builds and runtime errors on Flutter, native Android, native iOS and React Native: Gradle, Xcode, CocoaPods, Metro, pub, crash logs and ANRs, with a guide per platform and layer. | debug, build, dependency, migration | all | reis-mobile, evanca/flutter-ai-rules, flutter/skills, dart-lang/skills |
-
-</details>
-
-<details>
-<summary><strong>Performance</strong> (3)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-reducing-app-size` | Measures and optimizes the size of Flutter application bundles for deployment. | performance | Flutter | flutter/skills |
-| `flutter-handling-concurrency` | Executes long-running tasks in background isolates to keep the UI responsive. | performance | Flutter | flutter/skills |
-| `flutter-caching-data` | Implements caching strategies for Flutter apps to improve performance and offline support. | — | Flutter | flutter/skills |
-
-</details>
-
-<details>
-<summary><strong>UI, layout and navigation</strong> (8)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-building-layouts` | Builds Flutter layouts using the constraint system and layout widgets. | — | Flutter | flutter/skills |
-| `flutter-build-responsive-layout` | Use `LayoutBuilder`, `MediaQuery`, or `Expanded/Flexible` to create a layout that adapts to different screen sizes. | — | Flutter | flutter/skills |
-| `flutter-building-forms` | Builds Flutter forms with validation and user input handling. | — | Flutter | flutter/skills |
-| `flutter-animating-apps` | Implements animated effects, transitions, and motion in a Flutter app. | — | Flutter | flutter/skills |
-| `flutter-theming-apps` | Customizes the visual appearance of a Flutter app using the theming system. | — | Flutter | flutter/skills |
-| `flutter-add-widget-preview` | Adds interactive widget previews to the project using the previews.dart system. | — | Flutter | flutter/skills |
-| `flutter-setup-declarative-routing` | Configure `MaterialApp.router` using a package like `go_router` for advanced URL-based navigation. | — | Flutter | flutter/skills |
-| `flutter-adding-home-screen-widgets` | Adds home screen widgets to a Flutter app for Android and iOS. | — | Flutter | flutter/skills |
-
-</details>
-
-<details>
-<summary><strong>Data and networking</strong> (3)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-use-http-package` | Use the `http` package to execute GET, POST, PUT, or DELETE requests. | — | Flutter | flutter/skills |
-| `flutter-implement-json-serialization` | Create model classes with `fromJson` and `toJson` methods using `dart:convert`. | — | Flutter | flutter/skills |
-| `flutter-working-with-databases` | Manages local data persistence using SQLite or other database solutions. | — | Flutter | flutter/skills |
-
-</details>
-
-<details>
-<summary><strong>Native and plugins</strong> (3)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-building-plugins` | Builds Flutter plugins that provide native interop for other apps to use. | — | Flutter | flutter/skills |
-| `flutter-interoperating-with-native-apis` | Interoperates with native platform APIs on Android, iOS, and the web. | — | Flutter | flutter/skills |
-| `flutter-embedding-native-views` | Embeds native Android, iOS, or macOS views into a Flutter app. | — | Flutter | flutter/skills |
-
-</details>
-
-<details>
-<summary><strong>Security</strong> (1)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `mobile-security` | OWASP MASVS security review for Flutter, native Android, native iOS and React Native: token storage, secrets, TLS, exported components and intents, deep links, WebViews, biometrics, logs and release hardening, with a checklist per platform. | review, security, release | all | reis-mobile, android/skills |
-
-</details>
-
-<details>
-<summary><strong>Accessibility and internationalization</strong> (2)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-improving-accessibility` | Configures a Flutter app to support assistive technologies like Screen Readers. | accessibility | Flutter | flutter/skills |
-| `flutter-setup-localization` | Add `flutter_localizations` and `intl` dependencies, enable "generate true" in `pubspec.yaml`, and create an… | — | Flutter | flutter/skills |
-
-</details>
-
-<details>
-<summary><strong>Firebase</strong> (1)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `mobile-firebase` | Firebase on Flutter, native Android, native iOS and React Native: setup, Authentication, Firestore, Realtime Database, Storage, Functions, Messaging, Analytics, Crashlytics, Remote Config, App Check, In-App Messaging, AI Logic and SQL Connect, with a guide per platform and product. | — | all | reis-mobile, evanca/flutter-ai-rules |
-
-</details>
-
-<details>
-<summary><strong>Native Android</strong> (22)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `android-agp-9-upgrade` | Upgrades, or migrates, an Android project to use Android Gradle Plugin (AGP) version 9. | migration, build, dependency | Android | android/skills |
-| `android-r8-analyzer` | Analyzes Android build files and R8 keep rules to identify redundancies, broad package-wide rules, and rules that… | performance, build | Android | android/skills |
-| `android-profiler` | Manages Android performance profiling and debugging. | performance | Android | android/skills |
-| `android-play-policy-insights` | Automated auditor designed to verify Android applications against Google Play Policy domains. | release | Android | android/skills |
-| `android-play-billing-library-version-upgrade` | Use this skill when upgrading or migrating an Android project from any legacy Google Play Billing Library (PBL)… | — | Android | android/skills |
-| `android-engage-sdk-integration` | Helps developers integrate, debug, and resolve Play Engage SDK implementation issues. | — | Android | android/skills |
-| `android-migrate-xml-views-to-jetpack-compose` | Provides a structured workflow for migrating an Android XML View to Jetpack Compose. | — | Android | android/skills |
-| `android-adaptive` | Instructions to make or update an app's UI so that it adapts to different Android devices including phones… | — | Android | android/skills |
-| `android-edge-to-edge` | Use this skill to migrate your Jetpack Compose app to add adaptive edge-to-edge support and troubleshoot common… | — | Android | android/skills |
-| `android-styles` | Use this skill to integrate the Jetpack Compose Styles API into an Android project. | — | Android | android/skills |
-| `android-navigation-3` | Learn how to install and migrate to Jetpack Navigation 3, and how to implement features and patterns such as deep… | — | Android | android/skills |
-| `android-navigation-event` | Intercept back gestures and run Predictive Back animations using the NavigationEvent (androidx.navigationevent)… | — | Android | android/skills |
-| `android-camerax` | Provide technical guidance for Android camera development with CameraX. | — | Android | android/skills |
-| `android-media3-cast-integration` | Implements Google Cast support in Android apps using Jetpack Media3. | — | Android | android/skills |
-| `android-restore-credentials` | Provides knowledge and workflows to implement Android's Restore Credentials feature using the androidx.credentials… | — | Android | android/skills |
-| `android-verified-email` | Provides a complete workflow for implementing verified email retrieval on Android Credential Manager API. | — | Android | android/skills |
-| `android-appfunctions` | Analyzes Android apps to identify key user workflows for AppFunctions such as creating a note, playing media, or… | — | Android | android/skills |
-| `android-ml-kit-genai-prompt-api` | Analyzes Android codebases to implement ML Kit GenAI Prompt API. | — | Android | android/skills |
-| `android-wear-compose-m3` | Expert guidance for working with Wear OS Compose Material3. | — | Android | android/skills |
-| `android-leanback-to-compose-tv-migration` | Provides instructions and architectural patterns for migrating Android TV applications from legacy Leanback UI… | — | Android | android/skills |
-| `android-display-glasses-with-jetpack-compose-glimmer` | Provides guidelines for developing projected Android XR apps for display glasses using the Jetpack Compose Glimmer… | — | Android | android/skills |
-| `android-cli` | Provides instructions for installing and using the `android` CLI. | — | Android | android/skills |
-
-</details>
-
-<details>
-<summary><strong>Environment</strong> (2)</summary>
-
-| Skill | What it does | Auto-routed for | Stack | Origin |
-|---|---|---|---|---|
-| `flutter-setting-up-on-macos` | Sets up a macOS environment for Flutter development. | — | Flutter | flutter/skills |
-| `mobile-detect-stack` | Detects the mobile stack of the current project (Flutter, Android, iOS, React Native, Kotlin Multiplatform), its… | — | all | reis-mobile |
-
-</details>
-
-Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) and [android/skills](https://github.com/android/skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 
@@ -512,11 +364,11 @@ Third-party skills keep their original name and license. See [THIRD_PARTY_NOTICE
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review` and `debug` make no network calls. Only installation touches the network, to download the package and register the plugin. One imported skill, `android-play-policy-insights`, runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review` and `debug` make no network calls. Only installation touches the network, to download the package and register the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
-**Context cost.** The descriptions of the 16 agents and 60 skills add up to about 7,200 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
+**Context cost.** The descriptions of the 16 agents and 11 skills add up to about 3,900 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
 **No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
 
@@ -563,7 +415,7 @@ app: apps/mobile
 Every command then analyzes `apps/mobile`, wherever in the repository you run it, and the review diff is restricted to that folder. Without the file, run from the app folder or pass `--dir apps/mobile`.
 
 **Does it work with native Android and iOS?**
-Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). Android also has the Android team's skills from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more).
+Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). The platform skills `mobile-android`, `mobile-ios` and `mobile-rn` add what exists only on each stack; `mobile-android` includes the Android team's guides from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more).
 
 **I already have skills with the same names in `~/.claude/skills`.**
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.

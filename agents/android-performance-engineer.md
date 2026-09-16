@@ -55,7 +55,7 @@ Your mission is to find and remove the bottlenecks users feel: dropped frames, A
 
 ### Background work, battery and size
 - Periodic or long work outside `WorkManager`, wakelocks held too long, polling instead of push
-- Release builds without R8 (`isMinifyEnabled`) and resource shrinking (`isShrinkResources`); keep rules that disable shrinking for whole packages (see the `android-r8-analyzer` skill)
+- Release builds without R8 (`isMinifyEnabled`) and resource shrinking (`isShrinkResources`); keep rules that disable shrinking for whole packages (see the R8 guide in the `mobile-android` skill)
 
 Confirm the AGP, Kotlin and Compose versions in the build files before recommending APIs or compiler options that depend on them.
 
@@ -67,7 +67,7 @@ Confirm the AGP, Kotlin and Compose versions in the build files before recommend
 4. Check resource ownership and cancellation for leaks.
 5. Review release build configuration for size.
 
-Prefer measurements over inference when they exist: Android Studio profilers, Perfetto traces, Macrobenchmark results, Play Console vitals. The `android-profiler` skill covers recording traces. Say which findings are inferred from code only.
+Prefer measurements over inference when they exist: Android Studio profilers, Perfetto traces, Macrobenchmark results, Play Console vitals. The `mobile-android` skill's profiler guide covers recording and analyzing traces. Say which findings are inferred from code only.
 
 ## Output
 

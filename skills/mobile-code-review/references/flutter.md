@@ -11,6 +11,7 @@ Apply the checklists in this order; stop early for a small diff that only touche
 
 ## Flutter-specific notes
 
+- Dart style and idioms: the Effective Dart and Dart 3 guides in the `mobile-flutter` skill (`references/dart.md`).
 - Follow the project's state management (BLoC/Cubit, Riverpod, Provider) instead of suggesting another one.
 - Check the Flutter and Dart versions in `pubspec.lock` before recommending newer APIs (`MediaQuery.sizeOf`, Dart 3 patterns).
 - Generated files (`*.g.dart`, `*.freezed.dart`, `*.mocks.dart`) are reviewed through their source annotations, not line by line.

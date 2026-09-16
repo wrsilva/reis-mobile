@@ -24,11 +24,11 @@ describe('route', () => {
   });
 
   for (const [intent, agent, skill] of [
-    ['architecture', 'flutter-architect', 'flutter-app-architecture'],
+    ['architecture', 'flutter-architect', 'mobile-architecture'],
     ['performance', 'flutter-performance-engineer', 'mobile-code-review'],
     ['test', 'flutter-test-engineer', 'mobile-test'],
     ['debug', 'mobile-staff-engineer', 'mobile-debug'],
-    ['accessibility', 'mobile-staff-engineer', 'flutter-improving-accessibility'],
+    ['accessibility', 'mobile-staff-engineer', 'mobile-flutter'],
   ]) {
     it(`routes ${intent} on Flutter to ${agent} with ${skill}`, async () => {
       const result = await route({ intent, projectDir: await makeProject(FLUTTER_APP) });

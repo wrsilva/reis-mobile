@@ -100,10 +100,10 @@ Skill (`skills/<name>/SKILL.md`):
 
 ```yaml
 ---
-name: mobile-code-review          # same as the folder name; prefix of the first stack
+name: mobile-code-review          # same as the folder name; every skill starts with mobile-
 description: Reviews mobile code for...
 intents: [review, performance]
-stacks: ["*"]                     # a topic on every stack: one reference per platform
+stacks: ["*"]                     # topic skill; platform skills declare their one stack
 # areas: [gradle]                 # optional: build areas it is specific to (ranks it first)
 # routing: manual                 # optional: out of automatic routing
 # source: https://github.com/...  # third-party skills: origin

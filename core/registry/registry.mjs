@@ -8,14 +8,15 @@ import { parseFrontmatter } from './frontmatter.mjs';
 
 export const ANY_STACK = '*';
 
-/** Every skill name starts with the prefix of the first stack it declares. */
-export const SKILL_PREFIXES = {
-  [ANY_STACK]: ['mobile-'],
-  flutter: ['flutter-'],
-  android: ['android-'],
-  ios: ['ios-'],
-  'react-native': ['rn-'],
-  'kotlin-multiplatform': ['kmp-'],
+/**
+ * Every skill starts with `mobile-`. A topic skill covers every stack (`stacks: ["*"]`) with a
+ * reference per platform; a platform skill is named after the one stack it covers.
+ */
+export const PLATFORM_SKILLS = {
+  'mobile-flutter': 'flutter',
+  'mobile-android': 'android',
+  'mobile-ios': 'ios',
+  'mobile-rn': 'react-native',
 };
 
 /**
@@ -119,9 +120,15 @@ export function validateRegistry({ stacks, agents, skills }) {
 
     if (component.source && !component.license) errors.push(`${label}: "source" requires "license"`);
 
-    const prefixes = component.kind === 'skill' ? SKILL_PREFIXES[component.stacks[0]] : undefined;
-    if (prefixes && component.name && !prefixes.some((prefix) => component.name.startsWith(prefix))) {
-      errors.push(`${label}: skill name must start with "${prefixes.join('" or "')}" for stack "${component.stacks[0]}"`);
+    if (component.kind === 'skill' && component.name) {
+      const platform = PLATFORM_SKILLS[component.name];
+      if (!component.name.startsWith('mobile-')) {
+        errors.push(`${label}: skill name must start with "mobile-"`);
+      } else if (platform && !(component.stacks.length === 1 && component.stacks[0] === platform)) {
+        errors.push(`${label}: platform skill ${component.name} must declare stacks: [${platform}]`);
+      } else if (!platform && !(component.stacks.length === 1 && component.stacks[0] === ANY_STACK)) {
+        errors.push(`${label}: topic skill must declare stacks: ["*"], or be one of ${Object.keys(PLATFORM_SKILLS).join(', ')}`);
+      }
     }
 
     for (const intent of component.intents) {
