@@ -10,6 +10,10 @@ import { fileURLToPath } from 'node:url';
 
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 
+export function isStableVersion(value) {
+  return typeof value === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(value);
+}
+
 export function readVersions(root = PLUGIN_ROOT) {
   const json = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
   const marketplace = json('.claude-plugin/marketplace.json');
@@ -24,7 +28,7 @@ export function readVersions(root = PLUGIN_ROOT) {
 export function syncVersions(root = PLUGIN_ROOT) {
   const json = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
   const version = json('package.json').version;
-  if (typeof version !== 'string' || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version)) {
+  if (!isStableVersion(version)) {
     throw new Error(`package.json must contain a stable version (X.Y.Z), got ${JSON.stringify(version)}`);
   }
 

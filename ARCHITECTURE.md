@@ -142,6 +142,8 @@ The CLI and the plugins are the same code, published through three channels:
 
 `package.json` `files` decides what the npm package contains, including `THIRD_PARTY_NOTICES.md`, which the MIT and BSD-3-Clause licenses of the imported skills require. CI packs the package and installs it globally on Linux, macOS and Windows before running the CLI.
 
+`package.json` is the only editable version source. `scripts/versions.mjs --sync` updates the Claude Code plugin and marketplace manifests; tests reject drift. On a `main` push, the Release workflow synchronizes and tests the package. A new version gets a generated-manifest commit if needed, a `vX.Y.Z` tag, an npm publication, then a GitHub release. Existing tags skip a main-branch release; tag pushes and manual tag retries preserve the idempotent publish path. The workflow stops before tagging if it cannot publish to npm or cannot push the generated commit.
+
 There is no native binary: reis-mobile depends on Node.js 22+, declared in `engines`.
 
 `hooks/hooks.json` runs `bin/update-check.mjs` on session startup and resume. The script compares the installed plugin version with npm's `latest` dist-tag, using a 24-hour cache outside the plugin directory, a 1.5-second request timeout and a 3-second hook timeout. It emits a user-visible `systemMessage` only when a newer stable version exists; errors and offline sessions stay silent. `REIS_MOBILE_UPDATE_CHECK=0` disables it. `reis-mobile update-check --force` performs a manual check. The hook does not update either tool or the CLI.

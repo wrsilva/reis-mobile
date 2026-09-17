@@ -65,10 +65,10 @@ A good reis-mobile skill:
 
 ## Releasing a version
 
-1. Update the version in `package.json`, `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, and record the changes in `CHANGELOG.md`.
-2. `node scripts/versions.mjs vX.Y.Z` confirms everything matches.
-3. `npm pack --dry-run` lists what the npm package will contain.
-4. Commit, `git tag -a vX.Y.Z` and `git push origin main vX.Y.Z`.
-5. The **Release** workflow runs the tests, creates the GitHub release and publishes to npm with the `NPM_TOKEN` secret. Both steps skip what already exists, so re-running the workflow is safe.
+1. Change only the `version` field in `package.json` and move the release notes from `[Unreleased]` to a dated section in `CHANGELOG.md`.
+2. Run `npm run version:sync` to update the Claude Code plugin and marketplace manifests locally, then `npm run check` and `npm pack --dry-run` to verify the release. The CI and Release workflows also run the synchronization, so a direct edit to `package.json` is enough.
+3. Merge or push to `main`. The **Release** workflow verifies the version is newer than existing tags, validates and tests the package, commits synchronized manifests if needed, creates `vX.Y.Z`, publishes to npm, and creates the GitHub release. It skips publication when that tag already exists.
+
+`NPM_TOKEN` must be configured for the Release workflow, and GitHub Actions needs permission to push the generated manifest commit and tag to `main`. If a release stops after creating its tag, rerun the workflow manually with the existing tag in the `workflow_dispatch` input. A manually pushed `vX.Y.Z` tag also runs the same idempotent publication steps.
 
 The Claude Code and Codex plugins update from the repository itself: there is nothing else to publish.

@@ -2,43 +2,103 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing vX.Y.Z tag to retry
+        required: true
+        type: string
 
 permissions:
   contents: write
   id-token: write
 
-# GitHub has delivered the same tag push twice; the steps below are safe to repeat.
+# GitHub has delivered the same tag push twice; one run owns each release at a time.
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      TAG: ${{ github.ref_name }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.tag || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
+      - name: Synchronize plugin manifests
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: node scripts/versions.mjs --sync
+
+      - name: Plan release
+        id: plan
+        env:
+          REQUESTED_TAG: ${{ inputs.tag }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            node scripts/release-plan.mjs --main >> "$GITHUB_OUTPUT"
+          else
+            node scripts/release-plan.mjs --tag "${REQUESTED_TAG:-$GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check versions match the tag
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
         run: node scripts/versions.mjs "$TAG"
 
       - name: Validate and test
         run: npm run check
 
-      - name: Create GitHub release
+      - name: Require npm publishing credentials
+        if: steps.plan.outputs.release == 'true'
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo 'NPM_TOKEN is required before creating a release tag' >&2
+            exit 1
+          fi
+
+      - name: Commit synchronized manifests
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "reis-mobile ${TAG}" --generate-notes
+          TAG: ${{ steps.plan.outputs.tag }}
+          RELEASE: ${{ steps.plan.outputs.release }}
+        run: |
+          git add .claude-plugin/plugin.json .claude-plugin/marketplace.json
+          if [ "$RELEASE" = 'true' ] || ! git diff --cached --quiet; then
+            git fetch origin main
+            if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+              echo 'main advanced while the release was running; a newer run will handle it' >&2
+              exit 1
+            fi
+          fi
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m "chore(release): synchronize manifests for ${TAG}"
+            git push origin HEAD:main
+          fi
+
+      - name: Create release tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.plan.outputs.release == 'true'
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          git tag -a "$TAG" -m "reis-mobile $TAG"
+          git push origin "$TAG"
 
       - name: Publish to npm
-        if: env.NPM_TOKEN != ''
+        if: steps.plan.outputs.release == 'true'
         env:
+          TAG: ${{ steps.plan.outputs.tag }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if npm view "reis-mobile@${TAG#v}" version >/dev/null 2>&1; then
@@ -46,3 +106,10 @@ jobs:
           else
             npm publish --provenance --access public
           fi
+
+      - name: Create GitHub release
+        if: steps.plan.outputs.release == 'true'
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "reis-mobile ${TAG}" --generate-notes

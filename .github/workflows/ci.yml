@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - name: Synchronize plugin manifests
+        run: npm run version:sync
       - name: Validate plugin
         run: npm run validate
       - name: Test
@@ -39,6 +41,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Synchronize plugin manifests
+        run: npm run version:sync
       - name: Pack and install globally
         shell: bash
         run: |
