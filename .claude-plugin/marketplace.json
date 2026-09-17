@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "AI agents for mobile engineering",
-    "version": "0.7.0"
+    "version": "0.7.1"
   },
   "plugins": [
     {
       "name": "reis-mobile",
       "source": "./",
       "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development.",
-      "version": "0.7.0",
+      "version": "0.7.1",
       "author": {
         "name": "Warleson Reis"
       },

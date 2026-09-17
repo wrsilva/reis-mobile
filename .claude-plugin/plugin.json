@@ -1,6 +1,6 @@
 {
   "name": "reis-mobile",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development. Use /reis-mobile:doctor, /reis-mobile:review and /reis-mobile:test.",
   "author": {
     "name": "Warleson Reis"
@@ -8,5 +8,15 @@
   "license": "MIT",
   "repository": "https://github.com/wrsilva/reis-mobile",
   "homepage": "https://github.com/wrsilva/reis-mobile",
-  "keywords": ["mobile", "flutter", "android", "ios", "react-native", "kotlin-multiplatform", "code-review", "agents", "skills"]
+  "keywords": [
+    "mobile",
+    "flutter",
+    "android",
+    "ios",
+    "react-native",
+    "kotlin-multiplatform",
+    "code-review",
+    "agents",
+    "skills"
+  ]
 }

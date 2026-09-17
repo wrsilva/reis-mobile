@@ -54,7 +54,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.7.0** (current) | `/reis-mobile:test`, native XCTest and Espresso guidance, and project-specific contracts for the 18 specialists. |
+| **v0.7.1** (current) | Update notices on Claude Code and Codex session start, plus a single-source version and CI-driven release process. |
+| **v0.7.0** | `/reis-mobile:test`, native XCTest and Espresso guidance, and project-specific contracts for the 18 specialists. |
 | **v0.6.0** | `mobile-accessibility-auditor` and `mobile-release-engineer` agents with the new `mobile-accessibility` and `mobile-release` skills: accessibility audits on every stack, release readiness with a go/no-go verdict, release notes and store copy, CI/CD. `mobile-debug` gains guides for ANRs, Android memory leaks and deep links. |
 | **v0.5.0** | 11 skills instead of 60: topic skills with a guide per platform (`mobile-architecture`, `mobile-code-review`, `mobile-debug`, `mobile-test`, `mobile-security`, `mobile-firebase`) and platform skills (`mobile-flutter`, `mobile-android`, and the new `mobile-ios` and `mobile-rn`). Half the fixed context cost. |
 | **v0.4.0** | Native Android, iOS and React Native: architect, performance and test agents for each; `/reis-mobile:debug` for Gradle, Xcode, CocoaPods and Flutter failures; `mobile-test` and `mobile-firebase` with a guide per platform; the Android team's skills; `.reis-mobile/config.yaml` for monorepos. Skills now use stack prefixes. |
@@ -429,6 +430,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.5.0 | Topic and platform skills (`mobile-*`), with guides for Flutter, Android, iOS and React Native in each; new `mobile-ios` and `mobile-rn` | ✅ |
 | v0.6.0 | Accessibility auditor and release engineer agents, `mobile-accessibility` and `mobile-release` skills, ANR, memory leak and deep link debugging guides | ✅ |
 | v0.7.0 | `/reis-mobile:test`, native tests (XCTest, Espresso) and project-specific specialist contracts | ✅ |
+| v0.7.1 | Update notices, single-source version and release automation | ✅ |
 | v0.8.0 | `/reis-mobile:release` with quality gates | ⏳ |
 | v0.9.0 | MCP server | ⏳ |
 | v0.10.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |
@@ -463,7 +465,7 @@ Yes: `reis-mobile init eng` installs the plugin in Codex too. See [installation]
 The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.8.0.
 
 **What does reis-mobile send outside my machine?**
-The CLI sends nothing. What the model reads during `/reis-mobile:review` follows the same rules as any Claude Code session.
+The project analysis commands do not make network requests. The update hook and `reis-mobile update-check` request the public npm package metadata without sending project files or identifiers. What the model reads during `/reis-mobile:review` follows the same rules as any Claude Code session.
 
 ---
 
