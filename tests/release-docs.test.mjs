@@ -6,7 +6,9 @@ import { describe, it } from 'node:test';
 
 import { planReleaseDocs, syncReleaseDocs } from '../scripts/release-docs.mjs';
 
-const MARKERS = '<!-- reis-mobile:latest-release:start -->\nOld summary\n<!-- reis-mobile:latest-release:end -->';
+const START = '<!-- reis-mobile:latest-release:start -->';
+const END = '<!-- reis-mobile:latest-release:end -->';
+const MARKERS = `${START}\nOld summary\n${END}`;
 const OLD_RELEASE = '## [0.7.1] - 2026-09-17\n\n### Added\n\n- Historical note.\n';
 
 function fixture(version, unreleased = '### Added\n\n- New release note.') {
@@ -27,7 +29,8 @@ describe('release Markdown synchronization', () => {
       const readme = readFileSync(join(root, 'README.md'), 'utf8');
       assert.match(changelog, /## \[Unreleased\]\n\n## \[0\.7\.2\] - 2026-09-18\n\n### Added\n\n- New release note\./);
       assert.ok(changelog.includes(OLD_RELEASE));
-      assert.match(readme, /### v0\.7\.2\n\n#### Added\n\n- New release note\./);
+      const latest = readme.slice(readme.indexOf(START), readme.indexOf(END) + END.length);
+      assert.equal(latest, `${START}\n### v0.7.2\n\n#### Added\n\n- New release note.\n\n${END}`);
       assert.match(readme, /\| v0\.7\.1 \| Historical highlight \|/);
       assert.match(readme, /\| v0\.8\.0 \| Roadmap target \|/);
 
