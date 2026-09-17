@@ -11,12 +11,12 @@ import { isStableVersion } from './versions.mjs';
 export function planRelease(version, tags) {
   if (!isStableVersion(version)) throw new Error(`Expected a stable version in package.json, got ${JSON.stringify(version)}`);
   const tag = `v${version}`;
-  if (tags.includes(tag)) return { tag, release: false };
   const versions = tags.filter((candidate) => candidate.startsWith('v')).map((candidate) => candidate.slice(1)).filter(isStableVersion);
   const latest = versions.sort((left, right) => compareVersions(right, left))[0];
-  if (latest && compareVersions(version, latest) <= 0) {
+  if (latest && compareVersions(version, latest) < 0) {
     throw new Error(`package.json version ${version} must be newer than v${latest}`);
   }
+  if (tags.includes(tag)) return { tag, release: false };
   return { tag, release: true };
 }
 

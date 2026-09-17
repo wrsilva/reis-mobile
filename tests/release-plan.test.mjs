@@ -14,6 +14,7 @@ describe('release plan', () => {
 
   it('rejects a version behind a newer release', () => {
     assert.throws(() => planRelease('0.7.1', ['v0.7.0', 'v0.8.0']), /newer than v0\.8\.0/);
+    assert.throws(() => planRelease('0.7.1', ['v0.7.1', 'v0.8.0']), /newer than v0\.8\.0/);
   });
 
   it('rejects malformed versions and mismatched retry tags', () => {

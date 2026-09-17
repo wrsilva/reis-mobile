@@ -6,7 +6,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.7.0-blue" alt="Version 0.7.0">
+  <img src="https://img.shields.io/npm/v/reis-mobile" alt="Latest npm version">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -54,7 +54,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.7.1** (current) | Update notices on Claude Code and Codex session start, plus a single-source version and CI-driven release process. |
+| **v0.7.1** | Update notices on Claude Code and Codex session start, plus a single-source version and CI-driven release process. |
 | **v0.7.0** | `/reis-mobile:test`, native XCTest and Espresso guidance, and project-specific contracts for the 18 specialists. |
 | **v0.6.0** | `mobile-accessibility-auditor` and `mobile-release-engineer` agents with the new `mobile-accessibility` and `mobile-release` skills: accessibility audits on every stack, release readiness with a go/no-go verdict, release notes and store copy, CI/CD. `mobile-debug` gains guides for ANRs, Android memory leaks and deep links. |
 | **v0.5.0** | 11 skills instead of 60: topic skills with a guide per platform (`mobile-architecture`, `mobile-code-review`, `mobile-debug`, `mobile-test`, `mobile-security`, `mobile-firebase`) and platform skills (`mobile-flutter`, `mobile-android`, and the new `mobile-ios` and `mobile-rn`). Half the fixed context cost. |
