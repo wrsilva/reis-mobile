@@ -31,7 +31,8 @@
   "scripts": {
     "test": "node --test",
     "validate": "node bin/reis-mobile.mjs validate",
-    "check": "npm run validate && npm test"
+    "check": "npm run validate && npm test",
+    "version:sync": "node scripts/versions.mjs --sync"
   },
   "keywords": [
     "flutter",

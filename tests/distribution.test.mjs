@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { MARKETPLACE_URL, PLUGIN_ID, installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
-import { checkVersions, readVersions } from '../scripts/versions.mjs';
+import { checkVersions, readVersions, syncVersions } from '../scripts/versions.mjs';
 
 describe('versions', () => {
   it('keeps package.json and the plugin manifests on the same version', () => {
@@ -19,7 +20,52 @@ describe('versions', () => {
     assert.deepEqual(checkVersions(versions, 'v0.2.0'), ['tag v0.2.0 does not match version v0.1.0']);
     assert.equal(checkVersions({ ...versions, 'plugin.json': '0.0.9' }).length, 1);
   });
+
+  it('synchronizes plugin manifests from package.json and leaves other fields intact', () => {
+    const root = makeVersionFixture('0.7.1');
+    try {
+      assert.deepEqual(syncVersions(root), ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json']);
+      assert.deepEqual(Object.values(readVersions(root)), ['0.7.1', '0.7.1', '0.7.1', '0.7.1']);
+      const plugin = JSON.parse(readFileSync(join(root, '.claude-plugin/plugin.json'), 'utf8'));
+      const marketplace = JSON.parse(readFileSync(join(root, '.claude-plugin/marketplace.json'), 'utf8'));
+      assert.equal(plugin.description, 'Keep plugin description');
+      assert.equal(marketplace.plugins[0].description, 'Keep marketplace description');
+      assert.equal(marketplace.plugins[1].version, '9.9.9');
+      const before = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json'].map((path) => readFileSync(join(root, path), 'utf8'));
+      assert.deepEqual(syncVersions(root), []);
+      assert.deepEqual(['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json'].map((path) => readFileSync(join(root, path), 'utf8')), before);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('rejects an invalid package version without changing manifests', () => {
+    const root = makeVersionFixture('not-a-version');
+    try {
+      const paths = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json'];
+      const before = paths.map((path) => readFileSync(join(root, path), 'utf8'));
+      assert.throws(() => syncVersions(root), /stable version/);
+      assert.deepEqual(paths.map((path) => readFileSync(join(root, path), 'utf8')), before);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
 });
+
+function makeVersionFixture(version) {
+  const root = mkdtempSync(join(tmpdir(), 'reis-mobile-versions-'));
+  mkdirSync(join(root, '.claude-plugin'));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'reis-mobile', version }));
+  writeFileSync(join(root, '.claude-plugin/plugin.json'), JSON.stringify({ name: 'reis-mobile', version: '0.7.0', description: 'Keep plugin description' }));
+  writeFileSync(join(root, '.claude-plugin/marketplace.json'), JSON.stringify({
+    metadata: { version: '0.7.0' },
+    plugins: [
+      { name: 'reis-mobile', version: '0.7.0', description: 'Keep marketplace description' },
+      { name: 'other', version: '9.9.9' },
+    ],
+  }));
+  return root;
+}
 
 describe('Claude Code plugin install', () => {
   const recorder = (statuses = []) => {
