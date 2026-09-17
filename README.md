@@ -41,6 +41,23 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 ## What's new
 
+<!-- reis-mobile:latest-release:start -->
+### v0.7.1
+
+#### Added
+
+- A `SessionStart` hook for Claude Code and Codex that warns when the installed plugin is behind npm's latest release. It caches registry results for 24 hours, stays silent offline and can be disabled with `REIS_MOBILE_UPDATE_CHECK=0`.
+- `reis-mobile update-check [--force]` for manually checking the CLI version.
+
+#### Changed
+
+- `package.json` is the only editable version source. CI synchronizes the plugin manifests and the Release workflow tests, tags and publishes a new version after it reaches `main`.
+- Version synchronization now promotes authored `[Unreleased]` notes to a dated changelog section and refreshes the README's latest-release summary without changing historical entries.
+
+<!-- reis-mobile:latest-release:end -->
+
+### Earlier highlights
+
 **v0.7.0:** `/reis-mobile:test` runs, writes, audits or fixes tests using the app's existing setup, including XCTest/XCUITest and Espresso. The 18 agents now use a shared project brief and role-specific investigations tied to actual files, symbols and constraints.
 
 > 🆕 **v0.4.0: every mobile stack.** Native Android, native iOS and React Native get their own architect, performance and test specialists, and `/reis-mobile:debug` finds the cause of a failing build with the toolchain versions in hand.

@@ -14,6 +14,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 ### Changed
 
 - `package.json` is the only editable version source. CI synchronizes the plugin manifests and the Release workflow tests, tags and publishes a new version after it reaches `main`.
+- Version synchronization now promotes authored `[Unreleased]` notes to a dated changelog section and refreshes the README's latest-release summary without changing historical entries.
 
 ## [0.7.0] - 2026-09-17
 

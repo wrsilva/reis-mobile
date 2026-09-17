@@ -6,11 +6,16 @@ import { describe, it } from 'node:test';
 
 import { MARKETPLACE_URL, PLUGIN_ID, installClaudePlugin, uninstallClaudePlugin } from '../core/install/claude-plugin.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
+import { planReleaseDocs } from '../scripts/release-docs.mjs';
 import { checkVersions, readVersions, syncVersions } from '../scripts/versions.mjs';
 
 describe('versions', () => {
   it('keeps package.json and the plugin manifests on the same version', () => {
     assert.deepEqual(checkVersions(readVersions()), []);
+  });
+
+  it('keeps the current README release section aligned with the changelog', () => {
+    assert.deepEqual(planReleaseDocs().filter(({ before, after }) => before !== after), []);
   });
 
   it('rejects a release tag that does not match', () => {

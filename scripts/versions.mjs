@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-// package.json is the only editable version; plugin manifests are synchronized from it.
+// package.json is the only editable version; plugin manifests and release docs are synchronized from it.
 //
 //   node scripts/versions.mjs            # check manifests agree
-//   node scripts/versions.mjs --sync     # update plugin manifests
-//   node scripts/versions.mjs v0.7.1     # also check the tag
+//   node scripts/versions.mjs --sync     # update plugin manifests and release docs
+//   node scripts/versions.mjs vX.Y.Z    # also check the tag
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { PLUGIN_ROOT } from '../core/paths.mjs';
+import { planReleaseDocs, syncReleaseDocs } from './release-docs.mjs';
+import { isStableVersion } from './version-format.mjs';
 
-export function isStableVersion(value) {
-  return typeof value === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(value);
-}
+export { isStableVersion } from './version-format.mjs';
 
 export function readVersions(root = PLUGIN_ROOT) {
   const json = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
@@ -68,10 +68,12 @@ export function checkVersions(versions, tag) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const tag = process.argv[2] === '--sync' ? undefined : process.argv[2];
   if (process.argv[2] === '--sync') {
-    const changed = syncVersions();
-    console.log(changed.length ? `✓ synchronized ${changed.join(', ')}` : '✓ plugin manifests already match package.json');
+    const docs = planReleaseDocs();
+    const changed = [...syncVersions(), ...syncReleaseDocs(docs)];
+    console.log(changed.length ? `✓ synchronized ${changed.join(', ')}` : '✓ release files already match package.json');
   }
-  const errors = checkVersions(readVersions(), tag);
+  const docs = planReleaseDocs();
+  const errors = [...checkVersions(readVersions(), tag), ...docs.filter(({ before, after }) => before !== after).map(({ path }) => `${path} is out of sync with package.json`)];
   for (const error of errors) console.error(`✗ ${error}`);
   if (!errors.length) console.log(`✓ version ${readVersions()['package.json']}`);
   process.exitCode = errors.length ? 1 : 0;
