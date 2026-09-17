@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- `/reis-mobile:test` and `reis-mobile test`: the slash command runs, writes, audits or fixes tests according to the request; the CLI supplies explicit test routing, resolved project directory, redacted change context and toolchain diagnostics without launching test runners.
+- A shared project brief contract for all 18 specialists, with actual symbols and paths, acceptance criteria, constraints, validation commands and optional team knowledge in `.reis-mobile/project.md`.
+
+### Changed
+
+- Specialists now own distinct investigation steps and deliverables, reuse the project brief and load technical checklists from skills instead of repeating general instructions.
+- Native testing guides discover Android modules, variants and instrumentation setup for Espresso, and Xcode workspaces, schemes, plans and destinations for XCTest/XCUITest. Both cover deterministic synchronization and honest execution reporting.
+
 ### Fixed
 
 - `reis-mobile init` updates the Claude Code plugin when it is already installed. It used to run `claude plugin install`, which leaves an installed plugin untouched, so `npm update -g reis-mobile` followed by `init` kept Claude Code on the old version.

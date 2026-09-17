@@ -41,6 +41,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 ## What's new
 
+**Unreleased:** `/reis-mobile:test` runs, writes, audits or fixes tests using the app's existing setup, including XCTest/XCUITest and Espresso. The 18 agents now use a shared project brief and role-specific investigations tied to actual files, symbols and constraints. These changes are available from the clone and are not yet released; the package version remains v0.6.0.
+
 > 🆕 **v0.4.0: every mobile stack.** Native Android, native iOS and React Native get their own architect, performance and test specialists, and `/reis-mobile:debug` finds the cause of a failing build with the toolchain versions in hand.
 >
 > ```bash
@@ -202,7 +204,7 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 ## Commands
 
 ```bash
-/reis-mobile                                      # Lists the commands (entry point; also accepts doctor, review or a free-form request)
+/reis-mobile                                      # Lists the commands (also accepts doctor, review, debug, test, debate or a free-form request)
 /reis-mobile my android build fails on gradle     # Free-form request: detects the stack and applies the right agent and skills
 /reis-mobile:doctor                               # Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
 /reis-mobile:doctor --all                         # Checks every tool, not only those for the detected stack
@@ -210,6 +212,9 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 /reis-mobile:review --base main                   # Reviews the current branch against main, pull request style
 /reis-mobile:review --base main focus on security # Free-form focus, in English or Portuguese
 /reis-mobile:debug pod install fails on CI        # Finds the cause of a build or runtime failure and proposes the fix
+/reis-mobile:test run the checkout unit tests    # Uses the existing runner, module or scheme
+/reis-mobile:test add XCTest coverage for cancellation # Tests the actual Swift type and its dependency seams
+/reis-mobile:test audit Espresso checkout tests  # Reviews assertions and synchronization without editing
 /reis-mobile:debate Riverpod or BLoC in this app? # Debate between the specialists, with a decision by lead-mobile
 /reis-mobile:debate --rounds 3 --external ...     # More rounds; --external adds Codex and Gemini, if installed
 ```
@@ -219,6 +224,21 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 `/reis-mobile:debug` takes the error, the failing command or a description of the problem. It routes to the debug agent and to the skills for the stack and the build area it recognizes (`gradle`, `xcode`, `cocoapods`, `signing`, `pub`...), adds the doctor report with the installed toolchain versions, and answers with the cause, the evidence, the minimal fix and how to verify it.
 
 It proposes; it does not change your project on its own. Commands that alter files or caches — `flutter clean`, `pod install`, deleting `DerivedData` or Gradle caches, dependency upgrades — only run after you ask it to apply the fix.
+
+### Test
+
+`/reis-mobile:test` uses the request to choose whether to run existing tests, write missing tests, audit coverage or fix failures. With no request, it selects tests for the current changes or the documented default local suite in a clean project; if neither can be established, it inventories the setup and reports the limitation. It identifies the actual classes, functions, modules and test targets before proposing cases. Flutter widget/integration tests, Android JVM tests and Espresso/Compose instrumentation, iOS XCTest/Swift Testing and XCUITest, and React Native unit/component/E2E setups use their own references.
+
+The command discovers Gradle modules and variants or Xcode workspaces, schemes, test plans and destinations from the project. It reports exact commands, results and checks blocked by missing SDKs or devices; static inspection is never reported as a passing native test. A request to run tests executes the available relevant tests, while an audit stays read-only.
+
+The companion CLI prepares context for the model; it does not execute the app's tests:
+
+```bash
+reis-mobile test --dir apps/mobile --json -- "audit checkout tests"
+reis-mobile test --base main -- "write regression tests for these changes"
+```
+
+Its output includes the resolved project directory, explicit `test` intent, selected specialist and skills, redacted change context, toolchain diagnostics and answer language. `/reis-mobile test ...` forwards to the same slash-command workflow.
 
 ### Debate
 
@@ -267,7 +287,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Check release readiness, write release notes or set up CI/CD | agent `mobile-release-engineer` | ✅ |
 | Full audit with several specialists | agent `lead-mobile` | ✅ |
 | Decide between two architectures with a real trade-off | `/reis-mobile:debate` | ✅ |
-| Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | 🔜 v0.7 |
+| Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | ✅ Unreleased |
 | Check whether the app is ready for the store | `/reis-mobile:release` | 🔜 v0.8 |
 | Consolidated decision by consensus between agents | `/reis-mobile:council` | 🔜 v0.10 |
 
@@ -316,6 +336,10 @@ The Node.js core decides **what** to load. The model decides **how** to review, 
 | iOS | `*.xcodeproj`, `*.xcworkspace`, `Podfile` or `Package.swift` with `.iOS` |
 
 ### Agents
+
+Agents share a [project brief contract](docs/agent-context.md): app root, requested outcome, real objects at `path:line`, established conventions, constraints and validation commands. They reuse a caller's brief and load technical checklists from the relevant skill. Architects deliver boundary decisions, performance engineers deliver measurement plans and evidence, test engineers deliver behavior-to-test coverage, and the lead resolves conflicting findings.
+
+For domain knowledge that code cannot reveal, optionally commit `.reis-mobile/project.md` with critical user journeys, invariants, deliberate boundaries and CI commands. The model reads it alongside repository instructions and verifies it against code. It is Markdown context, not a new key in `.reis-mobile/config.yaml`; no setup file is required. See the [team context example](docs/agent-context.md#optional-team-context).
 
 | Agent | Stack | Triggered for | What it does |
 |-------|-------|---------------|-----------|
@@ -368,11 +392,11 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 ## Trust, security and limits
 
-**Read-only.** `doctor`, `detect`, `route` and `review` do not modify your project. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit files; the debate only writes its rounds to `.reis-mobile/debates/`, outside your code.
+**Read-only CLI context.** `doctor`, `detect`, `route`, `review` and `test` do not modify your project. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit files; the debate only writes its rounds to `.reis-mobile/debates/`, outside your code.
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review` and `debug` make no network calls. Only installation touches the network, to download the package and register the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug` and `test` make no network calls. Only installation touches the network, to download the package and register the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
 **Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
@@ -401,7 +425,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.4.0 | Native Android and iOS skills, architect, performance and test agents for Android, iOS and React Native, `.reis-mobile/config.yaml` and `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ✅ |
 | v0.5.0 | Topic and platform skills (`mobile-*`), with guides for Flutter, Android, iOS and React Native in each; new `mobile-ios` and `mobile-rn` | ✅ |
 | v0.6.0 | Accessibility auditor and release engineer agents, `mobile-accessibility` and `mobile-release` skills, ANR, memory leak and deep link debugging guides | ✅ |
-| v0.7.0 | `/reis-mobile:test` and native tests (XCTest, Espresso) | ⏳ |
+| v0.7.0 | `/reis-mobile:test`, native tests (XCTest, Espresso) and project-specific specialist contracts | Implemented, unreleased |
 | v0.8.0 | `/reis-mobile:release` with quality gates | ⏳ |
 | v0.9.0 | MCP server | ⏳ |
 | v0.10.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |

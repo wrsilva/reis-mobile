@@ -25,7 +25,8 @@ USER ──► COMMAND (/reis-mobile:review)
 | **Deterministic detection, not LLM-based** | Stack detection must be predictable, testable and cheap. The model receives the finished result. |
 | **The project on disk decides the stack** | The prompt only fills in an unknown stack or focuses on a native platform of a cross-platform app. "The Android build" in a Flutter app is still Flutter, with focus on Android. |
 | **No agent, no guess** | When no intent has a registered agent, the router emits a warning instead of picking the "closest" one. |
-| **Flat skill structure** | `skills/<name>/SKILL.md`, with the stack prefix in the name (`flutter-*`, `android-*`). It is the layout Claude Code discovers automatically. |
+| **Flat skill entry points** | `skills/mobile-<name>/SKILL.md`: topic skills share a workflow and link platform references; platform skills link focused guides. It is the layout Claude Code discovers automatically. |
+| **Project-specific agent contracts** | All agents reuse `docs/agent-context.md` for evidence gathering; each role defines its investigation and deliverable. Technical checklists live in skills. |
 | **Secrets masked before the model** | The diff goes through `redactSecrets` before leaving the CLI. The patterns target literals (`apiKey = "AIza..."`), not identifiers (`final token = await read()`), so the review is not harmed. |
 
 ## Modules
@@ -115,7 +116,13 @@ stacks: ["*"]                     # topic skill; platform skills declare their o
 
 ## Project configuration
 
-`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review` and `debug` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
+`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug` and `test` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
+
+The optional `.reis-mobile/project.md` carries domain knowledge for the model, not CLI configuration. Agents read it alongside applicable repository instructions and verify it against current code using the [shared project brief contract](docs/agent-context.md). The core does not parse it or infer product requirements.
+
+## Test workflow
+
+`reis-mobile test` forces the `test` intent, resolves the app directory, and combines routing with the existing redacted change context and doctor report. It does not invoke a test runner. `/reis-mobile:test` consumes that context, grounds the work in real symbols and test targets, and follows the user's requested run, write, audit or fix scope through the selected specialist and `mobile-test` references. Native targets in cross-platform apps require the corresponding native reference even when the main agent remains Flutter or React Native.
 
 ## Language
 
@@ -137,4 +144,4 @@ There is no native binary: reis-mobile depends on Node.js 22+, declared in `engi
 
 ## Out of scope for this version
 
-These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), `.reis-mobile/config.yaml`, providers, MCP server, hooks, multi-agent and execution logs.
+These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), a general provider abstraction, MCP server, hooks, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions.

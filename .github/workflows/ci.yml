@@ -49,3 +49,4 @@ jobs:
         run: |
           reis-mobile --version
           reis-mobile validate
+          reis-mobile test --json --lang en --dir "$RUNNER_TEMP"

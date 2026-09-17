@@ -26,13 +26,14 @@ Commands:
   route <prompt...>          Show which intent, agent and skills a prompt resolves to
   review [prompt...]         Route a code review and collect the git context for it
   debug [problem...]         Route a build or runtime failure and report the toolchain it runs on
+  test [request...]          Prepare test routing, git context and toolchain checks (does not run tests)
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
 
 Options:
   --dir <path>      Project directory (default: current directory, or "app" in .reis-mobile/config.yaml)
   --intent <id>     Force an intent (${INTENT_IDS.join(', ')})
-  --base <ref>      review: compare <ref>...HEAD instead of the working tree
+  --base <ref>      review/test: compare <ref>...HEAD instead of the working tree
   --all             doctor: check every tool, not only the relevant ones
   --strict          doctor: exit with code 1 when there are warnings
   --local           init: install the plugin from this installation instead of GitHub
@@ -66,6 +67,7 @@ const COMMANDS = {
   route: commandRoute,
   review: commandReview,
   debug: commandDebug,
+  test: commandTest,
   agents: (options) => commandList('agents', options),
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
@@ -99,7 +101,7 @@ async function main(argv) {
   return (await command({ ...options, dir: project.projectDir, project, prompt: rest.join(' ') })) ?? 0;
 }
 
-const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug']);
+const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test']);
 
 async function commandInit({ local, scope, uninstall, lang, prompt }) {
   const requested = lang ?? (prompt || process.env.REIS_MOBILE_LANG || undefined);
@@ -213,11 +215,15 @@ async function commandReview({ dir, project, base, prompt, json, lang }) {
   printProject(project);
   printRoute(result);
   printLanguage(language);
+  printContext(context);
+  return 0;
+}
+
+function printContext(context) {
   console.log(`\nContext     ${context.mode}${context.base ? ` (${context.base}...HEAD)` : ''}`);
   if (context.note) console.log(`            ${context.note}`);
   for (const file of context.files) console.log(`  ${file.status.padEnd(10)} ${file.path}`);
   if (context.diff) console.log(`\n${context.diff}`);
-  return 0;
 }
 
 /**
@@ -234,6 +240,24 @@ async function commandDebug({ dir, project, prompt, json, lang }) {
   printRoute(result);
   printLanguage(language);
   console.log('');
+  printDoctorChecks(doctor);
+  return 0;
+}
+
+/** Prepare evidence for the test agent; running the selected suite is the agent's job. */
+async function commandTest({ dir, project, base, prompt, json, lang }) {
+  const result = await route({ prompt, intent: 'test', projectDir: dir });
+  const context = collectReviewContext({ projectDir: dir, base });
+  const doctor = await runDoctor({ projectDir: dir });
+  const language = await resolveLanguage({ flag: lang });
+  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context, doctor });
+
+  // A test runner needs an explicit working directory even without a monorepo config.
+  printProject(project, true);
+  printRoute(result);
+  printLanguage(language);
+  printContext(context);
+  console.log('\nTest context prepared; no test suites were executed.\n');
   printDoctorChecks(doctor);
   return 0;
 }
@@ -280,9 +304,10 @@ function printRoute(result) {
   for (const warning of result.warnings) console.log(`! ${warning}`);
 }
 
-/** Only printed when .reis-mobile/config.yaml moved the command to another folder. */
-function printProject({ projectDir, config }) {
+/** Test commands always show the working directory; others show configured app roots. */
+function printProject({ projectDir, config }, always = false) {
   if (config?.data.app !== undefined) console.log(`Project     ${projectDir} (app from ${config.path})`);
+  else if (always) console.log(`Project     ${projectDir}`);
 }
 
 /** `-` means no saved language: the commands follow the language of the request. */

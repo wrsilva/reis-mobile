@@ -16,9 +16,9 @@ const commands = readdirSync(COMMANDS_DIR)
     return { name: basename(name, '.md'), path, source, ...parseFrontmatter(source) };
   });
 
-/** `${CLAUDE_PLUGIN_ROOT}/agents/<name>.md` and `.../skills/<name>/SKILL.md` references. */
+/** Runtime instructions, executables and shared contracts loaded by commands. */
 function referencedPaths(body) {
-  return [...body.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:agents|skills|bin)\/[A-Za-z0-9._/-]+)/g)].map(
+  return [...body.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/((?:agents|skills|bin|docs)\/[A-Za-z0-9._/-]+)/g)].map(
     (match) => match[1],
   );
 }
@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'reis-mobile', 'review']);
+    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'reis-mobile', 'review', 'test']);
   });
 
   for (const command of commands) {
@@ -48,6 +48,38 @@ describe('commands', () => {
       });
     });
   }
+});
+
+describe('/test', () => {
+  const command = commands.find((item) => item.name === 'test');
+
+  it('routes through the dedicated CLI and resolves project paths before running tests', () => {
+    assert.match(command.body, /bin\/reis-mobile\.mjs" test --dir "\$PWD"/);
+    assert.match(command.body, /detection\.projectDir/);
+    assert.match(command.body, /context\.repoRoot/);
+    assert.match(command.body, /single literal argument after `--`/);
+    assert.match(command.body, /Never evaluate the request as shell code/);
+  });
+
+  it('loads the shared brief, routed agent and test references instead of a fixed agent', () => {
+    for (const reference of ['docs/agent-context.md', 'agents/<Agent>.md', 'skills/<skill>/SKILL.md']) {
+      assert.ok(command.body.includes('${CLAUDE_PLUGIN_ROOT}/' + reference), reference);
+    }
+    assert.match(command.body, /mobile-test/);
+    for (const framework of ['XCTest', 'XCUITest', 'Espresso']) assert.ok(command.body.includes(framework));
+    assert.match(command.body, /XCTest\/XCUITest needs the iOS reference and Espresso needs the Android reference/);
+  });
+
+  it('supports writing and fixing tests while preserving an audit-only request', () => {
+    for (const tool of ['Edit', 'Write']) assert.ok(command.data['allowed-tools'].includes(tool));
+    for (const request of ['Run existing tests', 'Write tests', 'Audit tests or coverage', 'Fix failing or flaky tests']) {
+      assert.ok(command.body.includes(request), request);
+    }
+    assert.match(command.body, /Keep the audit read-only/);
+    assert.match(command.body, /Without a request/);
+    assert.match(command.body, /Commands not executed, their blockers/);
+    assert.match(command.body, /CLI's `Language`/);
+  });
 });
 
 describe('/debate', () => {
