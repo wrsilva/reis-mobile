@@ -13,6 +13,7 @@ import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
 import { route } from '../core/router/router.mjs';
+import { checkForUpdate, clearUpdateCache } from '../core/update/check.mjs';
 
 const USAGE = `reis-mobile — AI agents for mobile engineering
 
@@ -29,6 +30,7 @@ Commands:
   test [request...]          Prepare test routing, git context and toolchain checks (does not run tests)
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
+  update-check               Check npm for a newer reis-mobile release
 
 Options:
   --dir <path>      Project directory (default: current directory, or "app" in .reis-mobile/config.yaml)
@@ -39,6 +41,7 @@ Options:
   --local           init: install the plugin from this installation instead of GitHub
   --scope <scope>   init: Claude Code scope, user (default), project or local
   --uninstall       init: remove the plugin and its marketplace from Claude Code and Codex, and the saved language
+  --force           update-check: ignore the cached registry result
   --lang <en|pt>    Override the saved language for this run
   --json            Machine-readable output
   -v, --version     Print the version
@@ -53,6 +56,7 @@ const OPTIONS = {
   local: { type: 'boolean' },
   scope: { type: 'string' },
   uninstall: { type: 'boolean' },
+  force: { type: 'boolean' },
   lang: { type: 'string' },
   json: { type: 'boolean' },
   version: { type: 'boolean', short: 'v' },
@@ -72,6 +76,7 @@ const COMMANDS = {
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
   validate: commandValidate,
+  'update-check': commandUpdateCheck,
 };
 
 async function main(argv) {
@@ -103,6 +108,15 @@ async function main(argv) {
 
 const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test']);
 
+async function commandUpdateCheck({ force, json }) {
+  const result = await checkForUpdate({ force });
+  if (json) return print(result);
+  if (result.status === 'outdated') console.log(`reis-mobile ${result.current} is outdated; ${result.latest} is available. Run npm update -g reis-mobile && reis-mobile init.`);
+  else if (result.status === 'current') console.log(`reis-mobile ${result.current} is up to date (latest: ${result.latest}).`);
+  else console.error('Could not check the latest reis-mobile release. Try again with --force when online.');
+  return result.status === 'unavailable' ? 1 : 0;
+}
+
 async function commandInit({ local, scope, uninstall, lang, prompt }) {
   const requested = lang ?? (prompt || process.env.REIS_MOBILE_LANG || undefined);
   // Validate before touching Claude Code or Codex, so a typo does not leave a half-done install.
@@ -123,6 +137,7 @@ async function commandInit({ local, scope, uninstall, lang, prompt }) {
   }
   if (uninstall) {
     await removeConfig();
+    await clearUpdateCache();
     console.log(`✓ ${'Language'.padEnd(12)}saved setting removed`);
     return ok ? 0 : 1;
   }

@@ -35,7 +35,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔒 **Secrets never reach the model.** The diff sent for review goes through a layer that masks API keys, tokens, JWTs, private keys and keystore passwords.
 
-🪶 **Two commands to install.** `npm install -g reis-mobile` and `reis-mobile init eng` set it up in Claude Code and Codex, with zero npm dependencies, no hooks and no external provider.
+🪶 **Two commands to install.** `npm install -g reis-mobile` and `reis-mobile init eng` set it up in Claude Code and Codex, with zero npm dependencies and no external provider.
 
 ---
 
@@ -103,6 +103,8 @@ reis-mobile init eng
 ```
 
 Then restart Claude Code and Codex. See what changed in the [CHANGELOG](CHANGELOG.md).
+
+The plugin checks the npm `latest` tag when a Claude Code or Codex session starts or resumes. If a newer release exists, it shows an update notice; it never installs anything automatically. The registry result is cached for 24 hours, the request times out after 1.5 seconds, and offline failures are silent in the hook. Codex requires you to trust the new hook through `/hooks` before it runs. To check the CLI manually, run `reis-mobile update-check --force`; set `REIS_MOBILE_UPDATE_CHECK=0` to disable the automatic check. Versions released before this hook cannot display the notice until they are updated once.
 
 ### Uninstall
 
@@ -397,17 +399,17 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug` and `test` make no network calls. Only installation touches the network, to download the package and register the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug` and `test` make no network calls. The update hook and `update-check` request the public npm package metadata; they send no project files or identifiers. Installation downloads the package and registers the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
-**Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, nothing leaves your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
+**Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, the debate context stays in your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
 
 **Context cost.** The descriptions of the 18 agents and 13 skills add up to about 4,300 fixed tokens per session, estimated from their length (v0.3 measured about 4,800 with `claude plugin details reis-mobile`). The full content of each skill is only loaded when it is used.
 
-**No hooks.** The plugin does not attach to Claude Code events. It only acts when you call a command or when a skill is relevant.
+**One session hook.** On session startup or resume, the plugin checks for a newer release and warns only when the installed plugin is outdated. It does not read the project or modify the plugin installation.
 
 **Own namespace.** Commands live under `/reis-mobile:*` and do not conflict with the built-in `/review` or `/security-review`.
 
-**Clean uninstall.** `reis-mobile init --uninstall` removes the plugin and its marketplace from Claude Code and Codex, and the saved language, without leaving configuration behind.
+**Clean uninstall.** `reis-mobile init --uninstall` removes the plugin and its marketplace from Claude Code and Codex, the saved language and the update-check cache.
 
 ---
 

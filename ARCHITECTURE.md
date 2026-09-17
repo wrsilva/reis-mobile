@@ -51,6 +51,8 @@ core/
 │   └── context-engine.mjs       changed files and diff (working tree, range or project)
 ├── diagnostics/
 │   └── doctor.mjs               tools and project configuration
+├── update/
+│   └── check.mjs                cached npm version check and update notice
 ├── install/
 │   ├── init.mjs                 reis-mobile init: installs in every tool found on the PATH
 │   ├── claude-plugin.mjs        Claude Code steps
@@ -134,14 +136,16 @@ The CLI and the plugins are the same code, published through three channels:
 
 | Channel | Source | Installs |
 |---|---|---|
-| Claude Code plugin | This repository, as a GitHub marketplace (`reis-mobile@reis-mobile`) | Agents, skills, commands, and the CLI under `${CLAUDE_PLUGIN_ROOT}/bin` |
-| Codex plugin | The same marketplace, through `codex plugin` | Skills |
+| Claude Code plugin | This repository, as a GitHub marketplace (`reis-mobile@reis-mobile`) | Agents, skills, commands, the CLI under `${CLAUDE_PLUGIN_ROOT}/bin`, and a session update hook |
+| Codex plugin | The same marketplace, through `codex plugin` | Skills and a session update hook, after hook trust review |
 | npm (`reis-mobile`) | `npm publish` in the release workflow, when the `NPM_TOKEN` secret exists | The `reis-mobile` command; `reis-mobile init` installs the plugin in Claude Code and Codex, whichever are on the `PATH` |
 
 `package.json` `files` decides what the npm package contains, including `THIRD_PARTY_NOTICES.md`, which the MIT and BSD-3-Clause licenses of the imported skills require. CI packs the package and installs it globally on Linux, macOS and Windows before running the CLI.
 
 There is no native binary: reis-mobile depends on Node.js 22+, declared in `engines`.
 
+`hooks/hooks.json` runs `bin/update-check.mjs` on session startup and resume. The script compares the installed plugin version with npm's `latest` dist-tag, using a 24-hour cache outside the plugin directory, a 1.5-second request timeout and a 3-second hook timeout. It emits a user-visible `systemMessage` only when a newer stable version exists; errors and offline sessions stay silent. `REIS_MOBILE_UPDATE_CHECK=0` disables it. `reis-mobile update-check --force` performs a manual check. The hook does not update either tool or the CLI.
+
 ## Out of scope for this version
 
-These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), a general provider abstraction, MCP server, hooks, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions.
+These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), a general provider abstraction, MCP server, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions.

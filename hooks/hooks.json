@@ -1,0 +1,17 @@
+{
+  "description": "Warn when a newer reis-mobile release is available.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/update-check.mjs\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

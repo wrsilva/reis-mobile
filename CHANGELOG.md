@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- A `SessionStart` hook for Claude Code and Codex that warns when the installed plugin is behind npm's latest release. It caches registry results for 24 hours, stays silent offline and can be disabled with `REIS_MOBILE_UPDATE_CHECK=0`.
+- `reis-mobile update-check [--force]` for manually checking the CLI version.
+
 ## [0.7.0] - 2026-09-17
 
 ### Added

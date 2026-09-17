@@ -19,6 +19,7 @@
     "commands",
     "core",
     "docs/agent-context.md",
+    "hooks",
     "skills",
     "stacks",
     "THIRD_PARTY_NOTICES.md",
