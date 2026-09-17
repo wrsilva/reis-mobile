@@ -10,7 +10,8 @@ const END = '<!-- reis-mobile:latest-release:end -->';
 const RELEASE_HEADING = /^## \[(\d+\.\d+\.\d+)\] - (\d{4}-\d{2}-\d{2})$/;
 
 function currentRelease(changelog, version, date) {
-  const lines = changelog.split('\n');
+  const newline = changelog.includes('\r\n') ? '\r\n' : '\n';
+  const lines = changelog.split(/\r?\n/);
   const unreleased = lines.findIndex((line) => line === '## [Unreleased]');
   if (unreleased < 0) throw new Error('CHANGELOG.md needs an [Unreleased] section');
   for (const line of lines) {
@@ -34,12 +35,12 @@ function currentRelease(changelog, version, date) {
     const end = latest?.index ?? lines.length;
     const notes = lines.slice(unreleased + 1, end).join('\n').trim();
     if (!notes) throw new Error(`CHANGELOG.md needs notes under [Unreleased] for ${version}`);
-    const before = lines.slice(0, unreleased + 1).join('\n');
-    const after = lines.slice(end).join('\n');
-    next = `${before}\n\n## [${version}] - ${date}\n\n${notes}${after ? `\n\n${after}` : '\n'}`;
+    const before = lines.slice(0, unreleased + 1).join(newline);
+    const after = lines.slice(end).join(newline);
+    next = `${before}${newline}${newline}## [${version}] - ${date}${newline}${newline}${notes.replaceAll('\n', newline)}${after ? `${newline}${newline}${after}` : newline}`;
   }
 
-  const nextLines = next.split('\n');
+  const nextLines = next.split(/\r?\n/);
   const releaseStart = nextLines.findIndex((line) => RELEASE_HEADING.exec(line)?.[1] === version);
   if (releaseStart < 0) throw new Error(`CHANGELOG.md has no release entry for ${version}`);
   const releaseEnd = nextLines.findIndex((line, index) => index > releaseStart && line.startsWith('## '));
@@ -55,7 +56,8 @@ function updatedReadme(readme, version, notes) {
   const start = readme.indexOf(START);
   const end = readme.indexOf(END);
   if (end < start) throw new Error('README.md latest-release markers are out of order');
-  const content = `${START}\n### v${version}\n\n${notes.replace(/^### /gm, '#### ')}\n\n${END}`;
+  const newline = readme.includes('\r\n') ? '\r\n' : '\n';
+  const content = `${START}\n### v${version}\n\n${notes.replace(/^### /gm, '#### ')}\n\n${END}`.replaceAll('\n', newline);
   return readme.slice(0, start) + content + readme.slice(end + END.length);
 }
 

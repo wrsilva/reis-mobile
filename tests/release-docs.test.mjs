@@ -54,6 +54,29 @@ describe('release Markdown synchronization', () => {
     }
   });
 
+  it('accepts Windows CRLF files for both existing and new releases', () => {
+    for (const version of ['0.7.1', '0.7.2']) {
+      const root = fixture(version, version === '0.7.1' ? '' : '### Added\n\n- New release note.');
+      try {
+        for (const path of ['CHANGELOG.md', 'README.md']) {
+          const file = join(root, path);
+          writeFileSync(file, readFileSync(file, 'utf8').replaceAll('\n', '\r\n'));
+        }
+        const changed = syncReleaseDocs(planReleaseDocs(root, '2026-09-18'), root);
+        assert.ok(changed.includes('README.md'));
+        assert.equal(changed.includes('CHANGELOG.md'), version === '0.7.2');
+        for (const path of ['CHANGELOG.md', 'README.md']) {
+          const content = readFileSync(join(root, path), 'utf8');
+          assert.ok(content.includes('\r\n'));
+          assert.doesNotMatch(content, /(?<!\r)\n/);
+        }
+        assert.deepEqual(syncReleaseDocs(planReleaseDocs(root, '2026-09-19'), root), []);
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    }
+  });
+
   it('rejects a new version without authored notes or with malformed release headings', () => {
     const root = fixture('0.7.2', '');
     try {
