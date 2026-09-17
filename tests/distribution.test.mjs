@@ -111,7 +111,7 @@ describe('npm package', () => {
   });
 
   it('ships everything the plugins and the CLI load at runtime', () => {
-    for (const path of ['.claude-plugin', 'agents', 'bin', 'commands', 'core', 'skills', 'stacks']) {
+    for (const path of ['.claude-plugin', 'agents', 'bin', 'commands', 'core', 'docs/agent-context.md', 'skills', 'stacks']) {
       assert.ok(manifest.files.includes(path), `package.json "files" is missing ${path}`);
     }
     assert.equal(manifest.bin['reis-mobile'], 'bin/reis-mobile.mjs');

@@ -108,16 +108,30 @@ describe('plugin registry', () => {
     }
   });
 
-  it('keeps every relative Markdown link inside skills pointing at a file', () => {
-    const root = join(PLUGIN_ROOT, 'skills');
-    const files = readdirSync(root, { recursive: true }).filter((file) => file.endsWith('.md'));
+  it('keeps every relative Markdown link in runtime instructions pointing at a file', () => {
+    for (const directory of ['skills', 'agents', 'commands', 'docs']) {
+      const root = join(PLUGIN_ROOT, directory);
+      const files = readdirSync(root, { recursive: true }).filter((file) => file.endsWith('.md'));
 
-    for (const file of files) {
-      const text = readFileSync(join(root, file), 'utf8').replace(/```[\s\S]*?```/g, '');
-      for (const [, target] of text.matchAll(/\]\(([^)\s#]+\.md)(?:#[^)]*)?\)/g)) {
-        if (/^[a-z]+:\/\//.test(target)) continue;
-        assert.ok(existsSync(join(root, dirname(file), target)), `${file} links ${target}`);
+      for (const file of files) {
+        const text = readFileSync(join(root, file), 'utf8').replace(/```[\s\S]*?```/g, '');
+        for (const [, target] of text.matchAll(/\]\(([^)\s#]+\.md)(?:#[^)]*)?\)/g)) {
+          if (/^[a-z]+:\/\//.test(target)) continue;
+          assert.ok(existsSync(join(root, dirname(file), target)), `${directory}/${file} links ${target}`);
+        }
       }
+    }
+  });
+
+  it('gives every specialist access to the shared project brief contract', async () => {
+    const { agents } = await loadRegistry();
+    const contract = 'docs/agent-context.md';
+    const manifest = JSON.parse(readFileSync(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
+
+    assert.ok(manifest.files.includes(contract), 'the shared contract must ship in npm');
+    for (const agent of agents) {
+      const source = readFileSync(agent.path, 'utf8');
+      assert.ok(source.includes(`(../${contract})`), `${agent.name} must link the shared contract`);
     }
   });
 

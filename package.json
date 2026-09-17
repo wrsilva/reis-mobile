@@ -18,6 +18,7 @@
     "bin",
     "commands",
     "core",
+    "docs/agent-context.md",
     "skills",
     "stacks",
     "THIRD_PARTY_NOTICES.md",
