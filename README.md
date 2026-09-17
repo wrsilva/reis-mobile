@@ -6,7 +6,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Version-0.6.0-blue" alt="Version 0.6.0">
+  <img src="https://img.shields.io/badge/Version-0.7.0-blue" alt="Version 0.7.0">
   <img src="https://img.shields.io/badge/Claude_Code-plugin-blueviolet" alt="Claude Code plugin">
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node.js 22+">
   <img src="https://img.shields.io/badge/Dependencies-0-brightgreen" alt="Zero dependencies">
@@ -41,7 +41,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 ## What's new
 
-**Unreleased:** `/reis-mobile:test` runs, writes, audits or fixes tests using the app's existing setup, including XCTest/XCUITest and Espresso. The 18 agents now use a shared project brief and role-specific investigations tied to actual files, symbols and constraints. These changes are available from the clone and are not yet released; the package version remains v0.6.0.
+**v0.7.0:** `/reis-mobile:test` runs, writes, audits or fixes tests using the app's existing setup, including XCTest/XCUITest and Espresso. The 18 agents now use a shared project brief and role-specific investigations tied to actual files, symbols and constraints.
 
 > 🆕 **v0.4.0: every mobile stack.** Native Android, native iOS and React Native get their own architect, performance and test specialists, and `/reis-mobile:debug` finds the cause of a failing build with the toolchain versions in hand.
 >
@@ -54,7 +54,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 | Version | Highlights |
 |--------|-----------|
-| **v0.6.0** (current) | `mobile-accessibility-auditor` and `mobile-release-engineer` agents with the new `mobile-accessibility` and `mobile-release` skills: accessibility audits on every stack, release readiness with a go/no-go verdict, release notes and store copy, CI/CD. `mobile-debug` gains guides for ANRs, Android memory leaks and deep links. |
+| **v0.7.0** (current) | `/reis-mobile:test`, native XCTest and Espresso guidance, and project-specific contracts for the 18 specialists. |
+| **v0.6.0** | `mobile-accessibility-auditor` and `mobile-release-engineer` agents with the new `mobile-accessibility` and `mobile-release` skills: accessibility audits on every stack, release readiness with a go/no-go verdict, release notes and store copy, CI/CD. `mobile-debug` gains guides for ANRs, Android memory leaks and deep links. |
 | **v0.5.0** | 11 skills instead of 60: topic skills with a guide per platform (`mobile-architecture`, `mobile-code-review`, `mobile-debug`, `mobile-test`, `mobile-security`, `mobile-firebase`) and platform skills (`mobile-flutter`, `mobile-android`, and the new `mobile-ios` and `mobile-rn`). Half the fixed context cost. |
 | **v0.4.0** | Native Android, iOS and React Native: architect, performance and test agents for each; `/reis-mobile:debug` for Gradle, Xcode, CocoaPods and Flutter failures; `mobile-test` and `mobile-firebase` with a guide per platform; the Android team's skills; `.reis-mobile/config.yaml` for monorepos. Skills now use stack prefixes. |
 | **v0.3.6** | `reis-mobile init eng` installs the plugin in Claude Code and Codex at once, skipping whichever is not installed; `init --uninstall` removes it from both. |
@@ -287,7 +288,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Check release readiness, write release notes or set up CI/CD | agent `mobile-release-engineer` | ✅ |
 | Full audit with several specialists | agent `lead-mobile` | ✅ |
 | Decide between two architectures with a real trade-off | `/reis-mobile:debate` | ✅ |
-| Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | ✅ Unreleased |
+| Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | ✅ |
 | Check whether the app is ready for the store | `/reis-mobile:release` | 🔜 v0.8 |
 | Consolidated decision by consensus between agents | `/reis-mobile:council` | 🔜 v0.10 |
 
@@ -425,7 +426,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.4.0 | Native Android and iOS skills, architect, performance and test agents for Android, iOS and React Native, `.reis-mobile/config.yaml` and `/reis-mobile:debug` (Gradle, Xcode, CocoaPods, Flutter) | ✅ |
 | v0.5.0 | Topic and platform skills (`mobile-*`), with guides for Flutter, Android, iOS and React Native in each; new `mobile-ios` and `mobile-rn` | ✅ |
 | v0.6.0 | Accessibility auditor and release engineer agents, `mobile-accessibility` and `mobile-release` skills, ANR, memory leak and deep link debugging guides | ✅ |
-| v0.7.0 | `/reis-mobile:test`, native tests (XCTest, Espresso) and project-specific specialist contracts | Implemented, unreleased |
+| v0.7.0 | `/reis-mobile:test`, native tests (XCTest, Espresso) and project-specific specialist contracts | ✅ |
 | v0.8.0 | `/reis-mobile:release` with quality gates | ⏳ |
 | v0.9.0 | MCP server | ⏳ |
 | v0.10.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |

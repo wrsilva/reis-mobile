@@ -1,6 +1,6 @@
 {
   "name": "reis-mobile",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "AI agents and skills for mobile development — Flutter, Android, iOS and React Native — as a plugin for Claude Code and Codex: code review, debugging, tests, architecture, security and Firebase.",
   "type": "module",
   "license": "MIT",

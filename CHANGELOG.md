@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-17
+
 ### Added
 
 - `/reis-mobile:test` and `reis-mobile test`: the slash command runs, writes, audits or fixes tests according to the request; the CLI supplies explicit test routing, resolved project directory, redacted change context and toolchain diagnostics without launching test runners.
