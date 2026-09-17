@@ -18,3 +18,12 @@ it('synchronizes and commits release Markdown before tagging and publishing', ()
     assert.ok(stagedFiles.split(/\s+/).includes(path), `${path} must be committed before the release tag`);
   }
 });
+
+it('configures the Git identity before the optional commit and annotated tag', () => {
+  const workflow = readFileSync(join(PLUGIN_ROOT, '.github/workflows/release.yml'), 'utf8');
+  const name = workflow.indexOf("git config user.name 'github-actions[bot]'");
+  const email = workflow.indexOf("git config user.email '41898282+github-actions[bot]@users.noreply.github.com'");
+  const optionalCommit = workflow.indexOf('if ! git diff --cached --quiet; then');
+  const tag = workflow.indexOf('git tag -a ');
+  assert.ok(name >= 0 && name < email && email < optionalCommit && optionalCommit < tag);
+});
