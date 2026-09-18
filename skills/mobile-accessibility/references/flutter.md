@@ -27,7 +27,7 @@ Pitfalls:
 ## Announcements and focus
 
 - Mark text that changes on its own (a counter, a status) with `Semantics(liveRegion: true, ...)`.
-- For one-off messages, `SemanticsService.announce(message, textDirection)` exists in `package:flutter/semantics.dart`; check its status in the Flutter version in `pubspec.lock`'s SDK constraint before recommending it, since the announcement APIs have been evolving for multi-view support.
+- For one-off messages, inspect the installed Flutter SDK's `SemanticsService` API and the project's SDK pin before recommending an announcement call; `pubspec.lock` does not identify the exact Flutter SDK version.
 - `SnackBar`s shown through `ScaffoldMessenger` are announced by the framework.
 - Dialogs opened with `showDialog` and routes block the semantics of what is behind them; custom overlays built with `Stack` and `Positioned` do not — use `BlockSemantics` or a route.
 - Control reading order with `Semantics(sortKey: OrdinalSortKey(n))` only when the visual order and the widget order genuinely differ.

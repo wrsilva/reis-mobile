@@ -23,7 +23,7 @@ Apply to Dart files with widgets (`StatelessWidget`, `StatefulWidget`, `Consumer
 - [ ] Long lists with `ListView(children: [...])` / `Column` inside `SingleChildScrollView`: use `ListView.builder` or `SliverList`.
 - [ ] `shrinkWrap: true` on a large list inside another scroll view: forces layout of every item.
 - [ ] Rebuild scope too large: `setState`, `BlocBuilder` or `Consumer` at the top of the screen when only one part changes. Use `buildWhen`, `select` or extract the widget.
-- [ ] `MediaQuery.of(context)` used only for the size: `MediaQuery.sizeOf(context)` rebuilds less. Confirm the Flutter version in `pubspec.lock` before suggesting it.
+- [ ] `MediaQuery.of(context)` used only for the size: `MediaQuery.sizeOf(context)` rebuilds less. Confirm the project's Flutter SDK pin or installed toolchain before suggesting it.
 - [ ] Network images without `cacheWidth`/`cacheHeight` or without caching, decoded at full resolution to display thumbnails.
 - [ ] Animated `Opacity` or `ClipRRect`/`BackdropFilter` in list items: prefer `FadeTransition`/`AnimatedOpacity` and avoid unnecessary clipping.
 - [ ] Heavy work (parsing large JSON, cryptography, image processing) on the UI thread: use `compute`/`Isolate.run`.

@@ -96,7 +96,7 @@ describe('plugin registry', () => {
 
   it('links every platform reference a multi-platform skill ships', async () => {
     const { skills } = await loadRegistry();
-    const platformGuides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md'];
+    const platformGuides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
 
     for (const skill of skills.filter((item) => item.name.startsWith('mobile-'))) {
       const body = readFileSync(skill.path, 'utf8');
@@ -104,6 +104,23 @@ describe('plugin registry', () => {
         if (existsSync(join(dirname(skill.path), 'references', guide))) {
           assert.ok(body.includes(`(references/${guide})`), `${skill.name} links references/${guide}`);
         }
+      }
+    }
+  });
+
+  it('covers each advertised stack in every cross-stack topic skill', async () => {
+    const { skills } = await loadRegistry();
+    const topics = [
+      'mobile-architecture', 'mobile-test', 'mobile-code-review', 'mobile-debug',
+      'mobile-security', 'mobile-firebase', 'mobile-accessibility', 'mobile-release',
+    ];
+    const guides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
+
+    for (const topic of topics) {
+      const skill = skills.find((item) => item.name === topic);
+      assert.ok(skill, `${topic} exists`);
+      for (const guide of guides) {
+        assert.ok(existsSync(join(dirname(skill.path), 'references', guide)), `${topic} has ${guide}`);
       }
     }
   });
@@ -160,6 +177,7 @@ describe('plugin registry', () => {
       'skills/generic-helper/SKILL.md': '---\nname: generic-helper\ndescription: x\nrouting: manual\nstacks: ["*"]\n---\n',
       'skills/flutter-helper/SKILL.md': '---\nname: flutter-helper\ndescription: x\nrouting: manual\nstacks: [ios]\n---\n',
       'skills/mobile-ios/SKILL.md': '---\nname: mobile-ios\ndescription: x\nrouting: manual\nstacks: [flutter]\n---\n',
+      'skills/mobile-kmp/SKILL.md': '---\nname: mobile-kmp\ndescription: x\nrouting: manual\nstacks: [android]\n---\n',
       'skills/mobile-widgets/SKILL.md': '---\nname: mobile-widgets\ndescription: x\nrouting: manual\nstacks: [flutter]\n---\n',
       'skills/vendored/SKILL.md': '---\nname: vendored\ndescription: x\nrouting: manual\nstacks: ["*"]\nsource: https://example.com\n---\n',
     });
@@ -173,6 +191,7 @@ describe('plugin registry', () => {
     assert.ok(errors.some((error) => error.includes('generic-helper/SKILL.md: skill name must start with "mobile-"')));
     assert.ok(errors.some((error) => error.includes('flutter-helper/SKILL.md: skill name must start with "mobile-"')));
     assert.ok(errors.some((error) => error.includes('platform skill mobile-ios must declare stacks: [ios]')));
+    assert.ok(errors.some((error) => error.includes('platform skill mobile-kmp must declare stacks: [kotlin-multiplatform]')));
     assert.ok(errors.some((error) => error.includes('mobile-widgets/SKILL.md: topic skill must declare stacks: ["*"]')));
     assert.ok(errors.some((error) => error.includes('unknown stack "symbian"')));
     assert.ok(errors.some((error) => error.includes('stack "android" has a detector but no stacks/android/stack.json')));

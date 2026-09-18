@@ -1,6 +1,6 @@
 ---
 name: mobile-debug
-description: Finds the cause of failing builds and runtime errors in mobile apps on every stack — Flutter (pub version solving, Dart compilation, generated code, layout overflows, runtime exceptions), native Android (Gradle, AGP, JDK and Kotlin mismatches, dependency conflicts, manifest merger, R8, logcat crashes, ANRs and memory leaks), native iOS (Xcode signing and provisioning, deployment targets, CocoaPods, Swift Package Manager, crash logs) and React Native (Metro, native modules not found, Hermes, the Android and iOS builds underneath), plus deep links, App Links and Universal Links that do not open the app. Use whenever a build, `flutter run`, `pod install`, Gradle task, Xcode archive or app launch fails, when the user pastes a stack trace, "BUILD FAILED" or a red screen, or runs /reis-mobile:debug, even if they only paste the error.
+description: Diagnoses build and runtime failures across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. Covers pub/Dart, Gradle/AGP, Xcode/CocoaPods, Metro, KMP source sets and iOS frameworks, crashes and deep links. Use for failing builds, app launches, stack traces or /reis-mobile:debug.
 intents: [debug, build, dependency, migration]
 stacks: ["*"]
 ---
@@ -19,6 +19,7 @@ Choose by the stack **and** by the layer the error comes from — a Flutter or R
 | Gradle, the Android build, logcat crashes or ANRs (native Android, or the `android/` folder of any app) | [references/android.md](references/android.md) |
 | Xcode, signing, CocoaPods, Swift packages or iOS crash logs (native iOS, or the `ios/` folder of any app) | [references/ios.md](references/ios.md) |
 | A React Native or Expo app: Metro, native modules, JavaScript errors | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform compilation, source-set or framework integration | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 | A deep link, App Link or Universal Link that opens the browser, the wrong screen or crashes (any stack) | [references/deep-links.md](references/deep-links.md) |
 
 When `reis-mobile debug` (or `/reis-mobile:debug`) ran, its `area` line points at the layer: `gradle`, `manifest`, `proguard` → Android; `xcode`, `signing`, `cocoapods`, `spm` → iOS; `pub` → Flutter; `metro` → React Native.

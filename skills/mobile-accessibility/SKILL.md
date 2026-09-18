@@ -1,6 +1,6 @@
 ---
 name: mobile-accessibility
-description: Audits and fixes accessibility in mobile apps on every stack — screen reader labels, roles, states and reading order for TalkBack and VoiceOver, decorative elements, grouping, touch target size, text scaling and Dynamic Type, color contrast, focus in dialogs and announcements for dynamic content — with the exact APIs for Flutter (Semantics), native Android (Jetpack Compose semantics and Views), native iOS (SwiftUI and UIKit) and React Native, plus automated checks in tests. Use when building or reviewing UI for accessibility, preparing an accessibility audit, fixing TalkBack or VoiceOver issues, or when the user mentions a11y, WCAG, screen readers, font scaling or contrast, even if they only point at one screen.
+description: Audits and fixes mobile accessibility across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, including shared Compose UI and native hosts. Covers TalkBack/VoiceOver labels, roles, state, reading order, touch targets, text scaling, contrast and focus. Use for a11y audits, screen-reader bugs or accessible UI implementation.
 intents: [accessibility]
 stacks: ["*"]
 ---
@@ -17,6 +17,7 @@ One accessibility process for every mobile stack. This file holds what is true e
 | Native Android: Jetpack Compose or Views | [references/android.md](references/android.md) |
 | Native iOS: SwiftUI or UIKit | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform with shared Compose UI or native host UI | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 In Flutter and React Native apps, the native reference applies only to screens or components written natively (platform views, native modules with UI).
 

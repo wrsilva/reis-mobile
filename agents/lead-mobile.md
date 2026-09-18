@@ -30,6 +30,9 @@ Agents use the `reis-mobile:` prefix in the Agent tool. Choose by stack and deli
 | Route, cache/client-state and native-module boundaries | `reis-mobile:rn-architect` |
 | React render, JavaScript and native-thread costs | `reis-mobile:rn-performance-engineer` |
 | Jest/component tests and configured device journeys | `reis-mobile:rn-test-engineer` |
+| KMP source-set, shared object and Android/iOS contract design | `reis-mobile:kmp-architect` |
+| KMP common/target tests and host coverage | `reis-mobile:kmp-test-engineer` |
+| Shared Kotlin versus Android/iOS host performance cause | `reis-mobile:kmp-performance-engineer` |
 | Diff regression with concrete trigger and consequence | `reis-mobile:mobile-code-reviewer` |
 | Assistive-technology journey and control semantics | `reis-mobile:mobile-accessibility-auditor` |
 | Release identity, artifact gates, notes or pipeline | `reis-mobile:mobile-release-engineer` |

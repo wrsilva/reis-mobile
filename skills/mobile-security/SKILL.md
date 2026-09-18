@@ -1,6 +1,6 @@
 ---
 name: mobile-security
-description: Security review and hardening for mobile apps on every stack, organized by the OWASP MASVS categories — insecure token and credential storage, hardcoded secrets, cleartext traffic and TLS validation bypass, certificate pinning, exported components and intent handling, deep links, WebView bridges, biometrics, sensitive logging, backups, screenshots and release hardening — with concrete checks for Flutter, native Android, native iOS and React Native. Use when reviewing mobile code for security, auditing an app before release, storing tokens or credentials, handling authentication, deep links or WebViews, or when the user mentions OWASP, MASVS, pentest findings or store security requirements.
+description: Reviews mobile security across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform using OWASP MASVS. Covers credential storage, secrets, transport, deep links, WebViews, logging and platform implementations of shared KMP contracts. Use for security audits, auth/token handling, pentest findings or release hardening.
 intents: [review, security, release]
 stacks: ["*"]
 ---
@@ -17,6 +17,7 @@ Organized by the OWASP MASVS categories. Apply the general checks below, then th
 | Native Android (Kotlin/Java), or `android/` in any app | [references/android.md](references/android.md) |
 | Native iOS (Swift/Objective-C), or `ios/` in any app | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared code and platform implementations | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 Firebase-specific protection (security rules, App Check) is covered by `mobile-firebase`.
 

@@ -26,5 +26,5 @@ Each topic file lists its guides; open only the ones the task needs.
 ## Before writing code
 
 - Follow the project: its state management, folder structure, lints and packages already in `pubspec.yaml`.
-- Check the Flutter and Dart versions in `pubspec.lock` before using newer APIs; guides may describe features that a pinned SDK does not have.
+- Check the Flutter SDK pin (`.fvmrc`, toolchain config or CI) and the installed `flutter --version` before using newer APIs; `pubspec.lock` records resolved packages, not the exact Flutter SDK version.
 - Prefer packages the project already depends on over adding new ones; when adding one, check that it supports every platform the app targets.

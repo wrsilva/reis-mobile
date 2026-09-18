@@ -1,6 +1,6 @@
 ---
 name: mobile-firebase
-description: Integrates Firebase into mobile apps on every stack — Flutter (FlutterFire), native Android (Kotlin), native iOS (Swift) and React Native (React Native Firebase) — covering project setup, Authentication, Cloud Firestore, Realtime Database, Cloud Storage, callable Cloud Functions, Cloud Messaging push notifications, Analytics, Crashlytics, Remote Config, App Check, In-App Messaging, AI Logic and SQL Connect (formerly Data Connect). Use whenever the user adds, configures, debugs or reviews any Firebase product in a mobile app, including google-services.json, GoogleService-Info.plist, FCM tokens, security rules and the Firebase Local Emulator Suite, even if they only name the product.
+description: Integrates and reviews Firebase across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. Covers Auth, databases, Storage, Functions, FCM, Analytics, Crashlytics, Remote Config, App Check and KMP shared-to-platform SDK boundaries. Use for any Firebase setup, bug, security rule, emulator, configuration file or product integration.
 routing: manual
 stacks: ["*"]
 ---
@@ -19,6 +19,7 @@ Detect the stack first, then read the platform guide (shared setup and the produ
 | Native Android (Kotlin), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md) |
 | Native iOS (Swift) | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared API and Android/iOS Firebase boundaries | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 In a Flutter or React Native app, native code in `android/` and `ios/` (a notification service, an app extension) follows the native guides.
 

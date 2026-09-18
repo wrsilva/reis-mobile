@@ -17,6 +17,7 @@ export const PLATFORM_SKILLS = {
   'mobile-android': 'android',
   'mobile-ios': 'ios',
   'mobile-rn': 'react-native',
+  'mobile-kmp': 'kotlin-multiplatform',
 };
 
 /**

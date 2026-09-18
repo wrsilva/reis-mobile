@@ -58,6 +58,25 @@ describe('route', () => {
     }
   }
 
+  for (const [intent, agent, topic] of [
+    ['architecture', 'kmp-architect', 'mobile-architecture'],
+    ['test', 'kmp-test-engineer', 'mobile-test'],
+    ['performance', 'kmp-performance-engineer', 'mobile-code-review'],
+  ]) {
+    it(`routes KMP ${intent} to its own specialist and platform guide`, async () => {
+      const dir = await makeProject({
+        'settings.gradle.kts': 'include(":shared")\n',
+        'shared/build.gradle.kts': 'plugins { id("org.jetbrains.kotlin.multiplatform") }\nkotlin { androidTarget(); iosArm64() }',
+      });
+      const result = await route({ intent, projectDir: dir });
+
+      assert.equal(result.stack, 'kotlin-multiplatform');
+      assert.equal(result.agent.name, agent);
+      assert.equal(result.skills[0].name, 'mobile-kmp');
+      assert.ok(names(result.skills).includes(topic));
+    });
+  }
+
   it('sends release work on native iOS to the release engineer with the iOS and release skills', async () => {
     const result = await route({ intent: 'release', projectDir: await makeProject({ 'App.xcodeproj/project.pbxproj': '' }) });
 

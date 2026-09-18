@@ -1,6 +1,6 @@
 ---
 name: mobile-code-review
-description: Reviews mobile code for the bugs that reach production on every stack — Flutter and Dart (pull request checklist, widget lifecycle and rebuilds, project health, static analysis), native Android (Kotlin, coroutines, Jetpack Compose, lifecycle), native iOS (Swift concurrency, SwiftUI, retain cycles) and React Native (hooks, re-renders, platform code, Expo) — with file:line evidence and a structured report. Use whenever the user asks for a code review, PR or merge request review, project audit or quality check of a mobile app, or runs /reis-mobile:review, even if they only point at a diff or a folder.
+description: Reviews mobile code for production bugs across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, including KMP source-set and host API contracts. Covers lifecycle, concurrency, UI state and native boundaries with file:line evidence. Use for a code review, PR, project audit, quality check or /reis-mobile:review.
 intents: [review, performance]
 stacks: ["*"]
 ---
@@ -19,6 +19,7 @@ Detect the stack first, then apply the platform checklist to the files in scope:
 | Native Android (Kotlin/Java), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md) |
 | Native iOS (Swift/Objective-C) | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared and target changes | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 In a cross-platform app, native code in `android/`, `ios/` or native modules gets the native checklist too. Security findings follow `mobile-security` when it is loaded.
 

@@ -1,6 +1,6 @@
 ---
 name: mobile-release
-description: Prepares and checks mobile app releases on every stack — release readiness (go/no-go) checklist, version name and build number, signing, crash symbols (R8 mappings, dSYMs, Dart split debug info, JavaScript source maps), store requirements, staged rollout and rollback, release notes and store listing copy with the Google Play and App Store character limits, and CI/CD pipelines with GitHub Actions, fastlane and EAS — for Flutter, native Android, native iOS and React Native. Use when preparing a version for Google Play or the App Store, auditing whether a build is ready to ship, writing release notes or store descriptions from the git history, setting up or reviewing a build and deploy pipeline, or planning a rollout, even if the user only says "we ship on Friday".
+description: Prepares mobile releases across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, including separate Android/iOS artifacts from a shared KMP revision. Covers versions, signing, symbols, store readiness, rollout, release notes and CI/CD. Use for release audits, store submission, build pipelines or rollout planning.
 intents: [release, deployment]
 stacks: ["*"]
 ---
@@ -17,6 +17,7 @@ One release process for every mobile stack. This file holds the process and what
 | Native Android, or the Android build of any app | [references/android.md](references/android.md) |
 | Native iOS, or the iOS build of any app | [references/ios.md](references/ios.md) |
 | React Native or Expo app | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared module and both host apps | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 | Release notes and store listing text | [references/store-copy.md](references/store-copy.md) |
 | A CI/CD pipeline that builds, signs and uploads | [references/ci-cd.md](references/ci-cd.md) |
 

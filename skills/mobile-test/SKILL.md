@@ -1,6 +1,6 @@
 ---
 name: mobile-test
-description: Writes, runs and reviews automated tests for mobile apps on every stack — Flutter and Dart (unit, widget and integration tests, Patrol, mocktail, mockito, coverage, package:checks), native Android (JUnit, coroutines and Flow tests, Robolectric, Compose UI tests, Espresso, Hilt, screenshot tests), native iOS (Swift Testing, XCTest, XCUITest) and React Native (Jest, React Native Testing Library, Detox, Maestro). Use whenever the user wants to add, fix or audit tests, set up a test stack, mock dependencies, measure coverage or deal with flaky tests in a mobile project, even if they only name a class to test.
+description: Writes, runs and reviews mobile tests across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. Covers Dart widget/integration tests, JUnit/Compose/Espresso, XCTest/XCUITest, Jest/Detox, and KMP common/target tests. Use to add, fix, run or audit tests, test setup, mocks, coverage and flaky tests for a real app behavior.
 intents: [test]
 stacks: ["*"]
 ---
@@ -19,6 +19,7 @@ Detect the stack first (the router result, or `pubspec.yaml`, Gradle files, the 
 | Native Android (Kotlin), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md); for setting up a test stack from scratch, [references/android/setup/GUIDE.md](references/android/setup/GUIDE.md) |
 | Native iOS (Swift) | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared and target tests | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 A cross-platform app with native code (`android/`, `ios/`, native modules) uses the native reference for that code.
 

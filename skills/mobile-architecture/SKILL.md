@@ -1,6 +1,6 @@
 ---
 name: mobile-architecture
-description: Designs and reviews the architecture of mobile apps on every stack — layers (UI, domain, data), unidirectional data flow, state ownership and state management, feature-first modularization, dependency injection, navigation, offline data and use cases — for Flutter (BLoC, Riverpod, Provider, ChangeNotifier), native Android (ViewModel, Hilt, Gradle modules), native iOS (SwiftUI and UIKit, Observation, Swift packages, actors) and React Native (server vs client state, React Navigation, Expo Router, native modules). Use when structuring a new app or feature, choosing or implementing state management, refactoring to layers or modules, or when the user asks where code should live, even if they only mention one class or screen.
+description: Designs and reviews mobile architecture across Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. Covers state ownership, data flow, modules, dependency boundaries, navigation, offline data and KMP shared source sets versus host apps. Use when structuring a feature, choosing state management, refactoring layers or deciding where a real class or screen belongs.
 intents: [architecture]
 stacks: ["*"]
 ---
@@ -17,6 +17,7 @@ What makes a mobile codebase keep up with its team, and how each stack expresses
 | Native Android (Kotlin), or the Android side of Kotlin Multiplatform | [references/android.md](references/android.md) |
 | Native iOS (Swift) | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
+| Kotlin Multiplatform shared code and target boundaries | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 
 ## 2. Map before judging
 
