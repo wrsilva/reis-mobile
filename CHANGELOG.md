@@ -4,6 +4,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- Kotlin Multiplatform architect, test and performance specialists, a `mobile-kmp` platform skill and focused KMP references in the eight cross-stack topic skills. Routing and coverage tests guard the new paths.
+- `/reis-mobile:project [feature]` creates or refreshes a verified app object map in `.reis-mobile/project.md` while preserving team-authored product context.
+
+### Changed
+
+- Specialist guidance distinguishes configured shared source sets, Android/iOS host behavior and target-specific validation; the shared brief verifies profile paths and separates team knowledge from code evidence.
+
 ## [0.7.1] - 2026-09-17
 
 ### Added

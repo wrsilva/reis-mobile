@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'reis-mobile', 'review', 'test']);
+    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'project', 'reis-mobile', 'review', 'test']);
   });
 
   for (const command of commands) {
@@ -48,6 +48,27 @@ describe('commands', () => {
       });
     });
   }
+});
+
+describe('/project', () => {
+  const command = commands.find((item) => item.name === 'project');
+
+  it('resolves the app root and a monorepo profile location before writing', () => {
+    assert.match(command.body, /detect --json --dir "\$PWD"/);
+    assert.match(command.body, /`projectDir` as the app root/);
+    assert.match(command.body, /`projectConfig` is present/);
+    assert.match(command.body, /unknown stack/);
+    for (const tool of ['Edit', 'Write']) assert.ok(command.data['allowed-tools'].includes(tool));
+  });
+
+  it('preserves team knowledge and requires real objects and commands', () => {
+    assert.match(command.body, /replace only the content between these exact markers/);
+    assert.match(command.body, /If an existing profile lacks the markers, preserve all existing text/);
+    assert.match(command.body, /real object\/symbol → path → owner\/lifetime/);
+    assert.match(command.body, /Never invent a domain object, test target/);
+    assert.match(command.body, /Distinguish commands inspected from commands actually run/);
+    assert.match(command.body, /Never copy secrets/);
+  });
 });
 
 describe('/test', () => {
@@ -93,6 +114,13 @@ describe('/debate', () => {
     for (const name of mentioned) {
       assert.ok(agents.includes(name), `unknown agent "${name}"`);
     }
+  });
+
+  it('offers distinct architecture, performance and test participants for KMP', () => {
+    for (const name of ['kmp-architect', 'kmp-performance-engineer', 'kmp-test-engineer']) {
+      assert.ok(debate.body.includes(`reis-mobile:${name}`), name);
+    }
+    assert.match(debate.body, /\`kmp-\*\` Kotlin Multiplatform/);
   });
 
   it('keeps the external providers optional', () => {

@@ -26,7 +26,7 @@ USER ──► COMMAND (/reis-mobile:review)
 | **The project on disk decides the stack** | The prompt only fills in an unknown stack or focuses on a native platform of a cross-platform app. "The Android build" in a Flutter app is still Flutter, with focus on Android. |
 | **No agent, no guess** | When no intent has a registered agent, the router emits a warning instead of picking the "closest" one. |
 | **Flat skill entry points** | `skills/mobile-<name>/SKILL.md`: topic skills share a workflow and link platform references; platform skills link focused guides. It is the layout Claude Code discovers automatically. |
-| **Project-specific agent contracts** | All agents reuse `docs/agent-context.md` for evidence gathering; each role defines its investigation and deliverable. Technical checklists live in skills. |
+| **Project-specific agent contracts** | All agents reuse `docs/agent-context.md` for evidence gathering; each role defines its investigation and deliverable. `/reis-mobile:project` can record verified app objects in a profile without replacing team-authored product knowledge. Technical checklists live in skills. |
 | **Secrets masked before the model** | The diff goes through `redactSecrets` before leaving the CLI. The patterns target literals (`apiKey = "AIza..."`), not identifiers (`final token = await read()`), so the review is not harmed. |
 
 ## Modules
@@ -120,7 +120,7 @@ stacks: ["*"]                     # topic skill; platform skills declare their o
 
 `.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug` and `test` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
 
-The optional `.reis-mobile/project.md` carries domain knowledge for the model, not CLI configuration. Agents read it alongside applicable repository instructions and verify it against current code using the [shared project brief contract](docs/agent-context.md). The core does not parse it or infer product requirements.
+The optional `.reis-mobile/project.md` carries domain knowledge for the model, not CLI configuration. `/reis-mobile:project` writes or refreshes its marked verified code map using the resolved app directory and preserves all team-authored content. In a monorepo the profile lives beside `config.yaml`; otherwise it lives under the app root. Agents read it alongside applicable repository instructions and verify it against current code using the [shared project brief contract](docs/agent-context.md). The core does not parse it or infer product requirements.
 
 ## Test workflow
 

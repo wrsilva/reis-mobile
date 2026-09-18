@@ -1,7 +1,7 @@
 ---
-description: reis-mobile entry point — lists the commands or forwards to doctor, review, debug, test, debate or the right agent from a free-form request
-argument-hint: "[doctor | review | debug | test | debate | free-form request]"
-allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob"]
+description: reis-mobile entry point — lists the commands or forwards to doctor, project, review, debug, test, debate or the right agent from a free-form request
+argument-hint: "[doctor | project | review | debug | test | debate | free-form request]"
+allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob", "Edit", "Write"]
 ---
 
 # reis-mobile
@@ -20,6 +20,7 @@ Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}
 
 ```text
 /reis-mobile:doctor                  Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
+/reis-mobile:project [feature]       Creates or refreshes a brief with actual app objects and team context
 /reis-mobile:review [--base <ref>]   Code review of the changes (or the whole project)
 /reis-mobile:debug <problem>         Finds the cause of a build or runtime failure and proposes the fix
 /reis-mobile:test [request]          Runs, writes, audits or fixes tests using the project's test setup
@@ -33,6 +34,10 @@ When the language is `pt`, translate the descriptions and keep the commands as t
 
 1. Run via Bash: `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" doctor --dir "$PWD" <options>`.
 2. Read `${CLAUDE_PLUGIN_ROOT}/commands/doctor.md` and follow its **Instructions** section on that output.
+
+## `project [feature]`
+
+Read `${CLAUDE_PLUGIN_ROOT}/commands/project.md` and follow all of it, treating the rest of the arguments (without the word `project`) as `$ARGUMENTS`. This entry point has the same behavior as `/reis-mobile:project`.
 
 ## `review [options] [focus]`
 

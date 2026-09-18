@@ -6,7 +6,7 @@ Read this contract once per task. If the caller supplied a brief, reuse it and v
 
 Use the CLI's resolved `Project` directory and stack/platform focus. Read repository instructions that apply to the files in scope, then relevant architecture docs, build manifests, lock files, nearby implementation and tests. In a monorepo, keep repository-wide constraints and app-specific conventions distinct. Skip generated files and unrelated features.
 
-If the repository contains `.reis-mobile/project.md`, read it for team knowledge that code cannot explain: product vocabulary, critical journeys, intentional boundaries and supported environments. This is optional Markdown read by the model, not a new CLI configuration key. Verify its file paths, symbols and commands against the current checkout; mark stale statements. Do not require a setup interview or create the file unless requested.
+If the repository contains `.reis-mobile/project.md`, read it for team knowledge that code cannot explain: product vocabulary, critical journeys, intentional boundaries and supported environments. In a monorepo with `.reis-mobile/config.yaml`, look beside that config; otherwise look under the resolved app root. This is optional Markdown read by the model, not a new CLI configuration key. Verify its file paths, symbols and commands against the current checkout; mark stale statements and distinguish team-authored business rules from facts inferred from code. Do not require a setup interview or create the file unless requested.
 
 ## Build a compact brief
 
@@ -33,7 +33,7 @@ Trace at least one concrete path through the relevant objects: an action to a st
 
 ## Optional team context
 
-A team can commit `.reis-mobile/project.md` alongside the existing `.reis-mobile/config.yaml` (which continues to support only `app`). Useful content is short and specific:
+A team can run `/reis-mobile:project [feature]` to create or refresh a verified object map in `.reis-mobile/project.md`, then add product knowledge that cannot be inferred from code. The command preserves team-authored text on refresh. The optional profile can live beside the existing `.reis-mobile/config.yaml` (which continues to support only `app`). Useful content is short and specific:
 
 ```markdown
 # Mobile project context
