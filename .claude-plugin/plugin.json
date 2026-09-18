@@ -1,6 +1,6 @@
 {
   "name": "reis-mobile",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "AI agents, skills and workflows for Flutter, Android, iOS and React Native development. Use /reis-mobile:doctor, /reis-mobile:review and /reis-mobile:test.",
   "author": {
     "name": "Warleson Reis"

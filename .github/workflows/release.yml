@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   id-token: write
 
 # GitHub has delivered the same tag push twice; one run owns each release at a time.
@@ -39,6 +40,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.sha }}
+          token: ${{ secrets.RELEASE_PR_TOKEN || github.token }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -75,41 +77,74 @@ jobs:
         if: steps.plan.outputs.release == 'true'
         run: |
           if [ -z "$NPM_TOKEN" ]; then
-            echo 'NPM_TOKEN is required before creating a release tag' >&2
+            echo 'NPM_TOKEN is required before creating a release PR or tag' >&2
             exit 1
           fi
 
-      - name: Commit synchronized release files
+      - name: Open pull request for synchronized release files
+        id: sync_pr
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           TAG: ${{ steps.plan.outputs.tag }}
-          RELEASE: ${{ steps.plan.outputs.release }}
+          GH_TOKEN: ${{ secrets.RELEASE_PR_TOKEN || github.token }}
         run: |
           git add .claude-plugin/plugin.json .claude-plugin/marketplace.json README.md CHANGELOG.md
-          if [ "$RELEASE" = 'true' ] || ! git diff --cached --quiet; then
-            git fetch origin main
-            if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-              echo 'main advanced while the release was running; a newer run will handle it' >&2
-              exit 1
-            fi
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if ! git diff --cached --quiet; then
-            git commit -m "chore(release): synchronize files for ${TAG}"
-            git push origin HEAD:main
+          if git diff --cached --quiet; then
+            echo 'pending=false' >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo 'main advanced while the release was running; a newer run will handle it' >&2
+            exit 1
+          fi
+
+          BRANCH="automation/release-sync-${TAG}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          git commit -m "chore(release): synchronize files for ${TAG}"
+
+          REMOTE_SHA="$(git ls-remote --heads origin "$BRANCH" | cut -f1)"
+          if [ -n "$REMOTE_SHA" ]; then
+            git push --force-with-lease="refs/heads/$BRANCH:$REMOTE_SHA" origin "HEAD:refs/heads/$BRANCH"
+          else
+            git push origin "HEAD:refs/heads/$BRANCH"
+          fi
+
+          if [ "$(gh pr list --base main --head "$BRANCH" --state open --json number --jq 'length')" = '0' ]; then
+            cat > /tmp/reis-mobile-release-pr.md <<'EOF'
+          Synchronizes the plugin manifests, changelog and README from the version in `package.json`.
+
+          Merge this PR after the required checks pass. The next `main` run will create the tag and publish the package.
+          EOF
+            gh pr create --base main --head "$BRANCH" --title "chore(release): synchronize files for ${TAG}" --body-file /tmp/reis-mobile-release-pr.md || {
+              echo 'Could not open the release PR. Enable Actions to create pull requests in Settings > Actions > General, or configure RELEASE_PR_TOKEN with repository contents and pull-request write access.' >&2
+              exit 1
+            }
+          fi
+
+          echo 'pending=true' >> "$GITHUB_OUTPUT"
+          echo "Release files need a pull request before ${TAG} can be tagged or published." >> "$GITHUB_STEP_SUMMARY"
+
       - name: Create release tag
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.plan.outputs.release == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.plan.outputs.release == 'true' && steps.sync_pr.outputs.pending != 'true'
         env:
           TAG: ${{ steps.plan.outputs.tag }}
         run: |
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo 'main advanced while the release was running; a newer run will handle it' >&2
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git tag -a "$TAG" -m "reis-mobile $TAG"
           git push origin "$TAG"
 
       - name: Publish to npm
-        if: steps.plan.outputs.release == 'true'
+        if: steps.plan.outputs.release == 'true' && steps.sync_pr.outputs.pending != 'true'
         env:
           TAG: ${{ steps.plan.outputs.tag }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -121,7 +156,7 @@ jobs:
           fi
 
       - name: Create GitHub release
-        if: steps.plan.outputs.release == 'true'
+        if: steps.plan.outputs.release == 'true' && steps.sync_pr.outputs.pending != 'true'
         env:
           TAG: ${{ steps.plan.outputs.tag }}
           GH_TOKEN: ${{ github.token }}

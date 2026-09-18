@@ -44,17 +44,20 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.7.1
+### v0.7.2
 
 #### Added
 
-- A `SessionStart` hook for Claude Code and Codex that warns when the installed plugin is behind npm's latest release. It caches registry results for 24 hours, stays silent offline and can be disabled with `REIS_MOBILE_UPDATE_CHECK=0`.
-- `reis-mobile update-check [--force]` for manually checking the CLI version.
+- Kotlin Multiplatform architect, test and performance specialists, a `mobile-kmp` platform skill and focused KMP references in the eight cross-stack topic skills. Routing and coverage tests guard the new paths.
+- `/reis-mobile:project [feature]` creates or refreshes a verified app object map in `.reis-mobile/project.md` while preserving team-authored product context.
 
 #### Changed
 
-- `package.json` is the only editable version source. CI synchronizes the plugin manifests and the Release workflow tests, tags and publishes a new version after it reaches `main`.
-- Version synchronization now promotes authored `[Unreleased]` notes to a dated changelog section and refreshes the README's latest-release summary without changing historical entries.
+- Specialist guidance distinguishes configured shared source sets, Android/iOS host behavior and target-specific validation; the shared brief verifies profile paths and separates team knowledge from code evidence.
+
+#### Fixed
+
+- Release automation opens a pull request for synchronized files instead of pushing directly to a protected `main` branch, and waits for those changes to merge before tagging and publishing.
 
 <!-- reis-mobile:latest-release:end -->
 

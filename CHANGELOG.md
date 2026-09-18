@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-09-18
+
 ### Added
 
 - Kotlin Multiplatform architect, test and performance specialists, a `mobile-kmp` platform skill and focused KMP references in the eight cross-stack topic skills. Routing and coverage tests guard the new paths.
@@ -12,6 +14,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 ### Changed
 
 - Specialist guidance distinguishes configured shared source sets, Android/iOS host behavior and target-specific validation; the shared brief verifies profile paths and separates team knowledge from code evidence.
+
+### Fixed
+
+- Release automation opens a pull request for synchronized files instead of pushing directly to a protected `main` branch, and waits for those changes to merge before tagging and publishing.
 
 ## [0.7.1] - 2026-09-17
 
