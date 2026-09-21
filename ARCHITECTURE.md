@@ -118,7 +118,7 @@ stacks: ["*"]                     # topic skill; platform skills declare their o
 
 ## Project configuration
 
-`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug` and `test` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
+`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug`, `test` and `release` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
 
 The optional `.reis-mobile/project.md` carries domain knowledge for the model, not CLI configuration. `/reis-mobile:project` writes or refreshes its marked verified code map using the resolved app directory and preserves all team-authored content. In a monorepo the profile lives beside `config.yaml`; otherwise it lives under the app root. Agents read it alongside applicable repository instructions and verify it against current code using the [shared project brief contract](docs/agent-context.md). The core does not parse it or infer product requirements.
 
@@ -126,9 +126,15 @@ The optional `.reis-mobile/project.md` carries domain knowledge for the model, n
 
 `reis-mobile test` forces the `test` intent, resolves the app directory, and combines routing with the existing redacted change context and doctor report. It does not invoke a test runner. `/reis-mobile:test` consumes that context, grounds the work in real symbols and test targets, and follows the user's requested run, write, audit or fix scope through the selected specialist and `mobile-test` references. Native targets in cross-platform apps require the corresponding native reference even when the main agent remains Flutter or React Native.
 
+## Release readiness workflow
+
+`reis-mobile release` forces the existing `release` intent and combines routing, redacted change context and doctor diagnostics. `core/release/context.mjs` lists the detected stack's release reference and all detected Android/iOS references; it deliberately returns `evidenceStatus: unverified` and `verdict: null`. Detected targets are candidates to inspect, not proof of a shippable app. The CLI never builds, tests or uploads an artifact.
+
+`/reis-mobile:release` binds that context to actual release identities and uses `mobile-release-engineer` and `mobile-release/references/readiness.md`. The specialist verifies artifact provenance and external CI/store state, records pass/fail/unknown gates for each intended target, then runs `skills/mobile-release/scripts/verdict.mjs` on structured stdin. The helper checks completeness and decision consistency, not evidence truth. Missing/failed/unknown required gates produce NO-GO; all passing gates produce GO or GO WITH RISKS when non-blocking risks remain. No remote credentials or store integration are added to the core.
+
 ## Language
 
-Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <eng|pt>` or `reis-mobile lang <eng|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route` and `review` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
+Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <eng|pt>` or `reis-mobile lang <eng|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route`, `review`, `test` and `release` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
 
 ## Distribution
 

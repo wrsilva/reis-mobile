@@ -28,10 +28,10 @@ Flutter and React Native apps also need the Android and iOS references for signi
 
 For readiness audits, first follow [the readiness contract](references/readiness.md): resolve each artifact identity, collect per-target evidence and apply its required gates and deterministic verdict helper.
 
-Check each item against the project, not against memory. Mark each one **pass**, **fail** (with `file:line` or the missing artifact) or **unknown** (needs information only the team has, such as the store console state).
+Check each item against the project, not against memory. For the readiness verdict, a missing artifact or unavailable check is **unknown**; use **fail** only for an observed failure with evidence. Record a source reference and next action for every gate.
 
 **Version**
-- [ ] The version name follows the project's scheme and changed since the last release tag (`git describe --tags --abbrev=0`).
+- [ ] The version name follows the app's actual versioning scheme and is verified in the artifact and applicable CI overrides.
 - [ ] The build number satisfies the destination store’s numbering scope, verified against upload history: Android versionCode increases across tracks; iOS build numbers must be unused within the applicable version train. See the native references.
 - [ ] Android, iOS and any cross-platform manifest (`pubspec.yaml`, `app.json`) agree on the version.
 
@@ -50,7 +50,7 @@ Check each item against the project, not against memory. Mark each one **pass**,
 **Rollout**
 - [ ] Staged rollout (Play) or phased release (App Store) planned for updates, with the crash-free and ANR metrics to watch and the threshold that halts it.
 - [ ] Rollback plan: stores do not roll back a binary. Halting a rollout stops new installs; users who updated need a new build with a higher build number, a server-side kill switch or a remote config flag. Know which one applies before shipping.
-- [ ] The release commit is tagged and the tag matches the version.
+- [ ] The release commit is tagged and the tag matches the version, when this is the project's release convention.
 
 ## 3. Report
 

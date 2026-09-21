@@ -23,7 +23,7 @@ describe('readiness verdict', () => {
   });
 
   it('returns GO WITH RISKS for explicit non-blocking risks after all gates pass', () => {
-    const risks = ['Release owner accepts a smaller initial cohort; see rollout.md:12.'];
+    const risks = [{ id: 'cohort-size', description: 'Release owner accepts a smaller initial cohort.', evidence: ['rollout.md:12'], mitigation: 'Expand after the first monitoring review.', owner: 'Release owner' }];
     const result = evaluateReadiness({ targets: [passingTarget()], risks });
     assert.equal(result.verdict, 'GO WITH RISKS');
     assert.deepEqual(result.risks, risks);
@@ -34,7 +34,7 @@ describe('readiness verdict', () => {
       const ios = passingTarget('ios');
       const signing = ios.gates.find((gate) => gate.id === 'signing');
       Object.assign(signing, { status, evidence: status === 'fail' ? ['archive/signing.txt:7'] : [], nextAction: 'Release owner must provide the signed archive and profile.' });
-      const result = evaluateReadiness({ targets: [passingTarget(), ios], risks: ['Accepted cosmetic issue.'] });
+      const result = evaluateReadiness({ targets: [passingTarget(), ios], risks: [{ id: 'cosmetic', description: 'Accepted cosmetic issue.', evidence: ['issue.md:1'], mitigation: 'Schedule for the next release.', owner: 'Product owner' }] });
       assert.equal(result.verdict, 'NO-GO');
       assert.equal(result.blockers.length, 1);
       assert.equal(result.blockers[0].target, 'ios');
@@ -76,6 +76,8 @@ describe('readiness verdict', () => {
     assert.throws(() => evaluateReadiness({ targets: [duplicate] }), /duplicate/i);
     assert.throws(() => evaluateReadiness({ targets: [passingTarget(), passingTarget()] }), /duplicate/i);
     assert.throws(() => evaluateReadiness({ targets: [passingTarget()], risks: 'fine' }), /risks/);
+    assert.throws(() => evaluateReadiness({ targets: [passingTarget()], risks: ['fine'] }), /risks/);
+    assert.throws(() => evaluateReadiness({ targets: [passingTarget()], risks: [{ id: 'risky' }] }), /risks/);
   });
 
   it('reads stdin without writing files and distinguishes a verdict from an input error', () => {

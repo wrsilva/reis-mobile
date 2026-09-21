@@ -39,8 +39,8 @@ Acceptance Criteria:
 | ID | Scope | Verification | Status |
 |---|---|---|---|
 | RELEASE-01 | Criteria 1–2 | CLI integration tests across stacks, monorepo, missing evidence and read-only behavior | verified |
-| RELEASE-02 | Criteria 3–6 | Command contracts, verdict unit/CLI tests; independent workflow evaluation remains | implementing |
-| RELEASE-03 | Criterion 7 | Documentation/package checks, representative audit and full suite | pending |
+| RELEASE-02 | Criteria 3–6 | Command contracts, verdict unit/CLI tests, independent workflow evaluation | verified |
+| RELEASE-03 | Criterion 7 | Documentation/package checks, representative audit and full suite | verified |
 
 ## Execution Plan
 
@@ -56,3 +56,8 @@ Step 1: `node --test tests/release-command.test.mjs tests/doctor-and-cli.test.mj
 Step 2: `node --test tests/release-readiness.test.mjs tests/commands.test.mjs tests/registry.test.mjs` passed 50 tests. RELEASE-02 decision cases map to the GO/GO WITH RISKS assertions at `tests/release-readiness.test.mjs:20` and `:29`, cross-target blockers at `:41`, missing gates at `:53`, evidence-free pass at `:63`, and invalid-input CLI behavior at `:89`. Command integration maps to `tests/commands.test.mjs` in `/release`. Tests enforce criteria 3–6 without treating evidence strings as proof of their truth.
 
 Package verification found a symlink-path invocation defect in the verdict helper. A new regression test reproduced empty stdout; resolving the actual script path fixed it. `node --test tests/release-readiness.test.mjs` passed all 10 tests. The independent sample reader also identified unclear handling of absent app paths; the command now explicitly blocks unknown detection instead of trusting prompt hints. These corrections implement criteria 2, 5 and 7.
+
+
+RELEASE-03 validation: `npm run check` passed 5 stacks, 21 agents, 14 skills and 221 tests. The package archive was unpacked in a temporary directory; its `release` CLI selected `mobile-release-engineer`, and its packaged verdict script returned NO-GO for an empty target set. No global package installation occurred. The sample audit completed the 22 gate records and cites immutable upstream source plus official store pages with access dates.
+
+Independent workflow review found and resolved ambiguity between a missing artifact and an observed failure, the prior-release tag convention, and prompts pointing to a missing app path. Non-blocking risks now require an ID, description, evidence, mitigation and owner; their semantic impact still requires human verification. The release workflow remains read-only during the sample review.

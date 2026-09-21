@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- `/reis-mobile:release [request]` and entry-command forwarding audit mobile store readiness with per-target identity, pass/fail/unknown evidence gates and GO/GO WITH RISKS/NO-GO verdicts. A packaged helper rejects incomplete evidence; audits remain read-only by default.
+- `reis-mobile release` prepares routing, redacted git context, diagnostics and release references for all five stacks, including both native artifacts in cross-platform apps. A public Flutter sample audit demonstrates the report and external verification limits.
+
 ## [0.7.2] - 2026-09-18
 
 ### Added

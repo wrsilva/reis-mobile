@@ -8,7 +8,11 @@ const text = (value) => typeof value === 'string' && value.trim().length > 0;
 export function evaluateReadiness(report) {
   if (!report || !Array.isArray(report.targets)) throw new Error('targets must be an array');
   const risks = report.risks ?? [];
-  if (!Array.isArray(risks) || !risks.every(text)) throw new Error('risks must be an array of non-empty strings');
+  if (!Array.isArray(risks) || !risks.every((risk) => risk && text(risk.id) && text(risk.description)
+    && Array.isArray(risk.evidence) && risk.evidence.length > 0 && risk.evidence.every(text)
+    && text(risk.mitigation) && text(risk.owner))) {
+    throw new Error('risks must include id, description, evidence, mitigation and owner');
+  }
   const targets = new Set();
   const gates = [];
   for (const item of report.targets) {

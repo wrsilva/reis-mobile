@@ -40,7 +40,7 @@ Current store rules must be checked against official sources, such as [Google Pl
 
 The combined verdict covers every included target; one platform passing cannot approve another.
 
-Use [the verdict helper](../scripts/verdict.mjs) to check the report's decision. It validates completeness and consistency, **not the truth of the evidence**. Supply JSON on stdin using a quoted heredoc delimiter (no shell expansion):
+Use [the verdict helper](../scripts/verdict.mjs) to check the report's decision. It validates completeness and consistency, **not the truth of the evidence or whether a risk is truly non-blocking**. Supply JSON on stdin using a quoted heredoc delimiter (no shell expansion):
 
 ```bash
 node "${CLAUDE_PLUGIN_ROOT}/skills/mobile-release/scripts/verdict.mjs" <<'REIS_RELEASE_EVIDENCE'
@@ -48,7 +48,7 @@ node "${CLAUDE_PLUGIN_ROOT}/skills/mobile-release/scripts/verdict.mjs" <<'REIS_R
 REIS_RELEASE_EVIDENCE
 ```
 
-This intentionally incomplete example returns NO-GO. Replace it with the actual targets and all 11 gates; use one target name per artifact/store/track combination. `evidence` is an array of non-empty references (`file:line`, command plus result/log, artifact metadata, CI URL or dated portal confirmation). `nextAction` explains what resolves each fail/unknown. `risks` is an optional array of non-blocking risk statements with mitigation/owner. Do not place secrets in JSON. Choose a heredoc delimiter absent from the payload. The helper writes only stdout; exit 0 means evaluation succeeded, **not** GO. Malformed input exits 1 and must be corrected before reporting a verdict. Preserve returned unknowns and blockers; do not manually upgrade the result.
+This intentionally incomplete example returns NO-GO. Replace it with the actual targets and all 11 gates; use one target name per artifact/store/track combination. `evidence` is an array of non-empty references (`file:line`, command plus result/log, artifact metadata, CI URL or dated portal confirmation). `nextAction` explains what resolves each fail/unknown. `risks` is an optional array of objects with `id`, `description`, evidence references, `mitigation` and `owner`; include only evidenced issues whose impact truly does not block the release. The auditor is responsible for that classification. Do not place secrets in JSON. Choose a heredoc delimiter absent from the payload. The helper writes only stdout; exit 0 means evaluation succeeded, **not** GO. Malformed input exits 1 and must be corrected before reporting a verdict. Preserve returned unknowns and blockers; do not manually upgrade the result.
 
 ## Report
 
