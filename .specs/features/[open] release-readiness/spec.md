@@ -39,7 +39,7 @@ Acceptance Criteria:
 | ID | Scope | Verification | Status |
 |---|---|---|---|
 | RELEASE-01 | Criteria 1–2 | CLI integration tests across stacks, monorepo, missing evidence and read-only behavior | verified |
-| RELEASE-02 | Criteria 3–6 | Command contracts, verdict unit/CLI tests and independent workflow evaluation | pending |
+| RELEASE-02 | Criteria 3–6 | Command contracts, verdict unit/CLI tests; independent workflow evaluation remains | implementing |
 | RELEASE-03 | Criterion 7 | Documentation/package checks, representative audit and full suite | pending |
 
 ## Execution Plan
@@ -52,3 +52,5 @@ Acceptance Criteria:
 ## Execution evidence
 
 Step 1: `node --test tests/release-command.test.mjs tests/doctor-and-cli.test.mjs` passed 23 tests. RELEASE-01 maps to `tests/release-command.test.mjs:27` (`output.intent === release`), line 37 (exact platform list), line 38 (exact reference list), lines 66–67 (unchanged diff/status), and line 76 (unknown detection). All new tests map to criteria 1–2; no existing assertions were weakened.
+
+Step 2: `node --test tests/release-readiness.test.mjs tests/commands.test.mjs tests/registry.test.mjs` passed 50 tests. RELEASE-02 decision cases map to the GO/GO WITH RISKS assertions at `tests/release-readiness.test.mjs:20` and `:29`, cross-target blockers at `:41`, missing gates at `:53`, evidence-free pass at `:63`, and invalid-input CLI behavior at `:89`. Command integration maps to `tests/commands.test.mjs` in `/release`. Tests enforce criteria 3–6 without treating evidence strings as proof of their truth.

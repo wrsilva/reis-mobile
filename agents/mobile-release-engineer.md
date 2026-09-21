@@ -21,7 +21,7 @@ Use the [project brief](../docs/agent-context.md) once or reuse the supplied bri
 
 ## Produce the requested artifact
 
-- **Readiness:** apply the skill checklist to this release identity. Each gate is pass/fail/unknown with evidence and the responsible owner or next check. Verify current store requirements from official sources; local code cannot prove console approval or highest uploaded build number.
+- **Readiness:** apply the [readiness contract](../skills/mobile-release/references/readiness.md) and its verdict helper to this release identity. Unknown or failed required gates block readiness; evaluate each intended native artifact separately. Each gate is pass/fail/unknown with evidence and the responsible owner or next check. Verify current store requirements from official sources; local code cannot prove console approval or highest uploaded build number.
 - **Release notes:** establish the actual prior/current commit range. Map each user-facing change to commits/PRs, group by the app's feature names, preserve listing locales and check store limits from the reference. Unsupported claims stay out of the notes.
 - **Pipeline:** trace the existing jobs and artifact flow before proposing changes. Specify inputs, output artifact paths, secret names, build matrix and the dependency that prevents upload after failed checks. Keep build, signing and publishing steps independently identifiable.
 - **Rollout incident:** tie crash/ANR or adoption evidence to the affected build/cohort. Name the available halt, server flag or higher-build hotfix path from this app's deployment model, and state who remains exposed after a halt.
