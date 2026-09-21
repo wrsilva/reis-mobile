@@ -13,6 +13,8 @@ Public source: [flutter/samples at `8a4cf1db16d52741f0e59e1bfe818723430c35bc`](h
 | Android / Play production | `dev.flutter.testing_app` (A) | `release`; production environment unverified | `1.0.0+1` (P); Gradle reads generated local properties (A) | `8a4cf1db16d52741f0e59e1bfe818723430c35bc` | No AAB supplied (E2) |
 | iOS / App Store | `dev.flutter.testingApp` (I) | Runner / Release; production environment unverified | `1.0.0+1` (P, V); CI overrides unknown | `8a4cf1db16d52741f0e59e1bfe818723430c35bc` | No archive/IPA supplied (E2) |
 
+The store-specific build-number checks follow Google's [versionCode guidance](https://developer.android.com/studio/publish/versioning) and Apple's [build identification rules](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information); neither store upload history was available for this sample.
+
 Both native hosts exist. These are configured identities, not verified binary identities. A favorite-button action calls `Favorites.add/remove` (H), changes an in-memory list and notifies listeners (F); this observed data path does not establish complete privacy compliance.
 
 ## Gates
@@ -57,7 +59,7 @@ No separate non-blocking risks were accepted (`risks: []`). Required unknowns we
 1. Release owner confirms intended app ownership, identifiers, environment and destination history; Android owner addresses the observed debug signing configuration in separately authorized implementation.
 2. CI/QA owners supply this revision’s signed native artifacts, complete build/analysis/test results, dependency inventory and matching symbols. Resolve the workspace and toolchain before executing prepared checks.
 3. Store/privacy/product owners reconcile the binaries with current requirements, account state, disclosures and listing material. Re-run all gates against those artifacts.
-4. Release owner approves stages, monitoring baseline, halt thresholds and recovery. No percentages or thresholds are asserted as accepted here. Determine whether this is a first publication or update before choosing Play staged rollout or Apple phased release. Halting distribution does not replace already installed binaries; recovery needs a verified kill switch or a new higher-build hotfix. Neither path was verified.
+4. Release owner approves stages, monitoring baseline, halt thresholds and recovery. No percentages or thresholds are asserted as accepted here. Determine whether this is a first publication or update before choosing [Play staged rollout](https://support.google.com/googleplay/android-developer/answer/6346149) or [Apple phased release](https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases). Google notes that users who already received a staged version remain on it when rollout is halted; Apple says an update can still be downloaded manually during a phased release. Halting distribution therefore does not replace already installed binaries; recovery needs a verified kill switch or a new higher-build hotfix. Neither path was verified.
 
 Prepared, **not executed**, from `testing_app` after workspace/dependency and device setup: `flutter analyze`, `flutter test`, and `flutter test integration_test -d <approved-device-id>` separately for Android and iOS. The README also describes a physical-device profile performance run (T); the exact supported command/toolchain must be reconciled before execution. No publish command was prepared.
 

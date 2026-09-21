@@ -63,3 +63,5 @@ RELEASE-03 validation: `npm run check` passed 5 stacks, 21 agents, 14 skills and
 Independent workflow review found and resolved ambiguity between a missing artifact and an observed failure, the prior-release tag convention, and prompts pointing to a missing app path. Non-blocking risks now require an ID, description, evidence, mitigation and owner; their semantic impact still requires human verification. The release workflow remains read-only during the sample review.
 
 The independent verifier identified an AC3 test coverage gap: the command test did not assert every required release identity field or the configuration-versus-built-artifact distinction. Added focused assertions to `tests/commands.test.mjs` and made that distinction explicit in `commands/release.md`; `node --test tests/commands.test.mjs` passed 30 tests. Re-run the full gate and independent verifier on the updated head.
+
+The final independent review also requested official sources beside the example's claims about Android/iOS build-number scope and staged/phased rollout recovery. Added those primary-source links to the example and shared reference.
