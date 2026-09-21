@@ -13,6 +13,7 @@ One release process for every mobile stack. This file holds the process and what
 
 | Need | Read |
 |---|---|
+| Evidence-backed readiness audit, verdict and report | [references/readiness.md](references/readiness.md) |
 | Flutter app | [references/flutter.md](references/flutter.md) |
 | Native Android, or the Android build of any app | [references/android.md](references/android.md) |
 | Native iOS, or the iOS build of any app | [references/ios.md](references/ios.md) |
@@ -25,11 +26,13 @@ Flutter and React Native apps also need the Android and iOS references for signi
 
 ## 2. Readiness checklist
 
-Check each item against the project, not against memory. Mark each one **pass**, **fail** (with `file:line` or the missing artifact) or **unknown** (needs information only the team has, such as the store console state).
+For readiness audits, first follow [the readiness contract](references/readiness.md): resolve each artifact identity, collect per-target evidence and apply its required gates and deterministic verdict helper.
+
+Check each item against the project, not against memory. For the readiness verdict, a missing artifact or unavailable check is **unknown**; use **fail** only for an observed failure with evidence. Record a source reference and next action for every gate.
 
 **Version**
-- [ ] The version name follows the project's scheme and changed since the last release tag (`git describe --tags --abbrev=0`).
-- [ ] The build number is higher than any build already uploaded. Both stores reject a build number they have seen.
+- [ ] The version name follows the app's actual versioning scheme and is verified in the artifact and applicable CI overrides.
+- [ ] The build number satisfies the destination store’s numbering scope, verified against upload history: Android versionCode increases across tracks; iOS build numbers must be unused within the applicable version train. See the native references.
 - [ ] Android, iOS and any cross-platform manifest (`pubspec.yaml`, `app.json`) agree on the version.
 
 **Build quality**
@@ -47,25 +50,10 @@ Check each item against the project, not against memory. Mark each one **pass**,
 **Rollout**
 - [ ] Staged rollout (Play) or phased release (App Store) planned for updates, with the crash-free and ANR metrics to watch and the threshold that halts it.
 - [ ] Rollback plan: stores do not roll back a binary. Halting a rollout stops new installs; users who updated need a new build with a higher build number, a server-side kill switch or a remote config flag. Know which one applies before shipping.
-- [ ] The release commit is tagged and the tag matches the version.
+- [ ] The release commit is tagged and the tag matches the version, when this is the project's release convention.
 
 ## 3. Report
 
-```markdown
-## Release readiness — <app> <version> (<build>)
-Verdict: GO | GO WITH RISKS | NO-GO
+Use the [readiness report and decision rules](references/readiness.md#report). Any failed or unknown required gate means **NO-GO**. **GO WITH RISKS** requires all gates to pass with explicitly documented non-blocking risks; **GO** requires no outstanding risks.
 
-### Blockers
-- item — evidence (file:line or missing artifact) — fix
-
-### Risks
-- item — why it matters — mitigation
-
-### Unknown
-- item — who or what can confirm it
-
-### Rollout plan
-Stages, metrics to watch, halt threshold, rollback path.
-```
-
-A single blocker makes the verdict NO-GO. Do not bump versions, create tags, upload builds or change store settings unless the user asks; propose the exact commands instead.
+Readiness audits inspect existing evidence without running builds/tests or modifying the app. Version bumps, tags, uploads and store changes follow the user's explicit execution scope and existing authorization.

@@ -230,7 +230,7 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 ## Commands
 
 ```bash
-/reis-mobile                                      # Lists the commands (also accepts doctor, project, review, debug, test, debate or a free-form request)
+/reis-mobile                                      # Lists the commands (also accepts doctor, project, review, debug, test, release, debate or a free-form request)
 /reis-mobile my android build fails on gradle     # Free-form request: detects the stack and applies the right agent and skills
 /reis-mobile:doctor                               # Environment and project: SDKs, Xcode, CocoaPods, Gradle wrapper, lock files
 /reis-mobile:doctor --all                         # Checks every tool, not only those for the detected stack
@@ -242,6 +242,7 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 /reis-mobile:test run the checkout unit tests    # Uses the existing runner, module or scheme
 /reis-mobile:test add XCTest coverage for cancellation # Tests the actual Swift type and its dependency seams
 /reis-mobile:test audit Espresso checkout tests  # Reviews assertions and synchronization without editing
+/reis-mobile:release audit both stores for the production variant # Evidence-backed readiness, read-only
 /reis-mobile:debate Riverpod or BLoC in this app? # Debate between the specialists, with a decision by lead-mobile
 /reis-mobile:debate --rounds 3 --external ...     # More rounds; --external adds Codex and Gemini, if installed
 ```
@@ -266,6 +267,22 @@ reis-mobile test --base main -- "write regression tests for these changes"
 ```
 
 Its output includes the resolved project directory, explicit `test` intent, selected specialist and skills, redacted change context, toolchain diagnostics and answer language. `/reis-mobile test ...` forwards to the same slash-command workflow.
+
+### Release readiness
+
+`/reis-mobile:release [request]` audits the actual app artifacts for Flutter, native Android/iOS, React Native/Expo and Kotlin Multiplatform. `/reis-mobile release [request]` forwards to the same workflow. It resolves the app ID, flavor/scheme, environment, version/build, source revision, store/track and binary before evaluating readiness. Apps targeting both stores receive separate Android and iOS checks.
+
+The report lists each required gate as **pass**, **fail** or **unknown**, with evidence and next actions: identity, build, tests, analysis, version, signing, symbols, current store requirements, privacy, listing/localization and rollout/recovery. Any failed or unknown required gate means **NO-GO**. All gates passing means **GO**, or **GO WITH RISKS** when documented non-blocking risks remain. A packaged verdict helper enforces this decision rule; the specialist must still verify the evidence itself.
+
+The audit inspects existing files, artifacts and accessible CI/store records. It does not build, run tests, bump versions, tag, upload or change store settings by default. Missing CI results, upload history or portal confirmations remain unknown; local configuration is not proof that a check passed. Explicit execution requests retain their requested scope and prior authorization.
+
+```bash
+reis-mobile release --dir apps/mobile --json -- "audit Android production and iOS App Store"
+```
+
+The CLI only prepares routing, redacted git context, diagnostics and release reference paths. Its JSON includes `release.platforms` (candidate targets), `release.references`, `release.evidenceStatus: "unverified"` and `release.verdict: null`. Exit 0 does not approve a release. In Codex, ask it to run the CLI, read the returned instructions and follow `mobile-release`'s readiness contract; slash-command parity is not assumed.
+
+See the [readiness contract](skills/mobile-release/references/readiness.md) and [public Flutter sample audit](docs/examples/release-readiness.md) for the report format and evidence limits.
 
 ### Project context
 
@@ -320,7 +337,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Full audit with several specialists | agent `lead-mobile` | ✅ |
 | Decide between two architectures with a real trade-off | `/reis-mobile:debate` | ✅ |
 | Dedicated test command (including XCTest and Espresso) | `/reis-mobile:test` | ✅ |
-| Check whether the app is ready for the store | `/reis-mobile:release` | 🔜 v0.8 |
+| Check whether the app is ready for the store with evidence per target | `/reis-mobile:release` | ✅ |
 | Consolidated decision by consensus between agents | `/reis-mobile:council` | 🔜 v0.10 |
 
 <details>
@@ -428,7 +445,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 ## Trust, security and limits
 
-**Read-only CLI context.** `doctor`, `detect`, `route`, `review` and `test` do not modify your project. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/`.
+**Read-only CLI context.** `doctor`, `detect`, `route`, `review`, `test` and `release` do not modify your project. `/reis-mobile:release` inspects existing release evidence and remains read-only unless execution is explicitly requested. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/`.
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
@@ -463,7 +480,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.6.0 | Accessibility auditor and release engineer agents, `mobile-accessibility` and `mobile-release` skills, ANR, memory leak and deep link debugging guides | ✅ |
 | v0.7.0 | `/reis-mobile:test`, native tests (XCTest, Espresso) and project-specific specialist contracts | ✅ |
 | v0.7.1 | Update notices, single-source version and release automation | ✅ |
-| v0.8.0 | `/reis-mobile:release` with quality gates | ⏳ |
+| Unreleased | `/reis-mobile:release` with per-target evidence, required gates and deterministic readiness verdicts (previously planned for v0.8.0) | ✅ |
 | v0.9.0 | MCP server | ⏳ |
 | v0.10.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |
 | v1.0.0 | First stable version: Flutter, Android, iOS and React Native | ⏳ |

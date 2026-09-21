@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'project', 'reis-mobile', 'review', 'test']);
+    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'project', 'reis-mobile', 'release', 'review', 'test']);
   });
 
   for (const command of commands) {
@@ -143,5 +143,41 @@ describe('/debate', () => {
       debate.body.indexOf('Round 1') < debate.body.indexOf('Round 2'),
       'round 1 (blind positions) must come before round 2 (rebuttals)',
     );
+  });
+});
+
+
+describe('/release', () => {
+  const command = commands.find((item) => item.name === 'release');
+  const entry = commands.find((item) => item.name === 'reis-mobile');
+
+  it('is discoverable and loads the release workflow from the resolved project', () => {
+    assert.ok(entry.data['argument-hint'].includes('release'));
+    assert.ok(entry.body.includes('/reis-mobile:release [request]'));
+    assert.ok(entry.body.includes('${CLAUDE_PLUGIN_ROOT}/commands/release.md'));
+    assert.ok(command.body.includes('release --dir "$PWD" --'));
+    assert.ok(command.body.includes('detection.projectDir'));
+    assert.ok(command.body.includes('context.repoRoot'));
+    for (const reference of ['docs/agent-context.md', 'agents/<Agent>.md', 'skills/<skill>/SKILL.md', 'skills/mobile-release/references/readiness.md', 'skills/mobile-release/scripts/verdict.mjs']) {
+      assert.ok(command.body.includes('${CLAUDE_PLUGIN_ROOT}/' + reference), reference);
+    }
+  });
+
+  it('keeps audit boundaries and native artifact checks explicit', () => {
+    assert.match(command.body, /both native release references and separate artifact checks/);
+    assert.match(command.body, /Missing evidence must remain unknown/);
+    assert.match(command.body, /Do not claim a store or CI check passed from local configuration alone/);
+    assert.match(command.body, /read-only by default: no builds\/tests, version bump, tag, upload/);
+    assert.match(command.body, /single literal argument after `--`/);
+    assert.match(command.body, /CLI's `Language`/);
+    assert.ok(!command.data['allowed-tools'].includes('Write'));
+    assert.ok(!command.data['allowed-tools'].includes('Edit'));
+  });
+
+  it('requires each release identity field and separates configuration from artifact evidence', () => {
+    for (const field of ['app ID', 'flavor/scheme/environment', 'version/build', 'source revision', 'store/track', 'built artifact']) {
+      assert.ok(command.body.includes(field), `missing release identity field: ${field}`);
+    }
+    assert.match(command.body, /distinguish configured values from values verified in the built artifact/);
   });
 });
