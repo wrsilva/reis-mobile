@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-09-21
+
 ### Added
 
 - `/reis-mobile:release [request]` and entry-command forwarding audit mobile store readiness with per-target identity, pass/fail/unknown evidence gates and GO/GO WITH RISKS/NO-GO verdicts. A packaged helper rejects incomplete evidence; audits remain read-only by default.

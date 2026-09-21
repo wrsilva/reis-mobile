@@ -44,20 +44,12 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.7.2
+### v0.7.3
 
 #### Added
 
-- Kotlin Multiplatform architect, test and performance specialists, a `mobile-kmp` platform skill and focused KMP references in the eight cross-stack topic skills. Routing and coverage tests guard the new paths.
-- `/reis-mobile:project [feature]` creates or refreshes a verified app object map in `.reis-mobile/project.md` while preserving team-authored product context.
-
-#### Changed
-
-- Specialist guidance distinguishes configured shared source sets, Android/iOS host behavior and target-specific validation; the shared brief verifies profile paths and separates team knowledge from code evidence.
-
-#### Fixed
-
-- Release automation opens a pull request for synchronized files instead of pushing directly to a protected `main` branch, and waits for those changes to merge before tagging and publishing.
+- `/reis-mobile:release [request]` and entry-command forwarding audit mobile store readiness with per-target identity, pass/fail/unknown evidence gates and GO/GO WITH RISKS/NO-GO verdicts. A packaged helper rejects incomplete evidence; audits remain read-only by default.
+- `reis-mobile release` prepares routing, redacted git context, diagnostics and release references for all five stacks, including both native artifacts in cross-platform apps. A public Flutter sample audit demonstrates the report and external verification limits.
 
 <!-- reis-mobile:latest-release:end -->
 
