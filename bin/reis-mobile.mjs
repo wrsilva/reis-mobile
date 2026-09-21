@@ -11,6 +11,7 @@ import { runDoctor } from '../core/diagnostics/doctor.mjs';
 import { runInit } from '../core/install/init.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
+import { releaseContext } from '../core/release/context.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
 import { route } from '../core/router/router.mjs';
 import { checkForUpdate, clearUpdateCache } from '../core/update/check.mjs';
@@ -28,6 +29,7 @@ Commands:
   review [prompt...]         Route a code review and collect the git context for it
   debug [problem...]         Route a build or runtime failure and report the toolchain it runs on
   test [request...]          Prepare test routing, git context and toolchain checks (does not run tests)
+  release [request...]       Prepare release evidence context (does not build or publish)
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
   update-check               Check npm for a newer reis-mobile release
@@ -72,6 +74,7 @@ const COMMANDS = {
   review: commandReview,
   debug: commandDebug,
   test: commandTest,
+  release: commandRelease,
   agents: (options) => commandList('agents', options),
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
@@ -106,7 +109,7 @@ async function main(argv) {
   return (await command({ ...options, dir: project.projectDir, project, prompt: rest.join(' ') })) ?? 0;
 }
 
-const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test']);
+const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test', 'release']);
 
 async function commandUpdateCheck({ force, json }) {
   const result = await checkForUpdate({ force });
@@ -273,6 +276,26 @@ async function commandTest({ dir, project, base, prompt, json, lang }) {
   printLanguage(language);
   printContext(context);
   console.log('\nTest context prepared; no test suites were executed.\n');
+  printDoctorChecks(doctor);
+  return 0;
+}
+
+/** Prepare release evidence; the specialist audits it before assigning a verdict. */
+async function commandRelease({ dir, project, prompt, json, lang }) {
+  const result = await route({ prompt, intent: 'release', projectDir: dir });
+  const context = collectReviewContext({ projectDir: dir });
+  const doctor = await runDoctor({ projectDir: dir });
+  const language = await resolveLanguage({ flag: lang });
+  const release = releaseContext(result.detection);
+  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context, doctor, release });
+
+  printProject(project, true);
+  printRoute(result);
+  printLanguage(language);
+  printContext(context);
+  console.log(`\nRelease platforms (verify) ${release.platforms.join(', ') || 'unknown'}`);
+  for (const reference of release.references) console.log(`  Reference ${reference}`);
+  console.log('\nRelease context prepared; readiness has not been evaluated. No builds, tests or uploads were executed.\n');
   printDoctorChecks(doctor);
   return 0;
 }
