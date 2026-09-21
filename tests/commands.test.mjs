@@ -173,4 +173,11 @@ describe('/release', () => {
     assert.ok(!command.data['allowed-tools'].includes('Write'));
     assert.ok(!command.data['allowed-tools'].includes('Edit'));
   });
+
+  it('requires each release identity field and separates configuration from artifact evidence', () => {
+    for (const field of ['app ID', 'flavor/scheme/environment', 'version/build', 'source revision', 'store/track', 'built artifact']) {
+      assert.ok(command.body.includes(field), `missing release identity field: ${field}`);
+    }
+    assert.match(command.body, /distinguish configured values from values verified in the built artifact/);
+  });
 });
