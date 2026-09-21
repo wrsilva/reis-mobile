@@ -30,7 +30,7 @@ jobs:
         run: npm test
 
   package:
-    name: npm package · ${{ matrix.os }}
+    name: Installer · ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
