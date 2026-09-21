@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const REQUIRED_GATES = ['identity', 'build', 'tests', 'analysis', 'version', 'signing', 'symbols', 'store', 'privacy', 'listing', 'rollout'];
@@ -43,7 +43,7 @@ export function evaluateReadiness(report) {
 }
 
 // stdin avoids creating an audit file in the inspected project. Exit zero means evaluated, not GO.
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   try {
     let input = '';
     for await (const chunk of process.stdin) input += chunk;

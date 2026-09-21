@@ -20,6 +20,8 @@ Pass the request as a single literal argument after `--`, or omit it when empty.
 
 Use `Project` (`detection.projectDir` in JSON) as the app root and `context.repoRoot` for git-relative paths. The CLI lists candidate release platforms and reference paths (`release.platforms` and `release.references`); they are unverified inventory, not a verdict. Inspect untracked files and required files omitted by diff truncation. The git diff alone is not release evidence.
 
+If the resolved directory does not exist or `detection.stack` is `unknown`, report NO-GO with unresolved identity/targets and the exact app path needed. Do not use a stack inferred from the prompt as evidence of an app on disk. Feed an empty `targets` array to the verdict helper rather than inventing artifacts.
+
 ## 2. Bind the release to the app
 
 Read in order:

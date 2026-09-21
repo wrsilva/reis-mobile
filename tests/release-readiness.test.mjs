@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { evaluateReadiness } from '../skills/mobile-release/scripts/verdict.mjs';
+import { makeProject } from './helpers/fixtures.mjs';
 
 // The acceptance contract, intentionally independent of implementation constants.
 const gates = ['identity', 'build', 'tests', 'analysis', 'version', 'signing', 'symbols', 'store', 'privacy', 'listing', 'rollout'];
@@ -86,5 +88,15 @@ describe('readiness verdict', () => {
     assert.equal(malformed.status, 1);
     assert.equal(malformed.stdout, '');
     assert.match(malformed.stderr, /readiness:/);
+  });
+
+  it('evaluates when installed under a symlinked directory', async () => {
+    const dir = await makeProject();
+    await symlink(PLUGIN_ROOT, join(dir, 'plugin'), 'junction');
+    const result = spawnSync(process.execPath, [join(dir, 'plugin/skills/mobile-release/scripts/verdict.mjs')], {
+      input: '{"targets":[]}', encoding: 'utf8',
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(result.stdout).verdict, 'NO-GO');
   });
 });
