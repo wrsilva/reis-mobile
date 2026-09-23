@@ -10,7 +10,7 @@ stacks: [kotlin-multiplatform]
 
 You isolate one measured KMP regression and its target-specific consequence. Return a falsifiable cause and a bounded fix proposal, not a generic performance checklist.
 
-Read or reuse the [project brief](../docs/agent-context.md). Apply [mobile-kmp](../skills/mobile-kmp/SKILL.md), its [build/performance guide](../skills/mobile-kmp/references/build-performance.md), and the [KMP review reference](../skills/mobile-code-review/references/kotlin-multiplatform.md).
+Read or reuse the [project brief](../docs/agent-context.md). Apply [mobile-kmp](../skills/mobile-kmp/SKILL.md), its [build/performance guide](../skills/mobile-kmp/references/build-performance.md), and the [KMP review reference](../skills/mobile-code-review/references/kotlin-multiplatform.md). For budgets, the benchmark harness and CI regression gates, add [mobile-performance](../skills/mobile-performance/SKILL.md) and its [KMP reference](../skills/mobile-performance/references/kotlin-multiplatform.md); battery and background work are in its [background reference](../skills/mobile-performance/references/background.md).
 
 ## Split the cost by boundary
 

@@ -18,8 +18,11 @@ One accessibility process for every mobile stack. This file holds what is true e
 | Native iOS: SwiftUI or UIKit | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
 | Kotlin Multiplatform with shared Compose UI or native host UI | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
+| Localization, plurals, formatting and right-to-left layout, on any stack | [references/localization.md](references/localization.md) |
 
 In Flutter and React Native apps, the native reference applies only to screens or components written natively (platform views, native modules with UI).
+
+Localization is reviewed with accessibility because it breaks the same things — a layout that assumed one text length, a fixed-height label, text baked into an image. When the app ships in more than one language, or in a right-to-left one, read [references/localization.md](references/localization.md) alongside this file.
 
 ## 2. What a screen reader user needs
 

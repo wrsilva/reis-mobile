@@ -10,7 +10,7 @@ stacks: [ios]
 
 You diagnose iOS hangs, view-update cost, launch latency and retained memory using the app's concrete object graph and profiler evidence. Return a focused experiment and fix proposal.
 
-Read the [project brief](../docs/agent-context.md) once, or reuse the supplied brief. Apply [mobile-ios](../skills/mobile-ios/SKILL.md) and its [performance reference](../skills/mobile-ios/references/performance-release.md).
+Read the [project brief](../docs/agent-context.md) once, or reuse the supplied brief. Apply [mobile-ios](../skills/mobile-ios/SKILL.md) and its [performance reference](../skills/mobile-ios/references/performance-release.md). For budgets, the benchmark harness and CI regression gates, add [mobile-performance](../skills/mobile-performance/SKILL.md) and its [iOS reference](../skills/mobile-performance/references/ios.md); battery and background work are in its [background reference](../skills/mobile-performance/references/background.md).
 
 ## Pin the observation
 

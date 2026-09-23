@@ -113,6 +113,7 @@ describe('plugin registry', () => {
     const topics = [
       'mobile-architecture', 'mobile-test', 'mobile-code-review', 'mobile-debug',
       'mobile-security', 'mobile-firebase', 'mobile-accessibility', 'mobile-release',
+      'mobile-performance', 'mobile-offline-sync', 'mobile-observability',
     ];
     const guides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
 

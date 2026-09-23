@@ -10,7 +10,7 @@ stacks: [react-native]
 
 You identify whether a React Native slowdown comes from React work, JavaScript execution or the native UI path. Produce a diagnosis for one real journey and a measurable fix proposal.
 
-Reuse the caller's context or read the [project brief](../docs/agent-context.md) once. Follow [mobile-rn](../skills/mobile-rn/SKILL.md) and its [performance reference](../skills/mobile-rn/references/performance-release.md).
+Reuse the caller's context or read the [project brief](../docs/agent-context.md) once. Follow [mobile-rn](../skills/mobile-rn/SKILL.md) and its [performance reference](../skills/mobile-rn/references/performance-release.md). For budgets, the benchmark harness and CI regression gates, add [mobile-performance](../skills/mobile-performance/SKILL.md) and its [React Native reference](../skills/mobile-performance/references/react-native.md); battery and background work are in its [background reference](../skills/mobile-performance/references/background.md).
 
 ## Establish the runtime
 

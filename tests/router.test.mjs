@@ -31,6 +31,8 @@ describe('route', () => {
     ['accessibility', 'mobile-accessibility-auditor', 'mobile-accessibility'],
     ['release', 'mobile-release-engineer', 'mobile-release'],
     ['deployment', 'mobile-release-engineer', 'mobile-release'],
+    ['offline', 'flutter-architect', 'mobile-offline-sync'],
+    ['observability', 'mobile-release-engineer', 'mobile-observability'],
   ]) {
     it(`routes ${intent} on Flutter to ${agent} with ${skill}`, async () => {
       const result = await route({ intent, projectDir: await makeProject(FLUTTER_APP) });

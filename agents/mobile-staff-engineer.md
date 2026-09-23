@@ -4,7 +4,7 @@ description: Use this agent for senior-level guidance across Flutter/Dart, Andro
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]
-intents: [debug, architecture, performance, test, security, migration, dependency, build]
+intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability]
 stacks: ["*"]
 ---
 

@@ -36,8 +36,11 @@ Agents use the `reis-mobile:` prefix in the Agent tool. Choose by stack and deli
 | Diff regression with concrete trigger and consequence | `reis-mobile:mobile-code-reviewer` |
 | Assistive-technology journey and control semantics | `reis-mobile:mobile-accessibility-auditor` |
 | Release identity, artifact gates, notes or pipeline | `reis-mobile:mobile-release-engineer` |
+| Production crash, error and release-health signals | `reis-mobile:mobile-release-engineer` |
 | Flutter channel/Pigeon contract and detach lifecycle | `reis-mobile:plugin-native-expert` |
 | Cross-toolchain cause, compatibility or migration | `reis-mobile:mobile-staff-engineer` |
+
+An offline store, mutation queue or conflict strategy is an architecture assignment: give it to the detected stack's `*-architect`.
 
 Reuse the router/detector result; if missing, detect from the app root with `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect`. Native specialists join a Flutter/React Native task only for implicated native paths. Do not launch the whole table for a single-file task.
 

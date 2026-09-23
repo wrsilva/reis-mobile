@@ -18,6 +18,7 @@ Organized by the OWASP MASVS categories. Apply the general checks below, then th
 | Native iOS (Swift/Objective-C), or `ios/` in any app | [references/ios.md](references/ios.md) |
 | React Native or Expo | [references/react-native.md](references/react-native.md) |
 | Kotlin Multiplatform shared code and platform implementations | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
+| OAuth 2.0 / OIDC login, PKCE, tokens and biometric gating, on any stack | [references/auth.md](references/auth.md) |
 
 Firebase-specific protection (security rules, App Check) is covered by `mobile-firebase`.
 
@@ -43,6 +44,8 @@ Every finding needs evidence in the code or configuration at `file:line`. Severi
 - [ ] Authorization decided only on the client (a local `isAdmin` flag, hiding a button as access control).
 - [ ] Sessions without expiration, or refresh tokens never invalidated on logout.
 - [ ] Biometrics used only as a local boolean, without unlocking a key in the Keychain or Keystore.
+
+For anything involving a login flow — OAuth 2.0, OpenID Connect, PKCE, redirect URIs, token rotation or biometric-gated keys — read [references/auth.md](references/auth.md) before reviewing the stack reference.
 
 **MASVS-NETWORK**
 - [ ] `http://` URLs for APIs.
