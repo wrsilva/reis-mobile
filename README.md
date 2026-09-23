@@ -44,12 +44,21 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.7.3
+### v0.8.0
 
 #### Added
 
-- `/reis-mobile:release [request]` and entry-command forwarding audit mobile store readiness with per-target identity, pass/fail/unknown evidence gates and GO/GO WITH RISKS/NO-GO verdicts. A packaged helper rejects incomplete evidence; audits remain read-only by default.
-- `reis-mobile release` prepares routing, redacted git context, diagnostics and release references for all five stacks, including both native artifacts in cross-platform apps. A public Flutter sample audit demonstrates the report and external verification limits.
+- `mobile-performance` topic skill: measurement before optimization, budgets for startup, rendering, memory, battery and app size, and regression detection in CI, with a reference per stack (Flutter DevTools and `integration_test` summaries, Android Macrobenchmark, Baseline Profiles and vitals, iOS Instruments, MetricKit and `XCTMetric` baselines, React Native Hermes profiling and list tuning, KMP shared-versus-host isolation) plus a cross-stack guide to background execution and battery.
+- `mobile-offline-sync` topic skill: local store as the source of truth, a durable outbox with client-generated idempotency keys, ordering and operation collapsing, retry with backoff, conflict strategies per entity, reconnection triggers, offline UX and nine failure cases to test, with a reference per stack (drift and workmanager, Room and WorkManager, Core Data/SwiftData and `BGTaskScheduler`, SQLite with NetInfo and OTA-aware drains, SQLDelight and Ktor in `commonMain`).
+- `mobile-observability` topic skill: the signals that explain a production failure, mandatory segmentation by version and cohort, error context and grouping, correlation ids shared with the backend, rate-based alerting per version, sampling and cost, and what must never be collected, with a reference per stack (Flutter's three capture layers and Dart symbol upload, Android vitals and `ApplicationExitInfo`, MetricKit and Organizer, React Native source maps and OTA update ids, KMP `Telemetry` boundary and Kotlin/Native crash hooks).
+- `offline` and `observability` intents in the router. `offline` goes to the stack's architect and falls back to `mobile-staff-engineer`; `observability` goes to `mobile-release-engineer`.
+- `mobile-security/references/auth.md`: OAuth 2.0 and OIDC for native apps following RFC 8252 — authorization code with PKCE (`S256`), no client secret, system browser instead of a WebView, redirect URI choices, token rotation with reuse detection, and biometrics gating a key rather than a boolean.
+- `mobile-release/references/billing.md`: in-app purchase and subscription lifecycle — server-side entitlement, store server notifications, the states between active and expired, acknowledgement deadlines and automatic refunds, restore and account mapping, and the per-stack client libraries.
+- `mobile-accessibility/references/localization.md`: strings, CLDR plurals, locale-aware formatting, right-to-left layout and icon mirroring, translation growth, per-app language settings and pseudolocalization.
+
+#### Changed
+
+- The five `*-architect` agents also serve the `offline` intent, and `mobile-release-engineer` also serves `observability`; `mobile-staff-engineer` covers both when no stack is detected.
 
 <!-- reis-mobile:latest-release:end -->
 
