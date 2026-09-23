@@ -546,6 +546,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - [Architecture](ARCHITECTURE.md): modules, detection, routing and the agent and skill contract
 - [AGENTS.md](AGENTS.md): rules for whoever (or whichever AI) contributes to the repository
 - [Contributing](CONTRIBUTING.md)
+- [Releasing](docs/releasing.md): how a version is cut, what is generated and what to do when the pipeline fails
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Support](SUPPORT.md)
 - [Security](SECURITY.md)

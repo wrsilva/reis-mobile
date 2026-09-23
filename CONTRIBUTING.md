@@ -65,9 +65,13 @@ A good reis-mobile skill:
 
 ## Releasing a version
 
-1. Change only the `version` field in `package.json` and write release notes under `[Unreleased]` in `CHANGELOG.md`.
-2. Run `npm run version:sync` to update the Claude Code manifests, promote the notes to a dated changelog section and refresh the README's latest-release section. Then run `npm run check` and `npm pack --dry-run`. The CI and Release workflows also run synchronization; a new version without release notes fails.
-3. Merge or push to `main`. The **Release** workflow verifies the version is newer than existing tags, validates and tests the package, commits synchronized release files if needed, creates `vX.Y.Z`, publishes to npm, and creates the GitHub release. It skips publication when that tag already exists.
+Full process, repository settings it depends on and every failure mode: **[docs/releasing.md](docs/releasing.md)**. Read it before bumping anything.
+
+The short version:
+
+1. Edit **only** the `version` field in `package.json` (stable `X.Y.Z`, newer than the latest tag) and write release notes under `## [Unreleased]` in `CHANGELOG.md`. A version bump without notes fails CI.
+2. Run `npm run version:sync`, then `npm run check` and `npm pack --dry-run`. Everything else — the Claude Code manifests, the dated changelog heading and the README's latest-release section — is generated, never hand-edited.
+3. Merge to `main`. The **Release** workflow opens a second pull request with the synchronized files; merging that one creates `vX.Y.Z`, publishes to npm and creates the GitHub release. A release therefore takes two merges.
 
 `NPM_TOKEN` must be configured for the Release workflow, and GitHub Actions needs permission to push the generated release-files commit and tag to `main`. If a release stops after creating its tag, rerun the workflow manually with the existing tag in the `workflow_dispatch` input. A manually pushed `vX.Y.Z` tag also runs the same idempotent publication steps.
 
