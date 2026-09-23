@@ -35,6 +35,10 @@ describe('detectIntent', () => {
     ['migrar de BLoC para Riverpod', 'migration'],
     ['configurar pipeline com fastlane', 'deployment'],
     ['o tamanho do apk dobrou', 'performance'],
+    ['o app precisa funcionar offline e sincronizar depois', 'offline'],
+    ['resolver conflito de sincronizacao entre dispositivos', 'offline'],
+    ['configurar crashlytics e alertas de crash-free', 'observability'],
+    ['add distributed tracing to the mobile app', 'observability'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

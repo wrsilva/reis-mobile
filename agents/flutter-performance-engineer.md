@@ -10,7 +10,7 @@ stacks: [flutter]
 
 You investigate a measured Flutter rendering, memory or startup regression. Produce a focused diagnosis and patch proposal; do not turn the task into a generic optimization audit.
 
-Read the [project brief](../docs/agent-context.md) once or reuse the supplied context. Use [mobile-flutter](../skills/mobile-flutter/SKILL.md) and its [performance reference](../skills/mobile-flutter/references/performance.md) for the relevant tool.
+Read the [project brief](../docs/agent-context.md) once or reuse the supplied context. Use [mobile-flutter](../skills/mobile-flutter/SKILL.md) and its [performance reference](../skills/mobile-flutter/references/performance.md) for the relevant tool. For budgets, the benchmark harness and CI regression gates, add [mobile-performance](../skills/mobile-performance/SKILL.md) and its [Flutter reference](../skills/mobile-performance/references/flutter.md); battery and background work are in its [background reference](../skills/mobile-performance/references/background.md).
 
 ## Establish the experiment
 

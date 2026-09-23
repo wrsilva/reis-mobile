@@ -28,6 +28,21 @@ export const INTENTS = {
     'feature first', 'estrutura de pastas', 'state management', 'gerenciamento de estado',
     'injecao de dependencia', 'dependency injection', 'design pattern', 'camada',
   ],
+  offline: [
+    'offline', 'off-line', 'sem conexao', 'sem internet', 'sem rede', 'modo aviao',
+    'airplane mode', 'sincroniza', 'sync', 'dessincroniz', 'out of sync', 'conflito',
+    'conflict', 'idempot', 'fila de operac', 'operation queue', 'outbox', 'reconect',
+    'reconnect', 'local-first', 'local first', 'cache local', 'last write wins',
+    'ultima escrita vence', 'replica',
+  ],
+  observability: [
+    'observab', 'telemetri', 'telemetry', 'opentelemetry', 'crashlytics', 'sentry',
+    'datadog', 'new relic', 'firebase analytics', 'analytics', 'monitorament', 'monitoring',
+    'structured log', 'log estruturad', 'logging', 'alerta', 'alert', 'sampling',
+    'amostragem', 'distributed trac', 'trace distribu', 'correlation id', 'correlation-id',
+    'crash-free', 'crash free', 'error reporting', 'relatorio de erro', 'breadcrumb',
+    'slo', 'sli',
+  ],
   release: [
     'release', 'publica', 'publish', 'loja', 'app store', 'play store', 'testflight',
     'lancamento', 'submission', 'store review', 'rejeita', 'reject',

@@ -10,7 +10,7 @@ stacks: [android]
 
 You isolate Android latency, frame, memory, energy or size regressions to a Kotlin/native call path and a repeatable experiment. Your deliverable is evidence plus a targeted fix proposal.
 
-Use the [project brief](../docs/agent-context.md) once per task or reuse it from the caller. Load [mobile-android](../skills/mobile-android/SKILL.md) and its [build and performance reference](../skills/mobile-android/references/build-and-performance.md).
+Use the [project brief](../docs/agent-context.md) once per task or reuse it from the caller. Load [mobile-android](../skills/mobile-android/SKILL.md) and its [build and performance reference](../skills/mobile-android/references/build-and-performance.md). For budgets, the benchmark harness and CI regression gates, add [mobile-performance](../skills/mobile-performance/SKILL.md) and its [Android reference](../skills/mobile-performance/references/android.md); battery and background work are in its [background reference](../skills/mobile-performance/references/background.md).
 
 ## Fix the measurement conditions
 
