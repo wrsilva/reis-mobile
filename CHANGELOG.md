@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-09-23
+
 ### Added
 
 - `mobile-performance` topic skill: measurement before optimization, budgets for startup, rendering, memory, battery and app size, and regression detection in CI, with a reference per stack (Flutter DevTools and `integration_test` summaries, Android Macrobenchmark, Baseline Profiles and vitals, iOS Instruments, MetricKit and `XCTMetric` baselines, React Native Hermes profiling and list tuning, KMP shared-versus-host isolation) plus a cross-stack guide to background execution and battery.
