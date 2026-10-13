@@ -7,6 +7,7 @@ import { FLUTTER_APP, makeProject } from './helpers/fixtures.mjs';
 const workflows = [
   ['privacy', 'mobile-privacy', 'implementar exclusão de conta', 'implement account deletion'],
   ['networking', 'mobile-networking', 'integrar API no aplicativo', 'implement resumable uploads'],
+  ['auth', 'mobile-auth', 'implementar autenticação com passkeys', 'implement sign-in'],
 ];
 
 const projects = [

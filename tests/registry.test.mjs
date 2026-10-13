@@ -116,6 +116,7 @@ describe('plugin registry', () => {
       'mobile-performance', 'mobile-offline-sync', 'mobile-observability',
       'mobile-privacy',
       'mobile-networking',
+      'mobile-auth',
     ];
     const guides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
 

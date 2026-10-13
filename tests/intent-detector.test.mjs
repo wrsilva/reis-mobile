@@ -48,6 +48,11 @@ describe('detectIntent', () => {
     ['add resumable uploads', 'networking'],
     ['integrar API no aplicativo', 'networking'],
     ['configure an HTTP client', 'networking'],
+    ['implementar autenticação com passkeys', 'auth'],
+    ['add sign-in and account linking', 'auth'],
+    ['implementar gestão de sessão', 'auth'],
+    ['implement token refresh', 'auth'],
+    ['auditoria de segurança', 'security'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

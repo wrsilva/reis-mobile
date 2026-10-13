@@ -11,7 +11,7 @@ export const INTENTS = {
   security: [
     'seguranca', 'security', 'vulnerab', 'owasp', 'secret', 'credencia', 'criptograf',
     'encrypt', 'ssl pinning', 'certificate pinning', 'jailbreak', 'root detection',
-    'keychain', 'secure storage', 'autentica',
+    'keychain', 'secure storage',
   ],
   performance: [
     'performance', 'desempenho', 'lento', 'lentidao', 'slow', 'jank', 'fps', 'memoria',
@@ -60,6 +60,11 @@ export const INTENTS = {
     'networking', 'api integration', 'integracao de api', 'integrar api',
     'http client', 'cliente http', 'pagination', 'paginacao', 'resumable upload',
     'upload retomavel', 'websocket', 'request cancellation', 'cancelar requisic',
+  ],
+  auth: [
+    'authentication', 'autentica', 'passkey', 'sign-in', 'sign in', 'login',
+    'logout', 'oauth', 'oidc', 'pkce', 'session management', 'gestao de sessao',
+    'account linking', 'vincular conta', 'token refresh', 'renovacao de token',
   ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
