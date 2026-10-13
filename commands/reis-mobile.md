@@ -1,6 +1,6 @@
 ---
-description: reis-mobile entry point — lists the commands or forwards to doctor, project, review, debug, test, release, debate or the right agent from a free-form request
-argument-hint: "[doctor | project | review | debug | test | release | debate | free-form request]"
+description: reis-mobile entry point — lists the commands or forwards to doctor, project, review, debug, test, release, debate, consult or the right agent from a free-form request
+argument-hint: "[doctor | project | review | debug | test | release | debate | consult | free-form request]"
 allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob", "Edit", "Write"]
 ---
 
@@ -26,6 +26,7 @@ Reply only with this list. The only thing to run is `node "${CLAUDE_PLUGIN_ROOT}
 /reis-mobile:test [request]          Runs, writes, audits or fixes tests using the project's test setup
 /reis-mobile:release [request]       Audits store readiness with evidence and a go/no-go verdict
 /reis-mobile:debate <question>       Debate between the specialists, with a decision by lead-mobile
+/reis-mobile:consult <question>      Second opinion from the configured external providers, checked against the code
 /reis-mobile <free-form request>     Forwards the request to the agent and skills for the detected stack
 ```
 
@@ -51,6 +52,10 @@ Read `${CLAUDE_PLUGIN_ROOT}/commands/debug.md` and follow all of it, treating th
 ## `debate [options] <question>`
 
 Read `${CLAUDE_PLUGIN_ROOT}/commands/debate.md` and follow all of it, treating the rest of the arguments (without the word `debate`) as `$ARGUMENTS`.
+
+## `consult [options] <question>`
+
+Read `${CLAUDE_PLUGIN_ROOT}/commands/consult.md` and follow all of it, treating the rest of the arguments (without the word `consult`) as `$ARGUMENTS`. This entry point has the same behavior as `/reis-mobile:consult`.
 
 ## `test [request]`
 

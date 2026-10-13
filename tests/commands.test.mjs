@@ -26,7 +26,7 @@ function referencedPaths(body) {
 describe('commands', () => {
   it('ships at least the documented entry points', () => {
     const names = commands.map((command) => command.name).sort();
-    assert.deepEqual(names, ['debate', 'debug', 'doctor', 'project', 'reis-mobile', 'release', 'review', 'test']);
+    assert.deepEqual(names, ['consult', 'debate', 'debug', 'doctor', 'project', 'reis-mobile', 'release', 'review', 'test']);
   });
 
   for (const command of commands) {
@@ -48,6 +48,31 @@ describe('commands', () => {
       });
     });
   }
+});
+
+describe('/consult', () => {
+  const command = commands.find((item) => item.name === 'consult');
+
+  it('resolves providers and sends the briefing through the core', () => {
+    assert.match(command.body, /reis-mobile\.mjs" providers --dir "\$PWD" --all/);
+    assert.match(command.body, /reis-mobile\.mjs" consult --dir "\$PWD"/);
+    assert.match(command.body, /--file ".reis-mobile\/consults\/<id>\/briefing.md"/);
+    assert.match(command.body, /no API key passes through this conversation/);
+  });
+
+  it('warns that the briefing leaves the session and respects the allowlist', () => {
+    assert.match(command.body, /sends project context to a third party/i);
+    assert.match(command.body, /never include a credential/);
+    assert.match(command.body, /a team decision, which you do not work around/);
+  });
+
+  it('requires an own position and verification of every outside claim', () => {
+    assert.match(command.body, /Form your own position first/);
+    assert.match(command.body, /confirm it in the code and cite `file:line`/);
+    assert.match(command.body, /unverifiable/);
+    assert.match(command.body, /Do not apply any code change/);
+    assert.ok(!command.data['allowed-tools'].includes('Edit'), 'a consult never edits app code');
+  });
 });
 
 describe('/project', () => {
@@ -123,10 +148,16 @@ describe('/debate', () => {
     assert.match(debate.body, /\`kmp-\*\` Kotlin Multiplatform/);
   });
 
-  it('keeps the external providers optional', () => {
-    assert.match(debate.body, /command -v codex/, 'must probe for the Codex CLI before calling it');
-    assert.match(debate.body, /command -v gemini/, 'must probe for the Gemini CLI before calling it');
+  it('keeps the external providers optional and routed through the core', () => {
     assert.match(debate.body, /--external/, 'external providers must stay behind the --external flag');
+    assert.match(debate.body, /reis-mobile\.mjs" providers/, 'availability comes from the provider layer, not an ad-hoc probe');
+    assert.match(debate.body, /reis-mobile\.mjs" consult/, 'the call goes through the CLI, so no credential reaches the transcript');
+    assert.doesNotMatch(debate.body, /command -v (codex|gemini)/, 'provider detection must not be duplicated in prose');
+    assert.doesNotMatch(debate.body, /`?codex exec/, 'the provider argv belongs to the catalog');
+    for (const tool of ['Bash(codex:*)', 'Bash(gemini:*)']) {
+      assert.ok(!debate.data['allowed-tools'].includes(tool), `${tool} is no longer needed`);
+    }
+    assert.match(debate.body, /carry on with the agents alone/, 'a missing provider must not stop the debate');
   });
 
   it('assigns more than one model across the participants', () => {
