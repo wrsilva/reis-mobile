@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-13
+
 ### Added
 
 - `core/providers/`: the multi-provider layer. Six external providers — the `codex` and `gemini` CLIs plus the OpenAI, Gemini, OpenRouter and Ollama HTTP APIs — described as data (endpoint, credential variables, request shape, model catalog), so adding one touches no command. Status, model and allowlist resolution make no network call: a CLI is found by scanning `PATH`, an HTTP provider by its credential variable.
