@@ -51,3 +51,5 @@ Confirm every finding in the code before reporting it. Do not modify files: this
 Answer in the format defined by the agent (Summary, Critical, Bugs, Architecture, Security, Performance, Maintainability, Suggested changes), translating the headings when the language is not English. On the first line of the Summary, state the stack, the agent and the skills used, so the routing is visible.
 
 If the router emitted warnings (lines starting with `!`), mention them in the Summary.
+
+When the user wants a finding cross-checked by a model outside this session, point them at `/reis-mobile:consult <question>`: it builds the briefing, sends it to the configured providers and reconciles every outside claim against the code. A review never sends project context to a third party on its own.

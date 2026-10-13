@@ -247,7 +247,8 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 /reis-mobile:test audit Espresso checkout tests  # Reviews assertions and synchronization without editing
 /reis-mobile:release audit both stores for the production variant # Evidence-backed readiness, read-only
 /reis-mobile:debate Riverpod or BLoC in this app? # Debate between the specialists, with a decision by lead-mobile
-/reis-mobile:debate --rounds 3 --external ...     # More rounds; --external adds Codex and Gemini, if installed
+/reis-mobile:debate --rounds 3 --external ...     # More rounds; --external adds every configured external provider
+/reis-mobile:consult should we move this to a native module? # Second opinion from OpenAI, Gemini, OpenRouter, Ollama or the CLIs
 ```
 
 ### Debug
@@ -299,7 +300,50 @@ Participants vary along two axes at once. The **role** gives each one a differen
 
 It is expensive: several agents over two rounds. Use it for architecture decisions with a real trade-off — *migrate to Riverpod*, *offline-first with Firestore or a local cache*, *native plugin or an off-the-shelf package* — and not for questions with a single answer, where `/reis-mobile <request>` solves it for less.
 
-With `--external`, the command checks whether the `codex` and `gemini` CLIs exist and carries on without them if they are missing. External providers do not know the project and do not have the plugin skills: they come in as an outside opinion, checked against the code before the synthesis.
+With `--external`, the command asks the core which providers are ready — the `codex` and `gemini` CLIs, OpenAI, Gemini, OpenRouter, Ollama — and carries on without them if none is. `--providers a,b` picks them explicitly. External providers do not know the project and do not have the plugin skills: they come in as an outside opinion, checked against the code before the synthesis.
+
+### External providers
+
+`/reis-mobile:consult <question>` is the debate's external axis on its own: it routes the question, forms its own position, builds a self-contained briefing with the relevant code excerpts, sends it to the configured providers and then reconciles every outside claim against your code — confirmed with `file:line`, unverifiable, or wrong with the evidence. Rounds and agents cost nothing here, so it fits a question a single outside opinion settles.
+
+The core makes the call, never the model, so **no API key passes through the conversation**. The question is masked by [`redact.mjs`](core/security/redact.mjs) on the way out and every answer on the way in.
+
+| Provider | Needs | Model from |
+|---|---|---|
+| `codex` | the `codex` CLI on `PATH` | its own configuration |
+| `gemini-cli` | the `gemini` CLI on `PATH` | its own configuration |
+| `openai` | `OPENAI_API_KEY` | `OPENAI_MODEL` |
+| `gemini` | `GEMINI_API_KEY` or `GOOGLE_API_KEY` | `GEMINI_MODEL` |
+| `openrouter` | `OPENROUTER_API_KEY` | `OPENROUTER_MODEL` |
+| `ollama` | a server at `OLLAMA_HOST` (default `http://127.0.0.1:11434`) | `OLLAMA_MODEL` |
+
+```bash
+reis-mobile providers --all                      # What each provider needs, with no network call
+reis-mobile providers --models --providers openai # Ask the provider which models it serves
+reis-mobile consult --providers openai,ollama -- "is a native module justified here?"
+reis-mobile consult --file briefing.md --timeout 300000
+```
+
+reis-mobile ships **no default model id**: a hardcoded one is wrong the day the provider retires it. Set `OPENAI_MODEL` and friends, pass `--model`, or write it once in `~/.config/reis-mobile/config.json`:
+
+```json
+{
+  "providers": {
+    "openai": { "model": "<a model from reis-mobile providers --models>" },
+    "openrouter": { "enabled": false }
+  }
+}
+```
+
+A team decides which providers may receive repository context, committed with the repository:
+
+```yaml
+# .reis-mobile/config.yaml
+providers:
+  - ollama      # only this one; an empty list allows none, no key allows all
+```
+
+`reis-mobile providers` and `/reis-mobile:doctor` make no network call: a provider is `ready` because its executable is on `PATH` or its credential is in the environment, never because it answered. `ollama` shows as `local` until a request proves the server is up.
 
 Not sure what the router will pick? Ask the CLI:
 
@@ -326,6 +370,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | I want to... | Use | Status |
 |----------|-----|--------|
 | Know if my environment is ready to build | `/reis-mobile:doctor` | ✅ |
+| Cross-check a decision with a model outside this session | `/reis-mobile:consult` | ✅ |
 | Review a PR or my changes | `/reis-mobile:review` | ✅ |
 | Audit an entire Flutter project | `/reis-mobile:review` with no pending changes | ✅ |
 | Find out a project's stack | `reis-mobile detect` | ✅ |
@@ -454,13 +499,13 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 ## Trust, security and limits
 
-**Read-only CLI context.** `doctor`, `detect`, `route`, `review`, `test` and `release` do not modify your project. `/reis-mobile:release` inspects existing release evidence and remains read-only unless execution is explicitly requested. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/`.
+**Read-only CLI context.** `doctor`, `detect`, `route`, `review`, `test`, `release`, `providers` and `consult` do not modify your project. `/reis-mobile:release` inspects existing release evidence and remains read-only unless execution is explicitly requested. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/` and a consult its briefing to `.reis-mobile/consults/`.
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug` and `test` make no network calls. The update hook and `update-check` request the public npm package metadata; they send no project files or identifiers. Installation downloads the package and registers the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug`, `test` and `providers` make no network calls (`providers --models` and `consult` do, by request). The update hook and `update-check` request the public npm package metadata; they send no project files or identifiers. Installation downloads the package and registers the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
-**Exception: `/reis-mobile:debate --external`.** This flag, and only this flag, sends the debate context — including excerpts of the files mentioned in the question — to the `codex` and `gemini` CLIs, which are third-party and have their own data policies. Without the flag, the debate context stays in your session. The `review` diff is masked by `redact.mjs`, but the context you cite in a debate question does not go through that layer: check what you are sending before using `--external`.
+**Exception: external providers.** Two workflows, and only these two, send project context to a third party: `/reis-mobile:debate --external` and `/reis-mobile:consult`. Both state which providers receive it, and both are opt-in — no other command calls a provider. What leaves is the briefing, including the code excerpts you include; each provider has its own data policy. The question and every answer pass through `redact.mjs`, which is a protection layer and not a guarantee: read the briefing before sending it. API keys are read from the environment by the CLI and never enter the conversation, and `providers:` in `.reis-mobile/config.yaml` lets a team restrict which providers a repository allows. CLI providers (`codex`, `gemini-cli`) are asked for an opinion, not for work: they run in read-only mode (`codex exec --sandbox read-only`, `gemini --approval-mode plan`) inside a temporary directory, never in your repository.
 
 **Context cost.** Claude Code loads the descriptions of 21 agents and 17 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
 
@@ -491,8 +536,8 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.7.1 | Update notices, single-source version and release automation | ✅ |
 | v0.7.3 | `/reis-mobile:release` with per-target evidence, required gates and deterministic readiness verdicts (previously planned for v0.8.0) | ✅ |
 | v0.8.0 | `mobile-performance`, `mobile-offline-sync` and `mobile-observability` topic skills with a reference per stack, plus background execution, OAuth/PKCE, billing lifecycle and localization references | ✅ |
-| v0.9.0 | MCP server | ⏳ |
-| v0.10.0 | Multi-provider (OpenAI, Gemini, OpenRouter, Ollama) beyond the debate's `--external` | ⏳ |
+| v0.9.0 | Multi-provider layer (OpenAI, Gemini, OpenRouter, Ollama and the Codex/Gemini CLIs), `reis-mobile providers`, `reis-mobile consult` and `/reis-mobile:consult` — previously planned for v0.10.0 | ✅ |
+| v0.10.0 | MCP server | ⏳ |
 | v1.0.0 | First stable version: Flutter, Android, iOS and React Native | ⏳ |
 
 ---
@@ -501,6 +546,9 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Do I need Flutter, Xcode or the Android SDK installed?**
 Not for the review, which only reads code. `/reis-mobile:doctor` shows what is missing in case you want to build.
+
+**Do I need an API key?**
+No. Everything except `/reis-mobile:consult` and `/reis-mobile:debate --external` runs on the model of your session. Those two use whatever you have configured — a `codex` or `gemini` CLI already on your machine counts, and `ollama` keeps the question on localhost. `reis-mobile providers --all` shows what each one still needs.
 
 **My app lives inside a monorepo.**
 Commit a `.reis-mobile/config.yaml` at the repository root pointing at the app:

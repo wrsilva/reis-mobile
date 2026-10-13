@@ -27,6 +27,8 @@ USER ──► COMMAND (/reis-mobile:review)
 | **No agent, no guess** | When no intent has a registered agent, the router emits a warning instead of picking the "closest" one. |
 | **Flat skill entry points** | `skills/mobile-<name>/SKILL.md`: topic skills share a workflow and link platform references; platform skills link focused guides. It is the layout Claude Code discovers automatically. |
 | **Project-specific agent contracts** | All agents reuse `docs/agent-context.md` for evidence gathering; each role defines its investigation and deliverable. `/reis-mobile:project` can record verified app objects in a profile without replacing team-authored product knowledge. Technical checklists live in skills. |
+| **The core calls external providers, the model never does** | A provider request carries a credential. Keeping the call in `core/providers/` means the key never reaches a prompt, a transcript or a tool log, and the prompt and every answer pass through `redactSecrets` on the way through. |
+| **No provider ships a default model id** | A hardcoded model id is wrong the day the provider retires it. The model comes from `--model`, the provider's model variable or the config file, and `providers --models` asks the provider itself what it serves. |
 | **Secrets masked before the model** | The diff goes through `redactSecrets` before leaving the CLI. The patterns target literals (`apiKey = "AIza..."`), not identifiers (`final token = await read()`), so the review is not harmed. |
 
 ## Modules
@@ -51,6 +53,10 @@ core/
 │   └── context-engine.mjs       changed files and diff (working tree, range or project)
 ├── diagnostics/
 │   └── doctor.mjs               tools and project configuration
+├── providers/
+│   ├── catalog.mjs              external providers: endpoints, credentials, model catalogs
+│   ├── providers.mjs            status, model and allowlist resolution, without network
+│   └── consult.mjs              the calls themselves, redacted both ways
 ├── update/
 │   └── check.mjs                cached npm version check and update notice
 ├── install/
@@ -118,7 +124,7 @@ stacks: ["*"]                     # topic skill; platform skills declare their o
 
 ## Project configuration
 
-`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. The only key today is `app`, the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug`, `test` and `release` analyze that folder unless the command already runs inside it. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
+`.reis-mobile/config.yaml` holds settings a team commits with the repository. It is looked up from the command's folder upwards, so any folder inside a monorepo finds it. `app` is the mobile app folder relative to the file's repository root: `detect`, `doctor`, `route`, `review`, `debug`, `test`, `release`, `providers` and `consult` analyze that folder unless the command already runs inside it. `providers:` is a list of external provider ids the repository allows; absent, every provider is allowed, and an empty list allows none. Unknown keys produce a warning, not an error, so older versions of the CLI keep working with newer files.
 
 The optional `.reis-mobile/project.md` carries domain knowledge for the model, not CLI configuration. `/reis-mobile:project` writes or refreshes its marked verified code map using the resolved app directory and preserves all team-authored content. In a monorepo the profile lives beside `config.yaml`; otherwise it lives under the app root. Agents read it alongside applicable repository instructions and verify it against current code using the [shared project brief contract](docs/agent-context.md). The core does not parse it or infer product requirements.
 
@@ -131,6 +137,22 @@ The optional `.reis-mobile/project.md` carries domain knowledge for the model, n
 `reis-mobile release` forces the existing `release` intent and combines routing, redacted change context and doctor diagnostics. `core/release/context.mjs` lists the detected stack's release reference and all detected Android/iOS references; it deliberately returns `evidenceStatus: unverified` and `verdict: null`. Detected targets are candidates to inspect, not proof of a shippable app. The CLI never builds, tests or uploads an artifact.
 
 `/reis-mobile:release` binds that context to actual release identities and uses `mobile-release-engineer` and `mobile-release/references/readiness.md`. The specialist verifies artifact provenance and external CI/store state, records pass/fail/unknown gates for each intended target, then runs `skills/mobile-release/scripts/verdict.mjs` on structured stdin. The helper checks completeness and decision consistency, not evidence truth. Missing/failed/unknown required gates produce NO-GO; all passing gates produce GO or GO WITH RISKS when non-blocking risks remain. No remote credentials or store integration are added to the core.
+
+## External providers
+
+`core/providers/` is the single door to a model outside the session. The catalog holds six providers: the `codex` and `gemini` CLIs, and the OpenAI, Gemini, OpenRouter and Ollama HTTP APIs. A provider is data — endpoint, credential variables, request shape, model catalog — so adding one does not touch any command.
+
+| Step | Where | Network |
+|---|---|---|
+| Status, model and allowlist resolution | `providers.mjs` | No. A CLI is found by scanning `PATH`; an HTTP provider by its credential variable in the environment |
+| The call | `consult.mjs` | Yes, and only here |
+| Model catalogs | `consult.mjs`, through `providers --models` | Yes |
+
+Status is `ready` (executable or credential present), `local` (Ollama: a keyless server that only a request can confirm), `missing`, `disabled` (`providers.<id>.enabled: false` in the user config) or `blocked` (outside the repository's allowlist). A provider that needs a model and has none is `selectable` but not `runnable`: the default selection skips it, and asking for it by name returns `no-model` with the command that lists its models. Model precedence is `--model`, then the provider's model variable (`OPENAI_MODEL`, `GEMINI_MODEL`, `OPENROUTER_MODEL`, `OLLAMA_MODEL`), then `providers.<id>.model` in `~/.config/reis-mobile/config.json`. CLI providers keep the model they are configured with: the spelling of their model flag is not verified here.
+
+Every requested provider appears in the result with its own status — a missing provider is information to report, not an error to swallow — and failures are typed: `unavailable`, `no-model`, `timeout`, `error`. CLI providers are asked for an opinion, not for work: `codex exec` runs with `--sandbox read-only` and `gemini` with `--approval-mode plan`, both in a temporary working directory that is removed afterwards. The briefing already carries everything they need to read, so neither gets the user's repository as a workspace.
+
+`/reis-mobile:consult` and `/reis-mobile:debate --external` are the two workflows on top of this layer. Both state which providers received the context, and both require every outside claim to be confirmed in the code before it reaches a conclusion.
 
 ## Language
 
@@ -156,4 +178,4 @@ There is no native binary: reis-mobile depends on Node.js 22+, declared in `engi
 
 ## Out of scope for this version
 
-These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), a general provider abstraction, MCP server, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions.
+These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), MCP server, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions, and `core/providers/` covers external providers.

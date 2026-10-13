@@ -51,6 +51,15 @@ describe('project config', () => {
     assert.deepEqual(resolveProjectDir(root).warnings, [`${join(root, '.reis-mobile/config.yaml')}: unknown key "language" ignored`]);
   });
 
+  it('accepts the providers allowlist without a warning', async () => {
+    const root = await monorepo('app: apps/mobile\nproviders:\n  - openai\n  - ollama\n');
+
+    const { config, warnings } = resolveProjectDir(root);
+
+    assert.deepEqual(warnings, []);
+    assert.deepEqual(config.data.providers, ['openai', 'ollama']);
+  });
+
   it('rejects an app folder that does not exist or is absolute', async () => {
     const missing = await monorepo('app: apps/phone\n');
     const absolute = await monorepo('app: /etc\n');

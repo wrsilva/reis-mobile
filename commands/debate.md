@@ -1,7 +1,7 @@
 ---
 description: Structured debate between the mobile specialists — each agent defends its perspective, rebuts the others, and lead-mobile decides
-argument-hint: "[--rounds N] [--agents a,b,c] [--external] <question>"
-allowed-tools: ["Bash(node:*)", "Bash(command:*)", "Bash(mkdir:*)", "Bash(codex:*)", "Bash(gemini:*)", "Agent", "Read", "Write", "Grep", "Glob"]
+argument-hint: "[--rounds N] [--agents a,b,c] [--external] [--providers a,b] <question>"
+allowed-tools: ["Bash(node:*)", "Bash(mkdir:*)", "Agent", "Read", "Write", "Grep", "Glob"]
 ---
 
 # reis-mobile debate
@@ -16,7 +16,8 @@ Use this command for architecture decisions with real trade-offs, not for routin
 |---|---|---|
 | `--rounds N` | 2 | Number of rounds, from 1 to 3. Above 3, warn and use 3. |
 | `--agents a,b,c` | automatic | Explicit participants, using the names from the table in step 3. |
-| `--external` | off | Adds Codex and Gemini to the debate, when installed. |
+| `--external` | off | Adds every ready external provider to the debate. |
+| `--providers a,b` | every ready one | Explicit provider ids; implies `--external`. |
 
 Whatever remains is the question, as free text. Without a question, explain the usage and stop.
 
@@ -98,23 +99,26 @@ Ground every claim in file:line. Do not write what you have not verified.
 Write your position to: .reis-mobile/debates/<id>/rounds/r1_<agent>.md
 ```
 
-### 5.1 External providers (only with `--external`)
+### 5.1 External providers (only with `--external` or `--providers`)
 
-Check before calling, and carry on without them if they are missing — their absence is informative, not an error:
-
-```bash
-command -v codex >/dev/null 2>&1 && echo codex
-command -v gemini >/dev/null 2>&1 && echo gemini
-```
-
-If present, call them in parallel with the agents, writing to `r1_codex.md` and `r1_gemini.md`:
+Ask the core which providers can answer, instead of probing for executables yourself:
 
 ```bash
-codex exec --full-auto "<briefing>"
-printf '%s' "<briefing>" | gemini -p "" -o text --approval-mode yolo
+node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" providers --dir "$PWD" --all
 ```
 
-They do not have the plugin skills and do not know the project: give the entire context in the briefing and treat the output as an outside opinion, to be checked against the code before it enters the synthesis. State at the opening who joined and who was missing.
+`ready` providers can be used now; `missing`, `local`, `disabled` and `blocked` state what each one needs, and `blocked` means the repository's `providers:` allowlist excludes it — a team decision you do not work around. With no ready provider, carry on with the agents alone: their absence is informative, not an error. State at the opening who joined and who was missing.
+
+Write the same briefing you gave the agents to `rounds/r<N>_briefing.md` with the Write tool — a file, so nothing depends on shell quoting — and send it:
+
+```bash
+node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" consult --dir "$PWD" \
+  --file ".reis-mobile/debates/<id>/rounds/r<N>_briefing.md" [--providers <ids>]
+```
+
+The CLI performs the call, so no API key passes through this conversation, and the briefing is masked by the redaction layer before it leaves the process. Write each answer to `rounds/r<N>_<provider>.md` with the Write tool, keeping the provider id and the status from the output header. Treat a `timeout`, `error` or `no-model` status as a participant that did not answer this round.
+
+They do not have the plugin skills and do not know the project: the briefing carries the entire context, and the output is an outside opinion to be checked against the code before it enters the synthesis. In round 2 they receive the others' positions exactly as the agents do.
 
 ## 6. Round 2 — rebuttal
 

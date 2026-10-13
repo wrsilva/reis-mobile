@@ -4,8 +4,10 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 
+import { findProjectConfig } from '../config/project.mjs';
 import { createProbe } from '../detection/project-probe.mjs';
 import { detectStack } from '../detection/stack-detector.mjs';
+import { providerAllowlist, resolveProviders } from '../providers/providers.mjs';
 
 const run = promisify(execFile);
 const TOOL_TIMEOUT_MS = 30_000;
@@ -47,8 +49,9 @@ export async function runDoctor({ projectDir = process.cwd(), all = false, platf
   const tools = TOOLS.filter((tool) => all || tool.relevant(context));
   const toolChecks = await Promise.all(tools.map((tool) => checkTool(tool, platform)));
   const projectChecks = await checkProject(probe, detection, files);
+  const providerChecks = await checkProviders(detection.projectDir, all);
 
-  const checks = [...toolChecks, ...projectChecks];
+  const checks = [...toolChecks, ...projectChecks, ...providerChecks];
   const warnings = checks.filter((check) => check.status === 'warning').length;
 
   return {
@@ -83,6 +86,25 @@ async function checkTool(tool, platform) {
     const detail = missing ? 'not found' : error.killed ? 'timed out' : firstLine(error.stderr) || 'failed';
     return { ...base, status: tool.optional ? 'info' : 'warning', detail };
   }
+}
+
+/**
+ * External model providers, resolved from PATH and the environment only: `doctor` makes no
+ * network call, so a reachable provider is never confirmed here, just a configured one.
+ */
+async function checkProviders(projectDir, all) {
+  const { providers } = await resolveProviders({ allow: providerAllowlist(findProjectConfig(projectDir)) });
+  const shown = all ? providers : providers.filter((provider) => provider.status === 'ready');
+  if (!shown.length) {
+    return [{ id: 'providers', label: 'Providers', section: 'integrations', status: 'info', detail: 'none configured (reis-mobile providers --all)' }];
+  }
+  return shown.map((provider) => ({
+    id: `provider-${provider.id}`,
+    label: provider.label,
+    section: 'integrations',
+    status: provider.status === 'ready' ? 'ok' : 'info',
+    detail: `${provider.status} · ${provider.model ? `model ${provider.model}` : provider.kind === 'cli' ? 'own model' : 'no model'}`,
+  }));
 }
 
 async function checkAndroidSdk() {

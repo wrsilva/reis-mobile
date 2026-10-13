@@ -10,6 +10,8 @@ import { detectStack } from '../core/detection/stack-detector.mjs';
 import { runDoctor } from '../core/diagnostics/doctor.mjs';
 import { runInit } from '../core/install/init.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
+import { DEFAULT_TIMEOUT_MS, consult, listProviderModels } from '../core/providers/consult.mjs';
+import { parseProviderList, providerAllowlist, resolveProviders, selectProviders } from '../core/providers/providers.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { releaseContext } from '../core/release/context.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
@@ -30,6 +32,8 @@ Commands:
   debug [problem...]         Route a build or runtime failure and report the toolchain it runs on
   test [request...]          Prepare test routing, git context and toolchain checks (does not run tests)
   release [request...]       Prepare release evidence context (does not build or publish)
+  providers                  List the external model providers and what each one needs
+  consult [question...]      Ask the configured external providers the same question
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
   update-check               Check npm for a newer reis-mobile release
@@ -44,6 +48,11 @@ Options:
   --scope <scope>   init: Claude Code scope, user (default), project or local
   --uninstall       init: remove the plugin and its marketplace from Claude Code and Codex, and the saved language
   --force           update-check: ignore the cached registry result
+  --providers <ids> providers/consult: comma-separated provider ids (default: every usable one)
+  --model <id>      consult: model for the selected HTTP providers, overriding the configuration
+  --models          providers: ask each provider which models it serves (network request)
+  --file <path>     consult: read the question from a file instead of the arguments
+  --timeout <ms>    consult: give up on a provider after this long (default 120000)
   --lang <en|pt>    Override the saved language for this run
   --json            Machine-readable output
   -v, --version     Print the version
@@ -59,6 +68,11 @@ const OPTIONS = {
   scope: { type: 'string' },
   uninstall: { type: 'boolean' },
   force: { type: 'boolean' },
+  providers: { type: 'string' },
+  model: { type: 'string' },
+  models: { type: 'boolean' },
+  file: { type: 'string' },
+  timeout: { type: 'string' },
   lang: { type: 'string' },
   json: { type: 'boolean' },
   version: { type: 'boolean', short: 'v' },
@@ -75,6 +89,8 @@ const COMMANDS = {
   debug: commandDebug,
   test: commandTest,
   release: commandRelease,
+  providers: commandProviders,
+  consult: commandConsult,
   agents: (options) => commandList('agents', options),
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
@@ -109,7 +125,7 @@ async function main(argv) {
   return (await command({ ...options, dir: project.projectDir, project, prompt: rest.join(' ') })) ?? 0;
 }
 
-const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test', 'release']);
+const PROJECT_COMMANDS = new Set(['detect', 'doctor', 'route', 'review', 'debug', 'test', 'release', 'providers', 'consult']);
 
 async function commandUpdateCheck({ force, json }) {
   const result = await checkForUpdate({ force });
@@ -298,6 +314,112 @@ async function commandRelease({ dir, project, prompt, json, lang }) {
   console.log('\nRelease context prepared; readiness has not been evaluated. No builds, tests or uploads were executed.\n');
   printDoctorChecks(doctor);
   return 0;
+}
+
+/**
+ * External providers and what each one still needs. No network call: an executable on PATH
+ * or a credential in the environment is what decides `ready`, so `providers` and `doctor`
+ * stay offline. `--models` is the one exception, and asks the provider itself rather than
+ * shipping a model id that goes stale.
+ */
+async function commandProviders({ project, all, json, models, providers: requested, model, timeout }) {
+  const allow = providerAllowlist(project.config);
+  const resolution = await resolveProviders({ allow, model });
+  const requestedIds = parseProviderList(requested);
+  for (const warning of resolution.warnings) console.error(`! ${warning}`);
+
+  if (models) {
+    const selected = selectProviders(resolution.providers, requestedIds, { requireModel: false });
+    const catalogs = await listProviderModels({ providers: selected, timeoutMs: parseTimeout(timeout, 30_000) });
+    if (json) return print({ models: catalogs, configPath: resolution.configPath });
+    for (const catalog of catalogs) {
+      const summary = catalog.status === 'ok' ? `${catalog.models.length} model(s)` : `${catalog.status} · ${catalog.error}`;
+      console.log(`${catalog.provider.padEnd(14)}${summary}`);
+      for (const id of catalog.models) console.log(`  · ${id}`);
+    }
+    return catalogs.some((catalog) => catalog.status === 'ok') ? 0 : 1;
+  }
+
+  if (json) return print({ providers: resolution.providers, configPath: resolution.configPath, projectConfig: project.config?.path ?? null });
+
+  printProject(project);
+  const shown = all ? resolution.providers : resolution.providers.filter((provider) => provider.selectable);
+  for (const provider of shown) {
+    const model = provider.model ? `model ${provider.model} (${provider.modelSource})` : provider.kind === 'cli' ? 'own model' : 'no model';
+    console.log(`${provider.id.padEnd(14)}${PROVIDER_SYMBOLS[provider.status]} ${provider.status.padEnd(9)}${model.padEnd(34)}${provider.detail}`);
+  }
+  const usable = resolution.providers.filter((provider) => provider.runnable);
+  console.log(
+    usable.length
+      ? `\n${usable.length} provider(s) ready: reis-mobile consult --providers ${usable.map((provider) => provider.id).join(',')} -- "<question>"`
+      : '\nNo provider is ready. Install the Codex or Gemini CLI, or set an API key and a model (reis-mobile providers --all).',
+  );
+  console.log(`Config      ${resolution.configPath}`);
+  return 0;
+}
+
+const PROVIDER_SYMBOLS = { ready: '✓', local: '-', missing: '-', disabled: '-', blocked: '✗' };
+
+/**
+ * Asks the selected providers the same question. The core performs the call so no API key
+ * reaches the conversation, and both the question and every answer go through the redaction
+ * layer on the way through.
+ */
+async function commandConsult({ dir, project, json, providers: requested, model, timeout, file, prompt, lang }) {
+  const question = file ? await readFile(file, 'utf8') : prompt || (await readStdin());
+  if (!question.trim()) {
+    console.error('consult needs a question. Pass it as an argument, with --file <path>, or on stdin.');
+    return 1;
+  }
+
+  const allow = providerAllowlist(project.config);
+  const resolution = await resolveProviders({ allow, model });
+  for (const warning of resolution.warnings) console.error(`! ${warning}`);
+  const selected = selectProviders(resolution.providers, parseProviderList(requested));
+  if (!selected.length) {
+    console.error('No external provider is ready. Run `reis-mobile providers --all` to see what each one needs.');
+    return 1;
+  }
+
+  const detection = await detectStack(dir);
+  const language = await resolveLanguage({ flag: lang });
+  const answers = await consult({ prompt: question, providers: selected, timeoutMs: parseTimeout(timeout, DEFAULT_TIMEOUT_MS) });
+  const answered = answers.results.filter((result) => result.status === 'ok');
+
+  if (json) {
+    print({ stack: detection.stack, language, projectConfig: project.config?.path ?? null, ...answers });
+    return answered.length ? 0 : 1;
+  }
+
+  printProject(project);
+  console.log(`Stack       ${detection.stack}`);
+  printLanguage(language);
+  console.log(`Question    ${answers.prompt.chars} chars${answers.prompt.redacted ? ' (secrets masked)' : ''}`);
+  for (const result of answers.results) {
+    const heading = `${result.provider}${result.model ? ` · ${result.model}` : ''} · ${result.status} · ${(result.durationMs / 1000).toFixed(1)}s`;
+    console.log(`\n--- ${heading} ---`);
+    console.log(result.status === 'ok' ? result.text : `! ${result.error}`);
+  }
+  console.log(
+    answered.length
+      ? '\nExternal answers are an outside opinion: they do not know this project. Verify every claim in the code.'
+      : '\nNo provider answered.',
+  );
+  return answered.length ? 0 : 1;
+}
+
+function parseTimeout(value, fallback) {
+  if (value === undefined) return fallback;
+  const timeout = Number(value);
+  if (!Number.isFinite(timeout) || timeout <= 0) throw new Error(`--timeout must be a positive number of milliseconds, got ${JSON.stringify(value)}`);
+  return timeout;
+}
+
+async function readStdin() {
+  if (process.stdin.isTTY) return '';
+  const chunks = [];
+  for await (const chunk of process.stdin) chunks.push(chunk);
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 async function commandList(kind, { json }) {

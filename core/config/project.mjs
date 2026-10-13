@@ -5,7 +5,7 @@ import { parseYamlSubset } from '../registry/frontmatter.mjs';
 
 export const PROJECT_CONFIG = join('.reis-mobile', 'config.yaml');
 
-const KNOWN_KEYS = new Set(['app']);
+const KNOWN_KEYS = new Set(['app', 'providers']);
 
 /**
  * Finds the nearest `.reis-mobile/config.yaml`, starting at `dir` and walking up, so a
