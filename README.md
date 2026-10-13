@@ -44,21 +44,28 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.8.0
+### v0.9.0
 
 #### Added
 
-- `mobile-performance` topic skill: measurement before optimization, budgets for startup, rendering, memory, battery and app size, and regression detection in CI, with a reference per stack (Flutter DevTools and `integration_test` summaries, Android Macrobenchmark, Baseline Profiles and vitals, iOS Instruments, MetricKit and `XCTMetric` baselines, React Native Hermes profiling and list tuning, KMP shared-versus-host isolation) plus a cross-stack guide to background execution and battery.
-- `mobile-offline-sync` topic skill: local store as the source of truth, a durable outbox with client-generated idempotency keys, ordering and operation collapsing, retry with backoff, conflict strategies per entity, reconnection triggers, offline UX and nine failure cases to test, with a reference per stack (drift and workmanager, Room and WorkManager, Core Data/SwiftData and `BGTaskScheduler`, SQLite with NetInfo and OTA-aware drains, SQLDelight and Ktor in `commonMain`).
-- `mobile-observability` topic skill: the signals that explain a production failure, mandatory segmentation by version and cohort, error context and grouping, correlation ids shared with the backend, rate-based alerting per version, sampling and cost, and what must never be collected, with a reference per stack (Flutter's three capture layers and Dart symbol upload, Android vitals and `ApplicationExitInfo`, MetricKit and Organizer, React Native source maps and OTA update ids, KMP `Telemetry` boundary and Kotlin/Native crash hooks).
-- `offline` and `observability` intents in the router. `offline` goes to the stack's architect and falls back to `mobile-staff-engineer`; `observability` goes to `mobile-release-engineer`.
-- `mobile-security/references/auth.md`: OAuth 2.0 and OIDC for native apps following RFC 8252 — authorization code with PKCE (`S256`), no client secret, system browser instead of a WebView, redirect URI choices, token rotation with reuse detection, and biometrics gating a key rather than a boolean.
-- `mobile-release/references/billing.md`: in-app purchase and subscription lifecycle — server-side entitlement, store server notifications, the states between active and expired, acknowledgement deadlines and automatic refunds, restore and account mapping, and the per-stack client libraries.
-- `mobile-accessibility/references/localization.md`: strings, CLDR plurals, locale-aware formatting, right-to-left layout and icon mirroring, translation growth, per-app language settings and pseudolocalization.
+- `core/providers/`: the multi-provider layer. Six external providers — the `codex` and `gemini` CLIs plus the OpenAI, Gemini, OpenRouter and Ollama HTTP APIs — described as data (endpoint, credential variables, request shape, model catalog), so adding one touches no command. Status, model and allowlist resolution make no network call: a CLI is found by scanning `PATH`, an HTTP provider by its credential variable.
+- `reis-mobile providers [--all] [--json]` lists every provider with the evidence behind its status (`ready`, `local`, `missing`, `disabled`, `blocked`), its endpoint and the resolved model. `reis-mobile providers --models` asks each provider which models it serves, so no model id is ever shipped as a default.
+- `reis-mobile consult [--providers a,b] [--model <id>] [--file <path>] [--timeout <ms>] <question>` asks the selected providers the same question in parallel. The core performs the call, so no API key passes through the conversation; the question is redacted on the way out and every answer on the way in. Each requested provider is reported with its own typed status — `ok`, `unavailable`, `no-model`, `timeout`, `error` — and the exit code is 1 only when nobody answered.
+- `/reis-mobile:consult [options] <question>`, also reachable as `/reis-mobile consult ...`: routes the question through the stack's specialist, requires its own position first, builds a self-contained briefing in `.reis-mobile/consults/`, consults the providers and then reconciles every outside claim against the code as confirmed with `file:line`, unverifiable or wrong.
+- `providers:` in `.reis-mobile/config.yaml`: the allowlist of external providers a repository accepts, committed with the repository. An absent key allows all, an empty list allows none, and a blocked provider says so instead of failing.
+- `providers.<id>.model` and `providers.<id>.enabled` in `~/.config/reis-mobile/config.json`, with precedence `--model`, then the provider's model variable (`OPENAI_MODEL`, `GEMINI_MODEL`, `OPENROUTER_MODEL`, `OLLAMA_MODEL`), then the config file.
+- `reis-mobile doctor` lists the configured providers under Integrations, with a single informational row when none is configured. It still makes no network call.
 
 #### Changed
 
-- The five `*-architect` agents also serve the `offline` intent, and `mobile-release-engineer` also serves `observability`; `mobile-staff-engineer` covers both when no stack is detected.
+- `/reis-mobile:debate --external` selects providers through the core instead of probing with `command -v`, accepts `--providers a,b`, and no longer needs `Bash(codex:*)` or `Bash(gemini:*)`: every provider call goes through the CLI. Behavior without a ready provider is unchanged — the debate carries on with the agents alone.
+- CLI providers are asked for an opinion, not for work: `codex exec` now runs with `--sandbox read-only` and `gemini` with `--approval-mode plan`, both in a temporary working directory that is removed afterwards. The debate's previous invocation granted write access and the user's repository as a workspace, neither of which a second opinion needs.
+- `/reis-mobile:review` points at `/reis-mobile:consult` when a finding should be cross-checked outside the session, and still never sends project context itself.
+
+#### Fixed
+
+- `/reis-mobile:debate --external` could not reach Codex at all on current CLI versions: `codex exec --full-auto` is rejected with `unexpected argument '--full-auto' found`, and the call ran outside a Git repository without `--skip-git-repo-check`. The provider catalog now carries the invocation verified against `codex exec --help`.
+- A failing CLI provider reported its opening banner (`YOLO mode is enabled...`) instead of the cause. The reported line is now the first one that names a failure, falling back to the last line of stderr.
 
 <!-- reis-mobile:latest-release:end -->
 
