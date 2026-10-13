@@ -22,6 +22,8 @@ Organized by the OWASP MASVS categories. Apply the general checks below, then th
 
 Firebase-specific protection (security rules, App Check) is covered by `mobile-firebase`.
 
+For implementing identity/session transitions, use [mobile-auth](../mobile-auth/SKILL.md). For consent, SDK collection and account/data deletion, use [mobile-privacy](../mobile-privacy/SKILL.md). Keep this skill focused on the security properties of those flows.
+
 ## 2. Evidence and severity
 
 Every finding needs evidence in the code or configuration at `file:line`. Severity:

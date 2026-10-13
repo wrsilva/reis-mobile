@@ -9,6 +9,8 @@ stacks: ["*"]
 
 One skill for Firebase on every mobile stack. This file holds what is true for every platform and product; setup, APIs and pitfalls live in the references.
 
+For the app-wide lifecycle around Firebase APIs, use [mobile-auth](../mobile-auth/SKILL.md) for identity/session transitions, [mobile-notifications](../mobile-notifications/SKILL.md) for token bindings and tap navigation, and [mobile-privacy](../mobile-privacy/SKILL.md) for consent and deletion. Open only the workflow relevant to the task.
+
 ## 1. Pick the references
 
 Detect the stack first, then read the platform guide (shared setup and the product list) and only the product guides the task needs:

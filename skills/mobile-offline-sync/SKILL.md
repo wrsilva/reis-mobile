@@ -7,6 +7,8 @@ stacks: ["*"]
 
 # Mobile Offline Sync
 
+For HTTP request contracts, pagination, cancellation and transfer recovery, use [mobile-networking](../mobile-networking/SKILL.md). This skill owns durable local writes, reconciliation and conflict resolution.
+
 One design for offline-capable mobile data, on every stack. This file holds the model and the failure cases; each platform's storage engines, queue runners and network-condition tooling live in its reference.
 
 ## 1. Pick the reference

@@ -4,6 +4,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- Four topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: `mobile-privacy` for consent and data lifecycle, `mobile-networking` for API integration and request recovery, `mobile-auth` for identity/session flows, and `mobile-notifications` for push/local notification lifecycles.
+- English and Portuguese `privacy`, `networking`, `auth` and `notifications` intents, handled by the existing staff engineer, with five-stack routing, prompt discovery and explicit-override tests.
+
+### Changed
+
+- Authentication requests now have a dedicated `auth` intent instead of relying on security vocabulary. Explicit security audits retain the security workflow.
+
 ## [0.9.0] - 2026-10-13
 
 ### Added
