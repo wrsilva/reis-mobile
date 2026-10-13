@@ -51,6 +51,11 @@ export const INTENTS = {
     'acessibilidade', 'accessibility', 'a11y', 'leitor de tela', 'screen reader',
     'talkback', 'voiceover', 'contraste', 'semantics',
   ],
+  privacy: [
+    'privacy', 'privacidade', 'consent', 'consentimento', 'account deletion',
+    'delete account', 'exclusao de conta', 'excluir conta', 'data retention',
+    'retencao de dados', 'privacy manifest', 'data safety', 'analytics consent',
+  ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
     'code smell',

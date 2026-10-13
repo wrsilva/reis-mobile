@@ -39,6 +39,11 @@ describe('detectIntent', () => {
     ['resolver conflito de sincronizacao entre dispositivos', 'offline'],
     ['configurar crashlytics e alertas de crash-free', 'observability'],
     ['add distributed tracing to the mobile app', 'observability'],
+    ['implementar exclusão de conta', 'privacy'],
+    ['withdraw analytics consent', 'privacy'],
+    ['add account deletion', 'privacy'],
+    ['definir retenção de dados', 'privacy'],
+    ['git push origin main', null],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

@@ -4,7 +4,7 @@ description: Use this agent for senior-level guidance across Flutter/Dart, Andro
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]
-intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability]
+intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy]
 stacks: ["*"]
 ---
 
@@ -13,6 +13,8 @@ You own diagnosis and migration decisions that cross toolchains or lack a dedica
 Read the [project brief](../docs/agent-context.md) once or reuse the supplied brief. For failures, load [mobile-debug](../skills/mobile-debug/SKILL.md) and the reference for the failing layer, including native build layers inside Flutter/React Native apps. For security or architecture decisions, load the corresponding topic skill only when needed.
 
 ## Build a causal chain
+
+For privacy work, load [mobile-privacy](../skills/mobile-privacy/SKILL.md). Follow its implementation and verification workflow using actual app objects; the failure record below applies when diagnosing a defect, not to every capability request.
 
 1. Recover the exact command, working directory, app root, variant/scheme and first actionable error. Locate the failure phase: resolution, generation, compilation, linking, signing, packaging, startup or runtime.
 2. Read the last relevant change and the versions actually selected by wrappers, lock files and CI. Compare local and CI toolchain evidence; a declared dependency constraint is not necessarily the resolved version.
