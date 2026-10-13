@@ -33,6 +33,31 @@ describe('runDoctor', () => {
     assert.equal(report.status, 'warning');
   });
 
+  it('reports the external providers in Integrations without a network call', async () => {
+    const dir = await makeProject({ '.reis-mobile/config.yaml': 'providers:\n  - openai\n' });
+
+    const report = await runDoctor({ projectDir: dir, all: true, platform: 'linux' });
+    const integrations = report.checks.filter((check) => check.section === 'integrations');
+
+    assert.ok(integrations.some((check) => check.id === 'provider-openai'), 'an allowlisted provider is listed');
+    const blocked = integrations.find((check) => check.id === 'provider-codex');
+    assert.equal(blocked.status, 'info');
+    assert.equal(blocked.detail, 'blocked · own model');
+    assert.ok(
+      integrations.every((check) => check.status !== 'warning'),
+      'an unconfigured provider is informational, never a warning',
+    );
+  });
+
+  it('summarizes the providers in one row when none is configured', async () => {
+    const report = await runDoctor({ projectDir: await makeProject({ '.reis-mobile/config.yaml': 'providers:\n' }), platform: 'linux' });
+    const row = report.checks.find((check) => check.id === 'providers');
+
+    assert.equal(row.section, 'integrations');
+    assert.equal(row.status, 'info');
+    assert.match(row.detail, /none configured/);
+  });
+
   it('warns when there is no mobile project', async () => {
     const report = await runDoctor({ projectDir: await makeProject() });
 
@@ -168,6 +193,17 @@ describe('reis-mobile CLI', () => {
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /test \[request\.\.\.\].*does not run tests/);
     assert.match(result.stdout, /--base <ref> +review\/test:/);
+  });
+
+  it('documents the provider commands and their options in help', () => {
+    const result = cli('--help');
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /providers {2,}List the external model providers/);
+    assert.match(result.stdout, /consult \[question\.\.\.\] +Ask the configured external providers/);
+    assert.match(result.stdout, /--providers <ids>/);
+    assert.match(result.stdout, /--model <id>/);
+    assert.match(result.stdout, /--timeout <ms>/);
   });
 
   it('exits with 2 when detect finds no mobile project', async () => {
