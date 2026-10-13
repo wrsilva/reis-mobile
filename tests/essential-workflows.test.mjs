@@ -8,6 +8,7 @@ const workflows = [
   ['privacy', 'mobile-privacy', 'implementar exclusão de conta', 'implement account deletion'],
   ['networking', 'mobile-networking', 'integrar API no aplicativo', 'implement resumable uploads'],
   ['auth', 'mobile-auth', 'implementar autenticação com passkeys', 'implement sign-in'],
+  ['notifications', 'mobile-notifications', 'implementar notificações push', 'implement local notifications'],
 ];
 
 const projects = [

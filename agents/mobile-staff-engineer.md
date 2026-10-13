@@ -4,7 +4,7 @@ description: Use this agent for senior-level guidance across Flutter/Dart, Andro
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]
-intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth]
+intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications]
 stacks: ["*"]
 ---
 
@@ -19,6 +19,8 @@ For privacy work, load [mobile-privacy](../skills/mobile-privacy/SKILL.md). Foll
 For API integration and network lifecycle work, load [mobile-networking](../skills/mobile-networking/SKILL.md) and bind its request/cancellation contract to the actual client and repository.
 
 For identity and session flows, load [mobile-auth](../skills/mobile-auth/SKILL.md) and trace the provider, session owner and account-scoped data boundaries.
+
+For push or local notification flows, load [mobile-notifications](../skills/mobile-notifications/SKILL.md) and trace token ownership, app lifecycle and authorized tap navigation.
 
 1. Recover the exact command, working directory, app root, variant/scheme and first actionable error. Locate the failure phase: resolution, generation, compilation, linking, signing, packaging, startup or runtime.
 2. Read the last relevant change and the versions actually selected by wrappers, lock files and CI. Compare local and CI toolchain evidence; a declared dependency constraint is not necessarily the resolved version.

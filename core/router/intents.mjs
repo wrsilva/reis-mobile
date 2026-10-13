@@ -66,6 +66,10 @@ export const INTENTS = {
     'logout', 'oauth', 'oidc', 'pkce', 'session management', 'gestao de sessao',
     'account linking', 'vincular conta', 'token refresh', 'renovacao de token',
   ],
+  notifications: [
+    'push notification', 'local notification', 'notification permission',
+    'notification channel', 'notification tap', 'notifica', 'fcm', 'apns',
+  ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
     'code smell',

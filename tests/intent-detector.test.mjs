@@ -53,6 +53,11 @@ describe('detectIntent', () => {
     ['implementar gestão de sessão', 'auth'],
     ['implement token refresh', 'auth'],
     ['auditoria de segurança', 'security'],
+    ['implementar notificações push', 'notifications'],
+    ['add local notifications', 'notifications'],
+    ['handle notification permissions', 'notifications'],
+    ['configurar FCM no aplicativo', 'notifications'],
+    ['git push --force', null],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
