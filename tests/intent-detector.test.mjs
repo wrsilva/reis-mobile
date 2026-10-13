@@ -44,6 +44,10 @@ describe('detectIntent', () => {
     ['add account deletion', 'privacy'],
     ['definir retenção de dados', 'privacy'],
     ['git push origin main', null],
+    ['implementar paginação na listagem', 'networking'],
+    ['add resumable uploads', 'networking'],
+    ['integrar API no aplicativo', 'networking'],
+    ['configure an HTTP client', 'networking'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

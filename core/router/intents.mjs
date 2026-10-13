@@ -56,6 +56,11 @@ export const INTENTS = {
     'delete account', 'exclusao de conta', 'excluir conta', 'data retention',
     'retencao de dados', 'privacy manifest', 'data safety', 'analytics consent',
   ],
+  networking: [
+    'networking', 'api integration', 'integracao de api', 'integrar api',
+    'http client', 'cliente http', 'pagination', 'paginacao', 'resumable upload',
+    'upload retomavel', 'websocket', 'request cancellation', 'cancelar requisic',
+  ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
     'code smell',
