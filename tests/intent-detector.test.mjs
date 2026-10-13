@@ -58,6 +58,14 @@ describe('detectIntent', () => {
     ['handle notification permissions', 'notifications'],
     ['configurar FCM no aplicativo', 'notifications'],
     ['git push --force', null],
+    ['review privacy', 'review'],
+    ['review networking', 'review'],
+    ['review login', 'review'],
+    ['review push notifications', 'review'],
+    ['configurar pipeline de notificações', 'deployment'],
+    ['migrate authentication', 'migration'],
+    ['build push notifications', 'build'],
+    ['test login', 'test'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

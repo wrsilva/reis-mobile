@@ -53,5 +53,14 @@ describe('essential mobile workflows', () => {
       assert.ok(result.skills.some((item) => item.name === 'mobile-test'));
       assert.ok(!result.skills.some((item) => item.name === skill));
     });
+
+    it(`preserves the reviewer on a tied review and ${intent} request`, async () => {
+      const topic = { privacy: 'privacy', networking: 'networking', auth: 'login', notifications: 'push notifications' }[intent];
+      const result = await route({ prompt: `review ${topic}`, projectDir: await makeProject(FLUTTER_APP) });
+      assert.equal(result.intent, 'review');
+      assert.equal(result.agent?.name, 'mobile-code-reviewer');
+      assert.ok(result.skills.some((item) => item.name === 'mobile-code-review'));
+      assert.ok(!result.skills.some((item) => item.name === skill));
+    });
   }
 });

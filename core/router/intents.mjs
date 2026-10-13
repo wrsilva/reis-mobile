@@ -51,6 +51,22 @@ export const INTENTS = {
     'acessibilidade', 'accessibility', 'a11y', 'leitor de tela', 'screen reader',
     'talkback', 'voiceover', 'contraste', 'semantics',
   ],
+  review: [
+    'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
+    'code smell',
+  ],
+  migration: ['migra', 'migrate', 'upgrade', 'null safety'],
+  dependency: [
+    'dependencia', 'dependenc', 'pacote', 'package', 'pubspec', 'podfile', 'outdated',
+    'desatualizad', 'npm audit',
+  ],
+  build: [
+    'build', 'compil', 'gradle', 'xcodebuild', 'archive', 'apk', 'aab', 'ipa', 'assemble',
+  ],
+  deployment: [
+    'deploy', 'pipeline', 'ci/cd', 'github actions', 'fastlane', 'codemagic', 'bitrise',
+    'azure devops',
+  ],
   privacy: [
     'privacy', 'privacidade', 'consent', 'consentimento', 'account deletion',
     'delete account', 'exclusao de conta', 'excluir conta', 'data retention',
@@ -69,22 +85,6 @@ export const INTENTS = {
   notifications: [
     'push notification', 'local notification', 'notification permission',
     'notification channel', 'notification tap', 'notifica', 'fcm', 'apns',
-  ],
-  review: [
-    'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
-    'code smell',
-  ],
-  migration: ['migra', 'migrate', 'upgrade', 'null safety'],
-  dependency: [
-    'dependencia', 'dependenc', 'pacote', 'package', 'pubspec', 'podfile', 'outdated',
-    'desatualizad', 'npm audit',
-  ],
-  build: [
-    'build', 'compil', 'gradle', 'xcodebuild', 'archive', 'apk', 'aab', 'ipa', 'assemble',
-  ],
-  deployment: [
-    'deploy', 'pipeline', 'ci/cd', 'github actions', 'fastlane', 'codemagic', 'bitrise',
-    'azure devops',
   ],
 };
 
