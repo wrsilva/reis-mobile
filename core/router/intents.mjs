@@ -95,6 +95,14 @@ export const INTENTS = {
     'assinatura no app', 'assinaturas no app', 'assinatura recorrente', 'paywall', 'storekit',
     'play billing', 'restore purchase', 'restaurar compra', 'revenuecat',
   ],
+  // Plain "analytics" stays with observability; these longer phrases claim their span first.
+  analytics: [
+    'product analytics', 'analytics de produto', 'tracking plan', 'plano de tracking',
+    'plano de rastreamento', 'event tracking', 'rastreamento de eventos', 'event taxonomy',
+    'taxonomia de eventos', 'analytics event', 'evento de analytics', 'eventos de analytics',
+    'funnel', 'funil', 'conversion event', 'evento de conversao', 'user properties',
+    'propriedades de usuario', 'mixpanel', 'posthog', 'amplitude analytics', 'amplitude sdk',
+  ],
 };
 
 export const INTENT_IDS = Object.keys(INTENTS);

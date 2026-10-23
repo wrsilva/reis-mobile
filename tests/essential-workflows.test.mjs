@@ -10,6 +10,7 @@ const workflows = [
   ['auth', 'mobile-auth', 'implementar autenticação com passkeys', 'implement sign-in'],
   ['notifications', 'mobile-notifications', 'implementar notificações push', 'implement local notifications'],
   ['billing', 'mobile-billing', 'implementar compras no app', 'add in-app purchases', 'implementar paywall premium'],
+  ['analytics', 'mobile-analytics', 'criar plano de tracking', 'implement product analytics', 'definir funil de conversão do produto'],
 ];
 
 const projects = [
@@ -58,7 +59,7 @@ describe('essential mobile workflows', () => {
     it(`preserves the reviewer on a tied review and ${intent} request`, async () => {
       const topic = {
         privacy: 'privacy', networking: 'networking', auth: 'login', notifications: 'push notifications',
-        billing: 'paywall',
+        billing: 'paywall', analytics: 'product analytics',
       }[intent];
       const result = await route({ prompt: `review ${topic}`, projectDir: await makeProject(FLUTTER_APP) });
       assert.equal(result.intent, 'review');

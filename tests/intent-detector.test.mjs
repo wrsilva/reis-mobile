@@ -77,6 +77,14 @@ describe('detectIntent', () => {
     ['configurar assinatura do app para release', 'release'],
     ['fix the stream subscription leak', 'performance'],
     ['add the push notification entitlement', 'notifications'],
+    ['criar plano de tracking', 'analytics'],
+    ['implement product analytics', 'analytics'],
+    ['definir taxonomia de eventos', 'analytics'],
+    ['add funnel tracking', 'analytics'],
+    ['definir funil de conversão do produto', 'analytics'],
+    ['integrate Mixpanel', 'analytics'],
+    ['review product analytics', 'review'],
+    ['add analytics', 'observability'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
