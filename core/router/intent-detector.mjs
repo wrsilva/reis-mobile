@@ -48,8 +48,8 @@ function matchTerms(text, groups) {
   const counts = new Map();
 
   for (const { id, word } of terms) {
-    const end = WHOLE_WORDS.has(word) ? '(?![\\p{L}\\p{N}])' : '';
-    const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(word)}${end}`, 'gu');
+    const wordEnd = WHOLE_WORDS.has(word) ? '(?![\\p{L}\\p{N}])' : '';
+    const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(word)}${wordEnd}`, 'gu');
     for (const match of text.matchAll(pattern)) {
       const start = match.index;
       const end = start + word.length;
