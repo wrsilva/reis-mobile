@@ -94,6 +94,11 @@ describe('detectIntent', () => {
     ['testar bluetooth', 'test'],
     ['camera crash', 'debug'],
     ['traduzir a localização do app', null],
+    ['configurar assinatura do app', null],
+    ['cancel the stream subscription', null],
+    ['configure the iCloud entitlement', null],
+    ['migrar para null safety falhou', 'debug'],
+    ['migrate to null safety failed', 'debug'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
