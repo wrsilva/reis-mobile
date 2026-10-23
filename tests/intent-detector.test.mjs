@@ -99,6 +99,13 @@ describe('detectIntent', () => {
     ['configure the iCloud entitlement', null],
     ['migrar para null safety falhou', 'debug'],
     ['migrate to null safety failed', 'debug'],
+    ['configurar firebase analytics', 'observability'],
+    ['firebase analytics setup', 'observability'],
+    ['implementar biometria', null],
+    ['add biometric unlock', null],
+    ['notification permission for the camera', 'notifications'],
+    ['add a paywall to the account deletion screen', 'privacy'],
+    ['track push notification funnel', 'notifications'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
