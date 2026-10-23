@@ -52,7 +52,7 @@ export const INTENTS = {
     'talkback', 'voiceover', 'contraste', 'semantics',
   ],
   review: [
-    'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
+    'review', 'revis', 'code review', 'pull request', 'pr', 'prs', 'analis', 'avali', 'audit',
     'code smell',
   ],
   migration: ['migra', 'migrate', 'upgrade', 'null safety'],
@@ -89,6 +89,10 @@ export const INTENTS = {
 };
 
 export const INTENT_IDS = Object.keys(INTENTS);
+
+// Terms matched as whole words instead of stems: as a stem, "pr" would also claim
+// "premium", "product" and "preço".
+export const WHOLE_WORDS = new Set(['pr', 'prs']);
 
 // A failing build or pipeline is a debugging task, not a build/deploy task.
 export const DEBUG_DOMINATES = new Set(['build', 'deployment', 'dependency', 'migration']);

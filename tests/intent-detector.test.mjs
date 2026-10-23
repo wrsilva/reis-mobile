@@ -87,6 +87,13 @@ describe('detectIntent', () => {
     assert.equal(detectIntent('improve the approach').intent, null);
   });
 
+  it('counts PR toward review only as a whole word', () => {
+    assert.equal(detectIntent('implementar paywall premium').scores.review, undefined);
+    assert.equal(detectIntent('definir funil de conversão do produto').scores.review, undefined);
+    assert.equal(detectIntent('comentar no PR').intent, 'review');
+    assert.equal(detectIntent('listar PRs abertos').intent, 'review');
+  });
+
   it('returns no intent and zero confidence for unrelated text', () => {
     const result = detectIntent('bom dia');
 

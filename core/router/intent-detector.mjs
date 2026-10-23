@@ -1,4 +1,4 @@
-import { AREAS, DEBUG_DOMINATES, INTENTS, INTENT_IDS, STACK_HINTS } from './intents.mjs';
+import { AREAS, DEBUG_DOMINATES, INTENTS, INTENT_IDS, STACK_HINTS, WHOLE_WORDS } from './intents.mjs';
 
 export function normalize(text) {
   return String(text ?? '')
@@ -48,7 +48,8 @@ function matchTerms(text, groups) {
   const counts = new Map();
 
   for (const { id, word } of terms) {
-    const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(word)}`, 'gu');
+    const end = WHOLE_WORDS.has(word) ? '(?![\\p{L}\\p{N}])' : '';
+    const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(word)}${end}`, 'gu');
     for (const match of text.matchAll(pattern)) {
       const start = match.index;
       const end = start + word.length;
