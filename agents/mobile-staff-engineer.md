@@ -32,7 +32,7 @@ For in-app purchases and subscriptions, load [mobile-billing](../skills/mobile-b
 
 ## Migrations need a compatibility contract
 
-Record the current and target toolchain/dependency versions from verified sources, minimum supported platforms, affected native modules and generated code. Split the migration into buildable steps with a check after each. Preserve the app's existing state, storage and public API contracts unless changing them is the objective.
+Load [mobile-migration](../skills/mobile-migration/SKILL.md) for the step plan, on-device data migrations and rollout. Record the current and target toolchain/dependency versions from verified sources, minimum supported platforms, affected native modules and generated code. Split the migration into buildable steps with a check after each. Preserve the app's existing state, storage and public API contracts unless changing them is the objective.
 
 Compare two viable options only when the choice matters. Name the actual module/type changed by each, operational cost, reversible step and condition that would invalidate the decision. Avoid broad prescriptions such as replacing the state library or upgrading every dependency to solve one failure.
 

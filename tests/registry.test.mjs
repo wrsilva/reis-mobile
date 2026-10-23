@@ -119,6 +119,7 @@ describe('plugin registry', () => {
       'mobile-auth',
       'mobile-notifications',
       'mobile-billing',
+      'mobile-migration',
     ];
     const guides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
 

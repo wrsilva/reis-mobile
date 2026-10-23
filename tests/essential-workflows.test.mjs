@@ -68,3 +68,23 @@ describe('essential mobile workflows', () => {
     });
   }
 });
+
+describe('mobile migration workflow', () => {
+  for (const [stack, files] of projects) {
+    it(`adds mobile-migration to the staff engineer's migration route on ${stack}`, async () => {
+      const result = await route({ intent: 'migration', projectDir: await makeProject(files) });
+      assert.equal(result.intent, 'migration');
+      assert.equal(result.stack, stack);
+      assert.equal(result.agent?.name, 'mobile-staff-engineer');
+      assert.ok(result.skills.some((item) => item.name === 'mobile-migration'));
+      assert.deepEqual(result.warnings, []);
+    });
+  }
+
+  it('discovers mobile-migration from "migrar de BLoC para Riverpod"', async () => {
+    const result = await route({ prompt: 'migrar de BLoC para Riverpod', projectDir: await makeProject(FLUTTER_APP) });
+    assert.equal(result.intent, 'migration');
+    assert.equal(result.intentSource, 'prompt');
+    assert.ok(result.skills.some((item) => item.name === 'mobile-migration'));
+  });
+});
