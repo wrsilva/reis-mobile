@@ -103,6 +103,15 @@ export const INTENTS = {
     'funnel', 'funil', 'conversion event', 'evento de conversao', 'user properties',
     'propriedades de usuario', 'mixpanel', 'posthog', 'amplitude analytics', 'amplitude sdk',
   ],
+  // "localizacao" alone also means translation and "ble" is a prefix of unrelated words, so
+  // location and Bluetooth use specific phrases. Biometrics belongs to auth and security.
+  hardware: [
+    'hardware', 'bluetooth', 'nfc', 'camera', 'microphone', 'microfone', 'sensor',
+    'accelerometer', 'acelerometro', 'gyroscope', 'giroscopio', 'gps', 'geolocation',
+    'geolocaliza', 'geofenc', 'background location', 'localizacao em segundo plano',
+    'location updates', 'atualizacoes de localizacao', 'barcode', 'codigo de barras', 'qr code',
+    'codigo qr', 'haptic', 'vibration', 'vibracao', 'usb',
+  ],
 };
 
 export const INTENT_IDS = Object.keys(INTENTS);

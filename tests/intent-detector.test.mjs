@@ -85,6 +85,15 @@ describe('detectIntent', () => {
     ['integrate Mixpanel', 'analytics'],
     ['review product analytics', 'review'],
     ['add analytics', 'observability'],
+    ['conectar a um dispositivo bluetooth', 'hardware'],
+    ['integrar leitor de QR code', 'hardware'],
+    ['implementar captura com a câmera', 'hardware'],
+    ['read NFC tags', 'hardware'],
+    ['use the accelerometer', 'hardware'],
+    ['track location with GPS', 'hardware'],
+    ['testar bluetooth', 'test'],
+    ['camera crash', 'debug'],
+    ['traduzir a localização do app', null],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
