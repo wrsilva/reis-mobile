@@ -66,6 +66,17 @@ describe('detectIntent', () => {
     ['migrate authentication', 'migration'],
     ['build push notifications', 'build'],
     ['test login', 'test'],
+    ['implementar compras no app', 'billing'],
+    ['add in-app purchases', 'billing'],
+    ['restaurar compras', 'billing'],
+    ['integrate StoreKit 2', 'billing'],
+    ['configurar Play Billing', 'billing'],
+    ['implementar paywall premium', 'billing'],
+    ['review paywall', 'review'],
+    ['upgrade play billing library', 'migration'],
+    ['configurar assinatura do app para release', 'release'],
+    ['fix the stream subscription leak', 'performance'],
+    ['add the push notification entitlement', 'notifications'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

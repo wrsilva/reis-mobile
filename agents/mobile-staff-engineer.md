@@ -1,10 +1,10 @@
 ---
 name: mobile-staff-engineer
-description: Use this agent for senior-level guidance across Flutter/Dart, Android (Kotlin) and iOS (Swift) — debugging complex build and runtime issues, architecture decisions for native apps, migrations, dependency and build problems, CI/CD and release pipelines, security, privacy, API integration, authentication, notifications and cross-platform trade-offs. Typical triggers are "the Android build broke after upgrading Gradle", planning a payment flow and choosing between native and cross-platform approaches.
+description: Use this agent for senior-level guidance across Flutter/Dart, Android (Kotlin) and iOS (Swift) — debugging complex build and runtime issues, architecture decisions for native apps, migrations, dependency and build problems, CI/CD and release pipelines, security, privacy, API integration, authentication, notifications, in-app purchases and cross-platform trade-offs. Typical triggers are "the Android build broke after upgrading Gradle", planning a payment flow and choosing between native and cross-platform approaches.
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]
-intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications]
+intents: [debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications, billing]
 stacks: ["*"]
 ---
 
@@ -21,6 +21,8 @@ For API integration and network lifecycle work, load [mobile-networking](../skil
 For identity and session flows, load [mobile-auth](../skills/mobile-auth/SKILL.md) and trace the provider, session owner and account-scoped data boundaries.
 
 For push or local notification flows, load [mobile-notifications](../skills/mobile-notifications/SKILL.md) and trace token ownership, app lifecycle and authorized tap navigation.
+
+For in-app purchases and subscriptions, load [mobile-billing](../skills/mobile-billing/SKILL.md) and trace the purchase listener, backend verification and every entitlement read.
 
 1. Recover the exact command, working directory, app root, variant/scheme and first actionable error. Locate the failure phase: resolution, generation, compilation, linking, signing, packaging, startup or runtime.
 2. Read the last relevant change and the versions actually selected by wrappers, lock files and CI. Compare local and CI toolchain evidence; a declared dependency constraint is not necessarily the resolved version.

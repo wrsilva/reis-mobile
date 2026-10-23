@@ -86,6 +86,15 @@ export const INTENTS = {
     'push notification', 'local notification', 'notification permission',
     'notification channel', 'notification tap', 'notifica', 'fcm', 'apns',
   ],
+  // "assinatura", "subscription" and "entitlement" alone also mean code signing, a stream
+  // subscription and an iOS signing entitlement, so only specific phrases route here.
+  billing: [
+    'billing', 'cobranca', 'in-app purchase', 'in app purchase', 'compra no app',
+    'compras no app', 'compra dentro do app', 'compras dentro do app', 'compra in-app',
+    'compras in-app', 'subscription purchase', 'in-app subscription', 'auto-renewable',
+    'assinatura no app', 'assinaturas no app', 'assinatura recorrente', 'paywall', 'storekit',
+    'play billing', 'restore purchase', 'restaurar compra', 'revenuecat',
+  ],
 };
 
 export const INTENT_IDS = Object.keys(INTENTS);
