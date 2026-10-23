@@ -7,4 +7,4 @@
 - Remove every subscription and listener in the effect cleanup, and ignore callbacks that arrive after the owner unmounted.
 - Test the state logic in Jest with the native module mocked, and hardware behavior on native builds with the [Android](android.md) and [iOS](ios.md) references.
 
-Official references: [VisionCamera lifecycle](https://react-native-vision-camera.com/docs/guides/lifecycle), [useIsFocused](https://reactnavigation.org/docs/use-is-focused/), [Expo Camera](https://docs.expo.dev/versions/latest/sdk/camera/).
+Official references: [VisionCamera lifecycle](https://visioncamera.margelo.com/docs/lifecycle), [useIsFocused](https://reactnavigation.org/docs/use-is-focused/), [Expo Camera](https://docs.expo.dev/versions/latest/sdk/camera/).

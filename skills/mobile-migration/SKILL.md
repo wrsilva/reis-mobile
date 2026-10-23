@@ -46,6 +46,7 @@ Before editing, record:
 - Destructive fallback, dropping and recreating the store, is acceptable only for caches the app can refetch, and it must be explicit.
 - A migration interrupted by process death, low battery or a launch-time kill must leave the old or the new state, never a mix. Run it in a transaction, make a rerun safe and record completion after the data is written.
 - Long migrations block launch. Keep launch-time work bounded, move heavy work off the main thread and show progress when the user must wait; the iOS watchdog terminates apps that launch too slowly.
+- Installed versions keep calling the backend. Keep the contracts they use working until the backend's minimum supported version excludes them, and ship a forced-update path before a breaking change.
 - The next release must read what this one writes. A staged rollout can be halted, but devices that received the build keep it, and a hotfix ships as a newer version that starts from their data.
 - Secure storage outlives assumptions: Keychain items can survive app deletion, and a changed encryption scheme must read old data or reset it deliberately.
 
