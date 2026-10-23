@@ -74,6 +74,8 @@ The crash-in-the-middle case is the one to test: purchase succeeds, the app is k
 | React Native / Expo | `react-native-iap`, `expo-in-app-purchases` where available, or a vendor SDK; Expo managed projects need a development build — in-app purchases do not work in Expo Go |
 | Kotlin Multiplatform | Billing is host-specific. Keep the entitlement *model* and the backend calls in `commonMain`, and the store client in each host |
 
+The client-side implementation of this lifecycle, per stack, is in [mobile-billing](../../mobile-billing/SKILL.md).
+
 A subscription infrastructure vendor (RevenueCat, Adapty and similar) exists precisely because the server-side half above is substantial. Using one is a legitimate decision; it does not remove the need to decide entitlement on a server rather than in the app — it moves that server.
 
 ## Store policy

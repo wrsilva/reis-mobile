@@ -49,7 +49,7 @@ Purchase interrupted by process death; verification failing on a network error a
 
 Use each store's sandbox: Google Play license testers on a testing track, StoreKit configuration files in Xcode and Sandbox accounts. Test the backend by replaying server notification payloads. Unit-test the purchase state machine against a fake billing client.
 
-Return the purchase inventory with `path:symbol` evidence, the implemented transitions, test results and any unverified store console or backend configuration. Whether digital goods must use store billing depends on the market and changes often: check the current store policy instead of designing from memory. Use [mobile-release](../mobile-release/SKILL.md) for submission, [mobile-privacy](../mobile-privacy/SKILL.md) for account deletion versus cancellation and [mobile-security](../mobile-security/SKILL.md) for tampered clients.
+Return the purchase inventory with `path:symbol` evidence, the implemented transitions, test results and any unverified store console or backend configuration. Whether digital goods must use store billing depends on the market and changes often: check the current store policy instead of designing from memory. Use [mobile-release](../mobile-release/SKILL.md) for submission, [mobile-privacy](../mobile-privacy/SKILL.md) for account deletion versus cancellation, [mobile-security](../mobile-security/SKILL.md) for tampered clients and [mobile-analytics](../mobile-analytics/SKILL.md) for conversion events.
 
 ## Official sources
 
