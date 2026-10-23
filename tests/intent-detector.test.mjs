@@ -106,6 +106,8 @@ describe('detectIntent', () => {
     ['notification permission for the camera', 'notifications'],
     ['add a paywall to the account deletion screen', 'privacy'],
     ['track push notification funnel', 'notifications'],
+    ['connect a BLE device', 'hardware'],
+    ['fix the blend mode', null],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);

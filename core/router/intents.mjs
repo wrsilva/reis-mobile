@@ -103,10 +103,10 @@ export const INTENTS = {
     'funnel', 'funil', 'conversion event', 'evento de conversao', 'user properties',
     'propriedades de usuario', 'mixpanel', 'posthog', 'amplitude analytics', 'amplitude sdk',
   ],
-  // "localizacao" alone also means translation and "ble" is a prefix of unrelated words, so
-  // location and Bluetooth use specific phrases. Biometrics belongs to auth and security.
+  // "localizacao" alone also means translation, so location uses specific phrases; "ble" is a
+  // whole word (see WHOLE_WORDS). Biometrics belongs to auth and security.
   hardware: [
-    'hardware', 'bluetooth', 'nfc', 'camera', 'microphone', 'microfone', 'sensor',
+    'hardware', 'bluetooth', 'ble', 'nfc', 'camera', 'microphone', 'microfone', 'sensor',
     'accelerometer', 'acelerometro', 'gyroscope', 'giroscopio', 'gps', 'geolocation',
     'geolocaliza', 'geofenc', 'background location', 'localizacao em segundo plano',
     'location updates', 'atualizacoes de localizacao', 'barcode', 'codigo de barras', 'qr code',
@@ -116,9 +116,9 @@ export const INTENTS = {
 
 export const INTENT_IDS = Object.keys(INTENTS);
 
-// Terms matched as whole words instead of stems: as a stem, "pr" would also claim
-// "premium", "product" and "preço".
-export const WHOLE_WORDS = new Set(['pr', 'prs']);
+// Terms matched as whole words instead of stems: as stems, "pr" would also claim "premium",
+// "product" and "preço", and "ble" would claim "blend".
+export const WHOLE_WORDS = new Set(['pr', 'prs', 'ble']);
 
 // A failing build or pipeline is a debugging task, not a build/deploy task.
 export const DEBUG_DOMINATES = new Set(['build', 'deployment', 'dependency', 'migration']);
