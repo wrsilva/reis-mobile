@@ -560,7 +560,8 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.7.3 | `/reis-mobile:release` with per-target evidence, required gates and deterministic readiness verdicts (previously planned for v0.8.0) | ✅ |
 | v0.8.0 | `mobile-performance`, `mobile-offline-sync` and `mobile-observability` topic skills with a reference per stack, plus background execution, OAuth/PKCE, billing lifecycle and localization references | ✅ |
 | v0.9.0 | Multi-provider layer (OpenAI, Gemini, OpenRouter, Ollama and the Codex/Gemini CLIs), `reis-mobile providers`, `reis-mobile consult` and `/reis-mobile:consult` — previously planned for v0.10.0 | ✅ |
-| v0.10.0 | MCP server | ⏳ |
+| v0.10.0 | `mobile-privacy`, `mobile-networking`, `mobile-auth` and `mobile-notifications` topic skills with a reference per stack, plus the `privacy`, `networking`, `auth` and `notifications` intents | ✅ |
+| v0.11.0 | MCP server | ⏳ |
 | v1.0.0 | First stable version: Flutter, Android, iOS and React Native | ⏳ |
 
 ---
@@ -592,7 +593,7 @@ The plugin's skills live in the `reis-mobile:` namespace and do not conflict, bu
 Yes: `reis-mobile init eng` installs the plugin in Codex too. See [installation](#install). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
 
 **Does it work in Cursor?**
-The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.8.0.
+The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.11.0.
 
 **What does reis-mobile send outside my machine?**
 The project analysis commands do not make network requests. The update hook and `reis-mobile update-check` request the public npm package metadata without sending project files or identifiers. What the model reads during `/reis-mobile:review` follows the same rules as any Claude Code session.
