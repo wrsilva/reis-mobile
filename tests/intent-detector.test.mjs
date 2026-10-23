@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import { detectIntent } from '../core/router/intent-detector.mjs';
+import { INTENT_IDS } from '../core/router/intents.mjs';
 
 describe('detectIntent', () => {
   it('routes the plan example: a failing Android build after a Kotlin update', () => {
@@ -108,6 +109,7 @@ describe('detectIntent', () => {
     ['track push notification funnel', 'notifications'],
     ['connect a BLE device', 'hardware'],
     ['fix the blend mode', null],
+    ['add a paywall to the notification settings', 'notifications'],
   ]) {
     it(`"${prompt}" → ${intent}`, () => {
       assert.equal(detectIntent(prompt).intent, intent);
@@ -127,6 +129,11 @@ describe('detectIntent', () => {
 
   it('matches stems only at word boundaries', () => {
     assert.equal(detectIntent('improve the approach').intent, null);
+  });
+
+  it('keeps the capability intents after every existing intent', () => {
+    assert.deepEqual(INTENT_IDS.slice(-3), ['billing', 'analytics', 'hardware']);
+    assert.equal(INTENT_IDS.indexOf('notifications'), INTENT_IDS.length - 4);
   });
 
   it('counts PR toward review only as a whole word', () => {
