@@ -9,8 +9,7 @@ Apply after the general checks in `SKILL.md`, to native iOS apps and to the `ios
 
 ## Storage and credentials
 
-- [ ] Tokens in `UserDefaults`, property lists or files instead of the Keychain.
-- For token storage and migration guidance, see [Keychain token storage](ios/keychain.md).
+- [ ] Tokens in `UserDefaults`, property lists or files instead of the Keychain. Store and migrate them as in [ios/keychain.md](ios/keychain.md).
 - [ ] Keychain items with permissive accessibility (`kSecAttrAccessibleAlways*`, deprecated) instead of `...WhenUnlocked` or `...AfterFirstUnlock`; `ThisDeviceOnly` variants for secrets that must not migrate to other devices through backups.
 - [ ] Files with sensitive data written without an appropriate Data Protection class.
 - [ ] Biometrics checked with `LAContext.evaluatePolicy` only as a boolean when they guard credentials; protect the Keychain item with `SecAccessControl` and biometry instead.
