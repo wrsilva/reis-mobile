@@ -530,7 +530,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-code-review` | Review process and checklists | review, performance | Flutter (PR review, widgets, project audit, static analysis), Android, iOS, React Native, KMP |
 | `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs, memory leaks), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules), KMP, deep links |
 | `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native, KMP |
-| `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native, KMP, OAuth/OIDC and PKCE |
+| `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS (Keychain token storage), React Native, KMP, OAuth/OIDC and PKCE |
 | `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP and external Apple design reading |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
