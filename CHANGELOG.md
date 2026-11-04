@@ -16,6 +16,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ### Changed
 
+- The debate now invokes `lead-mobile` for participant selection before the rounds and again for final synthesis. The candidate table includes every specialist, including UI/UX, accessibility and release, with explicit participant validation and a persisted selection rationale.
+
 - All five platform skills now route design work and link the UI/UX workflow and Apple-target reference.
 
 ## [0.10.0] - 2026-11-04

@@ -1,5 +1,5 @@
 ---
-description: Structured debate between the mobile specialists — each agent defends its perspective, rebuts the others, and lead-mobile decides
+description: Structured debate between the mobile specialists — lead-mobile selects the participants, specialists defend and rebut positions, and lead-mobile returns to decide
 argument-hint: "[--rounds N] [--agents a,b,c] [--external] [--providers a,b] <question>"
 allowed-tools: ["Bash(node:*)", "Bash(mkdir:*)", "Agent", "Read", "Write", "Grep", "Glob"]
 ---
@@ -8,7 +8,7 @@ allowed-tools: ["Bash(node:*)", "Bash(mkdir:*)", "Agent", "Read", "Write", "Grep
 
 Arguments received: `$ARGUMENTS`
 
-Use this command for architecture decisions with real trade-offs, not for routine questions: every debate costs several agents across two rounds. If the question has a single answer that can be verified in the code, answer it directly and tell the user why it was not worth a debate.
+Use this command for mobile decisions with real trade-offs, including architecture, UI/UX, accessibility and release readiness. A debate runs several specialists over the configured rounds; avoid it for routine questions. If the question has a single answer that can be verified in the code, answer it directly and tell the user why it was not worth a debate.
 
 ## 1. Parse the arguments
 
@@ -31,9 +31,11 @@ The JSON carries the stack and the `language` for the whole debate: `en` English
 
 If the question mentions files or directories, resolve the paths and read them now: participants receive the content in the briefing, not the path. If it fails, show the error and stop.
 
-## 3. Pick the participants
+## 3. Lead selects the participants
 
-Choose **three** agents whose priorities genuinely conflict on the question. A debate between roles that agree produces no decision.
+Invoke `Agent(subagent_type: "reis-mobile:lead-mobile", model: "opus")` with `phase: selection`, following the **Debate selection** section of `${CLAUDE_PLUGIN_ROOT}/agents/lead-mobile.md`. Pass the question, detected stack and native targets, language, relevant file contents, flags and the complete candidate/model table below. The lead owns participant selection; the command executes the returned plan and does not independently replace participants.
+
+Ask the lead to choose **three** distinct specialists automatically, with relevant perspectives that can expose the question's trade-offs. Disagreement must come from evidence and competing constraints, not a requirement to invent conflict. Every specialist in the plugin is eligible; the lead itself is the selector and moderator, not a debater.
 
 | Agent | Defends | Model |
 |---|---|---|
@@ -55,19 +57,24 @@ Choose **three** agents whose priorities genuinely conflict on the question. A d
 | `reis-mobile:plugin-native-expert` | Flutter–native boundary, platform channels, lifecycle | `opus` |
 | `reis-mobile:mobile-staff-engineer` | Build, release, migration, cross-platform trade-offs | `opus` |
 | `reis-mobile:mobile-code-reviewer` | Concrete risk in the code that already exists | `sonnet` |
+| `reis-mobile:mobile-ui-ux-designer` | User journeys, visual hierarchy, interaction cost and design consistency | `opus` |
+| `reis-mobile:mobile-accessibility-auditor` | Assistive interaction, readable content, focus and inclusive task completion | `sonnet` |
+| `reis-mobile:mobile-release-engineer` | Artifact provenance, release gates, rollout and production readiness | `opus` |
 
-Pass the `model` from the table on every `Agent` call. It overrides the `model: inherit` the agents declare, and that is what keeps the debate from turning into a monologue: with everyone on the same model, participants inherit the same biases and the same blind spots, and the disagreement stays on the surface of the role. The table pairs model strength with role — `opus` where the question is a long-term trade-off, `sonnet` where it is concrete implementation detail.
+Pass the `model` from the table on each participant's `Agent` call. The lead uses `opus` for both selection and synthesis. Model diversity is a configured perspective check, not proof of independent reasoning or correct conclusions.
 
-Automatic selection must end with **at least two different models** among the participants. If the question leads to three agents on the same model, swap one of them for the most relevant adjacent agent that uses the other model, and tell the user you did so.
+Automatic selection must end with **at least two different models** among the participants. The lead must choose a relevant adjacent specialist using the other model when needed and explain the trade-off. If no relevant mixed-model trio fits the evidence, the lead reports that limitation instead of adding an unrelated role; resolve the scope before launching rounds.
 
 Selection rules:
 
-- The detected stack rules. The `flutter-*` agents only join Flutter projects, `android-*` native Android, `ios-*` native iOS, `rn-*` React Native and `kmp-*` Kotlin Multiplatform. Pick the architect, performance and test specialists of the detected stack first; `mobile-staff-engineer` and `mobile-code-reviewer` fit any stack.
-- Without native code in the project, do not call `plugin-native-expert`.
-- `--agents` overrides the automatic choice, but not the models: each agent keeps the one from the table. Unknown name: warn and stop.
-- `reis-mobile:lead-mobile` never debates — it moderates in step 7, always on `opus`, because synthesizing conflicting positions is the heaviest work in the flow.
+- The detected stack rules. Match `flutter-*` to Flutter, `android-*` to native Android, `ios-*` to native iOS, `rn-*` to React Native and `kmp-*` Kotlin Multiplatform. For architecture questions, consider the stack's architect, performance and test specialists. For design, accessibility or release questions, prioritize the corresponding cross-stack specialists. All `mobile-*` specialists fit any stack; native specialists may join cross-platform projects when the question implicates their native paths.
+- Select `plugin-native-expert` only for Flutter projects with an implicated native bridge or plugin path.
+- `--agents` overrides automatic membership, but not the models. The lead validates the supplied names (with or without the `reis-mobile:` prefix), requires at least two distinct specialists and preserves valid explicit choices. Unknown names, duplicates or the lead as a participant: explain the error and stop before rounds. An explicit same-model selection is allowed; disclose that limitation without substituting participants.
+- `reis-mobile:lead-mobile` never debates: it selects in step 3 and returns to moderate in step 7. Neither lead call launches participants or external providers.
 
-Before starting, tell the user in one line the stack, the participants with their models and the number of rounds.
+The lead returns a selection plan containing each participant's exact name, model, assigned question, rationale and evidence scope, plus unresolved constraints. Check the returned names/models against the table, uniqueness, explicit membership and the automatic model mix. If invalid, return the validation errors to the lead for correction before starting; do not silently repair its choices. If Agent delegation is unavailable, report that the debate could not run rather than claiming specialists participated.
+
+Before starting, tell the user in one line the stack, the lead-selected participants with their models and the number of rounds.
 
 ## 4. Prepare the folder
 
@@ -75,11 +82,11 @@ Before starting, tell the user in one line the stack, the participants with thei
 mkdir -p ".reis-mobile/debates/<NNN-question-slug>/rounds"
 ```
 
-`NNN` is sequential within `.reis-mobile/debates/`. Write `context.md` in the folder with the question, the stack, the language, the participants, the flags and the context read in step 2.
+`NNN` is sequential within `.reis-mobile/debates/`. Write `context.md` in the folder with the question, the stack, the language, the participants, the flags, the lead's selection plan with its rationale and the context read in step 2.
 
 ## 5. Round 1 — blind positions
 
-Launch the participants **in parallel**, each with `Agent(subagent_type: "<agent>", model: "<model from the table>", run_in_background: true)`, in a single tool block. Nobody sees anyone else's position in this round: that is what keeps the first to answer from anchoring the rest.
+Launch the participants **in parallel**, each with `Agent(subagent_type: "<agent>", model: "<model from the table>", run_in_background: true)`, in a single tool block. Pass each specialist its assigned question and evidence scope from the lead's plan. Instruct every participant to return analysis only, without editing app code or launching subagents. Nobody sees anyone else's position in this round: that is what keeps the first to answer from anchoring the rest.
 
 Each briefing, self-contained:
 
@@ -140,7 +147,7 @@ Rebutting the generic thesis does not count: every rebuttal cites a concrete cla
 
 ## 7. Synthesis
 
-Invoke `reis-mobile:lead-mobile` with all rounds, following the **Debate moderation** section of `${CLAUDE_PLUGIN_ROOT}/agents/lead-mobile.md`. It resolves the disagreements and produces the action plan.
+Invoke `Agent(subagent_type: "reis-mobile:lead-mobile", model: "opus")` again with `phase: synthesis`, the selection plan, original context, all completed rounds and any missing/failed participant statuses, following the **Debate moderation** section of `${CLAUDE_PLUGIN_ROOT}/agents/lead-mobile.md`. It reads the rounds, verifies decisive evidence, resolves the disagreements and delivers the decision with an ordered action plan. This call does not select new participants or start additional rounds.
 
 Before accepting the synthesis, confirm any decisive claim in the code yourself: participants do not verify each other. Write the result to `.reis-mobile/debates/<id>/synthesis.md`.
 

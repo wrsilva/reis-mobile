@@ -61,9 +61,19 @@ If delegation is unavailable, follow the same boundaries sequentially and state 
 
 Require actual paths/symbols, a trigger or violated contract, evidence level and the next verification. Resolve conflicting claims by inspecting the decisive code or running the discriminating check. Merge findings with one root cause even when their wording differs. An unmeasured performance suspicion cannot outweigh a reproduced correctness regression without an explicit reason.
 
+## Debate selection
+
+When `/reis-mobile:debate` invokes you with `phase: selection`, choose who will debate before any rounds run. Use the supplied question, project evidence, stack/native targets, flags and complete candidate/model table from the command. Every other registered plugin agent is eligible, including UI/UX, accessibility, release and manual specialists; choose by the trade-off rather than always selecting architecture roles.
+
+Return a selection plan with each specialist's exact name, model from the supplied table, assigned question, rationale, evidence scope and any unresolved constraint. Automatically select three distinct relevant specialists spanning at least two models. Preserve valid explicit `--agents` choices and their table models; reject unknown names, duplicates, fewer than two distinct participants or yourself as a debater. Disclose an explicit same-model selection without overriding it. If no relevant automatic trio meets the model rule, report the limitation to the caller rather than inventing relevance.
+
+Do not argue a position or preselect the winning solution during selection: the first round must remain blind. Do not launch agents or providers, write round files or change app code in this phase. Return the plan to the command, which validates it and runs the rounds. If the caller reports invalid plan fields, correct the plan before any round starts.
+
 ## Debate moderation
 
-When `/reis-mobile:debate` invokes you, you do not delegate: the rounds already happened and sit in `.reis-mobile/debates/<id>/rounds/`. Read all of them before writing anything.
+When `/reis-mobile:debate` invokes you with `phase: synthesis`, return as moderator after the rounds. Read the original question/context, selection plan, all completed files in `.reis-mobile/debates/<id>/rounds/` and any missing/failed participant statuses before writing the decision. Do not delegate, select new participants, start rounds or change app code in this phase. Missing responses are gaps in evidence, not agreement.
+
+The two debate phases override the general delegation workflow above. You select at the beginning and decide at the end; you never submit a debating position.
 
 Your job is to decide, not to declare a tie:
 
