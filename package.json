@@ -1,7 +1,7 @@
 {
   "name": "reis-mobile",
   "version": "0.10.1",
-  "description": "AI agents and skills for Flutter, Android, iOS, React Native and Kotlin Multiplatform — a Claude Code and Codex plugin for reviews, debugging, tests, architecture, security and Firebase.",
+  "description": "AI agents and skills for Flutter, Android, iOS, React Native and Kotlin Multiplatform — a Claude Code and Codex plugin and an MCP server for reviews, debugging, tests, architecture, security and Firebase.",
   "type": "module",
   "license": "MIT",
   "author": "Warleson Reis",
@@ -55,6 +55,10 @@
     "agent-skills",
     "skills",
     "ai-agents",
-    "code-review"
+    "code-review",
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "cursor"
   ]
 }
