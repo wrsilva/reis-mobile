@@ -54,6 +54,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 - Both MCP eras on one process: per-request `_meta` and `server/discover` from the 2026-07-28 revision, and the `initialize` handshake from 2025-11-25 back to 2024-11-05. Validated end to end with Claude Code 2.1.267; the Cursor and Codex configurations in the README follow each client's documented format.
 - `--dir` on `reis-mobile mcp` sets the app directory for tool calls that pass none, so a client can pass its workspace folder.
 - Every MCP tool is read-only and offline. `consult` and the commands that write are not exposed, and the instruction reader resolves symlinks and serves only `agents/`, `skills/` and `docs/agent-context.md`, up to 512 KB.
+- iOS Keychain token storage guide in `mobile-security` (`references/ios/keychain.md`): accessibility classes and backups, biometric access control, access groups, reinstall persistence, migration out of `UserDefaults`, and a Swift token store with `OSStatus` handling. Contributed by @jay23606 in #21.
 
 #### Changed
 
