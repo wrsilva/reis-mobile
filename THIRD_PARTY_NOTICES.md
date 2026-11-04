@@ -1,5 +1,38 @@
 # Third-Party Notices
 
+## greenstevester/fastlane-skill
+
+- Source: https://github.com/greenstevester/fastlane-skill
+- Revision: `cab4eff8e678391671916228d7b6446d438da4a9`
+- License: MIT
+- Integrated into `mobile-ci` as references; no standalone upstream skills are registered.
+- Adapted files under `skills/`: `setup-fastlane` → `mobile-ci/references/fastlane/setup-fastlane.md` and `mobile-ci/references/fastlane/xcode-cloud.md` (upstream `docs/xcode-cloud.md`); `match` → `mobile-ci/references/fastlane/match.md`; `beta` → `mobile-ci/references/fastlane/beta.md`; `release` → `mobile-ci/references/fastlane/release.md`; `snapshot` → `mobile-ci/references/fastlane/snapshot.md`.
+- Adaptation: removed skill frontmatter, added attribution and relocated the Xcode Cloud link. Original guide bodies are otherwise preserved; project-specific integration guidance lives in `mobile-ci/SKILL.md`.
+
+```text
+MIT License
+
+Copyright (c) 2024 greenstevester
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 reis-mobile is distributed under the MIT License (see [LICENSE](LICENSE)). The skills listed below were derived from third-party projects and remain under their original licenses. Each of these skills declares `source` and `license` in its `SKILL.md` frontmatter.
 
 Changes made by reis-mobile: every third-party skill was moved into a reis-mobile skill (`mobile-test`, `mobile-firebase`, `mobile-code-review`, `mobile-debug`, `mobile-security`, `mobile-architecture`, `mobile-flutter`, `mobile-android`). Its instructions are unchanged apart from a leading attribution line and the removed frontmatter; skills that shipped extra files (references, scripts, examples) moved as whole folders with the instructions in `GUIDE.md`, so their relative links still work. Each section lists the upstream skill and the file that holds it now. Some copies correspond to earlier revisions of the upstream files.

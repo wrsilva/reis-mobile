@@ -52,7 +52,7 @@ export const INTENTS = {
     'talkback', 'voiceover', 'contraste', 'semantics',
   ],
   review: [
-    'review', 'revis', 'code review', 'pull request', 'pr', 'analis', 'avali', 'audit',
+    'review', 'revis', 'code review', 'pull request', 'pr', 'prs', 'analis', 'avali', 'audit',
     'code smell',
   ],
   migration: ['migra', 'migrate', 'upgrade', 'null safety'],
@@ -86,9 +86,39 @@ export const INTENTS = {
     'push notification', 'local notification', 'notification permission',
     'notification channel', 'notification tap', 'notifica', 'fcm', 'apns',
   ],
+  // "assinatura", "subscription" and "entitlement" alone also mean code signing, a stream
+  // subscription and an iOS signing entitlement, so only specific phrases route here.
+  billing: [
+    'billing', 'cobranca', 'in-app purchase', 'in app purchase', 'compra no app',
+    'compras no app', 'compra dentro do app', 'compras dentro do app', 'compra in-app',
+    'compras in-app', 'subscription purchase', 'in-app subscription', 'auto-renewable',
+    'assinatura no app', 'assinaturas no app', 'assinatura recorrente', 'paywall', 'storekit',
+    'play billing', 'restore purchase', 'restaurar compra', 'revenuecat',
+  ],
+  // Plain "analytics" stays with observability; these longer phrases claim their span first.
+  analytics: [
+    'product analytics', 'analytics de produto', 'tracking plan', 'plano de tracking',
+    'plano de rastreamento', 'event tracking', 'rastreamento de eventos', 'event taxonomy',
+    'taxonomia de eventos', 'analytics event', 'evento de analytics', 'eventos de analytics',
+    'funnel', 'funil', 'conversion event', 'evento de conversao', 'user properties',
+    'propriedades de usuario', 'mixpanel', 'posthog', 'amplitude analytics', 'amplitude sdk',
+  ],
+  // "localizacao" alone also means translation, so location uses specific phrases; "ble" is a
+  // whole word (see WHOLE_WORDS). Biometrics belongs to auth and security.
+  hardware: [
+    'hardware', 'bluetooth', 'ble', 'nfc', 'camera', 'microphone', 'microfone', 'sensor',
+    'accelerometer', 'acelerometro', 'gyroscope', 'giroscopio', 'gps', 'geolocation',
+    'geolocaliza', 'geofenc', 'background location', 'localizacao em segundo plano',
+    'location updates', 'atualizacoes de localizacao', 'barcode', 'codigo de barras', 'qr code',
+    'codigo qr', 'haptic', 'vibration', 'vibracao', 'usb',
+  ],
 };
 
 export const INTENT_IDS = Object.keys(INTENTS);
+
+// Terms matched as whole words instead of stems: as stems, "pr" would also claim "premium",
+// "product" and "preço", and "ble" would claim "blend".
+export const WHOLE_WORDS = new Set(['pr', 'prs', 'ble']);
 
 // A failing build or pipeline is a debugging task, not a build/deploy task.
 export const DEBUG_DOMINATES = new Set(['build', 'deployment', 'dependency', 'migration']);
