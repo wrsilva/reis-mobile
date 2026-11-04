@@ -14,7 +14,7 @@ Read the [project brief](../docs/agent-context.md) once and build it for the act
 
 ## Assign bounded ownership
 
-Agents use the `reis-mobile:` prefix in the Agent tool. Choose by stack and deliverable:
+Every other agent shipped in this plugin is available for your delegation, including agents with manual routing. Keep the assignment table complete when specialists are added or renamed; do not delegate to yourself. Agents use the `reis-mobile:` prefix in the Agent tool. Choose by stack and deliverable:
 
 | Assignment | Specialist |
 |---|---|
@@ -34,6 +34,7 @@ Agents use the `reis-mobile:` prefix in the Agent tool. Choose by stack and deli
 | KMP common/target tests and host coverage | `reis-mobile:kmp-test-engineer` |
 | Shared Kotlin versus Android/iOS host performance cause | `reis-mobile:kmp-performance-engineer` |
 | Diff regression with concrete trigger and consequence | `reis-mobile:mobile-code-reviewer` |
+| User journeys, wireframes, visual hierarchy, design tokens and interface states | `reis-mobile:mobile-ui-ux-designer` |
 | Assistive-technology journey and control semantics | `reis-mobile:mobile-accessibility-auditor` |
 | Release identity, artifact gates, notes or pipeline | `reis-mobile:mobile-release-engineer` |
 | Production crash, error and release-health signals | `reis-mobile:mobile-release-engineer` |
@@ -50,7 +51,7 @@ Give every assignment the shared brief plus: question to resolve, owned paths/sy
 
 Examples of dependency ordering:
 
-- Feature: architecture contracts first, then implementation and test cases against those contracts.
+- Feature: involve the UI/UX designer when screens or journeys change, align the interaction design with architecture contracts, then implement and test against those contracts.
 - Native failure: bridge request/lifecycle trace plus platform stack investigation, then one coordinated correction.
 - Audit: split by distinct risk/path and merge overlapping evidence; do not commission duplicate whole-app checklists.
 

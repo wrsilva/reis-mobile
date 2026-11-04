@@ -84,6 +84,19 @@ describe('plugin registry', () => {
     assert.ok(registry.agents.some((agent) => agent.name === 'mobile-code-reviewer'));
   });
 
+  it('keeps every specialist in the lead delegation table without unknown agents or self-delegation', async () => {
+    const { agents } = await loadRegistry();
+    const lead = agents.find((agent) => agent.name === 'lead-mobile');
+    assert.ok(lead, 'the coordinator exists');
+    const source = readFileSync(lead.path, 'utf8');
+    const listed = [...source.matchAll(/^\|[^\n]+\| `reis-mobile:([a-z0-9-]+)` \|$/gm)]
+      .map((match) => match[1]);
+    const expected = agents.filter((agent) => agent.name !== lead.name).map((agent) => agent.name);
+
+    assert.deepEqual([...new Set(listed)].sort(), expected.sort(),
+      'every registered specialist, including manual agents, must have a delegation assignment');
+  });
+
   it('credits every third-party component in THIRD_PARTY_NOTICES.md', async () => {
     const notices = readFileSync(join(PLUGIN_ROOT, 'THIRD_PARTY_NOTICES.md'), 'utf8');
     const { agents, skills } = await loadRegistry();
