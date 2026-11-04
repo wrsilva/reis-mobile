@@ -44,25 +44,22 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.10.0
+### v0.10.1
 
 #### Added
 
-- `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation imported from `greenstevester/fastlane-skill` (MIT), attributed and pinned to their upstream revision.
-
-- Four topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: `mobile-privacy` for consent and data lifecycle, `mobile-networking` for API integration and request recovery, `mobile-auth` for identity/session flows, and `mobile-notifications` for push/local notification lifecycles.
-- English and Portuguese `privacy`, `networking`, `auth` and `notifications` intents, handled by the existing staff engineer, with five-stack routing, prompt discovery and explicit-override tests.
-- `mobile-billing`, `mobile-migration`, `mobile-analytics` and `mobile-hardware` topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: in-app purchases verified by the backend before acknowledgement and recovered after process death; migrations planned as buildable steps, with on-device data that survives skipped releases and interrupted launches; tracking plans with typed events, identity reset on sign-out and consent-gated collection; device hardware from the availability check to the release of the resource, with real-device test matrices.
-- English and Portuguese `billing`, `analytics` and `hardware` intents, handled by `mobile-staff-engineer`. `mobile-migration` joins the existing `migration` route. Plain "analytics" still routes to observability.
+- `mobile-ui-ux-designer` agent and `mobile-ui-ux` topic skill for mobile journeys, wireframes, design tokens, component states and evidence-based interface reviews across all five stacks.
+- English and Portuguese `design` routing with platform skill selection and regression coverage for architecture, accessibility, tests and unrelated terms.
+- Apple design reading workflow linked to `dickwu/apple-design-skill` at a recorded revision and to official HIG topics. Upstream content is linked, not vendored, because the inspected revision declares no redistribution license.
 
 #### Changed
 
-- Authentication requests now have a dedicated `auth` intent instead of relying on security vocabulary. Explicit security audits retain the security workflow.
-- `mobile-staff-engineer` serves the `billing`, `analytics` and `hardware` intents and loads `mobile-migration` for migration plans.
+- The debate now invokes `lead-mobile` for participant selection before the rounds and again for final synthesis. The candidate table includes every specialist, including UI/UX, accessibility and release, with explicit participant validation and a persisted selection rationale.
+- All five platform skills now route design work and link the UI/UX workflow and Apple-target reference.
 
 #### Fixed
 
-- The router counted any word starting with "pr" as a review request, so prompts such as "implementar paywall premium" or "definir funil de conversão do produto" went to review. "PR" and "PRs" now count only as whole words.
+- `lead-mobile` now includes the UI/UX designer in its delegation table. A registry test requires every other registered agent, including manual specialists, to appear and rejects unknown agents or self-delegation.
 
 <!-- reis-mobile:latest-release:end -->
 
