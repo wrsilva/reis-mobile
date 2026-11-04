@@ -73,6 +73,8 @@ jobs:
 
 ## fastlane
 
+For implementation, use [mobile-ci](../../mobile-ci/SKILL.md), which links the imported setup, Match, beta, release, Snapshot and Xcode Cloud guides with platform-specific integration guidance.
+
 - `Fastfile` lanes per platform: `beta` (build, upload to internal testing or TestFlight) and `release` (upload to production or submit for review).
 - iOS signing: `match` (certificates and profiles in an encrypted store) with `readonly: true` in CI; `app_store_connect_api_key` for authentication instead of an Apple ID with two-factor authentication.
 - Android upload: `upload_to_play_store(track: 'internal', aab: ...)` with `json_key_data` from a secret.

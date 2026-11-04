@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **21 agents and 25 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication, notifications, in-app purchases, migrations, product analytics and device hardware.
+👥 **21 agents and 26 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication, notifications, in-app purchases, migrations, product analytics and device hardware.
 
 🧩 **Project-specific context.** `/reis-mobile:project` records real app symbols, owners, boundaries and validation commands in `.reis-mobile/project.md`; the team can add product rules that code cannot reveal. Refreshing the verified map preserves team-authored text.
 
@@ -389,6 +389,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Build a plugin or debug MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
 | Audit a screen for TalkBack, VoiceOver, touch targets and text scaling | agent `mobile-accessibility-auditor` | ✅ |
 | Check release readiness, write release notes or set up CI/CD | agent `mobile-release-engineer` | ✅ |
+| Set up fastlane lanes, Match, TestFlight or automated screenshots | skill [`mobile-ci`](skills/mobile-ci/SKILL.md) | ✅ |
 | Set startup, frame, memory and battery budgets and guard them in CI | skill `mobile-performance` | ✅ |
 | Make the app work offline, queue writes and resolve conflicts | skill `mobile-offline-sync` | ✅ |
 | Get usable crashes, errors, traces and release-health alerts in production | skill `mobile-observability` | ✅ |
@@ -407,7 +408,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 21 agents and 25 mobile skills |
+| **Specialists** | None | 21 agents and 26 mobile skills |
 | **Context cost** | Zero | ~5,500 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
@@ -487,6 +488,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native, KMP, OAuth/OIDC and PKCE |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
+| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
 | `mobile-performance` | Startup, rendering, memory, battery, app size and regression gates | performance | Flutter, Android, iOS, React Native, KMP, background execution and battery |
 | `mobile-offline-sync` | Local store, outbox, idempotency, conflict resolution, reconnection | offline | Flutter, Android, iOS, React Native, KMP |
 | `mobile-observability` | Crashes, errors, breadcrumbs, traces, alerts, sampling and privacy | observability | Flutter, Android, iOS, React Native, KMP |
@@ -538,7 +540,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Exception: external providers.** Two workflows, and only these two, send project context to a third party: `/reis-mobile:debate --external` and `/reis-mobile:consult`. Both state which providers receive it, and both are opt-in — no other command calls a provider. What leaves is the briefing, including the code excerpts you include; each provider has its own data policy. The question and every answer pass through `redact.mjs`, which is a protection layer and not a guarantee: read the briefing before sending it. API keys are read from the environment by the CLI and never enter the conversation, and `providers:` in `.reis-mobile/config.yaml` lets a team restrict which providers a repository allows. CLI providers (`codex`, `gemini-cli`) are asked for an opinion, not for work: they run in read-only mode (`codex exec --sandbox read-only`, `gemini --approval-mode plan`) inside a temporary directory, never in your repository.
 
-**Context cost.** Claude Code loads the descriptions of 21 agents and 25 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
+**Context cost.** Claude Code loads the descriptions of 21 agents and 26 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
 
 **One session hook.** On session startup or resume, the plugin checks for a newer release and warns only when the installed plugin is outdated. It does not read the project or modify the plugin installation.
 
@@ -636,6 +638,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 
 ## Attribution
 
+- **[greenstevester/fastlane-skill](https://github.com/greenstevester/fastlane-skill)** (MIT): five fastlane guides and Xcode Cloud documentation in [`mobile-ci`](skills/mobile-ci/SKILL.md). The source revision and license are recorded in [Third-Party Notices](THIRD_PARTY_NOTICES.md).
 - **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
 - **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.

@@ -28,6 +28,8 @@ Use the [project brief](../docs/agent-context.md) once or reuse the supplied bri
 
 ## Scope and decision
 
+For pipeline implementation and fastlane automation, load [mobile-ci](../skills/mobile-ci/SKILL.md) and its relevant platform and task references.
+
 A release audit authorizes inspection and preparation. Version bumps, tags and publishing follow the user's requested scope; do not infer an upload from a readiness question. For an explicitly requested deployment, complete the reviewable preparation and reuse existing authorization. Avoid executing a lane before inspecting whether it publishes.
 
 Return the release identity, GO/GO WITH RISKS/NO-GO verdict where relevant, gates with evidence, exact prepared commands/artifacts and outstanding external state. Define rollout monitoring using the project's metrics and thresholds; proposed thresholds must be labeled as proposals. Never imply that halting store distribution removes a binary already installed.
