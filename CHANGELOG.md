@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-04
+
 ### Added
 
 - `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation imported from `greenstevester/fastlane-skill` (MIT), attributed and pinned to their upstream revision.
