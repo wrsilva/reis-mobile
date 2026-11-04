@@ -22,6 +22,7 @@ One release process for every mobile stack. This file holds the process and what
 | In-app purchases and subscription lifecycle | [references/billing.md](references/billing.md) |
 | Release notes and store listing text | [references/store-copy.md](references/store-copy.md) |
 | A CI/CD pipeline that builds, signs and uploads | [references/ci-cd.md](references/ci-cd.md) |
+| Fastlane setup, Match, beta lanes, submission and screenshots | [mobile-ci](../mobile-ci/SKILL.md) |
 
 Flutter and React Native apps also need the Android and iOS references for signing and store details. Deeper platform guides live in the platform skills: Google Play policy and Play Billing in `mobile-android`, TestFlight and App Store Connect in `mobile-ios`, EAS in `mobile-rn`. Security hardening before release is in `mobile-security`, and production crash, error and release-health signals are in [mobile-observability](../mobile-observability/SKILL.md).
 

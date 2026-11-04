@@ -9,6 +9,9 @@ const workflows = [
   ['networking', 'mobile-networking', 'integrar API no aplicativo', 'implement resumable uploads'],
   ['auth', 'mobile-auth', 'implementar autenticação com passkeys', 'implement sign-in'],
   ['notifications', 'mobile-notifications', 'implementar notificações push', 'implement local notifications'],
+  ['billing', 'mobile-billing', 'implementar compras no app', 'add in-app purchases', 'implementar paywall premium'],
+  ['analytics', 'mobile-analytics', 'criar plano de tracking', 'implement product analytics', 'definir funil de conversão do produto'],
+  ['hardware', 'mobile-hardware', 'conectar a um dispositivo bluetooth', 'connect to a Bluetooth device', 'integrar leitor de QR code', 'implementar captura com a câmera', 'read NFC tags', 'use the accelerometer', 'track location with GPS'],
 ];
 
 const projects = [
@@ -55,7 +58,10 @@ describe('essential mobile workflows', () => {
     });
 
     it(`preserves the reviewer on a tied review and ${intent} request`, async () => {
-      const topic = { privacy: 'privacy', networking: 'networking', auth: 'login', notifications: 'push notifications' }[intent];
+      const topic = {
+        privacy: 'privacy', networking: 'networking', auth: 'login', notifications: 'push notifications',
+        billing: 'paywall', analytics: 'product analytics', hardware: 'bluetooth',
+      }[intent];
       const result = await route({ prompt: `review ${topic}`, projectDir: await makeProject(FLUTTER_APP) });
       assert.equal(result.intent, 'review');
       assert.equal(result.agent?.name, 'mobile-code-reviewer');
@@ -63,4 +69,24 @@ describe('essential mobile workflows', () => {
       assert.ok(!result.skills.some((item) => item.name === skill));
     });
   }
+});
+
+describe('mobile migration workflow', () => {
+  for (const [stack, files] of projects) {
+    it(`adds mobile-migration to the staff engineer's migration route on ${stack}`, async () => {
+      const result = await route({ intent: 'migration', projectDir: await makeProject(files) });
+      assert.equal(result.intent, 'migration');
+      assert.equal(result.stack, stack);
+      assert.equal(result.agent?.name, 'mobile-staff-engineer');
+      assert.ok(result.skills.some((item) => item.name === 'mobile-migration'));
+      assert.deepEqual(result.warnings, []);
+    });
+  }
+
+  it('discovers mobile-migration from "migrar de BLoC para Riverpod"', async () => {
+    const result = await route({ prompt: 'migrar de BLoC para Riverpod', projectDir: await makeProject(FLUTTER_APP) });
+    assert.equal(result.intent, 'migration');
+    assert.equal(result.intentSource, 'prompt');
+    assert.ok(result.skills.some((item) => item.name === 'mobile-migration'));
+  });
 });

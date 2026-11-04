@@ -41,7 +41,7 @@ Everything below follows from four differences, and ignoring them is what produc
 | **Structured logs** | The detail behind one session | Sent for every session, at full volume, at full cost |
 | **Traces / spans** | Where the time went in one flow, across app and backend | Instrumented only in the app, so the backend half is invisible |
 | **Metrics** | The aggregate: latency percentiles, success rates, adoption | Averages instead of percentiles |
-| **Product analytics** | Whether the user completed the journey at all | Treated as observability; it shows the drop, never the cause |
+| **Product analytics** | Whether the user completed the journey at all | Treated as observability; it shows the drop, never the cause. Event design is in [mobile-analytics](../mobile-analytics/SKILL.md) |
 
 A production incident needs at least three of these to be explainable: **what broke** (crash/error), **what led to it** (breadcrumbs/logs), and **how many users** (metrics segmented by version).
 

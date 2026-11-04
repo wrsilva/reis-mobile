@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **21 agents and 21 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication and notifications.
+👥 **21 agents and 26 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication, notifications, in-app purchases, migrations, product analytics and device hardware.
 
 🧩 **Project-specific context.** `/reis-mobile:project` records real app symbols, owners, boundaries and validation commands in `.reis-mobile/project.md`; the team can add product rules that code cannot reveal. Refreshing the verified map preserves team-authored text.
 
@@ -44,28 +44,25 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.9.0
+### v0.10.0
 
 #### Added
 
-- `core/providers/`: the multi-provider layer. Six external providers — the `codex` and `gemini` CLIs plus the OpenAI, Gemini, OpenRouter and Ollama HTTP APIs — described as data (endpoint, credential variables, request shape, model catalog), so adding one touches no command. Status, model and allowlist resolution make no network call: a CLI is found by scanning `PATH`, an HTTP provider by its credential variable.
-- `reis-mobile providers [--all] [--json]` lists every provider with the evidence behind its status (`ready`, `local`, `missing`, `disabled`, `blocked`), its endpoint and the resolved model. `reis-mobile providers --models` asks each provider which models it serves, so no model id is ever shipped as a default.
-- `reis-mobile consult [--providers a,b] [--model <id>] [--file <path>] [--timeout <ms>] <question>` asks the selected providers the same question in parallel. The core performs the call, so no API key passes through the conversation; the question is redacted on the way out and every answer on the way in. Each requested provider is reported with its own typed status — `ok`, `unavailable`, `no-model`, `timeout`, `error` — and the exit code is 1 only when nobody answered.
-- `/reis-mobile:consult [options] <question>`, also reachable as `/reis-mobile consult ...`: routes the question through the stack's specialist, requires its own position first, builds a self-contained briefing in `.reis-mobile/consults/`, consults the providers and then reconciles every outside claim against the code as confirmed with `file:line`, unverifiable or wrong.
-- `providers:` in `.reis-mobile/config.yaml`: the allowlist of external providers a repository accepts, committed with the repository. An absent key allows all, an empty list allows none, and a blocked provider says so instead of failing.
-- `providers.<id>.model` and `providers.<id>.enabled` in `~/.config/reis-mobile/config.json`, with precedence `--model`, then the provider's model variable (`OPENAI_MODEL`, `GEMINI_MODEL`, `OPENROUTER_MODEL`, `OLLAMA_MODEL`), then the config file.
-- `reis-mobile doctor` lists the configured providers under Integrations, with a single informational row when none is configured. It still makes no network call.
+- `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation imported from `greenstevester/fastlane-skill` (MIT), attributed and pinned to their upstream revision.
+
+- Four topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: `mobile-privacy` for consent and data lifecycle, `mobile-networking` for API integration and request recovery, `mobile-auth` for identity/session flows, and `mobile-notifications` for push/local notification lifecycles.
+- English and Portuguese `privacy`, `networking`, `auth` and `notifications` intents, handled by the existing staff engineer, with five-stack routing, prompt discovery and explicit-override tests.
+- `mobile-billing`, `mobile-migration`, `mobile-analytics` and `mobile-hardware` topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: in-app purchases verified by the backend before acknowledgement and recovered after process death; migrations planned as buildable steps, with on-device data that survives skipped releases and interrupted launches; tracking plans with typed events, identity reset on sign-out and consent-gated collection; device hardware from the availability check to the release of the resource, with real-device test matrices.
+- English and Portuguese `billing`, `analytics` and `hardware` intents, handled by `mobile-staff-engineer`. `mobile-migration` joins the existing `migration` route. Plain "analytics" still routes to observability.
 
 #### Changed
 
-- `/reis-mobile:debate --external` selects providers through the core instead of probing with `command -v`, accepts `--providers a,b`, and no longer needs `Bash(codex:*)` or `Bash(gemini:*)`: every provider call goes through the CLI. Behavior without a ready provider is unchanged — the debate carries on with the agents alone.
-- CLI providers are asked for an opinion, not for work: `codex exec` now runs with `--sandbox read-only` and `gemini` with `--approval-mode plan`, both in a temporary working directory that is removed afterwards. The debate's previous invocation granted write access and the user's repository as a workspace, neither of which a second opinion needs.
-- `/reis-mobile:review` points at `/reis-mobile:consult` when a finding should be cross-checked outside the session, and still never sends project context itself.
+- Authentication requests now have a dedicated `auth` intent instead of relying on security vocabulary. Explicit security audits retain the security workflow.
+- `mobile-staff-engineer` serves the `billing`, `analytics` and `hardware` intents and loads `mobile-migration` for migration plans.
 
 #### Fixed
 
-- `/reis-mobile:debate --external` could not reach Codex at all on current CLI versions: `codex exec --full-auto` is rejected with `unexpected argument '--full-auto' found`, and the call ran outside a Git repository without `--skip-git-repo-check`. The provider catalog now carries the invocation verified against `codex exec --help`.
-- A failing CLI provider reported its opening banner (`YOLO mode is enabled...`) instead of the cause. The reported line is now the first one that names a failure, falling back to the last line of stderr.
+- The router counted any word starting with "pr" as a review request, so prompts such as "implementar paywall premium" or "definir funil de conversão do produto" went to review. "PR" and "PRs" now count only as whole words.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -389,6 +386,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | Build a plugin or debug MethodChannel/EventChannel | agent `plugin-native-expert` | ✅ |
 | Audit a screen for TalkBack, VoiceOver, touch targets and text scaling | agent `mobile-accessibility-auditor` | ✅ |
 | Check release readiness, write release notes or set up CI/CD | agent `mobile-release-engineer` | ✅ |
+| Set up fastlane lanes, Match, TestFlight or automated screenshots | skill [`mobile-ci`](skills/mobile-ci/SKILL.md) | ✅ |
 | Set startup, frame, memory and battery budgets and guard them in CI | skill `mobile-performance` | ✅ |
 | Make the app work offline, queue writes and resolve conflicts | skill `mobile-offline-sync` | ✅ |
 | Get usable crashes, errors, traces and release-health alerts in production | skill `mobile-observability` | ✅ |
@@ -407,8 +405,8 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 21 agents and 21 mobile skills |
-| **Context cost** | Zero | ~4,700 fixed tokens (agent and skill descriptions), no hooks |
+| **Specialists** | None | 21 agents and 26 mobile skills |
+| **Context cost** | Zero | ~5,500 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
 **In short:** Claude Code already knows how to code. reis-mobile makes it look at what matters in a mobile app.
@@ -468,7 +466,7 @@ For domain knowledge that code cannot reveal, optionally commit `.reis-mobile/pr
 | `kmp-test-engineer` | Kotlin Multiplatform | test | `commonTest`, target tests and Android/iOS host coverage |
 | `mobile-accessibility-auditor` | all | accessibility | Screen reader labels, roles and states, touch targets, text scaling, focus and announcements, with fixes per platform |
 | `mobile-release-engineer` | all | release, deployment, observability | Go/no-go readiness, versions and signing, crash symbols, release notes and store copy, CI/CD, staged rollout, production crash and release-health signals |
-| `mobile-staff-engineer` | all | debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications | Cross-toolchain diagnosis, migrations and capability workflows when no stack specialist owns the intent |
+| `mobile-staff-engineer` | all | debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications, billing, analytics, hardware | Cross-toolchain diagnosis, migrations and capability workflows when no stack specialist owns the intent |
 | `plugin-native-expert` | Flutter | on demand | MethodChannel, EventChannel, Pigeon and Kotlin/Swift bridges, threading and lifecycle |
 | `lead-mobile` | all | on demand | Coordinates the other agents and consolidates a single action plan |
 
@@ -487,6 +485,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native, KMP, OAuth/OIDC and PKCE |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
+| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
 | `mobile-performance` | Startup, rendering, memory, battery, app size and regression gates | performance | Flutter, Android, iOS, React Native, KMP, background execution and battery |
 | `mobile-offline-sync` | Local store, outbox, idempotency, conflict resolution, reconnection | offline | Flutter, Android, iOS, React Native, KMP |
 | `mobile-observability` | Crashes, errors, breadcrumbs, traces, alerts, sampling and privacy | observability | Flutter, Android, iOS, React Native, KMP |
@@ -494,6 +493,10 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-networking` | API contracts, cancellation, pagination, refresh coordination and resumable transfers | networking | Flutter, Android, iOS, React Native, KMP |
 | `mobile-auth` | Sign-in, passkeys, recovery, provider linking and session transitions | auth | Flutter, Android, iOS, React Native, KMP |
 | `mobile-notifications` | Push/local notifications, token bindings, permissions and cold-start taps | notifications | Flutter, Android, iOS, React Native, KMP |
+| `mobile-billing` | In-app purchases, subscriptions, backend verification, acknowledgement and restore | billing | Flutter, Android, iOS, React Native, KMP |
+| `mobile-migration` | Toolchain and library upgrades, incremental UI moves and on-device data migrations | migration | Flutter, Android, iOS, React Native, KMP |
+| `mobile-analytics` | Tracking plans, typed events, funnels, analytics identity and consent-gated collection | analytics | Flutter, Android, iOS, React Native, KMP |
+| `mobile-hardware` | Camera, Bluetooth and BLE, NFC, location, sensors, scanning and haptics | hardware | Flutter, Android, iOS, React Native, KMP |
 | `mobile-firebase` | Firebase setup and 13 products | — | Flutter, Android, iOS, React Native, KMP; check installed SDK support |
 | `mobile-flutter` | Flutter and Dart specifics | review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
 | `mobile-android` | Native Android specifics, from the Android team | performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
@@ -504,17 +507,21 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 
 Skills marked — are triggered by Claude Code when the request matches their description, for example *"configure Firestore rules"* → `mobile-firebase`. Notification requests route to `mobile-notifications`, which links Firebase guidance when FCM is the installed provider.
 
-The four capability intents select `mobile-staff-engineer` and the matching topic skill. Use these from your mobile app directory:
+The seven capability intents (`privacy`, `networking`, `auth`, `notifications`, `billing`, `analytics` and `hardware`) select `mobile-staff-engineer` and the matching topic skill; `mobile-migration` joins the existing `migration` route. Use these from your mobile app directory:
 
 ```bash
 reis-mobile route "implement account deletion"
 reis-mobile route "implement resumable uploads"
 reis-mobile route "implement sign-in with passkeys"
 reis-mobile route "implement local notifications"
+reis-mobile route "add in-app purchases"
+reis-mobile route "create a tracking plan"
+reis-mobile route "connect to a Bluetooth device"
+reis-mobile route "migrate from BLoC to Riverpod"
 reis-mobile route --intent auth "review the session lifecycle"
 ```
 
-The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account or send a notification. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
+The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account, send a notification or make a purchase. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes, and a plain "analytics" request still goes to `mobile-observability`. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
 
 About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) and [android/skills](https://github.com/android/skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
@@ -530,7 +537,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Exception: external providers.** Two workflows, and only these two, send project context to a third party: `/reis-mobile:debate --external` and `/reis-mobile:consult`. Both state which providers receive it, and both are opt-in — no other command calls a provider. What leaves is the briefing, including the code excerpts you include; each provider has its own data policy. The question and every answer pass through `redact.mjs`, which is a protection layer and not a guarantee: read the briefing before sending it. API keys are read from the environment by the CLI and never enter the conversation, and `providers:` in `.reis-mobile/config.yaml` lets a team restrict which providers a repository allows. CLI providers (`codex`, `gemini-cli`) are asked for an opinion, not for work: they run in read-only mode (`codex exec --sandbox read-only`, `gemini --approval-mode plan`) inside a temporary directory, never in your repository.
 
-**Context cost.** Claude Code loads the descriptions of 21 agents and 21 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
+**Context cost.** Claude Code loads the descriptions of 21 agents and 26 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
 
 **One session hook.** On session startup or resume, the plugin checks for a newer release and warns only when the installed plugin is outdated. It does not read the project or modify the plugin installation.
 
@@ -629,6 +636,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 
 ## Attribution
 
+- **[greenstevester/fastlane-skill](https://github.com/greenstevester/fastlane-skill)** (MIT): five fastlane guides and Xcode Cloud documentation in [`mobile-ci`](skills/mobile-ci/SKILL.md). The source revision and license are recorded in [Third-Party Notices](THIRD_PARTY_NOTICES.md).
 - **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
 - **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.

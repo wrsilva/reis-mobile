@@ -7,6 +7,24 @@ import { FLUTTER_APP, makeProject } from './helpers/fixtures.mjs';
 const names = (items) => items.map((item) => item.name);
 
 describe('route', () => {
+  for (const [stack, files] of [
+    ['flutter', FLUTTER_APP],
+    ['android', { 'settings.gradle': '', 'app/src/main/AndroidManifest.xml': '<manifest/>' }],
+    ['ios', { 'App.xcodeproj/project.pbxproj': '' }],
+    ['react-native', { 'package.json': JSON.stringify({ dependencies: { 'react-native': '0.76.0' } }) }],
+    ['kotlin-multiplatform', { 'shared/build.gradle.kts': 'plugins { id("org.jetbrains.kotlin.multiplatform") }' }],
+  ]) {
+    it(`routes fastlane pipeline setup on ${stack} to mobile-ci`, async () => {
+      const result = await route({ prompt: 'set up fastlane pipeline', projectDir: await makeProject(files) });
+
+      assert.equal(result.stack, stack);
+      assert.equal(result.intent, 'deployment');
+      assert.equal(result.agent.name, 'mobile-release-engineer');
+      assert.ok(names(result.skills).includes('mobile-ci'));
+      assert.ok(names(result.skills).includes('mobile-release'));
+    });
+  }
+
   // Plan §39: the MVP is proven when /reis-mobile:review on a Flutter project selects the
   // reviewer agent with the Flutter and security skills.
   it('routes /reis-mobile:review on a Flutter project to the MVP agent and skills', async () => {

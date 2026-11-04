@@ -50,7 +50,7 @@ Develop and test against the Firebase Local Emulator Suite (Auth, Firestore, Rea
 
 ## 6. Privacy
 
-Analytics, Crashlytics and Messaging collect data covered by store privacy disclosures (App Store privacy details and privacy manifests, Google Play Data safety). Never send personal data (emails, names, phone numbers) as analytics parameters, crash keys or user properties, and honor consent before enabling collection where the law requires it.
+Analytics, Crashlytics and Messaging collect data covered by store privacy disclosures (App Store privacy details and privacy manifests, Google Play Data safety). Never send personal data (emails, names, phone numbers) as analytics parameters, crash keys or user properties, and honor consent before enabling collection where the law requires it. Event design, tracking plans and analytics identity are in [mobile-analytics](../mobile-analytics/SKILL.md).
 
 ## Output
 
