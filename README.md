@@ -37,6 +37,8 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔒 **Secrets never reach the model.** The diff sent for review goes through a layer that masks API keys, tokens, JWTs, private keys and keystore passwords.
 
+🔌 **Works in any MCP client.** `reis-mobile mcp` serves stack detection, routing and the review, debug, test and release context to Cursor and other editors, with the agent and skill instructions behind them. See [MCP server](#mcp-server).
+
 🪶 **Two commands to install.** `npm install -g reis-mobile` and `reis-mobile init eng` set it up in Claude Code and Codex, with zero npm dependencies and no external provider.
 
 ---
@@ -197,7 +199,7 @@ reis-mobile route "review architecture" --json
 reis-mobile review --json
 ```
 
-You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis.
+You can also ask Codex: *"Run `reis-mobile review --json`, read the instructions in the returned files and review the changes using that context."* The CLI selects the instructions and gathers the context; Codex does the analysis. To let Codex call these commands as tools instead, register the [MCP server](#mcp-server).
 </details>
 
 <details>
@@ -363,6 +365,46 @@ Skills      mobile-test
 ```
 
 The router never invents a specialist: if no agent serves the intent, it warns you. You do not need to call agents by name, because Claude Code triggers them by their description when the request fits. To force one of them, ask: *"use reis-mobile:flutter-architect to review the architecture"*.
+
+---
+
+## MCP server
+
+Editors that cannot load the Claude Code plugin, such as Cursor, can use reis-mobile through MCP. `reis-mobile mcp` is a stdio server shipped in the npm package, so install it with `npm install -g reis-mobile` first.
+
+| Client | Register the server |
+|---|---|
+| Cursor | `.cursor/mcp.json` in the project, or `~/.cursor/mcp.json` for every project, as below |
+| Claude Code | `claude mcp add reis-mobile -- reis-mobile mcp` |
+| Codex | `codex mcp add reis-mobile -- reis-mobile mcp` |
+
+```json
+{
+  "mcpServers": {
+    "reis-mobile": {
+      "command": "reis-mobile",
+      "args": ["mcp", "--dir", "${workspaceFolder}"]
+    }
+  }
+}
+```
+
+`--dir` is the app directory a tool uses when the call does not pass `dir`; Cursor replaces `${workspaceFolder}` with the project folder. In Claude Code the plugin already provides the agents and commands, so the server matters most in the other clients.
+
+| Tool | Returns |
+|---|---|
+| `reis_mobile_route` | Intent, stack, agent and skill paths for a request |
+| `reis_mobile_review` | The review route and the git diff, lock files out and secrets masked |
+| `reis_mobile_debug` | The debug route and the installed toolchain versions |
+| `reis_mobile_test` | The test route, the diff and the toolchain checks; runs no tests |
+| `reis_mobile_release` | Candidate release targets and references; builds and uploads nothing |
+| `reis_mobile_detect` | Stack, languages, platforms and the evidence for each |
+| `reis_mobile_doctor` | SDK and project file checks for the detected stack |
+| `reis_mobile_read_instructions` | The agent, skill or reference file a route points to |
+
+The model calls a routing tool, reads the instructions it returns and follows them, the same flow the slash commands use. Each tool returns the same JSON as its `--json` command. Every tool is read-only and offline, so `consult`, which sends context to a third party, is not exposed. The server speaks both MCP eras: the 2026-07-28 revision with per-request metadata, and the `initialize` handshake of 2025-11-25 back to 2024-11-05.
+
+Validated end to end with Claude Code 2.1.267. The Cursor and Codex entries follow each client's documented configuration but have not been run against those clients yet; if you try one, tell us in an issue.
 
 ---
 
@@ -539,11 +581,11 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 ## Trust, security and limits
 
-**Read-only CLI context.** `doctor`, `detect`, `route`, `review`, `test`, `release`, `providers` and `consult` do not modify your project. `/reis-mobile:release` inspects existing release evidence and remains read-only unless execution is explicitly requested. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/` and a consult its briefing to `.reis-mobile/consults/`.
+**Read-only CLI context.** `doctor`, `detect`, `route`, `review`, `test`, `release`, `providers`, `consult` and the `mcp` server's tools do not modify your project. `/reis-mobile:release` inspects existing release evidence and remains read-only unless execution is explicitly requested. The `/reis-mobile:test` slash command can write or fix tests and execute runners when requested. `/reis-mobile:project` writes only the optional project profile. The `/reis-mobile:review` and `/reis-mobile:debate` commands instruct the model not to edit app code; the debate writes its rounds to `.reis-mobile/debates/` and a consult its briefing to `.reis-mobile/consults/`.
 
 **Secrets masked.** The diff goes through [`core/security/redact.mjs`](core/security/redact.mjs) before reaching the model. Lock files and generated code (`*.g.dart`, `*.freezed.dart`, `*.pbxproj`) stay out of the diff. Redaction is a protection layer, not a guarantee. See [SECURITY.md](SECURITY.md).
 
-**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug`, `test` and `providers` make no network calls (`providers --models` and `consult` do, by request). The update hook and `update-check` request the public npm package metadata; they send no project files or identifiers. Installation downloads the package and registers the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
+**No telemetry.** `detect`, `doctor`, `route`, `review`, `debug`, `test`, `providers` and the `mcp` server make no network calls (`providers --models` and `consult` do, by request). The update hook and `update-check` request the public npm package metadata; they send no project files or identifiers. Installation downloads the package and registers the plugin. The Google Play policy guide in `mobile-android` runs Python scripts that download your app's public Google Play listing when the model uses it. The AI analysis uses the model of the session you are working in, such as Claude Code or Codex.
 
 **Exception: external providers.** Two workflows, and only these two, send project context to a third party: `/reis-mobile:debate --external` and `/reis-mobile:consult`. Both state which providers receive it, and both are opt-in — no other command calls a provider. What leaves is the briefing, including the code excerpts you include; each provider has its own data policy. The question and every answer pass through `redact.mjs`, which is a protection layer and not a guarantee: read the briefing before sending it. API keys are read from the environment by the CLI and never enter the conversation, and `providers:` in `.reis-mobile/config.yaml` lets a team restrict which providers a repository allows. CLI providers (`codex`, `gemini-cli`) are asked for an opinion, not for work: they run in read-only mode (`codex exec --sandbox read-only`, `gemini --approval-mode plan`) inside a temporary directory, never in your repository.
 
@@ -578,8 +620,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 | v0.8.0 | `mobile-performance`, `mobile-offline-sync` and `mobile-observability` topic skills with a reference per stack, plus background execution, OAuth/PKCE, billing lifecycle and localization references | ✅ |
 | v0.9.0 | Multi-provider layer (OpenAI, Gemini, OpenRouter, Ollama and the Codex/Gemini CLIs), `reis-mobile providers`, `reis-mobile consult` and `/reis-mobile:consult` — previously planned for v0.10.0 | ✅ |
 | v0.10.0 | `mobile-privacy`, `mobile-networking`, `mobile-auth` and `mobile-notifications` topic skills with a reference per stack, plus the `privacy`, `networking`, `auth` and `notifications` intents | ✅ |
-| v0.11.0 | MCP server | ⏳ |
-| v1.0.0 | First stable version: Flutter, Android, iOS and React Native | ⏳ |
+| v1.0.0 | First stable version: Flutter, Android, iOS and React Native, with the MCP server previously planned for v0.11.0 | ✅ |
 
 ---
 
@@ -607,10 +648,10 @@ Yes. Native Android, native iOS and React Native each have architect, performanc
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
 
 **Does it work in Codex?**
-Yes: `reis-mobile init eng` installs the plugin in Codex too. See [installation](#install). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context.
+Yes: `reis-mobile init eng` installs the plugin in Codex too. See [installation](#install). Installation does not confirm parity with the Claude Code agents and commands; the `reis-mobile` CLI can also be run by Codex to get diagnostics and context, and the [MCP server](#mcp-server) exposes the same commands as tools.
 
 **Does it work in Cursor?**
-The Cursor integration has not been validated yet. The MCP server remains on the roadmap for v0.11.0.
+Through the [MCP server](#mcp-server): register `reis-mobile mcp` in `.cursor/mcp.json`. The configuration follows Cursor's documented format but has not been run against Cursor yet. Cursor gets the tools and the instructions, not the Claude Code agents, slash commands or hooks.
 
 **What does reis-mobile send outside my machine?**
 The project analysis commands do not make network requests. The update hook and `reis-mobile update-check` request the public npm package metadata without sending project files or identifiers. What the model reads during `/reis-mobile:review` follows the same rules as any Claude Code session.

@@ -3,19 +3,25 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
+import {
+  debugPayload,
+  detectPayload,
+  doctorPayload,
+  releasePayload,
+  reviewPayload,
+  routePayload,
+  testPayload,
+} from '../core/commands/payloads.mjs';
 import { LANGUAGES, configPath, removeConfig, resolveLanguage, saveLanguage } from '../core/config/language.mjs';
 import { resolveProjectDir } from '../core/config/project.mjs';
-import { collectReviewContext } from '../core/context/context-engine.mjs';
 import { detectStack } from '../core/detection/stack-detector.mjs';
-import { runDoctor } from '../core/diagnostics/doctor.mjs';
 import { runInit } from '../core/install/init.mjs';
+import { serveStdio } from '../core/mcp/server.mjs';
 import { PLUGIN_ROOT } from '../core/paths.mjs';
 import { DEFAULT_TIMEOUT_MS, consult, listProviderModels } from '../core/providers/consult.mjs';
 import { parseProviderList, providerAllowlist, resolveProviders, selectProviders } from '../core/providers/providers.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
-import { releaseContext } from '../core/release/context.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
-import { route } from '../core/router/router.mjs';
 import { checkForUpdate, clearUpdateCache } from '../core/update/check.mjs';
 
 const USAGE = `reis-mobile — AI agents for mobile engineering
@@ -34,12 +40,13 @@ Commands:
   release [request...]       Prepare release evidence context (does not build or publish)
   providers                  List the external model providers and what each one needs
   consult [question...]      Ask the configured external providers the same question
+  mcp                        Serve the read-only commands to MCP clients over stdio (Cursor, Claude Code, Codex...)
   agents | skills | stacks   List registered components
   validate                   Validate the plugin's agents, skills and stacks
   update-check               Check npm for a newer reis-mobile release
 
 Options:
-  --dir <path>      Project directory (default: current directory, or "app" in .reis-mobile/config.yaml)
+  --dir <path>      Project directory (default: current directory, or "app" in .reis-mobile/config.yaml); mcp: default for tool calls
   --intent <id>     Force an intent (${INTENT_IDS.join(', ')})
   --base <ref>      review/test: compare <ref>...HEAD instead of the working tree
   --all             doctor: check every tool, not only the relevant ones
@@ -91,6 +98,7 @@ const COMMANDS = {
   release: commandRelease,
   providers: commandProviders,
   consult: commandConsult,
+  mcp: commandMcp,
   agents: (options) => commandList('agents', options),
   skills: (options) => commandList('skills', options),
   stacks: (options) => commandList('stacks', options),
@@ -182,10 +190,9 @@ async function commandLang({ prompt, json }) {
   return 0;
 }
 
-async function commandDetect({ dir, project, json, lang }) {
-  const detection = await detectStack(dir);
-  const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...detection, language, projectConfig: project.config?.path ?? null });
+async function commandDetect({ project, json, lang }) {
+  const detection = await detectPayload({ project, lang });
+  if (json) return print(detection);
 
   printProject(project);
 
@@ -195,21 +202,20 @@ async function commandDetect({ dir, project, json, lang }) {
   for (const evidence of detection.evidence) console.log(`  · ${evidence}`);
   const others = detection.candidates.slice(1).map((candidate) => candidate.stack);
   if (others.length) console.log(`Also matches ${others.join(', ')}`);
-  printLanguage(language);
+  printLanguage(detection.language);
   return detection.stack === 'unknown' ? 2 : 0;
 }
 
-async function commandDoctor({ dir, project, all, strict, json, lang }) {
-  const report = await runDoctor({ projectDir: dir, all });
-  const language = await resolveLanguage({ flag: lang });
+async function commandDoctor({ project, all, strict, json, lang }) {
+  const report = await doctorPayload({ project, all, lang });
   if (json) {
-    print({ ...report, language, projectConfig: project.config?.path ?? null });
+    print(report);
   } else {
     console.log('reis-mobile doctor\n');
     printProject(project);
     printDoctorChecks(report);
     console.log(report.warnings ? `${report.warnings} warning(s)` : 'No issues found');
-    printLanguage(language);
+    printLanguage(report.language);
   }
   return strict && report.warnings ? 1 : 0;
 }
@@ -226,30 +232,27 @@ function printDoctorChecks(report) {
 
 const SYMBOLS = { ok: '✓', warning: '✗', info: '-', skipped: '-' };
 
-async function commandRoute({ dir, project, intent, prompt, json, lang }) {
+async function commandRoute({ project, intent, prompt, json, lang }) {
   if (!prompt && !intent) {
     console.error('route needs a prompt or --intent.');
     return 1;
   }
-  const result = await route({ prompt, intent, projectDir: dir });
-  const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null });
+  const result = await routePayload({ project, prompt, intent, lang });
+  if (json) return print(result);
   printProject(project);
   printRoute(result);
-  printLanguage(language);
+  printLanguage(result.language);
   return 0;
 }
 
-async function commandReview({ dir, project, base, prompt, json, lang }) {
-  const result = await route({ prompt, intent: 'review', projectDir: dir });
-  const context = collectReviewContext({ projectDir: dir, base });
-  const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context });
+async function commandReview({ project, base, prompt, json, lang }) {
+  const result = await reviewPayload({ project, base, prompt, lang });
+  if (json) return print(result);
 
   printProject(project);
   printRoute(result);
-  printLanguage(language);
-  printContext(context);
+  printLanguage(result.language);
+  printContext(result.context);
   return 0;
 }
 
@@ -264,55 +267,57 @@ function printContext(context) {
  * Routes a failure to the debug agent and skills, and adds the doctor report: most build
  * failures are toolchain mismatches (JDK, Gradle, Xcode, CocoaPods), which the report shows.
  */
-async function commandDebug({ dir, project, prompt, json, lang }) {
-  const result = await route({ prompt, intent: 'debug', projectDir: dir });
-  const doctor = await runDoctor({ projectDir: dir });
-  const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, doctor });
+async function commandDebug({ project, prompt, json, lang }) {
+  const result = await debugPayload({ project, prompt, lang });
+  if (json) return print(result);
 
   printProject(project);
   printRoute(result);
-  printLanguage(language);
+  printLanguage(result.language);
   console.log('');
-  printDoctorChecks(doctor);
+  printDoctorChecks(result.doctor);
   return 0;
 }
 
 /** Prepare evidence for the test agent; running the selected suite is the agent's job. */
-async function commandTest({ dir, project, base, prompt, json, lang }) {
-  const result = await route({ prompt, intent: 'test', projectDir: dir });
-  const context = collectReviewContext({ projectDir: dir, base });
-  const doctor = await runDoctor({ projectDir: dir });
-  const language = await resolveLanguage({ flag: lang });
-  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context, doctor });
+async function commandTest({ project, base, prompt, json, lang }) {
+  const result = await testPayload({ project, base, prompt, lang });
+  if (json) return print(result);
 
   // A test runner needs an explicit working directory even without a monorepo config.
   printProject(project, true);
   printRoute(result);
-  printLanguage(language);
-  printContext(context);
+  printLanguage(result.language);
+  printContext(result.context);
   console.log('\nTest context prepared; no test suites were executed.\n');
-  printDoctorChecks(doctor);
+  printDoctorChecks(result.doctor);
   return 0;
 }
 
 /** Prepare release evidence; the specialist audits it before assigning a verdict. */
-async function commandRelease({ dir, project, prompt, json, lang }) {
-  const result = await route({ prompt, intent: 'release', projectDir: dir });
-  const context = collectReviewContext({ projectDir: dir });
-  const doctor = await runDoctor({ projectDir: dir });
-  const language = await resolveLanguage({ flag: lang });
-  const release = releaseContext(result.detection);
-  if (json) return print({ ...summarizeRoute(result), language, projectConfig: project.config?.path ?? null, context, doctor, release });
+async function commandRelease({ project, prompt, json, lang }) {
+  const result = await releasePayload({ project, prompt, lang });
+  if (json) return print(result);
 
+  const { release } = result;
   printProject(project, true);
   printRoute(result);
-  printLanguage(language);
-  printContext(context);
+  printLanguage(result.language);
+  printContext(result.context);
   console.log(`\nRelease platforms (verify) ${release.platforms.join(', ') || 'unknown'}`);
   for (const reference of release.references) console.log(`  Reference ${reference}`);
   console.log('\nRelease context prepared; readiness has not been evaluated. No builds, tests or uploads were executed.\n');
-  printDoctorChecks(doctor);
+  printDoctorChecks(result.doctor);
+  return 0;
+}
+
+/**
+ * Serves the read-only commands to MCP clients over stdio. Nothing but protocol messages may
+ * reach stdout, so this command prints nothing itself; `--dir` is the default for tool calls.
+ */
+async function commandMcp({ dir }) {
+  const pkg = JSON.parse(await readFile(join(PLUGIN_ROOT, 'package.json'), 'utf8'));
+  await serveStdio({ version: pkg.version, defaultDir: dir });
   return 0;
 }
 
@@ -448,11 +453,6 @@ async function commandValidate({ json }) {
     console.log(`✓ ${registry.stacks.length} stacks, ${registry.agents.length} agents, ${registry.skills.length} skills`);
   }
   return errors.length ? 1 : 0;
-}
-
-function summarizeRoute(result) {
-  const component = (item) => item && { name: item.name, description: item.description, path: item.path };
-  return { ...result, agent: component(result.agent), skills: result.skills.map(component) };
 }
 
 function printRoute(result) {
