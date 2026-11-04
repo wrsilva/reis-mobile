@@ -4,6 +4,21 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-04
+
+### Added
+
+- `reis-mobile mcp`, a stdio MCP server for editors that cannot load the Claude Code plugin, such as Cursor. Seven tools (`reis_mobile_route`, `reis_mobile_review`, `reis_mobile_debug`, `reis_mobile_test`, `reis_mobile_release`, `reis_mobile_detect` and `reis_mobile_doctor`) return the same JSON as the matching `--json` command, and `reis_mobile_read_instructions` serves the agent, skill and reference files a route points to.
+- Both MCP eras on one process: per-request `_meta` and `server/discover` from the 2026-07-28 revision, and the `initialize` handshake from 2025-11-25 back to 2024-11-05. Validated end to end with Claude Code 2.1.267; the Cursor and Codex configurations in the README follow each client's documented format.
+- `--dir` on `reis-mobile mcp` sets the app directory for tool calls that pass none, so a client can pass its workspace folder.
+- Every MCP tool is read-only and offline. `consult` and the commands that write are not exposed, and the instruction reader resolves symlinks and serves only `agents/`, `skills/` and `docs/agent-context.md`, up to 512 KB.
+- iOS Keychain token storage guide in `mobile-security` (`references/ios/keychain.md`): accessibility classes and backups, biometric access control, access groups, reinstall persistence, migration out of `UserDefaults`, and a Swift token store with `OSStatus` handling. Contributed by @jay23606 in #21.
+
+### Changed
+
+- 1.0.0 is the first stable release for Flutter, native Android, native iOS and React Native, as planned in the roadmap, and ships the MCP server previously planned for v0.11.0.
+- The read-only commands build their `--json` output in `core/commands/payloads.mjs`, shared by the CLI and the MCP server. The output itself is unchanged.
+
 ## [0.10.1] - 2026-11-04
 
 ### Added

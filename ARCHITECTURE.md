@@ -30,6 +30,7 @@ USER ──► COMMAND (/reis-mobile:review)
 | **The core calls external providers, the model never does** | A provider request carries a credential. Keeping the call in `core/providers/` means the key never reaches a prompt, a transcript or a tool log, and the prompt and every answer pass through `redactSecrets` on the way through. |
 | **No provider ships a default model id** | A hardcoded model id is wrong the day the provider retires it. The model comes from `--model`, the provider's model variable or the config file, and `providers --models` asks the provider itself what it serves. |
 | **Secrets masked before the model** | The diff goes through `redactSecrets` before leaving the CLI. The patterns target literals (`apiKey = "AIza..."`), not identifiers (`final token = await read()`), so the review is not harmed. |
+| **MCP tools return the CLI's `--json`** | `core/commands/payloads.mjs` builds the output of the read-only commands once. The CLI prints it and the MCP server returns it, so an editor and a terminal never describe the same project differently. |
 
 ## Modules
 
@@ -53,6 +54,11 @@ core/
 │   └── context-engine.mjs       changed files and diff (working tree, range or project)
 ├── diagnostics/
 │   └── doctor.mjs               tools and project configuration
+├── commands/
+│   └── payloads.mjs             the --json output of the read-only commands, shared by CLI and MCP
+├── mcp/
+│   ├── server.mjs               dual-era MCP protocol (2026-07-28 and 2025-11-25 back to 2024-11-05) over stdio
+│   └── tools.mjs                the eight read-only tools, argument checks and the instruction reader
 ├── providers/
 │   ├── catalog.mjs              external providers: endpoints, credentials, model catalogs
 │   ├── providers.mjs            status, model and allowlist resolution, without network
@@ -154,6 +160,21 @@ Every requested provider appears in the result with its own status — a missing
 
 `/reis-mobile:consult` and `/reis-mobile:debate --external` are the two workflows on top of this layer. Both state which providers received the context, and both require every outside claim to be confirmed in the code before it reaches a conclusion.
 
+## MCP server
+
+`reis-mobile mcp` serves the read-only commands to any MCP client over stdio, for editors that cannot load the Claude Code plugin. It writes nothing but protocol messages to stdout and exits when its input closes.
+
+| Tool | Returns |
+|---|---|
+| `reis_mobile_route`, `reis_mobile_review`, `reis_mobile_debug`, `reis_mobile_test`, `reis_mobile_release`, `reis_mobile_detect`, `reis_mobile_doctor` | The same JSON as the command's `--json`, as `structuredContent` and as text |
+| `reis_mobile_read_instructions` | An agent, skill or reference file, plus the package root that `${CLAUDE_PLUGIN_ROOT}` stands for |
+
+**Protocol.** The server is dual-era. A request whose `_meta` carries `io.modelcontextprotocol/protocolVersion` is served statelessly under 2026-07-28, which also answers `server/discover`; an unsupported version gets `-32022` with the supported list. An `initialize` request instead starts a legacy session under the requested revision, or under 2025-11-25 when the client asks for one the server does not know. Before `initialize`, a request without `_meta` other than `ping` is rejected with `-32602`. A `notifications/cancelled` drops the reply of a request still in flight.
+
+**Scope.** Every tool is read-only and offline: it reads the project and the package and runs only local `git` and toolchain `--version` commands. `consult` and `providers --models` stay out, because they reach a third party, and so do `init`, `lang` and `/reis-mobile:project`, because they write. The instruction reader resolves symlinks before checking that the file sits in `agents/`, `skills/` or `docs/agent-context.md`, and refuses files above 512 KB. Agents, slash commands and hooks are Claude Code features; an MCP client gets their instructions through the reader, not the runtime that executes them.
+
+**Directory.** Each tool takes `dir`, resolved against the `--dir` given to `reis-mobile mcp` and then against the server's working directory, which each editor chooses differently. `.reis-mobile/config.yaml` is honored as in the CLI, and its warnings come back as a text block instead of stderr.
+
 ## Language
 
 Instructions are written once, in English. The answer language is a user setting, not a second copy of the content: `reis-mobile init <eng|pt>` or `reis-mobile lang <eng|pt>` saves it to `~/.config/reis-mobile/config.json`, outside the Claude Code plugin cache, which `claude plugin update` replaces. `detect`, `doctor`, `route`, `review`, `test` and `release` print it as `Language` (`language` in JSON), and every command tells the model to write in it. Precedence: `--lang`, then `REIS_MOBILE_LANG`, then the file; with nothing set the output is `-` and the model follows the language of the request.
@@ -167,6 +188,7 @@ The CLI and the plugins are the same code, published through three channels:
 | Claude Code plugin | This repository, as a GitHub marketplace (`reis-mobile@reis-mobile`) | Agents, skills, commands, the CLI under `${CLAUDE_PLUGIN_ROOT}/bin`, and a session update hook |
 | Codex plugin | The same marketplace, through `codex plugin` | Skills and a session update hook, after hook trust review |
 | npm (`reis-mobile`) | `npm publish` in the release workflow, when the `NPM_TOKEN` secret exists | The `reis-mobile` command; `reis-mobile init` installs the plugin in Claude Code and Codex, whichever are on the `PATH` |
+| MCP clients | `reis-mobile mcp` from the npm package, registered in the client's MCP configuration | The eight read-only tools; no agents, commands or hooks |
 
 `package.json` `files` decides what the npm package contains, including `THIRD_PARTY_NOTICES.md`, which the MIT and BSD-3-Clause licenses of the imported skills require. CI packs the package and installs it globally on Linux, macOS and Windows before running the CLI.
 
@@ -178,4 +200,4 @@ There is no native binary: reis-mobile depends on Node.js 22+, declared in `engi
 
 ## Out of scope for this version
 
-These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), MCP server, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions, and `core/providers/` covers external providers.
+These items remain in the plan but are not implemented yet: `.codex-plugin/` (the manifest format has not been verified yet), an MCP transport over HTTP, MCP prompts and resources, core-managed multi-agent execution and execution logs. The debate command already coordinates agents through model instructions, and `core/providers/` covers external providers.
