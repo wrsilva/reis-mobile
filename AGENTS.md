@@ -39,3 +39,4 @@ Do not improvise a release. `package.json` is the only version you edit, and a b
 | A command | `commands/<name>.md` (becomes `/reis-mobile:<name>`) | Documentation in the README |
 | An intent | Terms in `core/router/intents.mjs` | Cases in `tests/intent-detector.test.mjs` |
 | A stack | Rule in `stack-detector.mjs` + `stacks/<id>/stack.json` | Cases in `tests/stack-detector.test.mjs` |
+| An MCP tool | An entry in `TOOLS` in `core/mcp/tools.mjs`, read-only and offline, returning a payload from `core/commands/payloads.mjs` | Cases in `tests/mcp.test.mjs` and a row in the README tools table |
