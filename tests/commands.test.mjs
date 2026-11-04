@@ -141,6 +141,50 @@ describe('/debate', () => {
     }
   });
 
+  it('offers every specialist exactly once with a model and reserves the lead for orchestration', () => {
+    const rows = [...debate.body.matchAll(/^\| `reis-mobile:([a-z0-9-]+)` \|[^|]+\| `([a-z]+)` \|$/gm)];
+    const names = rows.map((row) => row[1]);
+
+    assert.equal(new Set(names).size, names.length, 'candidate assignments must be unique');
+    assert.deepEqual(names.sort(), agents.filter((name) => name !== 'lead-mobile').sort());
+    for (const row of rows) assert.ok(['opus', 'sonnet'].includes(row[2]), row[1]);
+  });
+
+  it('calls the lead for selection before rounds and for synthesis afterwards', () => {
+    const selection = debate.body.indexOf('## 3. Lead selects the participants');
+    const rounds = debate.body.indexOf('## 5. Round 1');
+    const synthesis = debate.body.indexOf('## 7. Synthesis');
+    const selectionBody = debate.body.slice(selection, rounds);
+    const synthesisBody = debate.body.slice(synthesis);
+    const lead = readFileSync(join(PLUGIN_ROOT, 'agents/lead-mobile.md'), 'utf8');
+
+    assert.ok(selection >= 0 && selection < rounds && rounds < synthesis);
+    for (const body of [selectionBody, synthesisBody]) {
+      assert.ok(body.includes('Agent(subagent_type: "reis-mobile:lead-mobile", model: "opus")'));
+    }
+    assert.match(selectionBody, /phase: selection/);
+    assert.match(selectionBody, /command executes the returned plan/);
+    assert.match(selectionBody, /lead's selection plan with its rationale/);
+    assert.match(synthesisBody, /phase: synthesis/);
+    assert.match(synthesisBody, /all completed rounds/);
+    assert.match(synthesisBody, /ordered action plan/);
+    assert.match(lead, /## Debate selection/);
+    assert.match(lead, /phase: selection/);
+    assert.match(lead, /phase: synthesis/);
+    assert.match(lead, /Do not launch agents or providers/);
+    assert.match(lead, /you never submit a debating position/);
+    assert.match(debate.body, /without editing app code or launching subagents/);
+  });
+
+  it('preserves explicit membership and validates the lead plan before launching', () => {
+    assert.match(debate.body, /preserves valid explicit choices/);
+    assert.match(debate.body, /Unknown names, duplicates or the lead as a participant/);
+    assert.match(debate.body, /at least two distinct specialists/);
+    assert.match(debate.body, /explicit same-model selection is allowed/);
+    assert.match(debate.body, /return the validation errors to the lead/);
+    assert.match(debate.body, /do not silently repair its choices/);
+  });
+
   it('offers distinct architecture, performance and test participants for KMP', () => {
     for (const name of ['kmp-architect', 'kmp-performance-engineer', 'kmp-test-engineer']) {
       assert.ok(debate.body.includes(`reis-mobile:${name}`), name);

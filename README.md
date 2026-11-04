@@ -23,7 +23,7 @@ A mobile app is not a generic project. A code review that does not know about `B
 
 🔎 **Detects the stack on its own.** Flutter (app or plugin), React Native (including Expo), Kotlin Multiplatform, native Android and iOS, with languages and target platforms. A Flutter app with `android/` and `ios/` is still Flutter.
 
-👥 **21 agents and 26 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication, notifications, in-app purchases, migrations, product analytics and device hardware.
+👥 **22 agents and 27 mobile skills.** Architect, performance and test engineers for Flutter, native Android, native iOS, React Native and Kotlin Multiplatform, plus a staff engineer, a native plugin specialist, a code reviewer, a UI/UX designer, an accessibility auditor, a release engineer and a lead. Topic skills cover the five stacks with focused references for debugging, tests, security, Firebase, accessibility, releases, performance budgets, offline sync, production observability, privacy, networking, authentication, notifications, in-app purchases, migrations, product analytics and device hardware.
 
 🧩 **Project-specific context.** `/reis-mobile:project` records real app symbols, owners, boundaries and validation commands in `.reis-mobile/project.md`; the team can add product rules that code cannot reveal. Refreshing the verified map preserves team-authored text.
 
@@ -44,25 +44,22 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v0.10.0
+### v0.10.1
 
 #### Added
 
-- `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation imported from `greenstevester/fastlane-skill` (MIT), attributed and pinned to their upstream revision.
-
-- Four topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: `mobile-privacy` for consent and data lifecycle, `mobile-networking` for API integration and request recovery, `mobile-auth` for identity/session flows, and `mobile-notifications` for push/local notification lifecycles.
-- English and Portuguese `privacy`, `networking`, `auth` and `notifications` intents, handled by the existing staff engineer, with five-stack routing, prompt discovery and explicit-override tests.
-- `mobile-billing`, `mobile-migration`, `mobile-analytics` and `mobile-hardware` topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: in-app purchases verified by the backend before acknowledgement and recovered after process death; migrations planned as buildable steps, with on-device data that survives skipped releases and interrupted launches; tracking plans with typed events, identity reset on sign-out and consent-gated collection; device hardware from the availability check to the release of the resource, with real-device test matrices.
-- English and Portuguese `billing`, `analytics` and `hardware` intents, handled by `mobile-staff-engineer`. `mobile-migration` joins the existing `migration` route. Plain "analytics" still routes to observability.
+- `mobile-ui-ux-designer` agent and `mobile-ui-ux` topic skill for mobile journeys, wireframes, design tokens, component states and evidence-based interface reviews across all five stacks.
+- English and Portuguese `design` routing with platform skill selection and regression coverage for architecture, accessibility, tests and unrelated terms.
+- Apple design reading workflow linked to `dickwu/apple-design-skill` at a recorded revision and to official HIG topics. Upstream content is linked, not vendored, because the inspected revision declares no redistribution license.
 
 #### Changed
 
-- Authentication requests now have a dedicated `auth` intent instead of relying on security vocabulary. Explicit security audits retain the security workflow.
-- `mobile-staff-engineer` serves the `billing`, `analytics` and `hardware` intents and loads `mobile-migration` for migration plans.
+- The debate now invokes `lead-mobile` for participant selection before the rounds and again for final synthesis. The candidate table includes every specialist, including UI/UX, accessibility and release, with explicit participant validation and a persisted selection rationale.
+- All five platform skills now route design work and link the UI/UX workflow and Apple-target reference.
 
 #### Fixed
 
-- The router counted any word starting with "pr" as a review request, so prompts such as "implementar paywall premium" or "definir funil de conversão do produto" went to review. "PR" and "PRs" now count only as whole words.
+- `lead-mobile` now includes the UI/UX designer in its delegation table. A registry test requires every other registered agent, including manual specialists, to appear and rejects unknown agents or self-delegation.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -298,9 +295,9 @@ See the [readiness contract](skills/mobile-release/references/readiness.md) and 
 
 ### Debate
 
-`/reis-mobile:debate` puts three specialists with conflicting priorities to defend positions on the same question. Round 1 is blind, so the first to answer does not anchor the others; in round 2 each one rebuts specific points from the others; at the end, `lead-mobile` decides and delivers the action plan. The rounds are stored in `.reis-mobile/debates/`.
+`/reis-mobile:debate` first asks `lead-mobile` to select three relevant specialists and explain each assignment. Every specialist is eligible, including UI/UX, accessibility and release; `--agents` supplies explicit choices for the lead to validate. Round 1 is blind, so the first to answer does not anchor the others; in round 2 each one rebuts specific points from the others; at the end, `lead-mobile` returns to analyze the rounds, resolve disagreements and deliver the decision with an action plan. The lead selects and moderates but does not debate. The rounds are stored in `.reis-mobile/debates/`.
 
-Participants vary along two axes at once. The **role** gives each one a different incentive: `flutter-architect` defends layer boundaries, `flutter-performance-engineer` is hostile to indirection, `flutter-test-engineer` wants injection seams the other two consider noise. The **model** keeps that disagreement from staying on the surface — the command spreads `opus` and `sonnet` across the participants, because three instances of the same model inherit the same blind spots and tend to converge for reasons that have nothing to do with your question. With `--external`, a third axis comes in: outside **providers**, in separate processes.
+Participants vary by role and model. The lead uses the command's `opus`/`sonnet` assignments and selects at least two models automatically; valid explicit `--agents` choices are preserved, with any same-model limitation disclosed. Model diversity does not guarantee independent reasoning: conclusions still require evidence. The command runs the selected participants and records the selection rationale with the context. With `--external`, outside providers join through the existing provider layer; the lead does not enable them on its own.
 
 It is expensive: several agents over two rounds. Use it for architecture decisions with a real trade-off — *migrate to Riverpod*, *offline-first with Firestore or a local cache*, *native plugin or an off-the-shelf package* — and not for questions with a single answer, where `/reis-mobile <request>` solves it for less.
 
@@ -405,7 +402,7 @@ The router never invents a specialist: if no agent serves the intent, it warns y
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
 | **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
-| **Specialists** | None | 21 agents and 26 mobile skills |
+| **Specialists** | None | 22 agents and 27 mobile skills |
 | **Context cost** | Zero | ~5,500 fixed tokens (agent and skill descriptions), no hooks |
 | **Best for** | General tasks | Teams and developers working on mobile apps |
 
@@ -464,13 +461,25 @@ For domain knowledge that code cannot reveal, optionally commit `.reis-mobile/pr
 | `kmp-architect` | Kotlin Multiplatform | architecture, offline | Shared source-set ownership, Android/iOS callers and Swift-facing contracts |
 | `kmp-performance-engineer` | Kotlin Multiplatform | performance | Shared Kotlin cost versus Android/iOS host traces and bridge overhead |
 | `kmp-test-engineer` | Kotlin Multiplatform | test | `commonTest`, target tests and Android/iOS host coverage |
+| `mobile-ui-ux-designer` | all | design | Mobile journeys, wireframes, design tokens, adaptive layouts and evidence-based UI/UX reviews |
 | `mobile-accessibility-auditor` | all | accessibility | Screen reader labels, roles and states, touch targets, text scaling, focus and announcements, with fixes per platform |
 | `mobile-release-engineer` | all | release, deployment, observability | Go/no-go readiness, versions and signing, crash symbols, release notes and store copy, CI/CD, staged rollout, production crash and release-health signals |
 | `mobile-staff-engineer` | all | debug, architecture, performance, test, security, migration, dependency, build, offline, observability, privacy, networking, auth, notifications, billing, analytics, hardware | Cross-toolchain diagnosis, migrations and capability workflows when no stack specialist owns the intent |
 | `plugin-native-expert` | Flutter | on demand | MethodChannel, EventChannel, Pigeon and Kotlin/Swift bridges, threading and lifecycle |
 | `lead-mobile` | all | on demand | Coordinates the other agents and consolidates a single action plan |
 
-When more than one agent serves the intent, the stack-specific one wins. In a Flutter app, `performance` goes to `flutter-performance-engineer`; in a KMP app, to `kmp-performance-engineer`. `accessibility` goes to `mobile-accessibility-auditor`, `release`, `deployment` and `observability` to `mobile-release-engineer` on every stack, and `offline` to the stack's architect.  Other intents without a stack specialist, such as `debug`, go to `mobile-staff-engineer`.
+When more than one agent serves the intent, the stack-specific one wins. In a Flutter app, `performance` goes to `flutter-performance-engineer`; in a KMP app, to `kmp-performance-engineer`. `design` goes to `mobile-ui-ux-designer`, `accessibility` goes to `mobile-accessibility-auditor`, `release`, `deployment` and `observability` to `mobile-release-engineer` on every stack, and `offline` to the stack's architect.  Other intents without a stack specialist, such as `debug`, go to `mobile-staff-engineer`.
+
+### UI/UX design
+
+Ask Claude Code to "use reis-mobile:mobile-ui-ux-designer to redesign this screen", or use `mobile-ui-ux` in a skill-capable host such as Codex. From a mobile app directory, inspect routing with:
+
+```bash
+reis-mobile route "review the UI/UX of this screen"
+reis-mobile route "create a mobile design system"
+```
+
+The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. Apple-target work includes a reading guide for [dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill) and official HIG pages. The upstream repository has no explicit redistribution license at the inspected revision, so its content is linked rather than bundled; the new guides are original project content. Current Apple claims require source verification, and Android retains its own conventions.
 
 ### Skills
 
@@ -483,6 +492,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs, memory leaks), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules), KMP, deep links |
 | `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native, KMP |
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS, React Native, KMP, OAuth/OIDC and PKCE |
+| `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP and external Apple design reading |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
 | `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
@@ -498,11 +508,11 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-analytics` | Tracking plans, typed events, funnels, analytics identity and consent-gated collection | analytics | Flutter, Android, iOS, React Native, KMP |
 | `mobile-hardware` | Camera, Bluetooth and BLE, NFC, location, sensors, scanning and haptics | hardware | Flutter, Android, iOS, React Native, KMP |
 | `mobile-firebase` | Firebase setup and 13 products | — | Flutter, Android, iOS, React Native, KMP; check installed SDK support |
-| `mobile-flutter` | Flutter and Dart specifics | review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
-| `mobile-android` | Native Android specifics, from the Android team | performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
-| `mobile-ios` | Native iOS specifics | performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
-| `mobile-rn` | React Native and Expo specifics | performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
-| `mobile-kmp` | Kotlin Multiplatform shared and target boundaries | architecture, test, performance, review, debug and more | Source sets, Apple interop, shared Compose UI, build and profiling |
+| `mobile-flutter` | Flutter and Dart specifics | design, review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
+| `mobile-android` | Native Android specifics, from the Android team | design, performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
+| `mobile-ios` | Native iOS specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
+| `mobile-rn` | React Native and Expo specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
+| `mobile-kmp` | Kotlin Multiplatform shared and target boundaries | design, architecture, test, performance, review, debug and more | Source sets, Apple interop, shared Compose UI, build and profiling |
 | `mobile-detect-stack` | Deterministic stack detection with the CLI | — | — |
 
 Skills marked — are triggered by Claude Code when the request matches their description, for example *"configure Firestore rules"* → `mobile-firebase`. Notification requests route to `mobile-notifications`, which links Firebase guidance when FCM is the installed provider.
@@ -537,7 +547,7 @@ About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [
 
 **Exception: external providers.** Two workflows, and only these two, send project context to a third party: `/reis-mobile:debate --external` and `/reis-mobile:consult`. Both state which providers receive it, and both are opt-in — no other command calls a provider. What leaves is the briefing, including the code excerpts you include; each provider has its own data policy. The question and every answer pass through `redact.mjs`, which is a protection layer and not a guarantee: read the briefing before sending it. API keys are read from the environment by the CLI and never enter the conversation, and `providers:` in `.reis-mobile/config.yaml` lets a team restrict which providers a repository allows. CLI providers (`codex`, `gemini-cli`) are asked for an opinion, not for work: they run in read-only mode (`codex exec --sandbox read-only`, `gemini --approval-mode plan`) inside a temporary directory, never in your repository.
 
-**Context cost.** Claude Code loads the descriptions of 21 agents and 26 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
+**Context cost.** Claude Code loads the descriptions of 22 agents and 27 skills; the full content of each skill is loaded only when it is used. The exact description cost depends on the host and plugin version.
 
 **One session hook.** On session startup or resume, the plugin checks for a newer release and warns only when the installed plugin is outdated. It does not read the project or modify the plugin installation.
 

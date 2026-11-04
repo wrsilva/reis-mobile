@@ -1,7 +1,7 @@
 ---
 name: mobile-kmp
 description: Works on Kotlin Multiplatform mobile projects with shared Kotlin source sets and Android/iOS targets. Use for architecture, tests, debugging, reviews, performance, security, accessibility, dependencies and releases when `org.jetbrains.kotlin.multiplatform` is applied; inspect actual targets, `commonMain`/`commonTest`, target source sets, Compose Multiplatform and the iOS framework/host app before giving platform advice.
-intents: [architecture, test, performance, review, debug, security, release, accessibility, migration, dependency, build, deployment]
+intents: [design, architecture, test, performance, review, debug, security, release, accessibility, migration, dependency, build, deployment]
 stacks: [kotlin-multiplatform]
 ---
 
@@ -24,3 +24,7 @@ KMP is a sharing mechanism, not a promise that both apps use the same UI or SDK.
 4. Use the topic skill for the requested work. Use `mobile-android` or `mobile-ios` only for an affected host or target-specific implementation; do not apply native-app instructions blindly to `commonMain`.
 
 The [Kotlin Multiplatform source-set reference](https://kotlinlang.org/docs/multiplatform/multiplatform-dsl-reference.html) defines `commonMain`, `commonTest` and target compilations. Confirm DSL and task names in the project's installed Kotlin and Gradle versions.
+
+## Interface design
+
+For UI/UX reviews, wireframes, design systems and screen redesigns, use [mobile-ui-ux](../mobile-ui-ux/SKILL.md) and its reference for this stack. For Apple targets, also consult its [Apple design workflow](../mobile-ui-ux/references/apple-design.md); validate platform claims against current official guidance and the installed toolkit.
