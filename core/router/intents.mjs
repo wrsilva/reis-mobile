@@ -51,6 +51,14 @@ export const INTENTS = {
     'acessibilidade', 'accessibility', 'a11y', 'leitor de tela', 'screen reader',
     'talkback', 'voiceover', 'contraste', 'semantics',
   ],
+  // Keep visual design separate from software architecture and UI test requests.
+  design: [
+    'ui/ux', 'ux/ui', 'ui design', 'ux design', 'design review', 'design de interface',
+    'design de tela', 'design system', 'visual design', 'interface design',
+    'wireframe', 'usabilidade', 'usability', 'hierarquia visual', 'visual hierarchy',
+    'tipografia', 'typography', 'apple hig', 'human interface guidelines',
+    'liquid glass', 'redesign', 'redesenhar',
+  ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'prs', 'analis', 'avali', 'audit',
     'code smell',

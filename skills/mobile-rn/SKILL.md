@@ -1,7 +1,7 @@
 ---
 name: mobile-rn
 description: Builds React Native and Expo apps in TypeScript — navigation with React Navigation or Expo Router, lists, forms, styling, gestures and animations with Reanimated, safe areas, accessibility and localization; networking with TanStack Query, response validation, persistence with MMKV, AsyncStorage, SQLite and secure storage; permissions, push notifications, deep links, background tasks, native modules and config plugins; performance with Hermes and the React profiler; and release with EAS Build, EAS Submit and EAS Update or bare Gradle and Xcode builds. Use when writing or changing React Native code, adding a native capability, configuring Expo, preparing a store build or an over-the-air update, or when the user asks how to do something in React Native, even if they do not name the library.
-intents: [performance, release, accessibility]
+intents: [design, performance, release, accessibility]
 stacks: [react-native]
 ---
 
@@ -24,3 +24,7 @@ Guides for building React Native and Expo apps. Cross-platform topics live in th
 - Install libraries with `npx expo install` in Expo projects, so versions match the SDK.
 - Libraries with native code need a new native build (a development build in Expo); they do not work in Expo Go unless the Expo SDK includes them.
 - Native requirements of each platform still apply; see `mobile-ios` and `mobile-android` for store and platform specifics.
+
+## Interface design
+
+For UI/UX reviews, wireframes, design systems and screen redesigns, use [mobile-ui-ux](../mobile-ui-ux/SKILL.md) and its reference for this stack. For Apple targets, also consult its [Apple design workflow](../mobile-ui-ux/references/apple-design.md); validate platform claims against current official guidance and the installed toolkit.

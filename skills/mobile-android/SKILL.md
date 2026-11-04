@@ -1,7 +1,7 @@
 ---
 name: mobile-android
 description: Builds native Android apps with the Android team's guides — Jetpack Compose UI, adaptive layouts, edge-to-edge, Compose styles, migrating XML views to Compose, Navigation 3 and predictive back; Android Gradle Plugin 9 upgrades, R8 keep rule analysis, profiling with Android Studio and Perfetto, and the Android CLI; Google Play policy compliance, Play Billing upgrades and the Engage SDK; Credential Manager restore and verified email; CameraX and Media3 Cast; App Functions and the ML Kit GenAI Prompt API; Wear OS, Android TV and display glasses. Use when writing, upgrading or auditing native Android (Kotlin) code for any of these topics, even if the user does not name the library.
-intents: [performance, release, migration, build, dependency]
+intents: [design, performance, release, migration, build, dependency]
 stacks: [android]
 ---
 
@@ -27,3 +27,7 @@ Each topic file lists its guides; open only the ones the task needs.
 
 - Check the AGP, Kotlin, Compose BOM and `compileSdk`/`targetSdk` versions in the build files and version catalog; several guides depend on minimum versions.
 - Several guides prescribe running specific tools or scripts and following steps strictly; run what writes files only with the user's agreement.
+
+## Interface design
+
+For UI/UX reviews, wireframes, design systems and screen redesigns, use [mobile-ui-ux](../mobile-ui-ux/SKILL.md) and its reference for this stack. For Apple targets, also consult its [Apple design workflow](../mobile-ui-ux/references/apple-design.md); validate platform claims against current official guidance and the installed toolkit.

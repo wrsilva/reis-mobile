@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- `mobile-ui-ux-designer` agent and `mobile-ui-ux` topic skill for mobile journeys, wireframes, design tokens, component states and evidence-based interface reviews across all five stacks.
+- English and Portuguese `design` routing with platform skill selection and regression coverage for architecture, accessibility, tests and unrelated terms.
+- Apple design reading workflow linked to `dickwu/apple-design-skill` at a recorded revision and to official HIG topics. Upstream content is linked, not vendored, because the inspected revision declares no redistribution license.
+
+### Changed
+
+- All five platform skills now route design work and link the UI/UX workflow and Apple-target reference.
+
 ## [0.10.0] - 2026-11-04
 
 ### Added

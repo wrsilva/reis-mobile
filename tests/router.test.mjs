@@ -14,6 +14,23 @@ describe('route', () => {
     ['react-native', { 'package.json': JSON.stringify({ dependencies: { 'react-native': '0.76.0' } }) }],
     ['kotlin-multiplatform', { 'shared/build.gradle.kts': 'plugins { id("org.jetbrains.kotlin.multiplatform") }' }],
   ]) {
+    it(`routes UI/UX design on ${stack} to the designer and platform guides`, async () => {
+      const projectDir = await makeProject(files);
+      const result = await route({ prompt: 'review the UI/UX of this screen', projectDir });
+      const platform = {
+        flutter: 'mobile-flutter', android: 'mobile-android', ios: 'mobile-ios',
+        'react-native': 'mobile-rn', 'kotlin-multiplatform': 'mobile-kmp',
+      }[stack];
+
+      assert.equal(result.stack, stack);
+      assert.equal(result.intent, 'design');
+      assert.equal(result.agent.name, 'mobile-ui-ux-designer');
+      assert.deepEqual(names(result.skills), [platform, 'mobile-ui-ux']);
+      assert.deepEqual(result.warnings, []);
+      const explicit = await route({ intent: 'design', prompt: 'review architecture', projectDir });
+      assert.equal(explicit.agent.name, 'mobile-ui-ux-designer');
+    });
+
     it(`routes fastlane pipeline setup on ${stack} to mobile-ci`, async () => {
       const result = await route({ prompt: 'set up fastlane pipeline', projectDir: await makeProject(files) });
 

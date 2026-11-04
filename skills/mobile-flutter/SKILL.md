@@ -1,7 +1,7 @@
 ---
 name: mobile-flutter
 description: Builds Flutter apps with guides for everything specific to Flutter and Dart — layouts, responsive UI, forms, animations, theming, declarative routing with go_router, widget previews and home screen widgets; HTTP, JSON serialization, local databases and caching; plugins, platform channels and native views; isolates and app size; accessibility and localization; Effective Dart, Dart 3 features and pattern matching; and macOS setup. Use when writing or changing Flutter UI, data or native integration code, or when the user asks how to do something in Flutter, even if they do not name the topic.
-intents: [review, performance, accessibility, migration]
+intents: [design, review, performance, accessibility, migration]
 stacks: [flutter]
 ---
 
@@ -28,3 +28,7 @@ Each topic file lists its guides; open only the ones the task needs.
 - Follow the project: its state management, folder structure, lints and packages already in `pubspec.yaml`.
 - Check the Flutter SDK pin (`.fvmrc`, toolchain config or CI) and the installed `flutter --version` before using newer APIs; `pubspec.lock` records resolved packages, not the exact Flutter SDK version.
 - Prefer packages the project already depends on over adding new ones; when adding one, check that it supports every platform the app targets.
+
+## Interface design
+
+For UI/UX reviews, wireframes, design systems and screen redesigns, use [mobile-ui-ux](../mobile-ui-ux/SKILL.md) and its reference for this stack. For Apple targets, also consult its [Apple design workflow](../mobile-ui-ux/references/apple-design.md); validate platform claims against current official guidance and the installed toolkit.

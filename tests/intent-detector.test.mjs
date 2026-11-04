@@ -28,6 +28,18 @@ describe('detectIntent', () => {
 
   for (const [prompt, intent] of [
     ['revise meu pull request', 'review'],
+    ['revise o design de interface do app', 'design'],
+    ['melhorar a usabilidade da tela', 'design'],
+    ['redesenhar a hierarquia visual', 'design'],
+    ['review the UI/UX of this screen', 'design'],
+    ['create a mobile design system', 'design'],
+    ['review this wireframe', 'design'],
+    ['apply Apple HIG to this screen', 'design'],
+    ['review design patterns', 'architecture'],
+    ['write UI tests', 'test'],
+    ['audit accessibility', 'accessibility'],
+    ['generate a UUID', null],
+    ['configure build settings', 'build'],
     ['a lista está com jank no scroll', 'performance'],
     ['escreva testes de widget para o login', 'test'],
     ['como modularizar o app em features', 'architecture'],

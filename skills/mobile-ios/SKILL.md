@@ -1,7 +1,7 @@
 ---
 name: mobile-ios
 description: Builds native iOS apps in Swift — SwiftUI and UIKit screens, state and data flow, NavigationStack, lists, forms and accessibility; networking with URLSession and Codable, persistence with SwiftData, Core Data, files and the Keychain; permissions, push notifications, universal links, background tasks, widgets, App Intents and StoreKit 2 purchases; performance with Instruments and MetricKit; and release with signing, TestFlight and App Store Connect. Use when writing or changing native iOS code, adding a platform feature, preparing a build for TestFlight or the App Store, or when the user asks how to do something on iOS, even if they do not name the framework.
-intents: [performance, release, accessibility]
+intents: [design, performance, release, accessibility]
 stacks: [ios]
 ---
 
@@ -23,3 +23,7 @@ Guides for building native iOS apps. Cross-platform topics live in their own ski
 - Check the deployment target (`IPHONEOS_DEPLOYMENT_TARGET`), the Swift language version and the Xcode version: many APIs in these guides need iOS 16 or 17, and Swift 6 changes concurrency checking.
 - Follow the project: SwiftUI or UIKit, its architecture, and dependencies already in `Package.resolved` or `Podfile.lock`.
 - Apple's requirements change every year (minimum SDK for uploads, privacy manifests, review guidelines); check the current ones instead of relying on these guides for dates or version numbers.
+
+## Interface design
+
+For UI/UX reviews, wireframes, design systems and screen redesigns, use [mobile-ui-ux](../mobile-ui-ux/SKILL.md) and its reference for this stack. For Apple targets, also consult its [Apple design workflow](../mobile-ui-ux/references/apple-design.md); validate platform claims against current official guidance and the installed toolkit.

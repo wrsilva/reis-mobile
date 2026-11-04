@@ -123,6 +123,7 @@ describe('plugin registry', () => {
       'mobile-analytics',
       'mobile-hardware',
       'mobile-ci',
+      'mobile-ui-ux',
     ];
     const guides = ['flutter.md', 'android.md', 'ios.md', 'react-native.md', 'kotlin-multiplatform.md'];
 

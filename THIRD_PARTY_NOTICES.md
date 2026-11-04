@@ -353,3 +353,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    See the License for the specific language governing permissions and
    limitations under the License.
 ```
+
+## External Apple design reading (not redistributed)
+
+Source: https://github.com/dickwu/apple-design-skill
+
+Inspected revision: `ff4ebddf0488598723a82bfdce1afb04de0b1c44` on 2026-11-04. Referenced by `mobile-ui-ux` through `references/apple-design.md`.
+
+The inspected repository contains no LICENSE file or explicit redistribution license. Its README attributes the reproduced Human Interface Guidelines text to Apple Inc. No upstream skill text, scripts or HIG snapshots are included here. This is an external reference, not an MIT-licensed import; no third-party license text is available to reproduce. The local UI/UX workflow and platform references are original project content.
