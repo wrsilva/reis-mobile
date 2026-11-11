@@ -1,8 +1,16 @@
 # 📱 reis-mobile
 
-A mobile app is not a generic project. A code review that does not know about `BuildContext` after `await`, `android:exported`, `NSAllowsArbitraryLoads` or `Podfile.lock` lets through exactly the bugs that only show up on the device. **reis-mobile** detects your project's stack, picks the right specialist and loads only the skills that apply to Flutter, Android, iOS, React Native or Kotlin Multiplatform.
+**reis-mobile** gives AI assistants mobile-specific context and workflows for code review, debugging, tests and architecture. It detects your project's stack, picks the right specialist and loads only the skills that apply to Flutter, Android, iOS, React Native or Kotlin Multiplatform.
 
 **AI agents and skills for mobile development — Flutter, Android, iOS, React Native and Kotlin Multiplatform.** A plugin for Claude Code and Codex with specialist agents and skills for code review, debugging, tests, architecture, security and Firebase.
+
+### How review fits with linters and tests
+
+Use configured analyzers, linters and tests first. For example, Dart's [`use_build_context_synchronously`](https://dart.dev/tools/linter-rules/use_build_context_synchronously) checks `BuildContext` use across asynchronous gaps; detecting that pattern is not a reason to spend tokens on a review.
+
+The review instructions ask the assistant to reuse available check results, distinguish tool diagnostics from additional findings, and trace behavior across files and lifecycle transitions. Investigation targets include a pending request repopulating user data after logout, an older search response replacing newer results, or retries conflicting with an API's idempotency contract. These are illustrative targets, not demonstrated detections or guarantees: each finding needs a concrete trigger and code evidence. The CLI gathers context; it does not automatically run the app's analyzers or tests, and missing check results must be disclosed.
+
+When a recurring defect has a precise, enforceable condition, capture it in a regression test or lint rule. AI can help write that check. A passing analyzer does not prove an app correct, and an AI review does not replace deterministic checks. This project does not yet provide a reproducible benchmark demonstrating additional defect detection beyond those checks.
 
 <p align="center">
   <a href="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml"><img src="https://github.com/wrsilva/reis-mobile/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -46,20 +54,12 @@ A mobile app is not a generic project. A code review that does not know about `B
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.0.0
+### v1.0.1
 
-#### Added
+#### Fixed
 
-- `reis-mobile mcp`, a stdio MCP server for editors that cannot load the Claude Code plugin, such as Cursor. Seven tools (`reis_mobile_route`, `reis_mobile_review`, `reis_mobile_debug`, `reis_mobile_test`, `reis_mobile_release`, `reis_mobile_detect` and `reis_mobile_doctor`) return the same JSON as the matching `--json` command, and `reis_mobile_read_instructions` serves the agent, skill and reference files a route points to.
-- Both MCP eras on one process: per-request `_meta` and `server/discover` from the 2026-07-28 revision, and the `initialize` handshake from 2025-11-25 back to 2024-11-05. Validated end to end with Claude Code 2.1.267; the Cursor and Codex configurations in the README follow each client's documented format.
-- `--dir` on `reis-mobile mcp` sets the app directory for tool calls that pass none, so a client can pass its workspace folder.
-- Every MCP tool is read-only and offline. `consult` and the commands that write are not exposed, and the instruction reader resolves symlinks and serves only `agents/`, `skills/` and `docs/agent-context.md`, up to 512 KB.
-- iOS Keychain token storage guide in `mobile-security` (`references/ios/keychain.md`): accessibility classes and backups, biometric access control, access groups, reinstall persistence, migration out of `UserDefaults`, and a Swift token store with `OSStatus` handling. Contributed by @jay23606 in #21.
-
-#### Changed
-
-- 1.0.0 is the first stable release for Flutter, native Android, native iOS and React Native, as planned in the roadmap, and ships the MCP server previously planned for v0.11.0.
-- The read-only commands build their `--json` output in `core/commands/payloads.mjs`, shared by the CLI and the MCP server. The output itself is unchanged.
+- Review instructions now prioritize applicable analyzer, linter and test results, separate confirmed tool diagnostics from additional findings, and disclose missing checks. Recurring defects with precise conditions should become regression tests or lint rules.
+- README positioning now explains how AI review complements deterministic checks, replaces the lint-covered opening example, and distinguishes illustrative investigation targets from demonstrated detections.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -440,7 +440,7 @@ Validated end to end with Claude Code 2.1.267. The Cursor and Codex entries foll
 |---|---|---|
 | **Domain** | Generic | Flutter, Android, iOS, React Native, KMP |
 | **Project context** | You explain the stack | Deterministic detection of stack, platform and variant |
-| **Review** | Generic | Mobile checklists: lifecycle, `BuildContext`, MASVS, manifest, ATS |
+| **Review** | General review instructions | Mobile workflows: existing check results, lifecycle and cross-file behavior, findings with code evidence |
 | **Secrets in the diff** | Sent as they are | Masked before reaching the model |
 | **Specialists** | None | 22 agents and 27 mobile skills |
 | **Context cost** | Zero | ~5,500 fixed tokens (agent and skill descriptions), no hooks |

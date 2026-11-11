@@ -41,6 +41,8 @@ Read with the Read tool, in this order:
 
 Follow the agent's process, applying the skills' checklists:
 
+- First inspect available analyzer, linter and test results for this revision and scope. Run existing checks only when available and permitted; otherwise state what was not checked. The CLI gathers context and does not execute these checks automatically. Summarize confirmed tool diagnostics separately from additional review findings.
+
 - **working-tree / range:** review the changed files. Read the full file when the diff does not give enough context. `untracked` files do not appear in the diff: read them directly. If the diff was truncated, read the remaining files.
 - **project:** there are no changes; audit the project starting from the entry points and the data layer.
 
