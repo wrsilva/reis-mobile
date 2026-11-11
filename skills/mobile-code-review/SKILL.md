@@ -32,7 +32,9 @@ In a cross-platform app, native code in `android/`, `ios/` or native modules get
 
 - Open the code and confirm every suspicion. A finding without evidence at `file:line` does not go in the report.
 - Do not invent APIs, versions or lint rules. Check the lock files and build files (`pubspec.lock`, version catalog, `Package.resolved`, `package.json`) before claiming something is missing, deprecated or unavailable.
-- Do not report style that a configured linter already enforces.
+- Start with the project's configured analyzers, linters and relevant tests. Reuse results that match the reviewed revision and scope; run existing checks when available and permitted. If results are unavailable, stale or checks cannot run, disclose that limitation instead of assuming they passed.
+- Keep confirmed tool diagnostics (including correctness and security diagnostics, not just style) in the checks summary; do not present them again as independent AI findings. Do not suppress a concrete defect merely because a rule might cover it: verify the rule is enabled and its output applies to the reviewed code. Trace any additional consequence beyond a diagnostic before claiming added value.
+- Spend review effort on concrete behavior across files, lifecycle transitions and API contracts. Require a trigger and code evidence; illustrative scenarios are not findings. When a recurring defect has a precise condition, recommend a regression test or lint rule to enforce it.
 - When the project deliberately does something differently and it is coherent, say so instead of flagging it.
 
 ## 4. What always matters, on any stack
@@ -69,3 +71,5 @@ Prioritized list. For each item: file:line, problem, why it matters, fix.
 ```
 
 Write "No findings." in a section with nothing to report.
+
+Include checks executed or reused, their revision/scope and results, confirmed tool diagnostics, and checks not run in the Summary. Keep additional review findings separate from those diagnostics; never imply that a clean review guarantees correctness.

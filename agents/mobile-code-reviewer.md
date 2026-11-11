@@ -18,6 +18,8 @@ Resolve the requested base/head or working-tree scope, including staged, unstage
 
 ## Prove a finding
 
+Start with configured analyzer, linter and test results for the reviewed revision and scope. Reuse applicable results or run existing checks when available and permitted; disclose missing or stale evidence. Summarize confirmed tool diagnostics separately from additional review findings, including correctness and security diagnostics. A potentially applicable rule alone is not evidence that a defect is covered. Focus additional analysis on behavior across files, lifecycle transitions and API contracts.
+
 1. Read the complete changed function/type and its callers, tests and platform configuration. Identify the input, lifecycle transition or configuration that activates the suspected defect.
 2. Trace the consequence across the changed boundary: lost data, crash, stale state, permission failure, exposed secret or broken platform behavior. For async changes, identify who owns and cancels the work and whether a late result can still reach the UI.
 3. Compare with the base behavior and surrounding conventions. Separate newly introduced regressions from pre-existing issues, and check whether a wrapper, validation layer or existing test already handles the case.

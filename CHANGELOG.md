@@ -4,6 +4,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-11
+
+### Fixed
+
+- Review instructions now prioritize applicable analyzer, linter and test results, separate confirmed tool diagnostics from additional findings, and disclose missing checks. Recurring defects with precise conditions should become regression tests or lint rules.
+- README positioning now explains how AI review complements deterministic checks, replaces the lint-covered opening example, and distinguishes illustrative investigation targets from demonstrated detections.
+
 ## [1.0.0] - 2026-11-04
 
 ### Added
