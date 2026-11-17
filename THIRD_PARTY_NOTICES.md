@@ -417,6 +417,72 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+## keysjoao/laws-of-ux-skills
+
+- Source: https://github.com/keysjoao/laws-of-ux-skills
+- Revision: `66f5e5602c8444b123e8b0d287ef9947ef295edc`
+- License: MIT
+- Integrated into `mobile-ui-ux` as references; no standalone upstream skills are registered.
+- Adapted files under `skills/`: `laws-of-ux` → `mobile-ui-ux/references/laws-of-ux/GUIDE.md`, `mobile-ui-ux/references/laws-of-ux/references/ux-laws-complete.md` and `mobile-ui-ux/references/laws-of-ux/references/code-patterns.md`; `laws-of-ux-review` → `mobile-ui-ux/references/laws-of-ux/review.md`; `laws-of-ux-checklist` → `mobile-ui-ux/references/laws-of-ux/checklist.md`.
+- Adaptation: removed skill frontmatter and added attribution. The guide bodies are otherwise preserved, including their web examples; the repository's cover image was not copied. How the laws apply to Flutter, Android, iOS, React Native and Kotlin Multiplatform is original project content in `mobile-ui-ux/references/ux-laws-on-mobile.md`.
+
+```text
+MIT License
+
+Copyright (c) 2026 keysjoao
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## ceorkm/mobile-app-ui-design
+
+- Source: https://github.com/ceorkm/mobile-app-ui-design
+- Revision: `0ad61f025fc647417d4b8fb0ca786cb493c5156a`
+- License: MIT, as declared by the author in the repository's README ("MIT License - feel free to use this skill in your projects.") and its license badge. The repository ships no LICENSE file at this revision, so no copyright line was published; the standard MIT text follows, attributed to the repository owner, ceorkm.
+- Integrated into `mobile-ui-ux` as references; no standalone upstream skills are registered.
+- Adapted files under `skills/`: `mobile-app-ui-design` → `mobile-ui-ux/references/app-ui-design/GUIDE.md` and `mobile-ui-ux/references/app-ui-design/references/industry-conventions.md`.
+- Adaptation: removed skill frontmatter, added attribution, and removed the closing "Store Screenshots" section, which told the model to suggest installing another third-party skill; store screenshots are covered by `mobile-ci` (fastlane snapshot) and `mobile-release`. The repository's `INDEX.md` and `README.md` were not copied. The rest of the guide is preserved, including its React and Tailwind prototype notes; their mobile translation is in `mobile-ui-ux/references/ux-laws-on-mobile.md`.
+
+```text
+MIT License
+
+Copyright (c) ceorkm
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## External Apple design reading (not redistributed)
 
 Source: https://github.com/dickwu/apple-design-skill

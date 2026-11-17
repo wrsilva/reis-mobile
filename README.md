@@ -568,7 +568,7 @@ reis-mobile route "review the UI/UX of this screen"
 reis-mobile route "create a mobile design system"
 ```
 
-The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. Apple-target work includes a reading guide for [dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill) and official HIG pages. The upstream repository has no explicit redistribution license at the inspected revision, so its content is linked rather than bundled; the new guides are original project content. Current Apple claims require source verification, and Android retains its own conventions.
+The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. Two MIT-licensed guide sets are bundled as references: [keysjoao/laws-of-ux-skills](https://github.com/keysjoao/laws-of-ux-skills) (the 30 Laws of UX mapped to component types, a 0–60 audit and a 12-point pre-ship checklist) and [ceorkm/mobile-app-ui-design](https://github.com/ceorkm/mobile-app-ui-design) (type, color, spacing and shadow rules, thumb zone, emotional design and industry conventions). Both use web examples, so `mobile-ui-ux/references/ux-laws-on-mobile.md` lists what changes on a phone (pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, text that scales) and gives each law's API in Flutter, Android, iOS, React Native and Kotlin Multiplatform. Apple-target work includes a reading guide for [dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill) and official HIG pages. The upstream repository has no explicit redistribution license at the inspected revision, so its content is linked rather than bundled; the new guides are original project content. Current Apple claims require source verification, and Android retains its own conventions.
 
 ### Skills
 
@@ -581,7 +581,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs, memory leaks), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules), KMP, deep links |
 | `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native, KMP |
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS (Keychain token storage), React Native, KMP, OAuth/OIDC and PKCE |
-| `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP and external Apple design reading |
+| `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states, Laws of UX audits and checklists, visual design rules and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP, Laws of UX, app UI design, UX laws on mobile and external Apple design reading |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
 | `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
@@ -740,6 +740,8 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
 - **[twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill)** (MIT): the SwiftUI Pro review guide by Paul Hudson, with its twelve references, in [`mobile-ios`](skills/mobile-ios/SKILL.md).
 - **[mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills)** (Apache-2.0): 15 Kotlin Multiplatform skills by Mariano Miani, as guides in [`mobile-kmp`](skills/mobile-kmp/SKILL.md).
+- **[keysjoao/laws-of-ux-skills](https://github.com/keysjoao/laws-of-ux-skills)** (MIT): the Laws of UX guide, audit and checklist, in [`mobile-ui-ux`](skills/mobile-ui-ux/SKILL.md).
+- **[ceorkm/mobile-app-ui-design](https://github.com/ceorkm/mobile-app-ui-design)** (MIT, declared in its README): the mobile app UI design guide and industry conventions, in [`mobile-ui-ux`](skills/mobile-ui-ux/SKILL.md).
 - **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---

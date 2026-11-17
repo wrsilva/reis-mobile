@@ -1,4 +1,4 @@
-import { AREAS, DEBUG_DOMINATES, INTENTS, INTENT_IDS, STACK_HINTS, WHOLE_WORDS } from './intents.mjs';
+import { AREAS, DEBUG_DOMINATES, DESIGN_WINS_TIES, INTENTS, INTENT_IDS, STACK_HINTS, WHOLE_WORDS } from './intents.mjs';
 
 export function normalize(text) {
   return String(text ?? '')
@@ -22,6 +22,7 @@ export function detectIntent(prompt) {
   const ranked = INTENT_IDS.filter((id) => scores[id]).sort((a, b) => scores[b] - scores[a]);
   let intent = ranked[0] ?? null;
   if (intent && DEBUG_DOMINATES.has(intent) && scores.debug) intent = 'debug';
+  if (intent && DESIGN_WINS_TIES.has(intent) && scores.design === scores[intent]) intent = 'design';
 
   const total = Object.values(scores).reduce((sum, value) => sum + value, 0);
   const confidence = intent ? round(scores[intent] / total) : 0;

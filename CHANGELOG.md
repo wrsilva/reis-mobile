@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- `mobile-ui-ux` bundles the MIT-licensed [keysjoao/laws-of-ux-skills](https://github.com/keysjoao/laws-of-ux-skills) as references: the 30 Laws of UX with a component-type map, a 0–60 audit with critical, warning and suggestion tiers, and a 12-point pre-ship checklist.
+- `mobile-ui-ux` bundles the MIT-licensed [ceorkm/mobile-app-ui-design](https://github.com/ceorkm/mobile-app-ui-design) guide: type hierarchy, 60/30/10 color, 8-point spacing, shadows, thumb zone, peak-end emotional design and industry visual conventions. Its closing section, which suggested installing another third-party skill, was left out.
+- `mobile-ui-ux/references/ux-laws-on-mobile.md`: what the web-oriented guides change on a phone (pressed states instead of hover, 44 pt on iOS and 48 dp on Android, bottom navigation and system back, Dynamic Type and the Material type scale instead of a fixed size limit, contrast checks, real data only for social proof) and each law's API in Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. `mobile-ui-ux-designer` uses it for audits and checklists.
+
+### Fixed
+
+- UX audits, reviews and checklists now route to `design` and `mobile-ui-ux-designer` instead of a code review or a release: the design vocabulary gains `ux`, `laws of ux` / `leis de ux`, `ux audit` / `auditoria de ux`, `ux review` and `ux checklist` / `checklist de ux`, and a tie between design and review or release goes to design.
+
 ## [1.3.0] - 2026-11-17
 
 ### Added
