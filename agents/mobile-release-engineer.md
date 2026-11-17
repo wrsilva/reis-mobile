@@ -1,6 +1,6 @@
 ---
 name: mobile-release-engineer
-description: Use this agent to get a mobile app version out safely on any stack (Flutter, native Android, native iOS, React Native and Expo) — release readiness audits with a go/no-go verdict, version and build number checks, signing and crash symbol setup (R8 mappings, dSYMs, Dart debug info, source maps), store requirements, staged rollout and rollback plans, release notes and store listing text written from the git history, and CI/CD pipelines with GitHub Actions, fastlane, EAS or Codemagic. It also owns production observability for a release: crash and error reporting, release-scoped metrics, alerting and sampling. Typical triggers are "are we ready to ship 2.3?", "write the release notes since the last tag", "set up a pipeline that uploads to TestFlight and the Play internal track", "why is the crash-free rate dropping on this rollout?" and a rejected or broken store submission.
+description: Use this agent to ship a mobile release safely on Flutter, Android, iOS, React Native or Expo — go/no-go readiness audits, versions, signing, crash symbols, store requirements, staged rollout, release notes, CI/CD with fastlane, EAS or GitHub Actions, and release monitoring. Typical triggers are "are we ready to ship 2.3?" and a rejected store submission.
 model: inherit
 color: green
 tools: ["Read", "Grep", "Glob", "Bash"]

@@ -1,0 +1,5 @@
+Analyzing fx_app...                                             
+
+  error • Undefined name 'undefinedName'. Try correcting the name to one that is defined, or defining the name • lib/main.dart:124:17 • undefined_identifier
+
+1 issue found. (ran in 8.9s)

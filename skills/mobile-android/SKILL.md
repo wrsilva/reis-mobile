@@ -1,6 +1,6 @@
 ---
 name: mobile-android
-description: Builds native Android apps with the Android team's guides — Jetpack Compose UI, adaptive layouts, edge-to-edge, Compose styles, migrating XML views to Compose, Navigation 3 and predictive back; Android Gradle Plugin 9 upgrades, R8 keep rule analysis, profiling with Android Studio and Perfetto, and the Android CLI; Google Play policy compliance, Play Billing upgrades and the Engage SDK; Credential Manager restore and verified email; CameraX and Media3 Cast; App Functions and the ML Kit GenAI Prompt API; Wear OS, Android TV and display glasses. Use when writing, upgrading or auditing native Android (Kotlin) code for any of these topics, even if the user does not name the library.
+description: Builds native Android apps with the Android team's guides — Jetpack Compose, adaptive and edge-to-edge UI, Navigation 3 and XML to Compose; AGP 9, R8 and Perfetto profiling; Play policy, Play Billing and Engage; Credential Manager; CameraX and Media3; on-device AI; Wear OS and TV. Use for native Android (Kotlin) code, even if the library is not named.
 intents: [design, performance, release, migration, build, dependency]
 stacks: [android]
 ---

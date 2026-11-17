@@ -1,0 +1,23 @@
+00:00 +0: loading /Users/dev/work/fx_app/test/math_test.dart
+00:00 +0: /Users/dev/work/fx_app/test/math_test.dart: adds two numbers
+00:00 +1: /Users/dev/work/fx_app/test/math_test.dart: subtracts by mistake
+00:00 +1 -1: /Users/dev/work/fx_app/test/math_test.dart: subtracts by mistake [E]
+  Expected: <5>
+    Actual: <4>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/math_test.dart 7:38                            main.<fn>
+  
+00:00 +1 -1: /Users/dev/work/fx_app/test/math_test.dart: handles zero
+00:00 +2 -1: /Users/dev/work/fx_app/test/math_test.dart: strings null check
+00:00 +2 -2: /Users/dev/work/fx_app/test/math_test.dart: strings null check [E]
+  Null check operator used on a null value
+  test/math_test.dart 12:19  main.<fn>.<fn>
+  
+00:04 +2 -2: /Users/dev/work/fx_app/test/widget_test.dart: Counter increments smoke test
+00:05 +3 -2: Some tests failed.
+
+Failing tests:
+  /Users/dev/work/fx_app/test/math_test.dart: strings null check
+  /Users/dev/work/fx_app/test/math_test.dart: subtracts by mistake

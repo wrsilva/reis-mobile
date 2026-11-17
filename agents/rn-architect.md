@@ -1,6 +1,6 @@
 ---
 name: rn-architect
-description: Use this agent to analyze or design the architecture of a React Native or Expo app — feature-based structure, separation of UI, state and data access, server state versus client state, navigation with React Navigation or Expo Router, platform-specific code, native modules and the New Architecture boundary, TypeScript contracts and monorepo setup. Typical triggers are "review the architecture of this React Native app", planning a new feature module, deciding where state and API calls should live and designing offline persistence and mutation queues.
+description: Use this agent to analyze or design React Native or Expo architecture — feature structure, UI, state and data access, server versus client state, React Navigation or Expo Router, native modules and the New Architecture, TypeScript contracts and monorepos. Typical triggers are "review the architecture of this React Native app", a new feature module and where state and API calls belong.
 model: inherit
 color: cyan
 tools: ["Read", "Grep", "Glob"]

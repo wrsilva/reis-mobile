@@ -1,0 +1,8 @@
+Resolving dependencies...
+Because every version of flutter_localizations from sdk depends on intl ^0.20.3 and fx_app depends on intl ^0.17.0, flutter_localizations from sdk is forbidden.
+So, because fx_app depends on flutter_localizations from sdk, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try upgrading your constraint on intl: flutter pub add intl:^0.20.3
+Failed to update packages.

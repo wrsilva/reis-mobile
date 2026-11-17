@@ -26,7 +26,7 @@ When `reis-mobile debug` (or `/reis-mobile:debug`) ran, its `area` line points a
 
 ## 2. Find the first real error
 
-Build and crash logs bury the cause under cascading failures. Quote the line that starts the failure — the first `error:`, the `What went wrong` block, the top of the exception with its `Caused by` — not the final `BUILD FAILED` or the last frame. Ask for the full output when the user pasted only the end.
+Build and crash logs bury the cause under cascading failures. Quote the line that starts the failure — the first `error:`, the `What went wrong` block, the top of the exception with its `Caused by` — not the final `BUILD FAILED` or the last frame. Ask for the full output when the user pasted only the end. When you run the build yourself, `reis-mobile run -- <command>` isolates those lines and prints the path of the full log for the surrounding context.
 
 ## 3. Collect versions before theorizing
 

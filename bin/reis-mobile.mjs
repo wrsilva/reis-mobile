@@ -22,6 +22,9 @@ import { DEFAULT_TIMEOUT_MS, consult, listProviderModels } from '../core/provide
 import { parseProviderList, providerAllowlist, resolveProviders, selectProviders } from '../core/providers/providers.mjs';
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
+import { parseRunArgs } from '../core/run/args.mjs';
+import { runCommand } from '../core/run/runner.mjs';
+import { isRunHookEnabled, setRunHook } from '../core/run/settings.mjs';
 import { checkForUpdate, clearUpdateCache } from '../core/update/check.mjs';
 
 const USAGE = `reis-mobile — AI agents for mobile engineering
@@ -38,6 +41,8 @@ Commands:
   debug [problem...]         Route a build or runtime failure and report the toolchain it runs on
   test [request...]          Prepare test routing, git context and toolchain checks (does not run tests)
   release [request...]       Prepare release evidence context (does not build or publish)
+  run [options] -- <command> Run a build, test or tool command and print a compact view of its output
+  hook [on|off]              Show or set the optional Claude Code hook that routes mobile commands through run
   providers                  List the external model providers and what each one needs
   consult [question...]      Ask the configured external providers the same question
   mcp                        Serve the read-only commands to MCP clients over stdio (Cursor, Claude Code, Codex...)
@@ -62,6 +67,15 @@ Options:
   --timeout <ms>    consult: give up on a provider after this long (default 120000)
   --lang <en|pt>    Override the saved language for this run
   --json            Machine-readable output
+
+Run options (before --):
+  --raw             Pass the output through unchanged
+  --mode <mode>     compact, light or stream, instead of the mode chosen for the tool
+  --max-lines <n>   Lines to show in compact mode (default 150)
+  --log-dir <path>  Where the full log is saved (default: the system temp dir; or REIS_MOBILE_LOG_DIR)
+  --no-log          Do not save the full log
+  --dir <path>      Directory to run the command in
+  --json            Print the result and the kept lines as JSON
   -v, --version     Print the version
   -h, --help        Show this help`;
 
@@ -104,9 +118,65 @@ const COMMANDS = {
   stacks: (options) => commandList('stacks', options),
   validate: commandValidate,
   'update-check': commandUpdateCheck,
+  hook: commandHook,
 };
 
+async function commandRun(argv) {
+  const { options, command } = parseRunArgs(argv);
+  if (options.help || !command.length) {
+    console.log(`Usage: reis-mobile run [options] -- <command> [args...]
+
+Runs the command and prints only what an agent needs: errors with file and line, failed
+tests, warning headlines and the final summary. The exit code is the command's. The full
+output is saved to a log file whose path is printed at the end.
+
+Examples:
+  reis-mobile run -- flutter test
+  reis-mobile run -- ./gradlew assembleDebug
+  reis-mobile run -- xcodebuild -scheme App -destination 'platform=iOS Simulator,name=iPhone 16' test
+  reis-mobile run -- "cd ios && pod install"
+
+Options:
+  --raw             Pass the output through unchanged
+  --mode <mode>     compact, light or stream, instead of the mode chosen for the tool
+  --max-lines <n>   Lines to show in compact mode (default 150)
+  --log-dir <path>  Where the full log is saved (default: the system temp dir; or REIS_MOBILE_LOG_DIR)
+  --no-log          Do not save the full log
+  --dir <path>      Directory to run the command in
+  --json            Print the result and the kept lines as JSON`);
+    return command.length || options.help ? 0 : 1;
+  }
+  const maxLines = options.maxLines === undefined ? undefined : Number(options.maxLines);
+  if (maxLines !== undefined && !(Number.isInteger(maxLines) && maxLines > 0)) throw new Error('--max-lines must be a positive integer');
+  return runCommand(command, {
+    cwd: options.dir ?? process.cwd(),
+    raw: options.raw,
+    json: options.json,
+    mode: options.mode,
+    maxLines,
+    logDir: options.logDir,
+    log: !options.noLog,
+  });
+}
+
+async function commandHook({ prompt, json }) {
+  const value = prompt.trim().toLowerCase();
+  if (value && !['on', 'off'].includes(value)) throw new Error('Usage: reis-mobile hook [on|off]');
+  const enabled = value ? await setRunHook(value === 'on') : await isRunHookEnabled();
+  if (json) return print({ runHook: enabled, path: configPath() });
+  if (enabled) {
+    console.log(`✓ Hook on: Claude Code sessions route recognized mobile commands through \`reis-mobile run\` (${configPath()}).`);
+    console.log('  Rewritten commands are shown before they run; RTK keeps the commands it rewrites itself. Turn off with `reis-mobile hook off`.');
+  } else {
+    console.log(`Hook off: commands run unchanged. Agents can still call \`reis-mobile run -- <command>\` directly. Turn on with \`reis-mobile hook on\`.`);
+  }
+  return 0;
+}
+
 async function main(argv) {
+  // Everything after `run` belongs to the wrapped command, so it is parsed separately.
+  if (argv[0] === 'run') return commandRun(argv.slice(1));
+
   const { values: options, positionals } = parseArgs({ args: argv, options: OPTIONS, allowPositionals: true });
   const [name, ...rest] = positionals;
 

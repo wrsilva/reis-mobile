@@ -4,6 +4,22 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-17
+
+### Added
+
+- `reis-mobile run -- <command>` runs a build, test or tool command and prints only what an agent needs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines and the final summary. The exit code is the command's, the full log is saved (and deleted after a week), and a closing line reports the lines and bytes saved. On real output, one Swift compile error in a raw `xcodebuild` log went from 1,697 lines and 169 KB to 13 lines; a failed Gradle build shrank by 79% and a SwiftPM build error by 91%.
+- Coverage for the commands of every supported stack. Flutter and Dart: `flutter`, `dart`, `fvm`, `melos`, `very_good`, `build_runner`. Android and Kotlin Multiplatform: `./gradlew` and `gradle` with any task (KMP iOS tests, framework linking and `podInstall` included), `kotlinc`, `ktlint`, `detekt`, Android `lint`, `adb`, `sdkmanager`, `avdmanager`, `emulator`. iOS: `xcodebuild`, `xcrun` tools, `swift`, `swiftc`, `pod`, `fastlane`, `swiftlint`, `carthage`, `tuist`. React Native and Expo: `react-native`, `expo`, `eas`, Metro, `jest`, `detox`, `maestro`, `npm`/`yarn`/`pnpm`/`bun`, `tsc`, `eslint`. Wrappers such as `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &&` are recognized, and any other command runs in light mode.
+- Three modes: compact for builds, tests, analyzers and installs; light for queries whose output is the answer (`flutter doctor`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and unknown commands; stream for `flutter run`, Metro and `adb logcat`, where an unfiltered logcat shows only warnings, errors and crashes. Repeated errors print once, stack traces stop after six frames, and a failure with no known error pattern shows the last lines. `--raw`, `--mode`, `--max-lines`, `--log-dir`, `--no-log`, `--dir` and `--json` adjust it.
+- `reis-mobile hook [on|off]`, an optional Claude Code hook, off by default, that routes recognized mobile commands through `reis-mobile run`. It skips pipes, redirections and subshells, and steps aside for commands RTK rewrites itself.
+- An extensionless `bin/reis-mobile` entry, so `reis-mobile` resolves where the plugin host puts `bin/` on the PATH.
+- Real output from Flutter, Dart, Gradle, `xcodebuild`, SwiftPM, CocoaPods, npm and Jest under `tests/fixtures/run/`, with tests for every stack's commands, the runner, the arguments and the hook.
+
+### Changed
+
+- The shared agent brief (`docs/agent-context.md`), `mobile-test` and `mobile-debug` tell agents to run builds and tests through `reis-mobile run` when it is available, and to read the full log or use `--raw` when the compact view lacks a detail.
+- The 13 longest agent and skill descriptions are shorter, cutting about 950 tokens from what every session loads, with the same trigger terms.
+
 ## [1.2.2] - 2026-11-17
 
 ### Fixed

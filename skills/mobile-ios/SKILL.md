@@ -1,6 +1,6 @@
 ---
 name: mobile-ios
-description: Builds native iOS apps in Swift — SwiftUI and UIKit screens, state and data flow, NavigationStack, lists, forms and accessibility; SwiftUI reviews for deprecated and modern API, view composition, data flow, resizable windows and performance (SwiftUI Pro); networking with URLSession and Codable, persistence with SwiftData, Core Data, files and the Keychain; permissions, push notifications, universal links, background tasks, widgets, App Intents and StoreKit 2 purchases; performance with Instruments and MetricKit; and release with signing, TestFlight and App Store Connect. Use when writing, reviewing or changing native iOS code, adding a platform feature, preparing a build for TestFlight or the App Store, or when the user asks how to do something on iOS, even if they do not name the framework.
+description: Builds native iOS apps in Swift — SwiftUI and UIKit screens, navigation, state, accessibility and SwiftUI reviews (SwiftUI Pro); URLSession, SwiftData, Core Data and the Keychain; push, universal links, widgets, App Intents and StoreKit 2; Instruments; signing, TestFlight and the App Store. Use for any native iOS code, even if the framework is not named.
 intents: [design, performance, release, accessibility]
 stacks: [ios]
 ---

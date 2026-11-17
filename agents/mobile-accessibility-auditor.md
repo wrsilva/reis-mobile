@@ -1,6 +1,6 @@
 ---
 name: mobile-accessibility-auditor
-description: Use this agent to audit mobile UI code for accessibility on any stack (Flutter, Jetpack Compose and Android Views, SwiftUI and UIKit, React Native) — missing or misleading screen reader labels, roles and states, decorative elements read aloud, rows split into many elements, touch targets below the minimum, text that does not scale, contrast risks, focus in dialogs and unannounced dynamic changes. It returns a severity-ranked report with file:line evidence and the fix in the platform's own API. Typical triggers are "is this screen accessible?", "TalkBack reads this button as unlabeled", an accessibility audit before release and a WCAG compliance request.
+description: Use this agent to audit mobile UI accessibility on Flutter, Compose, Views, SwiftUI, UIKit or React Native — screen reader labels, roles and states, touch targets, text scaling, contrast and focus — with a severity-ranked file:line report and fixes in the platform's API. Typical triggers are "is this screen accessible?", a TalkBack or VoiceOver bug and a WCAG audit.
 model: inherit
 color: purple
 tools: ["Read", "Grep", "Glob", "Bash"]

@@ -1,5 +1,5 @@
 {
-  "description": "Warn when a newer reis-mobile release is available.",
+  "description": "Warn when a newer reis-mobile release is available, and, when `reis-mobile hook on` enabled it, route mobile build and test commands through `reis-mobile run`.",
   "hooks": {
     "SessionStart": [
       {
@@ -8,6 +8,18 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/update-check.mjs\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/bin/run-hook.mjs\"",
             "timeout": 3
           }
         ]

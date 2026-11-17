@@ -1,6 +1,6 @@
 ---
 name: mobile-ui-ux-designer
-description: Use this agent to design, critique or improve mobile UI/UX across Flutter, Android, iOS, React Native and Kotlin Multiplatform. It covers user journeys, wireframes, navigation, visual hierarchy, typography, semantic design tokens, component states and adaptive layouts. Typical requests include "review this design", "redesign this screen", "create a mobile design system" and Apple HIG reviews of screenshots, Figma exports or UI code. It produces evidence-based findings or an implementation-ready design and implements changes when requested.
+description: Use this agent to design, critique or improve mobile UI/UX on Flutter, Android, iOS, React Native and Kotlin Multiplatform — journeys, wireframes, navigation, hierarchy, typography, design tokens, component states and adaptive layouts. Typical requests are "review this design", "redesign this screen", "create a mobile design system" and Apple HIG reviews; it implements changes when asked.
 model: inherit
 color: purple
 tools: ["Read", "Grep", "Glob", "Bash", "Edit", "Write", "WebFetch", "WebSearch"]

@@ -54,11 +54,21 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.2.2
+### v1.3.0
 
-#### Fixed
+#### Added
 
-- The Claude Code plugin and marketplace descriptions now list Kotlin Multiplatform alongside Flutter, Android, iOS and React Native, matching `package.json` and the README.
+- `reis-mobile run -- <command>` runs a build, test or tool command and prints only what an agent needs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines and the final summary. The exit code is the command's, the full log is saved (and deleted after a week), and a closing line reports the lines and bytes saved. On real output, one Swift compile error in a raw `xcodebuild` log went from 1,697 lines and 169 KB to 13 lines; a failed Gradle build shrank by 79% and a SwiftPM build error by 91%.
+- Coverage for the commands of every supported stack. Flutter and Dart: `flutter`, `dart`, `fvm`, `melos`, `very_good`, `build_runner`. Android and Kotlin Multiplatform: `./gradlew` and `gradle` with any task (KMP iOS tests, framework linking and `podInstall` included), `kotlinc`, `ktlint`, `detekt`, Android `lint`, `adb`, `sdkmanager`, `avdmanager`, `emulator`. iOS: `xcodebuild`, `xcrun` tools, `swift`, `swiftc`, `pod`, `fastlane`, `swiftlint`, `carthage`, `tuist`. React Native and Expo: `react-native`, `expo`, `eas`, Metro, `jest`, `detox`, `maestro`, `npm`/`yarn`/`pnpm`/`bun`, `tsc`, `eslint`. Wrappers such as `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &&` are recognized, and any other command runs in light mode.
+- Three modes: compact for builds, tests, analyzers and installs; light for queries whose output is the answer (`flutter doctor`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and unknown commands; stream for `flutter run`, Metro and `adb logcat`, where an unfiltered logcat shows only warnings, errors and crashes. Repeated errors print once, stack traces stop after six frames, and a failure with no known error pattern shows the last lines. `--raw`, `--mode`, `--max-lines`, `--log-dir`, `--no-log`, `--dir` and `--json` adjust it.
+- `reis-mobile hook [on|off]`, an optional Claude Code hook, off by default, that routes recognized mobile commands through `reis-mobile run`. It skips pipes, redirections and subshells, and steps aside for commands RTK rewrites itself.
+- An extensionless `bin/reis-mobile` entry, so `reis-mobile` resolves where the plugin host puts `bin/` on the PATH.
+- Real output from Flutter, Dart, Gradle, `xcodebuild`, SwiftPM, CocoaPods, npm and Jest under `tests/fixtures/run/`, with tests for every stack's commands, the runner, the arguments and the hook.
+
+#### Changed
+
+- The shared agent brief (`docs/agent-context.md`), `mobile-test` and `mobile-debug` tell agents to run builds and tests through `reis-mobile run` when it is available, and to read the full log or use `--raw` when the compact view lacks a detail.
+- The 13 longest agent and skill descriptions are shorter, cutting about 950 tokens from what every session loads, with the same trigger terms.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -256,6 +266,46 @@ After editing agents, skills or commands, restart Claude Code or Codex.
 `/reis-mobile:debug` takes the error, the failing command or a description of the problem. It routes to the debug agent and to the skills for the stack and the build area it recognizes (`gradle`, `xcode`, `cocoapods`, `signing`, `pub`...), adds the doctor report with the installed toolchain versions, and answers with the cause, the evidence, the minimal fix and how to verify it.
 
 It proposes; it does not change your project on its own. Commands that alter files or caches — `flutter clean`, `pod install`, deleting `DerivedData` or Gradle caches, dependency upgrades — only run after you ask it to apply the fix.
+
+### Compact command output
+
+Build and test logs are the largest token cost in a mobile session: in a new Flutter project, one Swift compile error produced a 1,697-line, 170 KB `xcodebuild` log. `reis-mobile run` runs the command and prints only what an agent needs, with the command's exit code and the path of the full log:
+
+```bash
+reis-mobile run -- flutter test
+reis-mobile run -- ./gradlew :app:assembleDebug
+reis-mobile run -- xcodebuild -workspace App.xcworkspace -scheme App build
+reis-mobile run -- "cd ios && pod install"
+```
+
+```text
+/Users/dev/app/ios/Runner/AppDelegate.swift:18:31: error: cannot find 'missingSymbol' in scope
+18 | func broken() -> Int { return missingSymbol }
+   |                               `- error: cannot find 'missingSymbol' in scope
+** BUILD FAILED **
+The following build commands failed:
+…
+[reis-mobile run: xcodebuild build · exit 65 · 1697 → 13 lines · 169.2 KB → 743 B (-99.6%) · full log: /tmp/reis-mobile/logs/…]
+```
+
+It covers the commands of every supported stack:
+
+| Stack | Commands |
+|---|---|
+| Flutter and Dart | `flutter` (test, analyze, pub, build, run…), `dart` (analyze, test, pub, compile, `run build_runner`), `fvm`, `melos`, `very_good` |
+| Android and Kotlin Multiplatform | `./gradlew` and `gradle` (any task, including KMP iOS tests, framework linking and `podInstall`), `kotlinc`, `ktlint`, `detekt`, Android `lint`, `adb`, `sdkmanager`, `avdmanager`, `emulator` |
+| iOS | `xcodebuild`, `xcrun` (`simctl`, `xcresulttool`, `notarytool`…), `swift` (build, test, package), `swiftc`, `pod`, `fastlane`, `swiftlint`, `carthage`, `tuist` |
+| React Native and Expo | `npx react-native`, `npx expo`, `eas`, Metro, `jest`, `detox`, `maestro`, `npm`/`yarn`/`pnpm`/`bun` (install, test and scripts), `tsc`, `eslint` |
+
+Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &&` are recognized. Each command gets a mode:
+
+- **compact** for builds, tests, analyzers and installs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines, and the final summary. Repeated errors (such as the same one for arm64 and x86_64) appear once. If a failing command matches no known error pattern, the last lines are shown instead.
+- **light** for queries whose output is the answer (`flutter doctor`, `adb devices`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and for any other command: everything except progress bars and repeated lines.
+- **stream** for commands that keep running (`flutter run`, Metro, `adb logcat`): lines print as they arrive; an unfiltered `adb logcat` shows only warnings, errors and crashes.
+
+`--raw` passes the output through, `--mode` overrides the mode, `--max-lines` changes the limit and `--json` returns the kept lines with the counts. Full logs go to the system temp directory (or `REIS_MOBILE_LOG_DIR`) and are deleted after a week. The agents use `reis-mobile run` when the CLI is installed; inside the Claude Code plugin, it is on the PATH.
+
+**Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when [RTK](https://github.com/rtk-ai/rtk) is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
 
 ### Test
 
