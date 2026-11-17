@@ -23,6 +23,7 @@ Apply to Swift and Objective-C sources of the app and its extensions. Items are 
 - [ ] **Identity.** `ForEach(items, id: \.self)` with non-unique values, or indices as ids for lists that change, attaches state to the wrong row.
 - [ ] **Work in `body`.** Formatting, sorting, filtering large collections or creating objects inside `body` repeats on every render.
 - [ ] **Side effects in `init` or `body`.** Loading data should happen in `.task` or the view model, not when the view struct is created, since SwiftUI creates views often.
+- [ ] **SwiftUI depth.** For SwiftUI sources, also apply [SwiftUI Pro](../../mobile-ios/references/swiftui-pro/GUIDE.md): soft-deprecated API that Xcode does not warn about, view composition, data flow, navigation, resizable windows, accessibility, localization and performance. Load only the references the changed files need.
 
 ## 4. Error handling and data
 

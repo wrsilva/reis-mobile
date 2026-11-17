@@ -354,6 +354,39 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 ```
 
+## twostraws/swiftui-agent-skill
+
+- Source: https://github.com/twostraws/swiftui-agent-skill
+- Revision: `f2920b63995263f57b3e198674e89a602efba6d2` (2026-10-26), upstream skill version 2.0.0
+- License: MIT
+- Skills (0): none as standalone skills; all of its content lives in the files listed below
+- Adapted into reis-mobile skills (upstream skill → file under `skills/`): `swiftui-pro` → `mobile-ios/references/swiftui-pro/GUIDE.md`, with its twelve references unchanged under `mobile-ios/references/swiftui-pro/references/`.
+- Changes made by reis-mobile: the `swiftui-pro/` folder was moved into `skills/mobile-ios/references/swiftui-pro/`, its `SKILL.md` renamed to `GUIDE.md` and its frontmatter replaced by an attribution line. The Codex interface metadata (`agents/openai.yaml`) and the icon assets were not copied. The instructions and references are unchanged.
+
+```text
+MIT License
+
+Copyright (c) 2026 Paul Hudson.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## External Apple design reading (not redistributed)
 
 Source: https://github.com/dickwu/apple-design-skill
