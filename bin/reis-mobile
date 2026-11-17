@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+// Extensionless entry point, so `reis-mobile` resolves where a plugin host puts bin/ on PATH.
+import('./reis-mobile.mjs');

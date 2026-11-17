@@ -70,7 +70,7 @@ Most tests belong at the top of this list. If a behavior can be verified without
 
 ## 7. Run before reporting
 
-Resolve the command from the project's scripts, Gradle tasks, Xcode scheme/test plan or CI before execution; do not run an example with guessed names. Run the relevant existing test first when reproducing a failure, then run the changed tests and their affected suite. Never weaken an assertion or delete a test to make the suite green.
+Resolve the command from the project's scripts, Gradle tasks, Xcode scheme/test plan or CI before execution; do not run an example with guessed names. Run it as `reis-mobile run -- <command>` when that CLI is available: it shows the failing tests and the final counts, keeps the exit code and saves the full log. Run the relevant existing test first when reproducing a failure, then run the changed tests and their affected suite. Never weaken an assertion or delete a test to make the suite green.
 
 For instrumented, UI and end-to-end tests, discover available devices and the project's runner policy. Use a compatible local emulator or simulator when authorized by the task; do not erase its data or silently switch to a physical device. If the SDK, runtime or destination is unavailable, report the exact blocker and the resolved command that remains unrun. A build, a skipped test or an empty filtered run is not a passing test: inspect the test count and results.
 

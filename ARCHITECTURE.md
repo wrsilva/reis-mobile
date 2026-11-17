@@ -63,6 +63,14 @@ core/
 │   ├── catalog.mjs              external providers: endpoints, credentials, model catalogs
 │   ├── providers.mjs            status, model and allowlist resolution, without network
 │   └── consult.mjs              the calls themselves, redacted both ways
+├── run/
+│   ├── tools.mjs                command line → tool, mode (compact | light | stream) and line families
+│   ├── families.mjs             line rules per tool: errors, warnings, summaries, blocks, noise
+│   ├── compact.mjs              streaming line filter: blocks, dedupe, caps, frames, fallback tail
+│   ├── runner.mjs               reis-mobile run: spawn, full log, exit code, savings line
+│   ├── args.mjs                 run options before `--`
+│   ├── hook.mjs                 optional PreToolUse rewrite of mobile commands
+│   └── settings.mjs             the hook on/off switch, in the language config file
 ├── update/
 │   └── check.mjs                cached npm version check and update notice
 ├── install/
@@ -174,6 +182,14 @@ Every requested provider appears in the result with its own status — a missing
 **Scope.** Every tool is read-only and offline: it reads the project and the package and runs only local `git` and toolchain `--version` commands. `consult` and `providers --models` stay out, because they reach a third party, and so do `init`, `lang` and `/reis-mobile:project`, because they write. The instruction reader resolves symlinks before checking that the file sits in `agents/`, `skills/` or `docs/agent-context.md`, and refuses files above 512 KB. Agents, slash commands and hooks are Claude Code features; an MCP client gets their instructions through the reader, not the runtime that executes them.
 
 **Directory.** Each tool takes `dir`, resolved against the `--dir` given to `reis-mobile mcp` and then against the server's working directory, which each editor chooses differently. `.reis-mobile/config.yaml` is honored as in the CLI, and its warnings come back as a text block instead of stderr.
+
+## Compact command output
+
+`reis-mobile run` exists because build and test logs, not instructions, dominate the tokens of a mobile session. It runs the command with stdin inherited and stdout and stderr piped, and filters line by line so long-running commands stream. Nothing is lost: the full ANSI-stripped output goes to a log whose path ends the output, and the exit code is the command's.
+
+`tools.mjs` unwraps wrappers (`fvm`, `npx`, `xcrun`, `bundle exec`, env assignments, `cd … &&`) and maps the tool and subcommand to a mode. Compact mode is a whitelist: a line survives only when a family rule claims it, so an unknown failure shows the last lines instead of nothing. Light mode is a blacklist of progress and repeats, used for queries and any unrecognized command, so the answer to a query is never filtered. The family patterns were written against real output stored in `tests/fixtures/run/`.
+
+The hook is registered by the plugin but inert until `reis-mobile hook on`: it reads the switch and exits before loading the rewrite code. It rewrites only simple commands joined by `&&`, `||` or `;`, inserts the runner after `VAR=value` assignments, and points at this installation's `bin/reis-mobile.mjs`, since a `reis-mobile` on the PATH may be an older version. When RTK's hook would rewrite the same call, it steps aside, because two `updatedInput` answers to one call conflict. `run` is not an MCP tool: MCP tools stay read-only and offline.
 
 ## Language
 

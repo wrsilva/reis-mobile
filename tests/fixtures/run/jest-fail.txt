@@ -1,0 +1,28 @@
+FAIL ./sum.test.js
+  sum
+    ✓ adds (1 ms)
+    ✕ fails on purpose (1 ms)
+    ✓ also passes
+
+  ● sum › fails on purpose
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 5
+    Received: 4
+
+      2 | describe('sum', () => {
+      3 |   test('adds', () => expect(sum(1, 2)).toBe(3));
+    > 4 |   test('fails on purpose', () => expect(sum(2, 2)).toBe(5));
+        |                                                    ^
+      5 |   test('also passes', () => expect(sum(0, 0)).toBe(0));
+      6 | });
+      7 |
+
+      at Object.toBe (sum.test.js:4:52)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 2 passed, 3 total
+Snapshots:   0 total
+Time:        0.142 s
+Ran all test suites.

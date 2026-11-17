@@ -29,6 +29,7 @@ Trace at least one concrete path through the relevant objects: an action to a st
 - Follow installed dependencies and project conventions. Check version-sensitive APIs before prescribing them. Reuse the smallest applicable skill reference rather than copying its checklist into every response.
 - Respect the requested scope: an audit produces findings, a request to write or fix authorizes the relevant edits. Preserve concurrent changes. Run authorized local checks; obtain missing authorization only for actions outside that scope.
 - Preserve actual exit status and report tests as passed, failed or not run. A plan, generated test file, unavailable SDK or static inspection is not a successful execution. Redact credentials from excerpts; a CLI-redacted diff does not sanitize files read separately.
+- Run builds, tests, analyzers and dependency installs as `reis-mobile run -- <command>` when `reis-mobile run --help` works; otherwise run them directly. It keeps errors with `path:line`, failed tests, warning headlines and the summary, returns the command's exit code and prints the path of the full log. Read that log, or rerun with `--raw`, when the compact view lacks a detail you need. A command already rewritten by a hook (`reis-mobile.mjs run --` or `rtk`) needs no wrapping.
 - End with the role's concrete deliverable, affected objects, validation evidence and remaining blockers. Do not fill empty categories with generic advice.
 
 ## Optional team context

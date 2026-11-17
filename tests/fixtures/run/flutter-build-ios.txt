@@ -1,0 +1,18 @@
+Resolving dependencies...
+Downloading packages...
+  cupertino_icons 1.0.9 (2.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.14 (0.7.15 available)
+  vector_math 2.4.3 (2.4.4 available)
+Got dependencies!
+4 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building dev.reis.fxApp for simulator (ios)...
+Swift Package Manager is currently disabled. Enabling Swift Package Manager will be required in a future version of Flutter. To re-enable it, run "flutter config --enable-swift-package-manager"
+Running Xcode build...                                          
+Xcode build done.                                           28.1s
+Failed to build iOS app
+Swift Compiler Error (Xcode): Cannot find 'missingSymbol' in scope
+/Users/dev/work/fx_ios/ios/Runner/AppDelegate.swift:17:30
+
+Encountered error while building for simulator.

@@ -1,0 +1,52 @@
+Building for debugging...
+[Planning deferred tasks]
+[28 / 52]
+[29 / 53] FxKit
+[31 / 57]
+[33 / 57] FxKit
+[41 / 57] FxKit
+[47 / 58] FxKitTests-product
+[55 / 126]
+[58 / 126]
+[66 / 126]
+[67 / 126]
+[69 / 126]
+[75 / 126]
+[77 / 126]
+[79 / 126]
+[82 / 126]
+[86 / 126]
+[88 / 126]
+[91 / 126]
+[92 / 126]
+[101 / 126]
+[103 / 126]
+[104 / 126]
+[106 / 126]
+[108 / 126]
+[111 / 126]
+[112 / 126]
+[117 / 126] FxKitTests-product
+[120 / 126] FxKitTests-product
+[122 / 126] FxKitTests-product
+Build complete! (12,63 secs)
+Test Suite 'All tests' started at 2026-11-17 09:26:10.840.
+Test Suite 'FxKitTests.xctest' started at 2026-11-17 09:26:10.846.
+Test Suite 'FxKitTests' started at 2026-11-17 09:26:10.846.
+Test Case '-[FxKitTests.FxKitTests testFails]' started.
+/Users/dev/work/FxKit/Tests/FxKitTests/FxKitTests.swift:6: error: -[FxKitTests.FxKitTests testFails] : XCTAssertEqual failed: ("4") is not equal to ("5") - math is broken
+Test Case '-[FxKitTests.FxKitTests testFails]' failed (0.155 seconds).
+Test Case '-[FxKitTests.FxKitTests testPasses]' started.
+Test Case '-[FxKitTests.FxKitTests testPasses]' passed (0.000 seconds).
+Test Suite 'FxKitTests' failed at 2026-11-17 09:26:11.002.
+	 Executed 2 tests, with 1 failure (0 unexpected) in 0.155 (0.156) seconds
+Test Suite 'FxKitTests.xctest' failed at 2026-11-17 09:26:11.002.
+	 Executed 2 tests, with 1 failure (0 unexpected) in 0.155 (0.156) seconds
+Test Suite 'All tests' failed at 2026-11-17 09:26:11.002.
+	 Executed 2 tests, with 1 failure (0 unexpected) in 0.155 (0.162) seconds
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
+Note: Some test targets reported failures:
+  - FxKitTests (XCTest)
