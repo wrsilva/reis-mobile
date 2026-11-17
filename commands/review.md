@@ -30,6 +30,10 @@ If the command fails, show the error to the user and stop.
 
 The CLI output has a `Language` line (`language` in JSON). Write everything the user reads — the answer, report headings and text, syntheses and files you create — in that language: `en` is English, `pt` is Brazilian Portuguese. With `-` or `null`, use the language of the user's request. Code, identifiers, file paths, commands and quoted tool output stay as they are.
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Tell the user the scope you are reviewing (files and commits) before you start. Each finding states the evidence at `path:line`, why it matters in this app, and the fix you rejected when a simpler one existed. If you run a build or the tests to confirm a finding, report the command, its exit code and its duration.
+
 ## 2. Load the instructions
 
 Read with the Read tool, in this order:

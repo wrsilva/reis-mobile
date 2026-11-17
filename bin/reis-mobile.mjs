@@ -23,8 +23,9 @@ import { parseProviderList, providerAllowlist, resolveProviders, selectProviders
 import { loadRegistry, validateRegistry } from '../core/registry/registry.mjs';
 import { INTENT_IDS } from '../core/router/intents.mjs';
 import { parseRunArgs } from '../core/run/args.mjs';
+import { DEFAULT_WAIT_SECONDS, followLog, startBackground, stopBackground, supervise } from '../core/run/background.mjs';
 import { runCommand } from '../core/run/runner.mjs';
-import { isRunHookEnabled, setRunHook } from '../core/run/settings.mjs';
+import { readRunSettings, setRunGuard, setRunHook } from '../core/run/settings.mjs';
 import { checkForUpdate, clearUpdateCache } from '../core/update/check.mjs';
 
 const USAGE = `reis-mobile — AI agents for mobile engineering
@@ -43,6 +44,7 @@ Commands:
   release [request...]       Prepare release evidence context (does not build or publish)
   run [options] -- <command> Run a build, test or tool command and print a compact view of its output
   hook [on|off]              Show or set the optional Claude Code hook that routes mobile commands through run
+  hook guard [on|off]        Show or set the guard that starts never-ending commands with run --background (see run --help)
   providers                  List the external model providers and what each one needs
   consult [question...]      Ask the configured external providers the same question
   mcp                        Serve the read-only commands to MCP clients over stdio (Cursor, Claude Code, Codex...)
@@ -76,6 +78,13 @@ Run options (before --):
   --no-log          Do not save the full log
   --dir <path>      Directory to run the command in
   --json            Print the result and the kept lines as JSON
+  --heartbeat <s>   Print a progress line after this many quiet seconds (default 30; 0 turns it off)
+  --background      Start a command that keeps running and return once it is ready, ends or --wait passes
+  --wait <s>        --background, --follow: how long to wait (default ${DEFAULT_WAIT_SECONDS})
+  --ready <regex>   An output line that means the command is ready
+  --ready-url <url> A URL that answers once the command is ready
+  --follow <log>    Keep following a command started with --background
+  --stop <log>      Stop a command started with --background
   -v, --version     Print the version
   -h, --help        Show this help`;
 
@@ -123,18 +132,39 @@ const COMMANDS = {
 
 async function commandRun(argv) {
   const { options, command } = parseRunArgs(argv);
-  if (options.help || !command.length) {
+  const control = options.follow ?? options.stop;
+  if (options.help || (!command.length && !control)) {
     console.log(`Usage: reis-mobile run [options] -- <command> [args...]
+       reis-mobile run --background [options] -- <command> [args...]
+       reis-mobile run --follow <log> [--wait <s>]
+       reis-mobile run --stop <log>
 
 Runs the command and prints only what an agent needs: errors with file and line, failed
 tests, warning headlines and the final summary. The exit code is the command's. The full
-output is saved to a log file whose path is printed at the end.
+output is saved to a log file whose path is printed at the end. When nothing has been shown
+for 30 seconds, a progress line reports how long the command has run and its last output.
+
+Some commands keep running and block the caller until they are stopped:
+  Flutter               flutter run, flutter attach, flutter logs
+  Native Android        emulator -avd <name>, adb logcat (without -d)
+  Native iOS            xcrun simctl spawn booted log stream, xcrun simctl launch --console
+  React Native          npx react-native start, npx react-native log-android / log-ios
+  Expo                  npx expo start, npx expo run:android / run:ios (without --no-bundler)
+  Kotlin Multiplatform  the Android and iOS host commands above
+--background starts them detached and returns when they are ready, end or --wait passes, with
+the PID, the log and the stop command. Exit codes: 0 ready or running, the command's own code
+when it ended, 124 still starting when the wait ran out.
 
 Examples:
   reis-mobile run -- flutter test
   reis-mobile run -- ./gradlew assembleDebug
   reis-mobile run -- xcodebuild -scheme App -destination 'platform=iOS Simulator,name=iPhone 16' test
   reis-mobile run -- "cd ios && pod install"
+  reis-mobile run --background -- flutter run -d emulator-5554 --pid-file /tmp/app.pid
+  reis-mobile run --background -- emulator -avd Pixel_9
+  reis-mobile run --background -- xcrun simctl spawn booted log stream --predicate 'subsystem == "com.example.app"'
+  reis-mobile run --background -- npx react-native start
+  reis-mobile run --background --ready-url http://localhost:8081 -- npx expo start
 
 Options:
   --raw             Pass the output through unchanged
@@ -143,32 +173,78 @@ Options:
   --log-dir <path>  Where the full log is saved (default: the system temp dir; or REIS_MOBILE_LOG_DIR)
   --no-log          Do not save the full log
   --dir <path>      Directory to run the command in
-  --json            Print the result and the kept lines as JSON`);
-    return command.length || options.help ? 0 : 1;
+  --json            Print the result and the kept lines as JSON
+  --heartbeat <s>   Progress line after this many quiet seconds (default 30, or REIS_MOBILE_HEARTBEAT; 0 = off)
+  --background      Start detached; return when ready, ended or after --wait
+  --wait <s>        --background and --follow: seconds to wait (default ${DEFAULT_WAIT_SECONDS})
+  --ready <regex>   An output line that means the command is ready (built in for flutter run and emulator)
+  --ready-url <url> A URL that answers once the command is ready (built in for react-native start)
+  --follow <log>    Keep following a command started with --background
+  --stop <log>      Stop it: SIGTERM to its process group, SIGKILL after 10 s`);
+    return command.length || control || options.help ? 0 : 1;
   }
   const maxLines = options.maxLines === undefined ? undefined : Number(options.maxLines);
   if (maxLines !== undefined && !(Number.isInteger(maxLines) && maxLines > 0)) throw new Error('--max-lines must be a positive integer');
+  const wait = options.wait === undefined ? undefined : Number(options.wait);
+  if (wait !== undefined && !(Number.isFinite(wait) && wait > 0)) throw new Error('--wait must be a positive number of seconds');
+  const heartbeat = options.heartbeat;
+  let ready;
+  if (options.ready !== undefined) {
+    try {
+      ready = new RegExp(options.ready);
+    } catch (error) {
+      throw new Error(`--ready is not a valid regular expression: ${error.message}`);
+    }
+  }
+  if (options.readyUrl !== undefined && !/^https?:\/\/\S+$/.test(options.readyUrl)) throw new Error('--ready-url must be an http:// or https:// URL');
+  const cwd = options.dir ?? process.cwd();
+
+  if (options.supervise) return supervise(command, { logPath: options.supervise, cwd, ready, readyUrl: options.readyUrl });
+  if (options.stop) return stopBackground(options.stop);
+  if (options.follow) return followLog(options.follow, { wait, heartbeat });
+  if (options.background) {
+    if (options.raw || options.json || options.noLog) throw new Error('--background cannot be combined with --raw, --json or --no-log: the log is how the command is followed');
+    return startBackground(command, { cwd, wait, heartbeat, ready, readyUrl: options.readyUrl, logDir: options.logDir });
+  }
   return runCommand(command, {
-    cwd: options.dir ?? process.cwd(),
+    cwd,
     raw: options.raw,
     json: options.json,
     mode: options.mode,
     maxLines,
     logDir: options.logDir,
     log: !options.noLog,
+    heartbeat,
+    ready,
+    readyUrl: options.readyUrl,
   });
 }
 
 async function commandHook({ prompt, json }) {
-  const value = prompt.trim().toLowerCase();
-  if (value && !['on', 'off'].includes(value)) throw new Error('Usage: reis-mobile hook [on|off]');
-  const enabled = value ? await setRunHook(value === 'on') : await isRunHookEnabled();
-  if (json) return print({ runHook: enabled, path: configPath() });
-  if (enabled) {
-    console.log(`✓ Hook on: Claude Code sessions route recognized mobile commands through \`reis-mobile run\` (${configPath()}).`);
-    console.log('  Rewritten commands are shown before they run; RTK keeps the commands it rewrites itself. Turn off with `reis-mobile hook off`.');
+  const words = prompt.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const guard = words[0] === 'guard';
+  const value = guard ? words[1] : words[0];
+  if ((value && !['on', 'off'].includes(value)) || words.length > (guard ? 2 : 1)) {
+    throw new Error('Usage: reis-mobile hook [on|off] | reis-mobile hook guard [on|off]');
+  }
+  if (value) await (guard ? setRunGuard : setRunHook)(value === 'on');
+  const settings = await readRunSettings();
+  if (json) return print({ runHook: settings.hook, runGuard: settings.guard, path: configPath() });
+  if (!guard) {
+    if (settings.hook) {
+      console.log(`✓ Hook on: Claude Code sessions route recognized mobile commands through \`reis-mobile run\` (${configPath()}).`);
+      console.log('  Rewritten commands are shown before they run; RTK keeps the commands it rewrites itself. Turn off with `reis-mobile hook off`.');
+    } else {
+      console.log(`Hook off: commands run unchanged. Agents can still call \`reis-mobile run -- <command>\` directly. Turn on with \`reis-mobile hook on\`.`);
+    }
+  }
+  if (settings.guard) {
+    console.log('✓ Guard on: a Claude Code Bash call that would block on a command that never ends starts it with `reis-mobile run --background` and returns when it is ready:');
+    console.log('  Flutter `flutter run`, `flutter attach`, `flutter logs`; Android `emulator -avd`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`;');
+    console.log('  React Native `npx react-native start`, `log-android`, `log-ios`; Expo `npx expo start`, `npx expo run:android` / `run:ios`; Kotlin Multiplatform the Android and iOS host commands.');
+    console.log('  Turn off with `reis-mobile hook guard off`.');
   } else {
-    console.log(`Hook off: commands run unchanged. Agents can still call \`reis-mobile run -- <command>\` directly. Turn on with \`reis-mobile hook on\`.`);
+    console.log('Guard off: never-ending commands run as written and block the call until it times out. Turn on with `reis-mobile hook guard on`.');
   }
   return 0;
 }

@@ -59,11 +59,27 @@ export function runnerPrefix() {
   return `node "${join(PLUGIN_ROOT, 'bin', 'reis-mobile.mjs')}" run --`;
 }
 
+/** The prefix that starts a never-ending command detached and returns once it is ready. */
+export function backgroundPrefix() {
+  return `node "${join(PLUGIN_ROOT, 'bin', 'reis-mobile.mjs')}" run --background --`;
+}
+
 /**
  * Returns the command with each recognized mobile tool invocation routed through
  * `reis-mobile run`, or null when nothing should change.
  */
-export function rewriteCommand(command, { prefix = runnerPrefix() } = {}) {
+export function rewriteCommand(command, options = {}) {
+  return planRewrite(command, options)?.command ?? null;
+}
+
+/**
+ * Plans the rewrite of a Bash command line. With `compact`, recognized mobile commands go
+ * through `reis-mobile run`; with `guard`, commands that never end on their own (flutter run,
+ * emulator, react-native start...) go through `reis-mobile run --background` instead.
+ *
+ * @returns {{ command: string, compacted: string[], guarded: string[] } | null}
+ */
+export function planRewrite(command, { prefix = runnerPrefix(), background = backgroundPrefix(), compact = true, guard = false } = {}) {
   if (typeof command !== 'string' || !command.trim()) return null;
   if (/(^|[\s;&|])(reis-mobile(\.mjs)?|rtk)\s/.test(command) || command.includes('reis-mobile.mjs')) return null;
   const parts = splitCommandLine(command);
@@ -71,13 +87,17 @@ export function rewriteCommand(command, { prefix = runnerPrefix() } = {}) {
 
   let result = '';
   let cursor = 0;
-  let changed = false;
+  const compacted = [];
+  const guarded = [];
   for (const [start, end] of parts) {
     const text = command.slice(start, end);
     const words = shellWords(text);
     let skip = 0;
     while (skip < words.length && ASSIGNMENT.test(words[skip])) skip++;
-    if (skip < words.length && recognize(words.slice(skip))) {
+    const profile = skip < words.length ? recognize(words.slice(skip)) : null;
+    const insert = profile && guard && profile.endless ? background : profile && compact ? prefix : null;
+    if (insert) {
+      (insert === background ? guarded : compacted).push(profile.tool);
       // Insert the prefix after leading VAR=value assignments, which stay shell assignments.
       const leading = text.match(/^\s*/)[0].length;
       let offset = leading;
@@ -86,16 +106,18 @@ export function rewriteCommand(command, { prefix = runnerPrefix() } = {}) {
         offset = at + words[i].length;
         while (offset < text.length && /\s/.test(text[offset])) offset++;
       }
-      result += command.slice(cursor, start) + text.slice(0, offset) + `${prefix} ` + text.slice(offset);
-      changed = true;
+      result += command.slice(cursor, start) + text.slice(0, offset) + `${insert} ` + text.slice(offset);
     } else {
       result += command.slice(cursor, end);
     }
     cursor = end;
   }
   result += command.slice(cursor);
-  return changed ? result : null;
+  return compacted.length || guarded.length ? { command: result, compacted, guarded } : null;
 }
+
+const COMPACT_REASON = 'reis-mobile run: compact output for a mobile build or test command';
+const guardReason = (tools) => `reis-mobile run --background: ${[...new Set(tools)].join(', ')} does not end on its own, so it would block this call until it times out; it starts detached and the call returns when it is ready, fails or the wait ends, with progress, the PID, the log and the stop command`;
 
 /** True when RTK is installed and its Claude Code hook would rewrite this tool call itself. */
 function rtkWouldRewrite(input, env) {
@@ -107,18 +129,36 @@ function rtkWouldRewrite(input, env) {
 /**
  * Handles a Claude Code PreToolUse payload. Returns the hook output object, or null to leave
  * the tool call unchanged.
+ *
+ * `enabled` is `reis-mobile hook on` (compact output); `guard` is `reis-mobile hook guard`,
+ * on by default. A call that already asks for `run_in_background` is not guarded: it does
+ * not block the session.
  */
-export function handlePreToolUse(input, { enabled, env = process.env, prefix } = {}) {
-  if (!enabled || input?.tool_name !== 'Bash') return null;
-  const command = input.tool_input?.command;
-  const rewritten = rewriteCommand(command, { prefix: prefix ?? runnerPrefix() });
-  if (!rewritten) return null;
-  if (rtkWouldRewrite(input, env)) return null;
+export function handlePreToolUse(input, { enabled, guard = false, env = process.env, prefix, background } = {}) {
+  if (input?.tool_name !== 'Bash' || (!enabled && !guard)) return null;
+  const plan = planRewrite(input.tool_input?.command, {
+    prefix: prefix ?? runnerPrefix(),
+    background: background ?? backgroundPrefix(),
+    compact: Boolean(enabled),
+    guard: guard && input.tool_input?.run_in_background !== true,
+  });
+  if (!plan) return null;
+  if (rtkWouldRewrite(input, env)) {
+    if (!plan.guarded.length) return null;
+    // Two rewrites of one call conflict; blocking with the command to use is the safe answer.
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `${guardReason(plan.guarded)}. Run it as: ${plan.command}`,
+      },
+    };
+  }
   return {
     hookSpecificOutput: {
       hookEventName: 'PreToolUse',
-      permissionDecisionReason: 'reis-mobile run: compact output for a mobile build or test command',
-      updatedInput: { ...input.tool_input, command: rewritten },
+      permissionDecisionReason: [plan.compacted.length && COMPACT_REASON, plan.guarded.length && guardReason(plan.guarded)].filter(Boolean).join('; '),
+      updatedInput: { ...input.tool_input, command: plan.command },
     },
   };
 }

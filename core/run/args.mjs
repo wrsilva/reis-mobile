@@ -1,5 +1,9 @@
-const RUN_FLAGS = new Set(['--raw', '--json', '--no-log']);
-const RUN_VALUES = new Set(['--mode', '--max-lines', '--log-dir', '--dir']);
+const RUN_FLAGS = new Set(['--raw', '--json', '--no-log', '--background']);
+const RUN_VALUES = new Set([
+  '--mode', '--max-lines', '--log-dir', '--dir', '--heartbeat', '--wait', '--ready', '--ready-url', '--follow', '--stop',
+  // Internal: the detached process started by --background.
+  '--supervise',
+]);
 
 /** Parses `run [options] [--] <command...>`: options stop at `--` or at the first other word. */
 export function parseRunArgs(argv) {

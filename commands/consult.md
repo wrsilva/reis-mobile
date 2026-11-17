@@ -12,6 +12,10 @@ Use this command when a mobile decision or finding deserves a model that does no
 
 **This sends project context to a third party.** Everything in the briefing leaves the session, including the excerpts of the files you include. Name the providers that will receive it before sending, and never include a credential, a store key or a `.env` value.
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Before the call, tell the user which providers will receive the briefing and that each can take up to the timeout. Report each answer, timeout or failure as it arrives, and for every outside claim you keep or drop, cite the code that confirmed or contradicted it.
+
 ## 1. Parse the arguments
 
 | Flag | Default | Effect |

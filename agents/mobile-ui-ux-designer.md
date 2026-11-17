@@ -10,7 +10,7 @@ stacks: ["*"]
 
 You own the experience of completing a mobile task, from entry through success and recovery. Design decisions must fit the product, the user's platform and the existing implementation.
 
-Read the [project brief](../docs/agent-context.md) once or reuse the caller's verified brief. Apply [mobile-ui-ux](../skills/mobile-ui-ux/SKILL.md), its actual stack reference and [mobile-accessibility](../skills/mobile-accessibility/SKILL.md) for the controls in scope. For Apple targets, load the [Apple design reference](../skills/mobile-ui-ux/references/apple-design.md). Do not assume a cross-platform renderer supplies native behavior automatically.
+Read the [project brief](../docs/agent-context.md) once or reuse the caller's verified brief. Apply [mobile-ui-ux](../skills/mobile-ui-ux/SKILL.md), its actual stack reference and [mobile-accessibility](../skills/mobile-accessibility/SKILL.md) for the controls in scope. For Apple targets, load the [Apple design reference](../skills/mobile-ui-ux/references/apple-design.md). For a scored audit or a pre-ship check, use the [Laws of UX review](../skills/mobile-ui-ux/references/laws-of-ux/review.md) or [checklist](../skills/mobile-ui-ux/references/laws-of-ux/checklist.md) together with [UX laws on mobile](../skills/mobile-ui-ux/references/ux-laws-on-mobile.md), which translates their web examples into each stack's API. Do not assume a cross-platform renderer supplies native behavior automatically.
 
 ## Establish the design boundary
 

@@ -54,21 +54,27 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.3.0
+### v1.4.0
 
 #### Added
 
-- `reis-mobile run -- <command>` runs a build, test or tool command and prints only what an agent needs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines and the final summary. The exit code is the command's, the full log is saved (and deleted after a week), and a closing line reports the lines and bytes saved. On real output, one Swift compile error in a raw `xcodebuild` log went from 1,697 lines and 169 KB to 13 lines; a failed Gradle build shrank by 79% and a SwiftPM build error by 91%.
-- Coverage for the commands of every supported stack. Flutter and Dart: `flutter`, `dart`, `fvm`, `melos`, `very_good`, `build_runner`. Android and Kotlin Multiplatform: `./gradlew` and `gradle` with any task (KMP iOS tests, framework linking and `podInstall` included), `kotlinc`, `ktlint`, `detekt`, Android `lint`, `adb`, `sdkmanager`, `avdmanager`, `emulator`. iOS: `xcodebuild`, `xcrun` tools, `swift`, `swiftc`, `pod`, `fastlane`, `swiftlint`, `carthage`, `tuist`. React Native and Expo: `react-native`, `expo`, `eas`, Metro, `jest`, `detox`, `maestro`, `npm`/`yarn`/`pnpm`/`bun`, `tsc`, `eslint`. Wrappers such as `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &&` are recognized, and any other command runs in light mode.
-- Three modes: compact for builds, tests, analyzers and installs; light for queries whose output is the answer (`flutter doctor`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and unknown commands; stream for `flutter run`, Metro and `adb logcat`, where an unfiltered logcat shows only warnings, errors and crashes. Repeated errors print once, stack traces stop after six frames, and a failure with no known error pattern shows the last lines. `--raw`, `--mode`, `--max-lines`, `--log-dir`, `--no-log`, `--dir` and `--json` adjust it.
-- `reis-mobile hook [on|off]`, an optional Claude Code hook, off by default, that routes recognized mobile commands through `reis-mobile run`. It skips pipes, redirections and subshells, and steps aside for commands RTK rewrites itself.
-- An extensionless `bin/reis-mobile` entry, so `reis-mobile` resolves where the plugin host puts `bin/` on the PATH.
-- Real output from Flutter, Dart, Gradle, `xcodebuild`, SwiftPM, CocoaPods, npm and Jest under `tests/fixtures/run/`, with tests for every stack's commands, the runner, the arguments and the hook.
+- `reis-mobile run --background -- <command>` for commands that never end on their own: Flutter `flutter run`, `flutter attach`, `flutter logs`; Android `emulator -avd`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`; React Native `npx react-native start`, `log-android`, `log-ios`; Expo `npx expo start`, `npx expo run:android` / `run:ios` without `--no-bundler`; and the Android and iOS host commands of a Kotlin Multiplatform app. It starts the command detached, shows its output and progress, and returns when the app is ready (exit 0), when it ends (its own exit code) or when `--wait` seconds pass while it is still starting (exit 124), printing the PID, the log, the follow command and the stop command. `--follow <log>` keeps watching it, and `--stop <log>` stops its process group after checking that the PID still belongs to that log. Verified with a real `flutter run -d web-server`: ready in 14 seconds, server up, stopped cleanly.
+- Readiness signals checked against the tools' own sources: `Flutter run key commands.` for `flutter run` and `flutter attach`, `Boot completed in … ms` for the Android emulator, and Metro's `/status` answering `packager-status:running` for `react-native start`. `--ready <regex>` and `--ready-url <url>` cover any other command.
+- A heartbeat in every `reis-mobile run`: after 30 quiet seconds, a status line with the elapsed time and the last output, including a line still in progress such as `Running Gradle task 'assembleDebug'...`. The closing line now carries the duration. `--heartbeat <seconds>` or `REIS_MOBILE_HEARTBEAT` changes it; `0` turns it off.
+- A Claude Code guard, on by default (`reis-mobile hook guard off` turns it off), that rewrites a foreground Bash call to a never-ending command into `reis-mobile run --background`, so the session gets control back instead of hanging until the tool times out.
+- Session rules: in a mobile project, a SessionStart hook (startup, resume, clear and compact) tells the session to announce long steps, report each phase by name, never block on a command that does not end, and justify each decision with its evidence, the alternatives rejected and how to verify or revert it. `REIS_MOBILE_SESSION_CONTEXT=0` turns it off.
+- `mobile-debug/references/launching.md`: which launch commands end and which do not on Flutter, native Android, native iOS, React Native, Expo and Kotlin Multiplatform, with the exact commands, the ready, progress and failure signals of each, Flutter hot reload through `--pid-file` and `SIGUSR1`, and wait loops for hosts without the CLI.
+- `mobile-ui-ux` gains Laws of UX references: the 30 Laws of UX with a component-type map, a 0–60 audit with critical, warning and suggestion tiers, and a 12-point pre-ship checklist.
+- `mobile-ui-ux` gains a mobile app UI design guide: type hierarchy, 60/30/10 color, 8-point spacing, shadows, thumb zone, peak-end emotional design and industry visual conventions.
+- `mobile-ui-ux/references/ux-laws-on-mobile.md`: what the web-oriented guides change on a phone (pressed states instead of hover, 44 pt on iOS and 48 dp on Android, bottom navigation and system back, Dynamic Type and the Material type scale instead of a fixed size limit, contrast checks, real data only for social proof) and each law's API in Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. `mobile-ui-ux-designer` uses it for audits and checklists.
 
 #### Changed
 
-- The shared agent brief (`docs/agent-context.md`), `mobile-test` and `mobile-debug` tell agents to run builds and tests through `reis-mobile run` when it is available, and to read the full log or use `--raw` when the compact view lacks a detail.
-- The 13 longest agent and skill descriptions are shorter, cutting about 950 tokens from what every session loads, with the same trigger terms.
+- The shared agent brief gains **Progress and decisions**, the contract every agent follows: what to say before a long step, phase reports with real object names, the final report, and decisions with evidence, rejected alternatives and consequences. The debug, review, test, release, consult, debate and project commands apply it to their own flow, and `mobile-debug` and `mobile-test` start devices and apps with `--background`.
+
+#### Fixed
+
+- UX audits, reviews and checklists now route to `design` and `mobile-ui-ux-designer` instead of a code review or a release: the design vocabulary gains `ux`, `laws of ux` / `leis de ux`, `ux audit` / `auditoria de ux`, `ux review` and `ux checklist` / `checklist de ux`, and a tie between design and review or release goes to design.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -301,11 +307,54 @@ Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &
 
 - **compact** for builds, tests, analyzers and installs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines, and the final summary. Repeated errors (such as the same one for arm64 and x86_64) appear once. If a failing command matches no known error pattern, the last lines are shown instead.
 - **light** for queries whose output is the answer (`flutter doctor`, `adb devices`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and for any other command: everything except progress bars and repeated lines.
-- **stream** for commands that keep running (`flutter run`, Metro, `adb logcat`): lines print as they arrive; an unfiltered `adb logcat` shows only warnings, errors and crashes.
+- **stream** for commands that keep running (`flutter run`, `emulator`, `adb logcat`, `xcrun simctl spawn booted log stream`, `npx react-native start`, `npx expo start`): lines print as they arrive; an unfiltered `adb logcat` shows only warnings, errors and crashes.
 
 `--raw` passes the output through, `--mode` overrides the mode, `--max-lines` changes the limit and `--json` returns the kept lines with the counts. Full logs go to the system temp directory (or `REIS_MOBILE_LOG_DIR`) and are deleted after a week. The agents use `reis-mobile run` when the CLI is installed; inside the Claude Code plugin, it is on the PATH.
 
-**Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when [RTK](https://github.com/rtk-ai/rtk) is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
+**Progress.** A quiet command is never silent: after 30 seconds without a shown line, a progress line reports the elapsed time and what the command printed last, including a line still in progress such as Flutter's `Running Gradle task 'assembleDebug'...`. The closing line carries the duration. `--heartbeat <seconds>` (or `REIS_MOBILE_HEARTBEAT`) changes the interval and `0` turns it off.
+
+```text
+[reis-mobile run: flutter build apk · running 1m30s · last output 52s ago: Running Gradle task 'assembleRelease'...]
+```
+
+**Commands that never end.** Some launch commands keep running until stopped, so a caller waiting for them hangs until its timeout:
+
+| Stack | Never ends | Ends on its own |
+|---|---|---|
+| Flutter | `flutter run -d <id>`, `flutter attach`, `flutter logs` | `flutter run --no-resident`, `flutter install -d <id>` |
+| Native Android | `emulator -avd <name>`, `adb logcat` without `-d` | `./gradlew :app:installDebug`, `adb shell am start -n <package>/<activity>` |
+| Native iOS | `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console booted <bundle id>` | `xcrun simctl bootstatus <udid> -b`, `xcrun simctl launch booted <bundle id>` |
+| React Native | `npx react-native start`, `npx react-native log-android` / `log-ios` | `npx react-native run-android` / `run-ios` |
+| Expo | `npx expo start`, `npx expo run:android` / `run:ios` (the dev server starts after the build) | `npx expo run:android --no-bundler` / `run:ios --no-bundler` |
+| Kotlin Multiplatform | The Android and iOS host commands above | `./gradlew :<android app module>:installDebug`, `xcodebuild -project <iosApp>.xcodeproj … build` |
+
+`--background` starts the command detached, shows its output and progress, and returns as soon as it is ready, fails or `--wait` seconds (default 100) pass:
+
+```bash
+reis-mobile run --background -- flutter run -d emulator-5554 --pid-file /tmp/app.pid
+reis-mobile run --background -- emulator -avd Pixel_9_API_36
+reis-mobile run --background -- xcrun simctl spawn booted log stream --predicate 'subsystem == "com.example.app"'
+reis-mobile run --background -- npx react-native start
+reis-mobile run --background --ready-url http://localhost:8081 -- npx expo start
+reis-mobile run --follow <log> --wait 15     # what it printed since, e.g. after kill -USR1 (Flutter hot reload)
+reis-mobile run --stop <log>                 # SIGTERM to its process group, SIGKILL after 10 s
+```
+
+```text
+Launching lib/main.dart on Web Server in debug mode...
+[reis-mobile run: flutter run · running 11s · last output 10s ago: Launching lib/main.dart on Web Server in debug mode...]
+lib/main.dart is being served at http://localhost:8099
+Flutter run key commands.
+[reis-mobile run: flutter run · ready after 14s · running in the background, pid 57074 · follow: … · stop: … · full log: …]
+```
+
+The exit code is 0 when it is ready, the command's own code when it ended, and 124 when the wait ran out while it was still starting. Readiness is built in for `flutter run` and `flutter attach` (`Flutter run key commands.`), `emulator` (`Boot completed in … ms`) and `react-native start` (`/status` answers `packager-status:running`); `--ready <regex>` and `--ready-url <url>` cover any other command, and a command without a signal returns after 10 seconds of running. Every status line starts with `[reis-mobile run: `, in the output and in the log, so one filter follows progress, readiness and the exit. The [launching reference](skills/mobile-debug/references/launching.md) lists the ready and failure signals per stack.
+
+**Guard.** In Claude Code, a Bash call that would block on a command from the "Never ends" column is rewritten to `reis-mobile run --background`, unless it already runs with `run_in_background`. The guard is on by default; `reis-mobile hook guard off` turns it off. It reads only the commands that name `flutter`, `emulator`, `logcat`, `react-native`, `expo` or `simctl`, and when RTK would rewrite the same call, it blocks the call with the command to run instead.
+
+**Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when RTK is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
+
+**Session rules.** When a Claude Code session starts, resumes, is cleared or compacted in a mobile project, the plugin adds three rules to it: say what runs, where, why and for how long before a long step and report each phase by name; never block on a command that does not end; and give every decision its evidence, the alternatives rejected and how to verify or revert it. The full contract is in [Progress and decisions](docs/agent-context.md#progress-and-decisions), which every agent and command follows. `REIS_MOBILE_SESSION_CONTEXT=0` turns the session rules off.
 
 ### Test
 
@@ -568,7 +617,7 @@ reis-mobile route "review the UI/UX of this screen"
 reis-mobile route "create a mobile design system"
 ```
 
-The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. Apple-target work includes a reading guide for [dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill) and official HIG pages. The upstream repository has no explicit redistribution license at the inspected revision, so its content is linked rather than bundled; the new guides are original project content. Current Apple claims require source verification, and Android retains its own conventions.
+The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. It includes the 30 Laws of UX mapped to component types, a 0–60 UX audit and a 12-point pre-ship checklist, and visual rules for type, color, spacing, shadows, the thumb zone, emotional design and industry conventions. `mobile-ui-ux/references/ux-laws-on-mobile.md` lists what changes on a phone (pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, text that scales) and gives each law's API in Flutter, Android, iOS, React Native and Kotlin Multiplatform. Apple-target work includes a reading guide for the official Human Interface Guidelines. Current Apple claims require source verification, and Android retains its own conventions.
 
 ### Skills
 
@@ -581,10 +630,10 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-debug` | Failing builds and runtime errors | debug, build, dependency, migration | Flutter (build, runtime, layout, packages), Android (Gradle, crashes, ANRs, memory leaks), iOS (Xcode, CocoaPods, crash logs), React Native (Metro, native modules), KMP, deep links |
 | `mobile-test` | Unit, UI, integration and end-to-end tests | test | Flutter (widget, integration, Patrol, mocks, coverage), Android, iOS, React Native, KMP |
 | `mobile-security` | OWASP MASVS security checks | review, security, release | Flutter (token storage), Android (intents), iOS (Keychain token storage), React Native, KMP, OAuth/OIDC and PKCE |
-| `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP and external Apple design reading |
+| `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states, Laws of UX audits and checklists, visual design rules and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP, Laws of UX, app UI design, UX laws on mobile and external Apple design reading |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
-| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
+| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, fastlane guides and Xcode Cloud |
 | `mobile-performance` | Startup, rendering, memory, battery, app size and regression gates | performance | Flutter, Android, iOS, React Native, KMP, background execution and battery |
 | `mobile-offline-sync` | Local store, outbox, idempotency, conflict resolution, reconnection | offline | Flutter, Android, iOS, React Native, KMP |
 | `mobile-observability` | Crashes, errors, breadcrumbs, traces, alerts, sampling and privacy | observability | Flutter, Android, iOS, React Native, KMP |
@@ -621,9 +670,6 @@ reis-mobile route --intent auth "review the session lifecycle"
 ```
 
 The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account, send a notification or make a purchase. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes, and a plain "analytics" request still goes to `mobile-observability`. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
-
-About 100 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules), [android/skills](https://github.com/android/skills), [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) and [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
 ---
 
 ## Trust, security and limits
@@ -689,7 +735,7 @@ app: apps/mobile
 Every command then analyzes `apps/mobile`, wherever in the repository you run it, and the review diff is restricted to that folder. Without the file, run from the app folder or pass `--dir apps/mobile`.
 
 **Does it work with native Android and iOS?**
-Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). The platform skills `mobile-android`, `mobile-ios` and `mobile-rn` add what exists only on each stack; `mobile-android` includes the Android team's guides from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more).
+Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). The platform skills `mobile-android`, `mobile-ios` and `mobile-rn` add what exists only on each stack; `mobile-android` includes guides for Compose, AGP 9, R8, Play policy, Wear, TV and more.
 
 **I already have skills with the same names in `~/.claude/skills`.**
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
@@ -727,20 +773,8 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Support](SUPPORT.md)
 - [Security](SECURITY.md)
-- [Third-Party Notices](THIRD_PARTY_NOTICES.md): origin and license of third-party skills
+- [Third-Party Notices](THIRD_PARTY_NOTICES.md): licenses of bundled third-party content
 - [Changelog](CHANGELOG.md)
-
----
-
-## Attribution
-
-- **[greenstevester/fastlane-skill](https://github.com/greenstevester/fastlane-skill)** (MIT): five fastlane guides and Xcode Cloud documentation in [`mobile-ci`](skills/mobile-ci/SKILL.md). The source revision and license are recorded in [Third-Party Notices](THIRD_PARTY_NOTICES.md).
-- **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
-- **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
-- **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
-- **[twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill)** (MIT): the SwiftUI Pro review guide by Paul Hudson, with its twelve references, in [`mobile-ios`](skills/mobile-ios/SKILL.md).
-- **[mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills)** (Apache-2.0): 15 Kotlin Multiplatform skills by Mariano Miani, as guides in [`mobile-kmp`](skills/mobile-kmp/SKILL.md).
-- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---
 

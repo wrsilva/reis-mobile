@@ -29,8 +29,9 @@ const matches = (rule, line) => (rule instanceof RegExp ? rule : rule.re).test(l
  * so long-running commands stream. Call `end(exitCode)` once for summaries and the fallback.
  */
 export class Compactor {
-  constructor({ mode = 'light', families = ['common'], streamFilter, maxLines = 150, maxWarnings = 10, maxInfos = 5, emit }) {
+  constructor({ mode = 'light', families = ['common'], streamFilter, maxLines = 150, maxWarnings = 10, maxInfos = 5, emit, observe }) {
     this.mode = mode;
+    this.observe = observe;
     this.families = families.map((name) => {
       const family = FAMILIES[name];
       if (!family) throw new Error(`Unknown output family "${name}"`);
@@ -69,6 +70,7 @@ export class Compactor {
     this.stats.rawBytes += Buffer.byteLength(raw) + 1;
     let line = cleanLine(raw).replace(/\s+$/, '');
     for (const family of this.families) if (family.pre) line = family.pre(line);
+    this.observe?.(line);
 
     if (line.trim()) {
       this.tail.push(line);
@@ -218,6 +220,15 @@ export class Compactor {
     this.stats.shownLines++;
     this.stats.shownBytes += Buffer.byteLength(line) + 1;
     this.emit(line);
+  }
+
+  /**
+   * The most recent text the command printed, including a line still in progress: Flutter
+   * prints `Running Gradle task 'assembleDebug'...` and completes that line only when the task ends.
+   */
+  latest() {
+    const partial = cleanLine(this.pending).trim();
+    return partial || this.tail.at(-1)?.trim() || null;
   }
 
   /** Flushes the last partial line, then prints summaries and, on failure, the fallback tail. */

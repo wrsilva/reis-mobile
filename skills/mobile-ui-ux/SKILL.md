@@ -1,6 +1,6 @@
 ---
 name: mobile-ui-ux
-description: Designs and reviews mobile interfaces across Flutter, Android, iOS, React Native and Kotlin Multiplatform. Use for UI/UX, wireframes, screen redesigns, design systems, visual hierarchy, typography, adaptive layouts, navigation flows, component states and usability reviews of screenshots, Figma artifacts or UI code. Includes an Apple HIG reference workflow for Apple targets while preserving Android conventions.
+description: Designs and reviews mobile interfaces across Flutter, Android, iOS, React Native and Kotlin Multiplatform. Use for UI/UX, wireframes, screen redesigns, design systems, visual hierarchy, typography, color, spacing, adaptive layouts, navigation flows, component states, Laws of UX audits and pre-ship checklists, and usability reviews of screenshots, Figma artifacts or UI code. Includes an Apple HIG reference workflow for Apple targets while preserving Android conventions.
 intents: [design]
 stacks: ["*"]
 ---
@@ -19,8 +19,16 @@ Turn a product task into a coherent mobile journey and a design that can be impl
 | React Native / Expo | [React Native](references/react-native.md) |
 | Kotlin Multiplatform | [Kotlin Multiplatform](references/kotlin-multiplatform.md) |
 | Apple HIG review, Apple-target design, materials or platform-specific behavior | [Apple design](references/apple-design.md) |
+| Which of the 30 Laws of UX apply to the screen being built (form, list, navigation, wizard, empty state...) and the fix for each | [Laws of UX](references/laws-of-ux/GUIDE.md), with [the component map](references/laws-of-ux/references/code-patterns.md) and [all 30 laws](references/laws-of-ux/references/ux-laws-complete.md) |
+| A scored UX audit of an existing screen (0–60, critical, warning, suggestion, action plan) | [Laws of UX review](references/laws-of-ux/review.md) |
+| A fast 12-point pass/fail check before shipping a screen | [Laws of UX checklist](references/laws-of-ux/checklist.md) |
+| Visual rules: type hierarchy, 60/30/10 color, 8-point spacing, shadows, thumb zone, empty and success states, emotional design | [App UI design](references/app-ui-design/GUIDE.md) |
+| The visual language users expect by category (finance, health, education, fitness, e-commerce...) and peak-end journey design | [Industry conventions](references/app-ui-design/references/industry-conventions.md) |
+| Applying any of the five guides above to Flutter, Android, iOS, React Native or Kotlin Multiplatform code | [UX laws on mobile](references/ux-laws-on-mobile.md), always together with them |
 
 Also use [mobile-accessibility](../mobile-accessibility/SKILL.md) for accessibility verification. Open only the references needed for the current target and interaction.
+
+The Laws of UX and app UI design guides use web examples (CSS, JSX, Tailwind, hover, desktop navigation). [UX laws on mobile](references/ux-laws-on-mobile.md) lists what changes on a phone, such as pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, type that scales and only real social proof, and gives each law's API in every stack. Write each fix in the project's toolkit and theme, never as CSS.
 
 ## Ground the work
 
@@ -43,6 +51,8 @@ Choose the requested mode: review, design or implementation. A review needs evid
 Trace shared components and resolved theme values before claiming a defect. Cite source locations or annotate the supplied artifact. A static image can reveal visual hierarchy but cannot prove hit area, reading order, back behavior or screen-reader output. Measure rendered colors and effective sizes when available; otherwise record what must be checked.
 
 Read the relevant official platform guidance before calling something a platform requirement. Cite the page and section consulted. Check API availability against the project's deployment target and dependency versions. When browsing is unavailable, label current requirements unverified and continue with the evidence available.
+
+For a structured audit, score the screen and each of its states with the [Laws of UX review](references/laws-of-ux/review.md), or run the [12-point checklist](references/laws-of-ux/checklist.md) before shipping. Name the law behind each finding, cite the widget, composable, view or component at `path:line`, and give the fix in the stack's API from [UX laws on mobile](references/ux-laws-on-mobile.md).
 
 Rank issues by blocked tasks and recovery cost, then recurring friction and visual polish. Separate platform guidance, confirmed defects and aesthetic judgment. Do not treat every stylistic preference as a violation or apply iOS conventions to Android-only UI.
 

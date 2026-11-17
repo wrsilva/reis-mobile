@@ -32,6 +32,10 @@ If the command fails, show the error to the user and stop.
 
 The CLI output has a `Language` line. Write everything the user reads in that language: `en` is English, `pt` is Brazilian Portuguese. With `-`, use the language of the user's request. Code, identifiers, file paths, commands and quoted tool output stay as they are.
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Before a build or a launch, tell the user the command, the directory, the device and what you expect to learn from it. Start anything that does not end on its own with `reis-mobile run --background -- <command>`: Flutter `flutter run -d <id>`, `flutter attach`, `flutter logs`; Android `emulator -avd <name>`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`; React Native `npx react-native start`; Expo `npx expo start`, `npx expo run:android` / `run:ios`; Kotlin Multiplatform the Android and iOS host commands. The ready and failure signals of each are in `${CLAUDE_PLUGIN_ROOT}/skills/mobile-debug/references/launching.md`. For each hypothesis you drop or keep, say which evidence decided it.
+
 ## 2. Load the instructions
 
 Read with the Read tool, in this order:

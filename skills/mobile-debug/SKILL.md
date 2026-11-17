@@ -21,6 +21,7 @@ Choose by the stack **and** by the layer the error comes from — a Flutter or R
 | A React Native or Expo app: Metro, native modules, JavaScript errors | [references/react-native.md](references/react-native.md) |
 | Kotlin Multiplatform compilation, source-set or framework integration | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 | A deep link, App Link or Universal Link that opens the browser, the wrong screen or crashes (any stack) | [references/deep-links.md](references/deep-links.md) |
+| Starting the app, an emulator, a simulator or Metro, and knowing when it is ready or why it failed (any stack) | [references/launching.md](references/launching.md) |
 
 When `reis-mobile debug` (or `/reis-mobile:debug`) ran, its `area` line points at the layer: `gradle`, `manifest`, `proguard` → Android; `xcode`, `signing`, `cocoapods`, `spm` → iOS; `pub` → Flutter; `metro` → React Native.
 
@@ -35,6 +36,19 @@ Most build failures after an upgrade are toolchain mismatches. Read the versions
 ## 4. Reproduce safely
 
 Read-only commands can run: version checks, dependency trees, `flutter doctor -v`, `./gradlew --version`, `pod --version`, `xcodebuild -version`. A build that only compiles can run when the user already ran it or agrees, since it takes time and writes build outputs.
+
+Reproducing a launch or runtime failure means running the app, and some of the commands involved never end on their own. Start those with `reis-mobile run --background -- <command>` so the session gets the first error back instead of hanging until the tool times out; run the others directly:
+
+| Stack | Never ends: `reis-mobile run --background -- …` | Ends on its own: run directly |
+|---|---|---|
+| Flutter | `flutter run -d <id>`, `flutter attach`, `flutter logs` | `flutter run --no-resident -d <id>`, `flutter build apk --debug`, `flutter install -d <id>` |
+| Native Android | `emulator -avd <name>`, `adb logcat` without `-d` | `./gradlew :app:installDebug`, `adb shell am start -n <package>/<activity>`, `adb logcat -d` |
+| Native iOS | `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console booted <bundle id>` | `xcrun simctl bootstatus <udid> -b`, `xcodebuild … build`, `xcrun simctl install booted <App.app>`, `xcrun simctl launch booted <bundle id>` |
+| React Native | `npx react-native start`, `npx react-native log-android`, `npx react-native log-ios` | `npx react-native run-android`, `npx react-native run-ios` (they open Metro in a separate window unless `--no-packager`) |
+| Expo | `npx expo start`, `npx expo run:android`, `npx expo run:ios` (the dev server starts after the build) | `npx expo run:android --no-bundler`, `npx expo run:ios --no-bundler` |
+| Kotlin Multiplatform | The Android and iOS host commands above | `./gradlew :<android app module>:installDebug`, `xcodebuild -project <iosApp>.xcodeproj -scheme <iosApp> … build` |
+
+[references/launching.md](references/launching.md) has each command's ready and failure signals. Tell the user what you are starting, on which device or simulator, and what you are waiting for.
 
 ## 5. Confirm the cause
 
