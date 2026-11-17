@@ -2,7 +2,7 @@
 
 A React Native frame crosses three execution contexts: the **JavaScript thread** (your React code), the **native UI thread**, and — with the New Architecture — the shadow tree and Fabric's rendering pipeline. A slow app is slow in one of them, and the fix differs. Identify the thread first.
 
-Related material already in this plugin: [`mobile-rn/references/performance-release.md`](../../mobile-rn/references/performance-release.md).
+Related material already in this plugin: [`mobile-rn/references/performance-release.md`](../../mobile-rn/references/performance-release.md), and the list, scroll and animation rules in [React Native Skills](../../mobile-rn/references/react-native-skills/GUIDE.md).
 
 ## Measure
 

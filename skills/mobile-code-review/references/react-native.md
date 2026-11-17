@@ -24,6 +24,7 @@ Apply to TypeScript and JavaScript sources of a React Native or Expo app, and to
 - [ ] **Inline objects and callbacks** passed to memoized components, defeating `React.memo`. Only report on hot paths.
 - [ ] **Animations driven by JavaScript state** per frame instead of Reanimated or `useNativeDriver: true`.
 - [ ] **Remote images** without caching or sized far larger than displayed.
+- [ ] **Rule-level depth.** For list, animation, scroll, navigation and UI pattern findings, check the matching rule in [React Native Skills](../../mobile-rn/references/react-native-skills/GUIDE.md) and cite its incorrect/correct example. Recommend a library the project does not use only as a proposal.
 
 ## 4. Platform and native code
 

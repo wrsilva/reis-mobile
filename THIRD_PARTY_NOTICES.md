@@ -417,6 +417,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+## vercel-labs/agent-skills
+
+- Source: https://github.com/vercel-labs/agent-skills
+- Revision: `1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62` (2026-10-27), upstream skill version 1.0.0
+- License: MIT, as declared in the upstream README (`## License` → `MIT`) and in the skill's frontmatter (`license: MIT`, `author: vercel`). The repository ships no `LICENSE` file and no copyright line; the standard MIT terms are reproduced below without inventing one.
+- Skills (0): none as standalone skills; all of its content lives in the files listed below
+- Adapted into reis-mobile skills (upstream skill → file under `skills/`): `vercel-react-native-skills` → `mobile-rn/references/react-native-skills/GUIDE.md`, with its `rules/`, `AGENTS.md`, `README.md` and `metadata.json` unchanged under `mobile-rn/references/react-native-skills/`.
+- Changes made by reis-mobile: the `skills/react-native-skills/` folder was moved into `skills/mobile-rn/references/react-native-skills/`, its `SKILL.md` renamed to `GUIDE.md` and its frontmatter replaced by an attribution line. The rules and the compiled document are unchanged. The repository's other skills (React and Next.js web performance, composition patterns with web examples, view transitions, Vercel deployment and optimization, web design and writing guidelines) are not mobile-specific and were not copied. The repository contains no agents.
+
+```text
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## External Apple design reading (not redistributed)
 
 Source: https://github.com/dickwu/apple-design-skill

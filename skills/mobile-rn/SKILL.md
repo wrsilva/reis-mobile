@@ -1,6 +1,6 @@
 ---
 name: mobile-rn
-description: Builds React Native and Expo apps in TypeScript — navigation with React Navigation or Expo Router, lists, forms, styling, gestures and animations with Reanimated, safe areas, accessibility and localization; networking with TanStack Query, response validation, persistence with MMKV, AsyncStorage, SQLite and secure storage; permissions, push notifications, deep links, background tasks, native modules and config plugins; performance with Hermes and the React profiler; and release with EAS Build, EAS Submit and EAS Update or bare Gradle and Xcode builds. Use when writing or changing React Native code, adding a native capability, configuring Expo, preparing a store build or an over-the-air update, or when the user asks how to do something in React Native, even if they do not name the library.
+description: Builds React Native and Expo apps in TypeScript — navigation with React Navigation or Expo Router, lists, forms, styling, gestures and animations with Reanimated, safe areas, accessibility and localization; networking with TanStack Query, response validation, persistence with MMKV, AsyncStorage, SQLite and secure storage; permissions, push notifications, deep links, background tasks, native modules and config plugins; performance with Hermes and the React profiler, plus rule-by-rule guidance for lists, animations, native navigators and UI patterns (React Native Skills); and release with EAS Build, EAS Submit and EAS Update or bare Gradle and Xcode builds. Use when writing or changing React Native code, adding a native capability, configuring Expo, preparing a store build or an over-the-air update, or when the user asks how to do something in React Native, even if they do not name the library.
 intents: [design, performance, release, accessibility]
 stacks: [react-native]
 ---
@@ -17,6 +17,9 @@ Guides for building React Native and Expo apps. Cross-platform topics live in th
 | Networking, server state, validation, persistence, offline | [references/data-networking.md](references/data-networking.md) |
 | Permissions, push, deep links, background work, native modules, config plugins | [references/platform-features.md](references/platform-features.md) |
 | Performance, bundle, EAS Build, store submission and over-the-air updates | [references/performance-release.md](references/performance-release.md) |
+| Rules with incorrect/correct examples: list and scroll performance, Reanimated animations, native navigators, UI patterns, state, rendering, monorepos and config (React Native Skills, by Vercel) | [references/react-native-skills/GUIDE.md](references/react-native-skills/GUIDE.md) |
+
+The React Native Skills guide lives in its own folder: the `rules/` files and `AGENTS.md` it mentions refer to that folder. Read only the rules the task needs. Several rules recommend specific libraries (LegendList or FlashList, `expo-image`, Galeria, Zeego); when the project does not already use one, propose it instead of adding it, and install versions that match the project's React Native or Expo SDK.
 
 ## Before writing code
 
