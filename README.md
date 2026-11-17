@@ -54,12 +54,15 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.0.1
+### v1.1.0
 
-#### Fixed
+#### Added
 
-- Review instructions now prioritize applicable analyzer, linter and test results, separate confirmed tool diagnostics from additional findings, and disclose missing checks. Recurring defects with precise conditions should become regression tests or lint rules.
-- README positioning now explains how AI review complements deterministic checks, replaces the lint-covered opening example, and distinguishes illustrative investigation targets from demonstrated detections.
+- SwiftUI Pro guide in `mobile-ios` (`references/swiftui-pro/GUIDE.md`), adapted from the `swiftui-pro` skill by Paul Hudson in [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) (MIT). Its review process and twelve references cover soft-deprecated and modern SwiftUI API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance, Swift and code hygiene. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`.
+
+#### Changed
+
+- The `mobile-ios` description and topic table route SwiftUI reviews to the new guide, and the iOS checklist in `mobile-code-review` points SwiftUI sources to it.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -550,7 +553,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-firebase` | Firebase setup and 13 products | — | Flutter, Android, iOS, React Native, KMP; check installed SDK support |
 | `mobile-flutter` | Flutter and Dart specifics | design, review, performance, accessibility, migration | UI and navigation, data, native code, performance, accessibility and i18n, Dart, setup |
 | `mobile-android` | Native Android specifics, from the Android team | design, performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
-| `mobile-ios` | Native iOS specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
+| `mobile-ios` | Native iOS specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release, SwiftUI Pro review guide |
 | `mobile-rn` | React Native and Expo specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
 | `mobile-kmp` | Kotlin Multiplatform shared and target boundaries | design, architecture, test, performance, review, debug and more | Source sets, Apple interop, shared Compose UI, build and profiling |
 | `mobile-detect-stack` | Deterministic stack detection with the CLI | — | — |
@@ -573,7 +576,7 @@ reis-mobile route --intent auth "review the session lifecycle"
 
 The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account, send a notification or make a purchase. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes, and a plain "analytics" request still goes to `mobile-observability`. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
 
-About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules) and [android/skills](https://github.com/android/skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules), [android/skills](https://github.com/android/skills) and [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 
@@ -689,6 +692,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
 - **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
+- **[twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill)** (MIT): the SwiftUI Pro review guide by Paul Hudson, with its twelve references, in [`mobile-ios`](skills/mobile-ios/SKILL.md).
 - **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---

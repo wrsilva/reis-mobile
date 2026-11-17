@@ -1,6 +1,6 @@
 ---
 name: mobile-ios
-description: Builds native iOS apps in Swift — SwiftUI and UIKit screens, state and data flow, NavigationStack, lists, forms and accessibility; networking with URLSession and Codable, persistence with SwiftData, Core Data, files and the Keychain; permissions, push notifications, universal links, background tasks, widgets, App Intents and StoreKit 2 purchases; performance with Instruments and MetricKit; and release with signing, TestFlight and App Store Connect. Use when writing or changing native iOS code, adding a platform feature, preparing a build for TestFlight or the App Store, or when the user asks how to do something on iOS, even if they do not name the framework.
+description: Builds native iOS apps in Swift — SwiftUI and UIKit screens, state and data flow, NavigationStack, lists, forms and accessibility; SwiftUI reviews for deprecated and modern API, view composition, data flow, resizable windows and performance (SwiftUI Pro); networking with URLSession and Codable, persistence with SwiftData, Core Data, files and the Keychain; permissions, push notifications, universal links, background tasks, widgets, App Intents and StoreKit 2 purchases; performance with Instruments and MetricKit; and release with signing, TestFlight and App Store Connect. Use when writing, reviewing or changing native iOS code, adding a platform feature, preparing a build for TestFlight or the App Store, or when the user asks how to do something on iOS, even if they do not name the framework.
 intents: [design, performance, release, accessibility]
 stacks: [ios]
 ---
@@ -17,6 +17,9 @@ Guides for building native iOS apps. Cross-platform topics live in their own ski
 | Networking, JSON, persistence, caching, offline | [references/data-networking.md](references/data-networking.md) |
 | Permissions, push, universal links, background work, widgets, App Intents, in-app purchases | [references/platform-features.md](references/platform-features.md) |
 | Performance, app size, signing, TestFlight and App Store release | [references/performance-release.md](references/performance-release.md) |
+| Reviewing or writing SwiftUI: deprecated and modern API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance and Swift hygiene (SwiftUI Pro, by Paul Hudson) | [references/swiftui-pro/GUIDE.md](references/swiftui-pro/GUIDE.md) |
+
+The SwiftUI Pro guide lives in its own folder with its references; the `references/...` paths it mentions refer to that folder. Load only the references the task needs.
 
 ## Before writing code
 
