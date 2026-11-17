@@ -58,6 +58,8 @@ export const INTENTS = {
     'wireframe', 'usabilidade', 'usability', 'hierarquia visual', 'visual hierarchy',
     'tipografia', 'typography', 'apple hig', 'human interface guidelines',
     'liquid glass', 'redesign', 'redesenhar',
+    'ux', 'laws of ux', 'leis de ux', 'lawsofux', 'ux audit', 'auditoria de ux', 'ux review',
+    'revisao de ux', 'ux checklist', 'checklist de ux',
   ],
   review: [
     'review', 'revis', 'code review', 'pull request', 'pr', 'prs', 'analis', 'avali', 'audit',
@@ -125,11 +127,15 @@ export const INTENTS = {
 export const INTENT_IDS = Object.keys(INTENTS);
 
 // Terms matched as whole words instead of stems: as stems, "pr" would also claim "premium",
-// "product" and "preço", and "ble" would claim "blend".
-export const WHOLE_WORDS = new Set(['pr', 'prs', 'ble']);
+// "product" and "preço", "ble" would claim "blend" and "ux" would claim "uxtheme".
+export const WHOLE_WORDS = new Set(['pr', 'prs', 'ble', 'ux']);
 
 // A failing build or pipeline is a debugging task, not a build/deploy task.
 export const DEBUG_DOMINATES = new Set(['build', 'deployment', 'dependency', 'migration']);
+
+// In a tie, a UX audit, review or pre-release checklist is design work: the design terms name
+// the subject, while "audit", "review" or "publish" only name the action or the moment.
+export const DESIGN_WINS_TIES = new Set(['review', 'release']);
 
 // First match wins, so the most specific stacks come first.
 export const STACK_HINTS = [

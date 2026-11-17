@@ -12,10 +12,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 - A Claude Code guard, on by default (`reis-mobile hook guard off` turns it off), that rewrites a foreground Bash call to a never-ending command into `reis-mobile run --background`, so the session gets control back instead of hanging until the tool times out.
 - Session rules: in a mobile project, a SessionStart hook (startup, resume, clear and compact) tells the session to announce long steps, report each phase by name, never block on a command that does not end, and justify each decision with its evidence, the alternatives rejected and how to verify or revert it. `REIS_MOBILE_SESSION_CONTEXT=0` turns it off.
 - `mobile-debug/references/launching.md`: which launch commands end and which do not on Flutter, native Android, native iOS, React Native, Expo and Kotlin Multiplatform, with the exact commands, the ready, progress and failure signals of each, Flutter hot reload through `--pid-file` and `SIGUSR1`, and wait loops for hosts without the CLI.
+- `mobile-ui-ux` gains Laws of UX references: the 30 Laws of UX with a component-type map, a 0–60 audit with critical, warning and suggestion tiers, and a 12-point pre-ship checklist.
+- `mobile-ui-ux` gains a mobile app UI design guide: type hierarchy, 60/30/10 color, 8-point spacing, shadows, thumb zone, peak-end emotional design and industry visual conventions.
+- `mobile-ui-ux/references/ux-laws-on-mobile.md`: what the web-oriented guides change on a phone (pressed states instead of hover, 44 pt on iOS and 48 dp on Android, bottom navigation and system back, Dynamic Type and the Material type scale instead of a fixed size limit, contrast checks, real data only for social proof) and each law's API in Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. `mobile-ui-ux-designer` uses it for audits and checklists.
 
 ### Changed
 
 - The shared agent brief gains **Progress and decisions**, the contract every agent follows: what to say before a long step, phase reports with real object names, the final report, and decisions with evidence, rejected alternatives and consequences. The debug, review, test, release, consult, debate and project commands apply it to their own flow, and `mobile-debug` and `mobile-test` start devices and apps with `--background`.
+
+### Fixed
+
+- UX audits, reviews and checklists now route to `design` and `mobile-ui-ux-designer` instead of a code review or a release: the design vocabulary gains `ux`, `laws of ux` / `leis de ux`, `ux audit` / `auditoria de ux`, `ux review` and `ux checklist` / `checklist de ux`, and a tie between design and review or release goes to design.
 
 ## [1.3.0] - 2026-11-17
 
@@ -49,7 +56,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ### Added
 
-- Fifteen Kotlin Multiplatform guides in `mobile-kmp`, adapted from the skills by Mariano Miani in [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills) (Apache-2.0): architecture review, implemented-code review, feature implementation, modularization, state management, shared Compose UI, adaptive layouts and resources, navigation, `expect`/`actual` bridges, Android App Links and deep links, data layer, testing, Gradle governance, bug fixes and refactor safety. Five theme indexes (`references/architecture.md`, `ui-navigation.md`, `platform.md`, `data-testing-build.md`, `bugfix-refactoring.md`) list them under their upstream names. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`; the upstream orchestration package (agents, hooks, `execute-ticket`) is not included.
+- Fifteen Kotlin Multiplatform guides in `mobile-kmp`: architecture review, implemented-code review, feature implementation, modularization, state management, shared Compose UI, adaptive layouts and resources, navigation, `expect`/`actual` bridges, Android App Links and deep links, data layer, testing, Gradle governance, bug fixes and refactor safety. Five theme indexes (`references/architecture.md`, `ui-navigation.md`, `platform.md`, `data-testing-build.md`, `bugfix-refactoring.md`) list them under their original names. Licenses are in `THIRD_PARTY_NOTICES.md`.
 
 ### Changed
 
@@ -59,7 +66,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ### Added
 
-- SwiftUI Pro guide in `mobile-ios` (`references/swiftui-pro/GUIDE.md`), adapted from the `swiftui-pro` skill by Paul Hudson in [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) (MIT). Its review process and twelve references cover soft-deprecated and modern SwiftUI API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance, Swift and code hygiene. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`.
+- SwiftUI Pro guide in `mobile-ios` (`references/swiftui-pro/GUIDE.md`). Its review process and twelve references cover soft-deprecated and modern SwiftUI API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance, Swift and code hygiene.
 
 ### Changed
 
@@ -93,7 +100,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 - `mobile-ui-ux-designer` agent and `mobile-ui-ux` topic skill for mobile journeys, wireframes, design tokens, component states and evidence-based interface reviews across all five stacks.
 - English and Portuguese `design` routing with platform skill selection and regression coverage for architecture, accessibility, tests and unrelated terms.
-- Apple design reading workflow linked to `dickwu/apple-design-skill` at a recorded revision and to official HIG topics. Upstream content is linked, not vendored, because the inspected revision declares no redistribution license.
+- Apple design reading workflow linked to official HIG topics.
 
 ### Changed
 
@@ -108,7 +115,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ### Added
 
-- `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation imported from `greenstevester/fastlane-skill` (MIT), attributed and pinned to their upstream revision.
+- `mobile-ci` topic skill for deployment pipelines across all five stacks, with the setup, Match, beta, release and Snapshot guides plus Xcode Cloud documentation.
 
 - Four topic skills, each with Flutter, Android, iOS, React Native and Kotlin Multiplatform references: `mobile-privacy` for consent and data lifecycle, `mobile-networking` for API integration and request recovery, `mobile-auth` for identity/session flows, and `mobile-notifications` for push/local notification lifecycles.
 - English and Portuguese `privacy`, `networking`, `auth` and `notifications` intents, handled by the existing staff engineer, with five-stack routing, prompt discovery and explicit-override tests.
@@ -238,7 +245,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 - **Breaking:** every skill starts with `mobile-`, and there are 11: topic skills with a reference per platform (`mobile-architecture`, `mobile-code-review`, `mobile-debug`, `mobile-test`, `mobile-security`, `mobile-firebase`, `mobile-detect-stack`) and platform skills with what exists only on one stack (`mobile-flutter`, `mobile-android`, `mobile-ios`, `mobile-rn`). `reis-mobile validate` enforces both kinds.
 - `mobile-architecture` replaces the Flutter architecture and state management skills (`flutter-app-architecture`, `flutter-architecture-feature-first`, `flutter-apply-architecture-best-practices`, `flutter-managing-state`, `flutter-bloc`, `flutter-riverpod`, `flutter-provider`, `flutter-change-notifier`, `flutter-login-usecase`) and adds architecture guides for Android, iOS and React Native.
 - `mobile-flutter` holds the other Flutter skills, grouped by theme: UI and navigation, data, native code, performance, accessibility and i18n, Dart, and setup.
-- `mobile-android` holds the 22 remaining guides from `android/skills`, grouped by theme, each as a folder with its references and scripts.
+- `mobile-android` holds the 22 remaining Android guides, grouped by theme, each as a folder with its references and scripts.
 - New `mobile-ios` and `mobile-rn` skills with guides for UI and navigation, data and networking, platform features, and performance and release.
 - The plugin's fixed context cost drops to about 3,900 tokens per session.
 - The npm description and keywords, and the README introduction, name the stacks and tools people search for (Flutter, iOS, React Native, Claude Code, Codex, agent skills).
@@ -250,7 +257,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 - `/reis-mobile:debug` and `reis-mobile debug`: routes a build or runtime failure to the debug agent and skills, adds the doctor report, and answers with the cause, evidence, minimal fix and verification. It only changes the project after the user asks to apply the fix.
 - Architect, performance and test agents for native Android (`android-*`), native iOS (`ios-*`) and React Native (`rn-*`), alongside the Flutter ones. `lead-mobile` and `/reis-mobile:debate` pick the specialists of the detected stack.
 - Skills written for reis-mobile: `android-gradle-build-debug`, `ios-xcode-build-debug`, `ios-cocoapods-debug`, `flutter-build-debug`, `android-code-review` and `ios-code-review`.
-- The skills from [android/skills](https://github.com/android/skills) (Apache-2.0), credited in `THIRD_PARTY_NOTICES.md`, prefixed with `android-`: `android-agp-9-upgrade`, `android-r8-analyzer`, `android-intent-security`, `android-profiler` and `android-play-policy-insights` are routed automatically, and `testing-setup` became part of `mobile-test`; the others (Compose, navigation, Play, camera, media, identity, on-device AI, Wear, TV, XR and the Android CLI) are triggered by their description.
+- Android skills, prefixed with `android-`: `android-agp-9-upgrade`, `android-r8-analyzer`, `android-intent-security`, `android-profiler` and `android-play-policy-insights` are routed automatically, and `testing-setup` became part of `mobile-test`; the others (Compose, navigation, Play, camera, media, identity, on-device AI, Wear, TV, XR and the Android CLI) are triggered by their description.
 - `.reis-mobile/config.yaml` with `app: <folder>`, so every command analyzes the mobile app of a monorepo from anywhere in the repository.
 - Skills can declare `areas` (`gradle`, `xcode`, `cocoapods`, `signing`, `pub`...). The router ranks the skill for the area detected in the prompt first among skills of the same stack.
 
@@ -348,7 +355,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 ### Added
 
 - Agents `flutter-architect`, `flutter-performance-engineer`, `flutter-test-engineer`, `mobile-staff-engineer`, `plugin-native-expert` and `lead-mobile`.
-- 63 Flutter, Dart and Firebase skills: 25 from `flutter/skills`, 8 from `dart-lang/skills`, 28 from `evanca/flutter-ai-rules` and 2 original ones (`flutter-login-usecase`, `flutter-secure-token-store`).
+- 63 Flutter, Dart and Firebase skills, including `flutter-login-usecase` and `flutter-secure-token-store`.
 - `THIRD_PARTY_NOTICES.md` with origin and license; frontmatter with `source` and `license` in third-party skills.
 - Frontmatter parser with support for `|` and `>` blocks.
 
