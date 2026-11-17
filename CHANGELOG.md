@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-11-17
+
+### Fixed
+
+- The Claude Code plugin and marketplace descriptions now list Kotlin Multiplatform alongside Flutter, Android, iOS and React Native, matching `package.json` and the README.
+
 ## [1.2.1] - 2026-11-17
 
 ### Fixed
