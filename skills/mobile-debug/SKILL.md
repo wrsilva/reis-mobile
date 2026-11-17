@@ -37,7 +37,18 @@ Most build failures after an upgrade are toolchain mismatches. Read the versions
 
 Read-only commands can run: version checks, dependency trees, `flutter doctor -v`, `./gradlew --version`, `pod --version`, `xcodebuild -version`. A build that only compiles can run when the user already ran it or agrees, since it takes time and writes build outputs.
 
-Reproducing a launch or runtime failure means running the app. `flutter run`, an emulator, Metro and log tails never end on their own: start them with `reis-mobile run --background -- <command>` and use the ready and failure signals in [references/launching.md](references/launching.md), so the session gets the first error back instead of hanging until the tool times out. Tell the user what you are starting, on which device, and what you are waiting for.
+Reproducing a launch or runtime failure means running the app, and some of the commands involved never end on their own. Start those with `reis-mobile run --background -- <command>` so the session gets the first error back instead of hanging until the tool times out; run the others directly:
+
+| Stack | Never ends: `reis-mobile run --background -- …` | Ends on its own: run directly |
+|---|---|---|
+| Flutter | `flutter run -d <id>`, `flutter attach`, `flutter logs` | `flutter run --no-resident -d <id>`, `flutter build apk --debug`, `flutter install -d <id>` |
+| Native Android | `emulator -avd <name>`, `adb logcat` without `-d` | `./gradlew :app:installDebug`, `adb shell am start -n <package>/<activity>`, `adb logcat -d` |
+| Native iOS | `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console booted <bundle id>` | `xcrun simctl bootstatus <udid> -b`, `xcodebuild … build`, `xcrun simctl install booted <App.app>`, `xcrun simctl launch booted <bundle id>` |
+| React Native | `npx react-native start`, `npx react-native log-android`, `npx react-native log-ios` | `npx react-native run-android`, `npx react-native run-ios` (they open Metro in a separate window unless `--no-packager`) |
+| Expo | `npx expo start`, `npx expo run:android`, `npx expo run:ios` (the dev server starts after the build) | `npx expo run:android --no-bundler`, `npx expo run:ios --no-bundler` |
+| Kotlin Multiplatform | The Android and iOS host commands above | `./gradlew :<android app module>:installDebug`, `xcodebuild -project <iosApp>.xcodeproj -scheme <iosApp> … build` |
+
+[references/launching.md](references/launching.md) has each command's ready and failure signals. Tell the user what you are starting, on which device or simulator, and what you are waiting for.
 
 ## 5. Confirm the cause
 

@@ -299,7 +299,7 @@ export async function followLog(logPath, options = {}) {
           return finish(exit ? 'exit' : 'vanished');
         }
       }
-      if (options.settle && header.ready === 'none' && now - (header.started ?? following) >= settleMs) return finish('running');
+      if (options.settle && detected.settle !== false && header.ready === 'none' && now - (header.started ?? following) >= settleMs) return finish('running');
       if (now - following >= waitMs) return finish(ready ? 'watching' : 'waiting');
       await sleep(POLL_MS);
     }

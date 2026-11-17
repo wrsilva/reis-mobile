@@ -10,6 +10,7 @@ reis-mobile is a Claude Code plugin with a Node.js CLI that orchestrates agents 
 
 - **English only.** Agents, skills, commands, documentation, templates, comments and commit messages are written in English. Portuguese stays only where it is functional: the intent vocabulary in `core/router/intents.mjs` and the tests that cover Portuguese prompts.
 - **Mobile first.** Every new agent, skill or command must directly help mobile development.
+- **Every stack, with its own commands.** When an agent, skill, command or document cites a command, give the specific command for each stack it applies to (Flutter, native Android, native iOS, React Native/Expo, Kotlin Multiplatform), not one stack's command as the example for all and not a generic description such as "start the emulator". Use a placeholder for a value that differs by project (module, scheme, bundle id, device id) and say where to read the real one.
 - **Zero dependencies.** `core/` and `bin/` use only the Node.js 22+ standard library. Do not add npm packages.
 - **ES modules** (`.mjs`), 2 spaces, single quotes, semicolons.
 - **Do not invent.** Skill checklists cite APIs, lints, flags and store requirements that actually exist. When in doubt, tell the model to check the version in the project's lock file instead of asserting it.

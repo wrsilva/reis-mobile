@@ -301,7 +301,7 @@ Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &
 
 - **compact** for builds, tests, analyzers and installs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines, and the final summary. Repeated errors (such as the same one for arm64 and x86_64) appear once. If a failing command matches no known error pattern, the last lines are shown instead.
 - **light** for queries whose output is the answer (`flutter doctor`, `adb devices`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and for any other command: everything except progress bars and repeated lines.
-- **stream** for commands that keep running (`flutter run`, Metro, `adb logcat`): lines print as they arrive; an unfiltered `adb logcat` shows only warnings, errors and crashes.
+- **stream** for commands that keep running (`flutter run`, `emulator`, `adb logcat`, `xcrun simctl spawn booted log stream`, `npx react-native start`, `npx expo start`): lines print as they arrive; an unfiltered `adb logcat` shows only warnings, errors and crashes.
 
 `--raw` passes the output through, `--mode` overrides the mode, `--max-lines` changes the limit and `--json` returns the kept lines with the counts. Full logs go to the system temp directory (or `REIS_MOBILE_LOG_DIR`) and are deleted after a week. The agents use `reis-mobile run` when the CLI is installed; inside the Claude Code plugin, it is on the PATH.
 
@@ -311,11 +311,26 @@ Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &
 [reis-mobile run: flutter build apk · running 1m30s · last output 52s ago: Running Gradle task 'assembleRelease'...]
 ```
 
-**Commands that never end.** `flutter run`, an emulator, Metro, `expo start` and `adb logcat` keep running until stopped, so a caller waiting for them hangs until its timeout. `--background` starts the command detached, shows its output and progress, and returns as soon as it is ready, fails or `--wait` seconds (default 100) pass:
+**Commands that never end.** Some launch commands keep running until stopped, so a caller waiting for them hangs until its timeout:
+
+| Stack | Never ends | Ends on its own |
+|---|---|---|
+| Flutter | `flutter run -d <id>`, `flutter attach`, `flutter logs` | `flutter run --no-resident`, `flutter install -d <id>` |
+| Native Android | `emulator -avd <name>`, `adb logcat` without `-d` | `./gradlew :app:installDebug`, `adb shell am start -n <package>/<activity>` |
+| Native iOS | `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console booted <bundle id>` | `xcrun simctl bootstatus <udid> -b`, `xcrun simctl launch booted <bundle id>` |
+| React Native | `npx react-native start`, `npx react-native log-android` / `log-ios` | `npx react-native run-android` / `run-ios` |
+| Expo | `npx expo start`, `npx expo run:android` / `run:ios` (the dev server starts after the build) | `npx expo run:android --no-bundler` / `run:ios --no-bundler` |
+| Kotlin Multiplatform | The Android and iOS host commands above | `./gradlew :<android app module>:installDebug`, `xcodebuild -project <iosApp>.xcodeproj … build` |
+
+`--background` starts the command detached, shows its output and progress, and returns as soon as it is ready, fails or `--wait` seconds (default 100) pass:
 
 ```bash
 reis-mobile run --background -- flutter run -d emulator-5554 --pid-file /tmp/app.pid
-reis-mobile run --follow <log> --wait 15     # what it printed since, e.g. after kill -USR1 (hot reload)
+reis-mobile run --background -- emulator -avd Pixel_9_API_36
+reis-mobile run --background -- xcrun simctl spawn booted log stream --predicate 'subsystem == "com.example.app"'
+reis-mobile run --background -- npx react-native start
+reis-mobile run --background --ready-url http://localhost:8081 -- npx expo start
+reis-mobile run --follow <log> --wait 15     # what it printed since, e.g. after kill -USR1 (Flutter hot reload)
 reis-mobile run --stop <log>                 # SIGTERM to its process group, SIGKILL after 10 s
 ```
 
@@ -329,7 +344,7 @@ Flutter run key commands.
 
 The exit code is 0 when it is ready, the command's own code when it ended, and 124 when the wait ran out while it was still starting. Readiness is built in for `flutter run` and `flutter attach` (`Flutter run key commands.`), `emulator` (`Boot completed in … ms`) and `react-native start` (`/status` answers `packager-status:running`); `--ready <regex>` and `--ready-url <url>` cover any other command, and a command without a signal returns after 10 seconds of running. Every status line starts with `[reis-mobile run: `, in the output and in the log, so one filter follows progress, readiness and the exit. The [launching reference](skills/mobile-debug/references/launching.md) lists the ready and failure signals per stack.
 
-**Guard.** In Claude Code, a Bash call that would block on one of those commands is rewritten to `reis-mobile run --background`, unless it already runs with `run_in_background`. The guard is on by default; `reis-mobile hook guard off` turns it off. It reads only the commands that name `flutter`, `emulator`, `logcat`, `react-native`, `expo` or `simctl`, and when RTK would rewrite the same call, it blocks the call with the command to run instead.
+**Guard.** In Claude Code, a Bash call that would block on a command from the "Never ends" column is rewritten to `reis-mobile run --background`, unless it already runs with `run_in_background`. The guard is on by default; `reis-mobile hook guard off` turns it off. It reads only the commands that name `flutter`, `emulator`, `logcat`, `react-native`, `expo` or `simctl`, and when RTK would rewrite the same call, it blocks the call with the command to run instead.
 
 **Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when [RTK](https://github.com/rtk-ai/rtk) is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
 

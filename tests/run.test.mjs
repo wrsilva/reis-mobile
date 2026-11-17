@@ -145,7 +145,10 @@ describe('run: commands that keep running', () => {
     'adb logcat *:E',
     'npx react-native start --port 8088',
     'npx expo start',
+    'npx expo run:android',
+    'npx expo run:ios --device "iPhone 16"',
     'xcrun simctl spawn booted log stream --level debug',
+    'xcrun simctl launch --console booted com.example.app',
   ];
   const finite = [
     'flutter run --no-resident -d emulator-5554',
@@ -156,7 +159,10 @@ describe('run: commands that keep running', () => {
     'adb logcat -t 100',
     'adb logcat -c',
     'npx react-native run-android',
-    'npx expo run:ios',
+    'npx react-native run-ios',
+    'npx expo run:ios --no-bundler',
+    'xcrun simctl bootstatus 1A2B -b',
+    'xcrun simctl launch booted com.example.app',
     'npm start',
     'xcrun simctl spawn booted log show --last 5m',
     './gradlew assembleDebug',
@@ -179,6 +185,8 @@ describe('run: commands that keep running', () => {
     assert.equal(metro.readyUrl, 'http://localhost:8088/status');
     assert.equal(metro.readyBody, 'packager-status:running');
     assert.equal(identify(['react-native start']).readyUrl, 'http://localhost:8081/status');
+    // expo run:* builds before it serves: no early "running" report.
+    assert.equal(identify(['npx expo run:android']).settle, false);
   });
 
   it('formats durations for status lines', () => {

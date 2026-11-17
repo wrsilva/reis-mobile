@@ -44,7 +44,7 @@ Commands:
   release [request...]       Prepare release evidence context (does not build or publish)
   run [options] -- <command> Run a build, test or tool command and print a compact view of its output
   hook [on|off]              Show or set the optional Claude Code hook that routes mobile commands through run
-  hook guard [on|off]        Show or set the guard that starts never-ending commands (flutter run...) with run --background
+  hook guard [on|off]        Show or set the guard that starts never-ending commands with run --background (see run --help)
   providers                  List the external model providers and what each one needs
   consult [question...]      Ask the configured external providers the same question
   mcp                        Serve the read-only commands to MCP clients over stdio (Cursor, Claude Code, Codex...)
@@ -144,10 +144,16 @@ tests, warning headlines and the final summary. The exit code is the command's. 
 output is saved to a log file whose path is printed at the end. When nothing has been shown
 for 30 seconds, a progress line reports how long the command has run and its last output.
 
-Commands that keep running (flutter run, emulator, react-native start, expo start, adb logcat)
-block the caller until they are stopped. --background starts them detached and returns when
-they are ready, end or --wait passes, with the PID, the log and the stop command. Exit codes:
-0 ready or running, the command's own code when it ended, 124 still starting when the wait ran out.
+Some commands keep running and block the caller until they are stopped:
+  Flutter               flutter run, flutter attach, flutter logs
+  Native Android        emulator -avd <name>, adb logcat (without -d)
+  Native iOS            xcrun simctl spawn booted log stream, xcrun simctl launch --console
+  React Native          npx react-native start, npx react-native log-android / log-ios
+  Expo                  npx expo start, npx expo run:android / run:ios (without --no-bundler)
+  Kotlin Multiplatform  the Android and iOS host commands above
+--background starts them detached and returns when they are ready, end or --wait passes, with
+the PID, the log and the stop command. Exit codes: 0 ready or running, the command's own code
+when it ended, 124 still starting when the wait ran out.
 
 Examples:
   reis-mobile run -- flutter test
@@ -156,6 +162,8 @@ Examples:
   reis-mobile run -- "cd ios && pod install"
   reis-mobile run --background -- flutter run -d emulator-5554 --pid-file /tmp/app.pid
   reis-mobile run --background -- emulator -avd Pixel_9
+  reis-mobile run --background -- xcrun simctl spawn booted log stream --predicate 'subsystem == "com.example.app"'
+  reis-mobile run --background -- npx react-native start
   reis-mobile run --background --ready-url http://localhost:8081 -- npx expo start
 
 Options:
@@ -231,7 +239,10 @@ async function commandHook({ prompt, json }) {
     }
   }
   if (settings.guard) {
-    console.log('✓ Guard on: a Claude Code Bash call that would block on a command that never ends (flutter run, emulator, react-native start, expo start, adb logcat) starts it with `reis-mobile run --background` and returns when it is ready. Turn off with `reis-mobile hook guard off`.');
+    console.log('✓ Guard on: a Claude Code Bash call that would block on a command that never ends starts it with `reis-mobile run --background` and returns when it is ready:');
+    console.log('  Flutter `flutter run`, `flutter attach`, `flutter logs`; Android `emulator -avd`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`;');
+    console.log('  React Native `npx react-native start`, `log-android`, `log-ios`; Expo `npx expo start`, `npx expo run:android` / `run:ios`; Kotlin Multiplatform the Android and iOS host commands.');
+    console.log('  Turn off with `reis-mobile hook guard off`.');
   } else {
     console.log('Guard off: never-ending commands run as written and block the call until it times out. Turn on with `reis-mobile hook guard on`.');
   }

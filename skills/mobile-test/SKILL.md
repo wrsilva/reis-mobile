@@ -74,7 +74,18 @@ Resolve the command from the project's scripts, Gradle tasks, Xcode scheme/test 
 
 For instrumented, UI and end-to-end tests, discover available devices and the project's runner policy. Use a compatible local emulator or simulator when authorized by the task; do not erase its data or silently switch to a physical device. If the SDK, runtime or destination is unavailable, report the exact blocker and the resolved command that remains unrun. A build, a skipped test or an empty filtered run is not a passing test: inspect the test count and results.
 
-Booting an emulator or simulator, starting Metro and launching the app do not end on their own. Start them with `reis-mobile run --background -- <command>` and wait on the ready and failure signals in the [launching reference](../mobile-debug/references/launching.md), so a device that never boots returns an error instead of a hung call. Before a long suite, tell the user the command, the device and the expected duration; afterwards, the counts, the duration and the first failure.
+Prepare the device with commands that return. Some setup steps never end on their own and go through `reis-mobile run --background -- <command>`, so a device that never boots returns an error instead of a hung call:
+
+| Stack | Setup that never ends (`--background`) | Setup and test runs that end |
+|---|---|---|
+| Flutter | `flutter run -d <id>` when a test attaches to a running app | `flutter emulators --launch <id>`, `flutter test integration_test -d <id>`, `flutter drive …` |
+| Native Android | `emulator -avd <name>` | `adb wait-for-device`, `./gradlew :app:connectedDebugAndroidTest` |
+| Native iOS | — | `xcrun simctl bootstatus <udid> -b`, `xcodebuild test -scheme <App> -destination 'platform=iOS Simulator,id=<udid>'` |
+| React Native | `npx react-native start` (Metro for a debug build) | `npx detox build -c <config>`, `npx detox test -c <config>`, `maestro test <flow>` |
+| Expo | `npx expo start` | `maestro test <flow>`, `npx detox test -c <config>` |
+| Kotlin Multiplatform | The Android host's `emulator -avd <name>` | `./gradlew allTests`, `./gradlew :<module>:iosSimulatorArm64Test`, the host apps' Android and iOS test commands |
+
+The [launching reference](../mobile-debug/references/launching.md) has each command's ready and failure signals. Before a long suite, tell the user the command, the device and the expected duration; afterwards, the counts, the duration and the first failure.
 
 ## Output
 

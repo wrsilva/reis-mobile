@@ -10,7 +10,7 @@ Arguments received: `$ARGUMENTS`
 
 ## Progress and decisions
 
-Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Before each test run, tell the user the exact command, the directory, the device and the expected duration; after it, the counts, the duration and the first failure. Boot devices and start apps with `reis-mobile run --background -- <command>` so a device that never boots ends the wait with an error. Explain why each test targets the behavior it does and which cheaper test you rejected.
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Before each test run, tell the user the exact command, the directory, the device and the expected duration; after it, the counts, the duration and the first failure. Start setup that never ends with `reis-mobile run --background -- <command>` so a device that never boots ends the wait with an error: Android `emulator -avd <name>`, React Native `npx react-native start`, Expo `npx expo start`, Flutter `flutter run -d <id>` when a test attaches to a running app. `xcrun simctl bootstatus <udid> -b`, `flutter emulators --launch <id>`, `adb wait-for-device` and the test commands themselves end on their own. Explain why each test targets the behavior it does and which cheaper test you rejected.
 
 ## 1. Route the request
 

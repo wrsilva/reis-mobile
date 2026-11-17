@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Claude Code PreToolUse hook. It runs before every Bash call, so it stays cheap: it reads the
 // switches and exits without output unless one applies.
-//   guard (on by default)  a command that never ends (flutter run, emulator, react-native start,
-//                          expo start, adb logcat) starts with `reis-mobile run --background`
+//   guard (on by default)  a command that never ends starts with `reis-mobile run --background`:
+//                          flutter run/attach/logs, emulator, adb logcat, simctl log stream and
+//                          launch --console, react-native start/log-*, expo start and run:*
 //   hook (`reis-mobile hook on`)  recognized mobile build and test commands go through `reis-mobile run`
 import { readRunSettings } from '../core/run/settings.mjs';
 

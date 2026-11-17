@@ -1,5 +1,5 @@
 {
-  "description": "Warn when a newer reis-mobile release is available; in a mobile project, give the session the progress and decisions rules; start commands that never end (flutter run, emulator, Metro) with `reis-mobile run --background` instead of blocking; and, when `reis-mobile hook on` enabled it, route mobile build and test commands through `reis-mobile run`.",
+  "description": "Warn when a newer reis-mobile release is available; in a mobile project, give the session the progress and decisions rules; start commands that never end (flutter run, emulator, adb logcat, simctl log stream, react-native start, expo start) with `reis-mobile run --background` instead of blocking; and, when `reis-mobile hook on` enabled it, route mobile build and test commands through `reis-mobile run`.",
   "hooks": {
     "SessionStart": [
       {

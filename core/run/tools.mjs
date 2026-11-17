@@ -11,6 +11,8 @@
  *
  * A profile may also carry:
  *   endless    the command does not end on its own (an app session, a dev server, a log tail)
+ *   settle     false when --background must not report "running" after a few seconds without a
+ *              ready signal, because the command builds before it serves
  *   ready      an output line that proves the command is usable
  *   readyUrl   a URL that answers once it is usable, with `readyBody` in the answer when set
  */
@@ -278,8 +280,11 @@ function expoProfile(args) {
   const sub = firstPositional(args);
   const label = `expo${sub ? ` ${sub}` : ''}`;
   if (sub === 'start' || sub === undefined) return stream(label, ['metro', 'expo', 'common'], { endless: true });
-  if (sub === 'run:android') return profile(label, 'compact', ['expo', 'metro', ...ANDROID_GRADLE]);
-  if (sub === 'run:ios') return profile(label, 'compact', ['expo', 'metro', ...IOS_XCODE]);
+  // run:* starts the dev server after the build unless --no-bundler, so it keeps running; it has no
+  // ready line, and returning after a short settle would report a running app during the build.
+  const devServer = has(args, '--no-bundler') ? {} : { endless: true, settle: false };
+  if (sub === 'run:android') return profile(label, 'compact', ['expo', 'metro', ...ANDROID_GRADLE], devServer);
+  if (sub === 'run:ios') return profile(label, 'compact', ['expo', 'metro', ...IOS_XCODE], devServer);
   if (sub === 'prebuild') return profile(label, 'compact', ['expo', 'cocoapods', 'common']);
   if (sub?.startsWith('export')) return profile(label, 'compact', ['expo', 'metro', 'common']);
   if (sub === 'install') return profile(label, 'compact', ['expo', 'npm', 'common']);
@@ -391,6 +396,8 @@ function identifyOne([exe, ...args]) {
     const sub = firstPositional(args);
     const label = `${tool}${sub ? ` ${sub}` : ''}`;
     if (tool === 'simctl' && sub === 'spawn' && args.includes('log')) return stream(label, ['common'], { endless: args.includes('stream') });
+    // `launch --console` blocks and prints the app's output until the app exits.
+    if (tool === 'simctl' && sub === 'launch' && has(args, '--console', '--console-pty')) return stream(label, ['common'], { endless: true });
     return light(label);
   }
   if (SIMPLE[tool]) return SIMPLE[tool](args);
