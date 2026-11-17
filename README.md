@@ -305,7 +305,35 @@ Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &
 
 `--raw` passes the output through, `--mode` overrides the mode, `--max-lines` changes the limit and `--json` returns the kept lines with the counts. Full logs go to the system temp directory (or `REIS_MOBILE_LOG_DIR`) and are deleted after a week. The agents use `reis-mobile run` when the CLI is installed; inside the Claude Code plugin, it is on the PATH.
 
+**Progress.** A quiet command is never silent: after 30 seconds without a shown line, a progress line reports the elapsed time and what the command printed last, including a line still in progress such as Flutter's `Running Gradle task 'assembleDebug'...`. The closing line carries the duration. `--heartbeat <seconds>` (or `REIS_MOBILE_HEARTBEAT`) changes the interval and `0` turns it off.
+
+```text
+[reis-mobile run: flutter build apk · running 1m30s · last output 52s ago: Running Gradle task 'assembleRelease'...]
+```
+
+**Commands that never end.** `flutter run`, an emulator, Metro, `expo start` and `adb logcat` keep running until stopped, so a caller waiting for them hangs until its timeout. `--background` starts the command detached, shows its output and progress, and returns as soon as it is ready, fails or `--wait` seconds (default 100) pass:
+
+```bash
+reis-mobile run --background -- flutter run -d emulator-5554 --pid-file /tmp/app.pid
+reis-mobile run --follow <log> --wait 15     # what it printed since, e.g. after kill -USR1 (hot reload)
+reis-mobile run --stop <log>                 # SIGTERM to its process group, SIGKILL after 10 s
+```
+
+```text
+Launching lib/main.dart on Web Server in debug mode...
+[reis-mobile run: flutter run · running 11s · last output 10s ago: Launching lib/main.dart on Web Server in debug mode...]
+lib/main.dart is being served at http://localhost:8099
+Flutter run key commands.
+[reis-mobile run: flutter run · ready after 14s · running in the background, pid 57074 · follow: … · stop: … · full log: …]
+```
+
+The exit code is 0 when it is ready, the command's own code when it ended, and 124 when the wait ran out while it was still starting. Readiness is built in for `flutter run` and `flutter attach` (`Flutter run key commands.`), `emulator` (`Boot completed in … ms`) and `react-native start` (`/status` answers `packager-status:running`); `--ready <regex>` and `--ready-url <url>` cover any other command, and a command without a signal returns after 10 seconds of running. Every status line starts with `[reis-mobile run: `, in the output and in the log, so one filter follows progress, readiness and the exit. The [launching reference](skills/mobile-debug/references/launching.md) lists the ready and failure signals per stack.
+
+**Guard.** In Claude Code, a Bash call that would block on one of those commands is rewritten to `reis-mobile run --background`, unless it already runs with `run_in_background`. The guard is on by default; `reis-mobile hook guard off` turns it off. It reads only the commands that name `flutter`, `emulator`, `logcat`, `react-native`, `expo` or `simctl`, and when RTK would rewrite the same call, it blocks the call with the command to run instead.
+
 **Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when [RTK](https://github.com/rtk-ai/rtk) is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
+
+**Session rules.** When a Claude Code session starts, resumes, is cleared or compacted in a mobile project, the plugin adds three rules to it: say what runs, where, why and for how long before a long step and report each phase by name; never block on a command that does not end; and give every decision its evidence, the alternatives rejected and how to verify or revert it. The full contract is in [Progress and decisions](docs/agent-context.md#progress-and-decisions), which every agent and command follows. `REIS_MOBILE_SESSION_CONTEXT=0` turns the session rules off.
 
 ### Test
 

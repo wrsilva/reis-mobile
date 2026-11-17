@@ -8,10 +8,11 @@ import { describe, it } from 'node:test';
 
 import { parseRunArgs } from '../core/run/args.mjs';
 import { Compactor, cleanLine } from '../core/run/compact.mjs';
-import { handlePreToolUse, rewriteCommand, splitCommandLine } from '../core/run/hook.mjs';
+import { handlePreToolUse, planRewrite, rewriteCommand, splitCommandLine } from '../core/run/hook.mjs';
 import { runCommand } from '../core/run/runner.mjs';
-import { isRunHookEnabled, setRunHook } from '../core/run/settings.mjs';
-import { identify } from '../core/run/tools.mjs';
+import { isRunHookEnabled, readRunSettings, setRunGuard, setRunHook } from '../core/run/settings.mjs';
+import { duration } from '../core/run/status.mjs';
+import { READY, identify } from '../core/run/tools.mjs';
 
 const FIXTURES = new URL('./fixtures/run/', import.meta.url);
 const fixture = (name) => readFileSync(new URL(`${name}.txt`, FIXTURES), 'utf8');
@@ -130,6 +131,61 @@ describe('run: tool identification', () => {
     assert.equal(identify(['adb logcat']).streamFilter, 'logcatErrors');
     assert.equal(identify(['adb logcat *:E']).streamFilter, undefined);
     assert.equal(identify(['adb logcat -s MyApp']).streamFilter, undefined);
+  });
+});
+
+describe('run: commands that keep running', () => {
+  const endless = [
+    'flutter run -d emulator-5554',
+    'fvm flutter run --flavor dev',
+    'flutter attach',
+    'flutter logs',
+    'emulator -avd Pixel_9',
+    'adb logcat',
+    'adb logcat *:E',
+    'npx react-native start --port 8088',
+    'npx expo start',
+    'xcrun simctl spawn booted log stream --level debug',
+  ];
+  const finite = [
+    'flutter run --no-resident -d emulator-5554',
+    'flutter test',
+    'flutter build apk',
+    'emulator -list-avds',
+    'adb logcat -d',
+    'adb logcat -t 100',
+    'adb logcat -c',
+    'npx react-native run-android',
+    'npx expo run:ios',
+    'npm start',
+    'xcrun simctl spawn booted log show --last 5m',
+    './gradlew assembleDebug',
+  ];
+
+  for (const command of endless) {
+    it(`${command} does not end on its own`, () => assert.equal(identify([command]).endless, true));
+  }
+  for (const command of finite) {
+    it(`${command} ends on its own`, () => assert.ok(!identify([command]).endless));
+  }
+
+  it('knows the readiness signal of flutter run, the emulator and the React Native dev server', () => {
+    assert.equal(identify(['flutter run']).ready, READY.flutter);
+    assert.ok(READY.flutter.test('Flutter run key commands.'));
+    assert.ok(!READY.flutter.test('Flutter run key commands. extra'));
+    assert.equal(identify(['emulator -avd Pixel_9']).ready, READY.emulator);
+    assert.ok(READY.emulator.test('INFO         | Boot completed in 12345 ms'));
+    const metro = identify(['npx react-native start --port=8088']);
+    assert.equal(metro.readyUrl, 'http://localhost:8088/status');
+    assert.equal(metro.readyBody, 'packager-status:running');
+    assert.equal(identify(['react-native start']).readyUrl, 'http://localhost:8081/status');
+  });
+
+  it('formats durations for status lines', () => {
+    assert.equal(duration(420), '0.4s');
+    assert.equal(duration(12_400), '12s');
+    assert.equal(duration(125_000), '2m05s');
+    assert.equal(duration(3_780_000), '1h03m');
   });
 });
 
@@ -352,6 +408,47 @@ describe('run: runner', () => {
     assert.equal(code, 0);
     assert.match(stdout.text(), /one\ntwo/);
   });
+
+  it('prints a progress line while the command is quiet, with its last output', async () => {
+    const stderr = sink();
+    const code = await runCommand(script("process.stdout.write('Running Gradle task');setTimeout(()=>console.log(' done'),700)"), {
+      log: false, stdout: sink(), stderr, heartbeat: 0.15, mode: 'compact',
+    });
+    assert.equal(code, 0);
+    assert.match(stderr.text(), /\[reis-mobile run: node · running [\d.]+s · last output [\d.]+s ago: Running Gradle task\]/);
+    assert.match(stderr.text(), /exit 0 · [\d.]+s · /);
+  });
+
+  it('says so when a quiet command printed nothing yet, and stays silent with --heartbeat 0', async () => {
+    const quiet = script('setTimeout(()=>{},500)');
+    const loud = sink();
+    await runCommand(quiet, { log: false, stdout: sink(), stderr: loud, heartbeat: 0.15 });
+    assert.match(loud.text(), /running [\d.]+s · no output yet/);
+
+    const off = sink();
+    await runCommand(quiet, { log: false, stdout: sink(), stderr: off, heartbeat: 0 });
+    assert.doesNotMatch(off.text(), /running [\d.]+s/);
+  });
+
+  it('reports readiness once and writes the ready and exit lines to the log', async () => {
+    const logDir = await mkdtemp(join(tmpdir(), 'reis-run-'));
+    const stderr = sink();
+    await runCommand(script("console.log('Server READY');console.log('Server READY')"), { logDir, stdout: sink(), stderr, ready: /READY/ });
+    assert.equal(stderr.text().match(/ready after/g).length, 1);
+    assert.match(stderr.text(), /ready after [\d.]+s · signal: Server READY/);
+    const [log] = await readdir(logDir);
+    const saved = await readFile(join(logDir, log), 'utf8');
+    assert.match(saved, /^\[reis-mobile run: node · ready after [\d.]+s/m);
+    assert.match(saved, /^\[reis-mobile run: node · exit 0 · [\d.]+s\]$/m);
+  });
+
+  it('warns that a command which never ends blocks the caller', async () => {
+    const stderr = sink();
+    // An empty PATH makes sure no real emulator starts; the warning comes before the spawn.
+    const code = await runCommand(['emulator', '-avd', 'Pixel_9'], { log: false, stdout: sink(), stderr, env: { PATH: '' } });
+    assert.equal(code, 127);
+    assert.match(stderr.text(), /emulator · keeps running until stopped · .*--background/);
+  });
 });
 
 describe('run: arguments', () => {
@@ -365,6 +462,14 @@ describe('run: arguments', () => {
     const { options, command } = parseRunArgs(['--mode=light', 'xcodebuild', '-list']);
     assert.deepEqual(options, { mode: 'light' });
     assert.deepEqual(command, ['xcodebuild', '-list']);
+  });
+
+  it('reads the background, follow and readiness options', () => {
+    assert.deepEqual(parseRunArgs(['--background', '--wait', '30', '--ready-url=http://localhost:8081', '--', 'npx', 'expo', 'start']), {
+      options: { background: true, wait: '30', readyUrl: 'http://localhost:8081' },
+      command: ['npx', 'expo', 'start'],
+    });
+    assert.deepEqual(parseRunArgs(['--follow', '/tmp/x.log', '--heartbeat', '0']), { options: { follow: '/tmp/x.log', heartbeat: '0' }, command: [] });
   });
 });
 
@@ -412,6 +517,45 @@ describe('run: Claude Code hook', () => {
         updatedInput: { command: 'RUN -- flutter test', description: 'Run tests' },
       },
     });
+  });
+
+  it('starts never-ending commands with --background when the guard is on', () => {
+    const background = 'BG --';
+    const plan = (command, options) => planRewrite(command, { prefix, background, ...options });
+
+    assert.deepEqual(plan('flutter run -d emulator-5554', { compact: false, guard: true }), {
+      command: 'BG -- flutter run -d emulator-5554', compacted: [], guarded: ['flutter run'],
+    });
+    assert.equal(plan('flutter pub get && flutter run', { guard: true }).command, 'RUN -- flutter pub get && BG -- flutter run');
+    assert.equal(plan('cd android && adb logcat *:E', { compact: false, guard: true }).command, 'cd android && BG -- adb logcat *:E');
+    assert.equal(plan('flutter run --no-resident', { compact: false, guard: true }), null);
+    assert.equal(plan('flutter test', { compact: false, guard: true }), null);
+    // Without the guard a never-ending command keeps the plain runner, as before.
+    assert.equal(plan('flutter run', { guard: false }).command, 'RUN -- flutter run');
+  });
+
+  it('guards by default, but not a call that already runs in the background', () => {
+    const env = { PATH: '' };
+    const background = 'BG --';
+    const input = { tool_name: 'Bash', tool_input: { command: 'flutter run -d emulator-5554', description: 'Launch the app' } };
+
+    const output = handlePreToolUse(input, { enabled: false, guard: true, env, prefix, background });
+    assert.equal(output.hookSpecificOutput.updatedInput.command, 'BG -- flutter run -d emulator-5554');
+    assert.match(output.hookSpecificOutput.permissionDecisionReason, /flutter run does not end on its own/);
+
+    const detached = { ...input, tool_input: { ...input.tool_input, run_in_background: true } };
+    assert.equal(handlePreToolUse(detached, { enabled: false, guard: true, env, prefix, background }), null);
+    assert.equal(handlePreToolUse({ ...input, tool_input: { command: 'flutter test' } }, { enabled: false, guard: true, env, prefix, background }), null);
+    assert.equal(handlePreToolUse(input, { enabled: false, guard: false, env, prefix, background }), null);
+  });
+
+  it('keeps the guard on unless it was turned off', async () => {
+    const path = join(await mkdtemp(join(tmpdir(), 'reis-hook-')), 'config.json');
+    assert.deepEqual(await readRunSettings(path), { hook: false, guard: true });
+    await setRunGuard(false, path);
+    assert.deepEqual(await readRunSettings(path), { hook: false, guard: false });
+    await setRunHook(true, path);
+    assert.deepEqual(await readRunSettings(path), { hook: true, guard: false });
   });
 
   it('stores the hook setting next to the language setting', async () => {

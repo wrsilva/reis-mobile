@@ -8,6 +8,10 @@ allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob", "WebFetch
 
 Arguments received: `$ARGUMENTS`
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Tell the user which gate you are checking and how, report each gate's result with its evidence as you go, and justify every GO, NO-GO or unknown with the artifact, file or command output behind it. Archives and release builds are long: start them with `reis-mobile run --background -- <command>` when they may outlast the tool timeout.
+
 ## 1. Prepare context
 
 Run:

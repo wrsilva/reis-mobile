@@ -4,6 +4,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+### Added
+
+- `reis-mobile run --background -- <command>` for commands that never end on their own (`flutter run`, `flutter attach`, `emulator`, `react-native start`, `expo start`, `adb logcat`): it starts the command detached, shows its output and progress, and returns when the app is ready (exit 0), when it ends (its own exit code) or when `--wait` seconds pass while it is still starting (exit 124), printing the PID, the log, the follow command and the stop command. `--follow <log>` keeps watching it, and `--stop <log>` stops its process group after checking that the PID still belongs to that log. Verified with a real `flutter run -d web-server`: ready in 14 seconds, server up, stopped cleanly.
+- Readiness signals checked against the tools' own sources: `Flutter run key commands.` for `flutter run` and `flutter attach`, `Boot completed in … ms` for the Android emulator, and Metro's `/status` answering `packager-status:running` for `react-native start`. `--ready <regex>` and `--ready-url <url>` cover any other command.
+- A heartbeat in every `reis-mobile run`: after 30 quiet seconds, a status line with the elapsed time and the last output, including a line still in progress such as `Running Gradle task 'assembleDebug'...`. The closing line now carries the duration. `--heartbeat <seconds>` or `REIS_MOBILE_HEARTBEAT` changes it; `0` turns it off.
+- A Claude Code guard, on by default (`reis-mobile hook guard off` turns it off), that rewrites a foreground Bash call to a never-ending command into `reis-mobile run --background`, so the session gets control back instead of hanging until the tool times out.
+- Session rules: in a mobile project, a SessionStart hook (startup, resume, clear and compact) tells the session to announce long steps, report each phase by name, never block on a command that does not end, and justify each decision with its evidence, the alternatives rejected and how to verify or revert it. `REIS_MOBILE_SESSION_CONTEXT=0` turns it off.
+- `mobile-debug/references/launching.md`: how to start the app, an emulator, a simulator or Metro on each stack, with the ready, progress and failure signals and hot reload through `--pid-file` and `SIGUSR1`.
+
+### Changed
+
+- The shared agent brief gains **Progress and decisions**, the contract every agent follows: what to say before a long step, phase reports with real object names, the final report, and decisions with evidence, rejected alternatives and consequences. The debug, review, test, release, consult, debate and project commands apply it to their own flow, and `mobile-debug` and `mobile-test` start devices and apps with `--background`.
+
 ## [1.3.0] - 2026-11-17
 
 ### Added

@@ -21,6 +21,7 @@ Choose by the stack **and** by the layer the error comes from — a Flutter or R
 | A React Native or Expo app: Metro, native modules, JavaScript errors | [references/react-native.md](references/react-native.md) |
 | Kotlin Multiplatform compilation, source-set or framework integration | [references/kotlin-multiplatform.md](references/kotlin-multiplatform.md) |
 | A deep link, App Link or Universal Link that opens the browser, the wrong screen or crashes (any stack) | [references/deep-links.md](references/deep-links.md) |
+| Starting the app, an emulator, a simulator or Metro, and knowing when it is ready or why it failed (any stack) | [references/launching.md](references/launching.md) |
 
 When `reis-mobile debug` (or `/reis-mobile:debug`) ran, its `area` line points at the layer: `gradle`, `manifest`, `proguard` → Android; `xcode`, `signing`, `cocoapods`, `spm` → iOS; `pub` → Flutter; `metro` → React Native.
 
@@ -35,6 +36,8 @@ Most build failures after an upgrade are toolchain mismatches. Read the versions
 ## 4. Reproduce safely
 
 Read-only commands can run: version checks, dependency trees, `flutter doctor -v`, `./gradlew --version`, `pod --version`, `xcodebuild -version`. A build that only compiles can run when the user already ran it or agrees, since it takes time and writes build outputs.
+
+Reproducing a launch or runtime failure means running the app. `flutter run`, an emulator, Metro and log tails never end on their own: start them with `reis-mobile run --background -- <command>` and use the ready and failure signals in [references/launching.md](references/launching.md), so the session gets the first error back instead of hanging until the tool times out. Tell the user what you are starting, on which device, and what you are waiting for.
 
 ## 5. Confirm the cause
 

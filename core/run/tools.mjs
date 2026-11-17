@@ -8,7 +8,21 @@
  *   stream   commands that keep running (flutter run, Metro, logcat): print as lines arrive
  *
  * Any command works: an unrecognized tool runs in light mode.
+ *
+ * A profile may also carry:
+ *   endless    the command does not end on its own (an app session, a dev server, a log tail)
+ *   ready      an output line that proves the command is usable
+ *   readyUrl   a URL that answers once it is usable, with `readyBody` in the answer when set
  */
+
+/** Readiness lines, checked against the tools' own sources (see the launching reference of mobile-debug). */
+export const READY = {
+  // flutter_tools prints it once the app runs, with or without a terminal attached.
+  flutter: /^\s*Flutter run key commands\.\s*$/,
+  // The Android emulator prints it when the guest finishes booting.
+  emulator: /Boot completed in \d+ ms/,
+};
+const METRO_STATUS = 'packager-status:running';
 
 const WRAPPERS_WITH_FLAGS = new Set(['env', 'time', 'command', 'exec', 'nice', 'nohup', 'caffeinate', 'arch', 'sudo']);
 const NPX_VALUE_FLAGS = new Set(['-p', '--package', '-c', '--call']);
@@ -160,10 +174,12 @@ function flutterProfile(tool, args) {
       return profile(label, 'compact', ['flutter', 'dart', 'pub', 'gradle', 'kotlin', 'xcode', 'cocoapods', 'common']);
     case 'run':
       if (tool === 'dart') return dartRunProfile(label, args);
-      return stream(label, ['common']);
+      // `--no-resident` launches the app and exits instead of staying attached.
+      return stream(label, ['common'], has(args, '--no-resident') ? {} : { endless: true, ready: READY.flutter });
     case 'attach':
+      return stream(label, ['common'], { endless: true, ready: READY.flutter });
     case 'logs':
-      return stream(label, ['common']);
+      return stream(label, ['common'], { endless: true });
     case 'format':
     case 'fix':
       return light(label);
@@ -204,7 +220,9 @@ function adbProfile(args) {
   if (sub === 'logcat') {
     const rest = args.slice(args.indexOf('logcat') + 1);
     const filtered = rest.some((arg) => /^[\w*]+:[VDIWEFS*]$/.test(arg) || ['-s', '--pid', '-e', '--regex', '-d', '-c'].includes(arg));
-    return filtered ? stream(label) : stream(label, ['common'], { streamFilter: 'logcatErrors' });
+    // -d dumps and exits, -c clears, -g prints buffer sizes, -t <count> implies -d.
+    const endless = !rest.some((arg) => ['-d', '-c', '-g', '-t'].includes(arg));
+    return filtered ? stream(label, ['common'], { endless }) : stream(label, ['common'], { streamFilter: 'logcatErrors', endless });
   }
   return light(label);
 }
@@ -240,16 +258,26 @@ function reactNativeProfile(args) {
   const label = `react-native${sub ? ` ${sub}` : ''}`;
   if (['run-android', 'build-android'].includes(sub)) return profile(label, 'compact', ['rnCli', 'metro', ...ANDROID_GRADLE]);
   if (['run-ios', 'build-ios'].includes(sub)) return profile(label, 'compact', ['rnCli', 'metro', ...IOS_XCODE]);
-  if (sub === 'start') return stream(label, ['metro', 'common']);
+  if (sub === 'start') {
+    // The dev server answers GET /status with `packager-status:running` (8081 unless --port).
+    const port = optionValue(args, '--port') ?? '8081';
+    return stream(label, ['metro', 'common'], { endless: true, readyUrl: `http://localhost:${port}/status`, readyBody: METRO_STATUS });
+  }
   if (sub === 'bundle' || sub === 'ram-bundle') return profile(label, 'compact', ['metro', 'common']);
-  if (sub === 'log-android' || sub === 'log-ios') return stream(label);
+  if (sub === 'log-android' || sub === 'log-ios') return stream(label, ['common'], { endless: true });
   return light(label);
+}
+
+function optionValue(args, name) {
+  const index = args.indexOf(name);
+  if (index >= 0) return args[index + 1];
+  return args.find((arg) => arg.startsWith(`${name}=`))?.slice(name.length + 1);
 }
 
 function expoProfile(args) {
   const sub = firstPositional(args);
   const label = `expo${sub ? ` ${sub}` : ''}`;
-  if (sub === 'start' || sub === undefined) return stream(label, ['metro', 'expo', 'common']);
+  if (sub === 'start' || sub === undefined) return stream(label, ['metro', 'expo', 'common'], { endless: true });
   if (sub === 'run:android') return profile(label, 'compact', ['expo', 'metro', ...ANDROID_GRADLE]);
   if (sub === 'run:ios') return profile(label, 'compact', ['expo', 'metro', ...IOS_XCODE]);
   if (sub === 'prebuild') return profile(label, 'compact', ['expo', 'cocoapods', 'common']);
@@ -303,7 +331,7 @@ const SIMPLE = {
   lint: () => profile('lint', 'compact', ['androidLint', 'common']),
   sdkmanager: (args) => (has(args, '--list', '--list_installed', '--version') ? light('sdkmanager') : profile('sdkmanager', 'compact', ['sdkmanager', 'common'])),
   avdmanager: (args) => (firstPositional(args) === 'list' ? light('avdmanager list') : profile(`avdmanager ${firstPositional(args) ?? ''}`.trim(), 'compact', ['sdkmanager', 'common'])),
-  emulator: (args) => (has(args, '-list-avds', '-help', '-version') ? light('emulator') : stream('emulator')),
+  emulator: (args) => (has(args, '-list-avds', '-help', '-version') ? light('emulator') : stream('emulator', ['common'], { endless: true, ready: READY.emulator })),
   swiftc: () => profile('swiftc', 'compact', ['xcode', 'common']),
   swiftlint: (args) => (['version', 'rules', 'help'].includes(firstPositional(args)) ? light('swiftlint') : profile('swiftlint', 'compact', ['xcode', 'swiftLint', 'common'])),
   carthage: (args) => profile(`carthage ${firstPositional(args) ?? ''}`.trim(), ['build', 'bootstrap', 'update'].includes(firstPositional(args)) ? 'compact' : 'light', ['xcode', 'common']),
@@ -362,7 +390,7 @@ function identifyOne([exe, ...args]) {
   if (tool === 'simctl' || tool === 'xcresulttool' || tool === 'altool' || tool === 'notarytool' || tool === 'xctrace' || tool === 'devicectl') {
     const sub = firstPositional(args);
     const label = `${tool}${sub ? ` ${sub}` : ''}`;
-    if (tool === 'simctl' && sub === 'spawn' && args.includes('log')) return stream(label);
+    if (tool === 'simctl' && sub === 'spawn' && args.includes('log')) return stream(label, ['common'], { endless: args.includes('stream') });
     return light(label);
   }
   if (SIMPLE[tool]) return SIMPLE[tool](args);

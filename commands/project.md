@@ -8,6 +8,10 @@ allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Read", "Grep", "Glob", "Edit", "
 
 Arguments received: `$ARGUMENTS`
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Tell the user which app root and profile path you resolved and why, report each area of the code map as you verify it, and mark every statement you could not verify instead of guessing it.
+
 ## Resolve the mobile app and profile
 
 Run `node "${CLAUDE_PLUGIN_ROOT}/bin/reis-mobile.mjs" detect --json --dir "$PWD"`. Parse the JSON result; use `projectDir` as the app root. If `projectConfig` is present, place the profile at `.reis-mobile/project.md` beside that config file. Otherwise place it at `<projectDir>/.reis-mobile/project.md`. Do not write a profile for an unknown stack or a missing project root. Read `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md` before collecting evidence.

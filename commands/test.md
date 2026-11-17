@@ -8,6 +8,10 @@ allowed-tools: ["Bash(node:*)", "Bash(git:*)", "Bash(flutter:*)", "Bash(dart:*)"
 
 Arguments received: `$ARGUMENTS`
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. Before each test run, tell the user the exact command, the directory, the device and the expected duration; after it, the counts, the duration and the first failure. Boot devices and start apps with `reis-mobile run --background -- <command>` so a device that never boots ends the wait with an error. Explain why each test targets the behavior it does and which cheaper test you rejected.
+
 ## 1. Route the request
 
 Extract `--base <ref>` if present; the remaining arguments are the user's test request in free text. Run:

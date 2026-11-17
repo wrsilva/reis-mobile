@@ -32,6 +32,29 @@ Trace at least one concrete path through the relevant objects: an action to a st
 - Run builds, tests, analyzers and dependency installs as `reis-mobile run -- <command>` when `reis-mobile run --help` works; otherwise run them directly. It keeps errors with `path:line`, failed tests, warning headlines and the summary, returns the command's exit code and prints the path of the full log. Read that log, or rerun with `--raw`, when the compact view lacks a detail you need. A command already rewritten by a hook (`reis-mobile.mjs run --` or `rtk`) needs no wrapping.
 - End with the role's concrete deliverable, affected objects, validation evidence and remaining blockers. Do not fill empty categories with generic advice.
 
+## Progress and decisions
+
+The user must never wait without knowing what is running, why, and what comes next. Silence is not progress, and a call that hangs until its timeout is a failure of this contract even when the command eventually works.
+
+**Before a step that takes more than about 30 seconds** (a build, a test suite, `pod install`, an emulator boot, an app launch), say in one or two sentences: the command and its directory, the target (device id, simulator, flavor, scheme), why the step is needed now, the result you expect and how long it usually takes when the project or an earlier run shows it. Write "duration unknown" instead of guessing one.
+
+**Never block on a command that does not end on its own.** `flutter run`, `flutter attach`, `flutter logs`, `emulator -avd`, `react-native start`, `expo start`, Metro, `npm start` or `dev`, `adb logcat` without `-d`, and `xcrun simctl spawn … log stream` keep running until stopped. In the foreground they hold the call until the tool times out while the user sees nothing. Start them with `reis-mobile run --background -- <command>`: it prints progress while it waits, returns when the app is ready, fails or the wait ends (exit 0, the command's code, or 124 for still starting), and prints the PID, the log, the follow command and the stop command. Continue with `reis-mobile run --follow <log>` and stop with `reis-mobile run --stop <log>`. Without the CLI, use the host's background execution and wait with a loop that ends on its own on the ready line, on every failure line and on process exit, as the [launching reference](../skills/mobile-debug/references/launching.md) shows. A wait that matches only the success line turns a crash into an endless wait.
+
+**A long finite command** (a first Gradle build, an archive, a full test suite) gets a tool timeout above its expected duration. When the host caps a single call, as Claude Code's Bash does at two minutes by default, run it with `--background` and continue with `--follow` instead of letting the call die. `reis-mobile run` prints a progress line after 30 quiet seconds with the elapsed time and the last output, so a slow phase and a hang look different.
+
+**While it runs**, report each phase as it happens and name the real object: "Gradle `:app:assembleDebug` started", "APK installed on `emulator-5554`", "app running on `iPhone 16`, hot reload available". "Working on it", "still processing" and "almost done" carry no information.
+
+**When it ends**, report the command, the exit code, the duration, the first failing line quoted with its `path:line` (not the final `BUILD FAILED`), the full log path and the next action. Report a timeout, a killed process, a command still starting and a command that never ran as exactly that, never as success.
+
+**Explain every decision** that changes code, configuration, dependencies, the device or the next diagnostic step:
+
+- **Decision**: what you chose, naming the object: file, class, Gradle task, dependency and version, flag.
+- **Evidence**: why it is right here: `path:line`, the quoted log line, the version from the lock file, the command output.
+- **Alternatives**: the realistic options you rejected, each with the concrete reason it loses in this project.
+- **Consequences**: what else changes (minimum OS, CI, generated files, caches), how to verify it and how to revert it.
+
+"Best practice", "cleaner", "more maintainable" and "it depends" are not reasons until they are tied to something in this project. A choice with a single obvious piece of evidence needs one sentence, not four headings; a trivial choice (a local variable name) needs none. When evidence is missing, say what is missing and how you will get it instead of choosing anyway.
+
 ## Optional team context
 
 A team can run `/reis-mobile:project [feature]` to create or refresh a verified object map in `.reis-mobile/project.md`, then add product knowledge that cannot be inferred from code. The command preserves team-authored text on refresh. The optional profile can live beside the existing `.reis-mobile/config.yaml` (which continues to support only `app`). Useful content is short and specific:

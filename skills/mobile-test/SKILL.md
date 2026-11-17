@@ -74,6 +74,8 @@ Resolve the command from the project's scripts, Gradle tasks, Xcode scheme/test 
 
 For instrumented, UI and end-to-end tests, discover available devices and the project's runner policy. Use a compatible local emulator or simulator when authorized by the task; do not erase its data or silently switch to a physical device. If the SDK, runtime or destination is unavailable, report the exact blocker and the resolved command that remains unrun. A build, a skipped test or an empty filtered run is not a passing test: inspect the test count and results.
 
+Booting an emulator or simulator, starting Metro and launching the app do not end on their own. Start them with `reis-mobile run --background -- <command>` and wait on the ready and failure signals in the [launching reference](../mobile-debug/references/launching.md), so a device that never boots returns an error instead of a hung call. Before a long suite, tell the user the command, the device and the expected duration; afterwards, the counts, the duration and the first failure.
+
 ## Output
 
 Report the operation, source symbols and behaviors covered, files changed, exact command and working directory, executed test counts/result and any report artifact. Separate passed, failed, skipped and blocked checks. When auditing, link each gap or flaky test to a concrete path, the missing assertion or race, and the smallest useful test to add.

@@ -10,6 +10,10 @@ Arguments received: `$ARGUMENTS`
 
 Use this command for mobile decisions with real trade-offs, including architecture, UI/UX, accessibility and release readiness. A debate runs several specialists over the configured rounds; avoid it for routine questions. If the question has a single answer that can be verified in the code, answer it directly and tell the user why it was not worth a debate.
 
+## Progress and decisions
+
+Follow **Progress and decisions** in `${CLAUDE_PLUGIN_ROOT}/docs/agent-context.md`. The specialists run in the background, so tell the user when each round starts, who is in it and why each was chosen, and report each position as it returns. The final decision names the evidence that settled it and the strongest position it overruled, with the reason.
+
 ## 1. Parse the arguments
 
 | Flag | Default | Effect |

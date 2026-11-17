@@ -67,10 +67,15 @@ core/
 │   ├── tools.mjs                command line → tool, mode (compact | light | stream) and line families
 │   ├── families.mjs             line rules per tool: errors, warnings, summaries, blocks, noise
 │   ├── compact.mjs              streaming line filter: blocks, dedupe, caps, frames, fallback tail
-│   ├── runner.mjs               reis-mobile run: spawn, full log, exit code, savings line
+│   ├── runner.mjs               reis-mobile run: spawn, full log, exit code, heartbeat, savings line
+│   ├── background.mjs           --background, --follow, --stop: detached supervisor and log follower
+│   ├── readiness.mjs            ready signal: an output line or a URL that answers
+│   ├── status.mjs               the `[reis-mobile run: …]` status lines and their parsers
 │   ├── args.mjs                 run options before `--`
-│   ├── hook.mjs                 optional PreToolUse rewrite of mobile commands
-│   └── settings.mjs             the hook on/off switch, in the language config file
+│   ├── hook.mjs                 PreToolUse rewrite: the guard and the optional compact hook
+│   └── settings.mjs             the hook and guard switches, in the language config file
+├── session/
+│   └── context.mjs              SessionStart rules for a mobile project
 ├── update/
 │   └── check.mjs                cached npm version check and update notice
 ├── install/
@@ -188,6 +193,10 @@ Every requested provider appears in the result with its own status — a missing
 `reis-mobile run` exists because build and test logs, not instructions, dominate the tokens of a mobile session. It runs the command with stdin inherited and stdout and stderr piped, and filters line by line so long-running commands stream. Nothing is lost: the full ANSI-stripped output goes to a log whose path ends the output, and the exit code is the command's.
 
 `tools.mjs` unwraps wrappers (`fvm`, `npx`, `xcrun`, `bundle exec`, env assignments, `cd … &&`) and maps the tool and subcommand to a mode. Compact mode is a whitelist: a line survives only when a family rule claims it, so an unknown failure shows the last lines instead of nothing. Light mode is a blacklist of progress and repeats, used for queries and any unrecognized command, so the answer to a query is never filtered. The family patterns were written against real output stored in `tests/fixtures/run/`.
+
+**Progress and never-ending commands.** A caller sees nothing until a command ends, and some commands never end. The runner prints a heartbeat status line after 30 quiet seconds with the elapsed time and the latest output, including a line still in progress. Profiles in `tools.mjs` mark the commands that never end (`endless`) and how they prove they are usable (`ready`, a line checked against the tools' sources; `readyUrl`, an address that answers). `--background` spawns `reis-mobile run --supervise <log>` detached, in its own process group: the supervisor runs the command, writes its cleaned output, a ready line and an exit line to the log, and ignores the stop signals so it can record the command's exit. The foreground process follows that log with the same compactor and returns on the ready line, the exit line or the wait (exit 124), with the PID, the follow command and the stop command. `--stop` checks that the PID still belongs to that log's supervisor before it signals the group, because PIDs are reused. The log is the single source of truth, so `--follow`, a `tail -f` and a Claude Code Monitor all see the same states.
+
+**Hooks.** `bin/run-hook.mjs` holds two switches. The guard, on by default, rewrites a foreground Bash call to a never-ending command into `run --background`; it skips calls that already use `run_in_background`, reads only inputs that name a guarded tool, and blocks with the command to run when RTK would rewrite the same call. `bin/session-context.mjs` runs on SessionStart (startup, resume, clear, compact): in a detected mobile project it adds the progress, background and decision rules as `additionalContext`, pointing at the full contract in `docs/agent-context.md`. Both stay out of Codex (`PLUGIN_ROOT` set), whose hook output format was not verified.
 
 The hook is registered by the plugin but inert until `reis-mobile hook on`: it reads the switch and exits before loading the rewrite code. It rewrites only simple commands joined by `&&`, `||` or `;`, inserts the runner after `VAR=value` assignments, and points at this installation's `bin/reis-mobile.mjs`, since a `reis-mobile` on the PATH may be an older version. When RTK's hook would rewrite the same call, it steps aside, because two `updatedInput` answers to one call conflict. `run` is not an MCP tool: MCP tools stay read-only and offline.
 
