@@ -18,7 +18,7 @@ KMP is a sharing mechanism, not a promise that both apps use the same UI or SDK.
 
 ## Guides by theme
 
-Fifteen in-depth guides, from `mmiani/kotlin-kmp-claude-agent-skills`. They refer to each other by their upstream names (`kotlin-...`), which are the link texts in these tables. Open only the guides the task needs.
+Fifteen in-depth guides. They refer to each other by their original names (`kotlin-...`), which are the link texts in these tables. Open only the guides the task needs.
 
 | Theme | Read |
 |---|---|

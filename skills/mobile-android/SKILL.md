@@ -7,7 +7,7 @@ stacks: [android]
 
 # Mobile Android
 
-Guides for building native Android apps, most of them from the Android team (`android/skills`). Cross-platform topics live in their own skills and have Android references there: architecture in `mobile-architecture`, tests in `mobile-test`, debugging (Gradle, crashes, ANRs) in `mobile-debug`, code review in `mobile-code-review`, security in `mobile-security` and Firebase in `mobile-firebase`.
+Guides for building native Android apps. Cross-platform topics live in their own skills and have Android references there: architecture in `mobile-architecture`, tests in `mobile-test`, debugging (Gradle, crashes, ANRs) in `mobile-debug`, code review in `mobile-code-review`, security in `mobile-security` and Firebase in `mobile-firebase`.
 
 ## Pick the topic
 

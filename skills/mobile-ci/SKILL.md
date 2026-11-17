@@ -36,12 +36,12 @@ Load the app's stack reference, then only the fastlane guide needed for the task
 4. Adapt the selected reference to the detected platform. The imported fastlane guides describe iOS workflows; Android needs its own Gradle tasks, keystore and Play destination.
 5. Check lane definitions, dependencies, action parameters and workflow syntax before execution. Run the project's relevant local checks, then report what was verified locally and what still needs a CI or store run. A configured pipeline is not evidence of a successful upload.
 
-## Applying the upstream examples
+## Applying the fastlane examples
 
-The fastlane references preserve the instructions from `greenstevester/fastlane-skill`; their frontmatter was removed and the Xcode Cloud link relocated. Read them as examples, with these integration rules:
+Read the fastlane references as examples, with these integration rules:
 
-- Use the project's Ruby/Bundler/fastlane versions and `bundle exec fastlane` when a Gemfile exists. Verify compatibility from the lock file and current fastlane documentation rather than applying the upstream blanket claim about Bundler 4 or replacing the installation with Homebrew.
-- Resolve `/setup-fastlane` and references to the `match`, `beta`, `release` and `snapshot` skills through the table above. These are references, not separately installed commands. Embedded `!` shell snippets and `${ARGUMENTS}` placeholders are upstream notation, not automatic preflight results.
+- Use the project's Ruby/Bundler/fastlane versions and `bundle exec fastlane` when a Gemfile exists. Verify compatibility from the lock file and current fastlane documentation rather than applying the guides' blanket claim about Bundler 4 or replacing the installation with Homebrew.
+- Resolve `/setup-fastlane` and references to the `match`, `beta`, `release` and `snapshot` skills through the table above. These are references, not separately installed commands. Embedded `!` shell snippets and `${ARGUMENTS}` placeholders are the guides' notation, not automatic preflight results.
 - Inspect each lane before invoking it: the setup and Match examples define different `release` behavior. Confirm the exact tested build rather than submitting whichever build is newest. Existing session authorization determines whether builds, uploads, store submission or automatic release are in scope.
 - Keep Match read-only in CI. Certificate revocation (`match nuke`), simulator erasure, package removal and screenshot-directory replacement are destructive recovery examples, not routine setup steps; diagnose first and require explicit authorization for those actions.
 - Verify action options with the installed version's help or official documentation. In particular, check the `app_store_connect_api_key` action's content parameter rather than copying the Xcode Cloud example's `key:` blindly. Never print private keys or passwords.

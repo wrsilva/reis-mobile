@@ -17,7 +17,7 @@ Guides for building native iOS apps. Cross-platform topics live in their own ski
 | Networking, JSON, persistence, caching, offline | [references/data-networking.md](references/data-networking.md) |
 | Permissions, push, universal links, background work, widgets, App Intents, in-app purchases | [references/platform-features.md](references/platform-features.md) |
 | Performance, app size, signing, TestFlight and App Store release | [references/performance-release.md](references/performance-release.md) |
-| Reviewing or writing SwiftUI: deprecated and modern API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance and Swift hygiene (SwiftUI Pro, by Paul Hudson) | [references/swiftui-pro/GUIDE.md](references/swiftui-pro/GUIDE.md) |
+| Reviewing or writing SwiftUI: deprecated and modern API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance and Swift hygiene (SwiftUI Pro) | [references/swiftui-pro/GUIDE.md](references/swiftui-pro/GUIDE.md) |
 
 The SwiftUI Pro guide lives in its own folder with its references; the `references/...` paths it mentions refer to that folder. Load only the references the task needs.
 

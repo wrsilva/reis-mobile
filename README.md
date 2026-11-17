@@ -305,7 +305,7 @@ Wrappers such as `fvm`, `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &
 
 `--raw` passes the output through, `--mode` overrides the mode, `--max-lines` changes the limit and `--json` returns the kept lines with the counts. Full logs go to the system temp directory (or `REIS_MOBILE_LOG_DIR`) and are deleted after a week. The agents use `reis-mobile run` when the CLI is installed; inside the Claude Code plugin, it is on the PATH.
 
-**Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when [RTK](https://github.com/rtk-ai/rtk) is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
+**Optional hook.** `reis-mobile hook on` makes the plugin rewrite recognized mobile commands that Claude Code runs, for example `cd ios && pod install` becomes `cd ios && node ".../reis-mobile.mjs" run -- pod install`. It is off by default; `reis-mobile hook off` turns it off. It leaves pipes, redirections and subshells alone, and when RTK is installed it skips the commands RTK rewrites itself. The hook runs before every Bash call (about 0.1 s while off). A rewritten command is a different command for permission rules, and auto mode may review it again.
 
 ### Test
 
@@ -568,7 +568,7 @@ reis-mobile route "review the UI/UX of this screen"
 reis-mobile route "create a mobile design system"
 ```
 
-The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. Two MIT-licensed guide sets are bundled as references: [keysjoao/laws-of-ux-skills](https://github.com/keysjoao/laws-of-ux-skills) (the 30 Laws of UX mapped to component types, a 0–60 audit and a 12-point pre-ship checklist) and [ceorkm/mobile-app-ui-design](https://github.com/ceorkm/mobile-app-ui-design) (type, color, spacing and shadow rules, thumb zone, emotional design and industry conventions). Both use web examples, so `mobile-ui-ux/references/ux-laws-on-mobile.md` lists what changes on a phone (pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, text that scales) and gives each law's API in Flutter, Android, iOS, React Native and Kotlin Multiplatform. Apple-target work includes a reading guide for [dickwu/apple-design-skill](https://github.com/dickwu/apple-design-skill) and official HIG pages. The upstream repository has no explicit redistribution license at the inspected revision, so its content is linked rather than bundled; the new guides are original project content. Current Apple claims require source verification, and Android retains its own conventions.
+The workflow covers journeys, wireframes, tokens, component states, adaptive layouts and implementation when requested. Existing platform skills link it too. It includes the 30 Laws of UX mapped to component types, a 0–60 UX audit and a 12-point pre-ship checklist, and visual rules for type, color, spacing, shadows, the thumb zone, emotional design and industry conventions. `mobile-ui-ux/references/ux-laws-on-mobile.md` lists what changes on a phone (pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, text that scales) and gives each law's API in Flutter, Android, iOS, React Native and Kotlin Multiplatform. Apple-target work includes a reading guide for the official Human Interface Guidelines. Current Apple claims require source verification, and Android retains its own conventions.
 
 ### Skills
 
@@ -584,7 +584,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-ui-ux` | Journeys, wireframes, visual hierarchy, tokens, component states, Laws of UX audits and checklists, visual design rules and Apple HIG reference workflow | design | Flutter, Android, iOS, React Native, KMP, Laws of UX, app UI design, UX laws on mobile and external Apple design reading |
 | `mobile-accessibility` | Screen readers, touch targets, text scaling, contrast, localization | accessibility | Flutter (Semantics), Android (Compose and Views), iOS (SwiftUI and UIKit), React Native, KMP, localization and RTL |
 | `mobile-release` | Release readiness, store copy, billing and CI/CD | release, deployment | Flutter, Android, iOS, React Native, KMP, release notes and store listing, in-app purchases, CI/CD |
-| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, imported fastlane guides and Xcode Cloud |
+| `mobile-ci` | CI/CD and fastlane setup, Match, beta, release and Snapshot | deployment | Flutter, Android, iOS, React Native, KMP, fastlane guides and Xcode Cloud |
 | `mobile-performance` | Startup, rendering, memory, battery, app size and regression gates | performance | Flutter, Android, iOS, React Native, KMP, background execution and battery |
 | `mobile-offline-sync` | Local store, outbox, idempotency, conflict resolution, reconnection | offline | Flutter, Android, iOS, React Native, KMP |
 | `mobile-observability` | Crashes, errors, breadcrumbs, traces, alerts, sampling and privacy | observability | Flutter, Android, iOS, React Native, KMP |
@@ -621,9 +621,6 @@ reis-mobile route --intent auth "review the session lifecycle"
 ```
 
 The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account, send a notification or make a purchase. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes, and a plain "analytics" request still goes to `mobile-observability`. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
-
-About 100 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules), [android/skills](https://github.com/android/skills), [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) and [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
 ---
 
 ## Trust, security and limits
@@ -689,7 +686,7 @@ app: apps/mobile
 Every command then analyzes `apps/mobile`, wherever in the repository you run it, and the review diff is restricted to that folder. Without the file, run from the app folder or pass `--dir apps/mobile`.
 
 **Does it work with native Android and iOS?**
-Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). The platform skills `mobile-android`, `mobile-ios` and `mobile-rn` add what exists only on each stack; `mobile-android` includes the Android team's guides from `android/skills` (Compose, AGP 9, R8, Play policy, Wear, TV and more).
+Yes. Native Android, native iOS and React Native each have architect, performance and test agents, and the cross-platform skills — `mobile-debug`, `mobile-code-review`, `mobile-test` and `mobile-firebase` — have a guide for each of them (Gradle and R8, Xcode and CocoaPods, Metro and native modules). The platform skills `mobile-android`, `mobile-ios` and `mobile-rn` add what exists only on each stack; `mobile-android` includes guides for Compose, AGP 9, R8, Play policy, Wear, TV and more.
 
 **I already have skills with the same names in `~/.claude/skills`.**
 The plugin's skills live in the `reis-mobile:` namespace and do not conflict, but Claude Code loads both descriptions. To save context, remove the global copies the plugin already covers.
@@ -727,22 +724,8 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Support](SUPPORT.md)
 - [Security](SECURITY.md)
-- [Third-Party Notices](THIRD_PARTY_NOTICES.md): origin and license of third-party skills
+- [Third-Party Notices](THIRD_PARTY_NOTICES.md): licenses of bundled third-party content
 - [Changelog](CHANGELOG.md)
-
----
-
-## Attribution
-
-- **[greenstevester/fastlane-skill](https://github.com/greenstevester/fastlane-skill)** (MIT): five fastlane guides and Xcode Cloud documentation in [`mobile-ci`](skills/mobile-ci/SKILL.md). The source revision and license are recorded in [Third-Party Notices](THIRD_PARTY_NOTICES.md).
-- **[flutter/skills](https://github.com/flutter/skills)** (BSD-3-Clause): 25 Flutter skills.
-- **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
-- **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
-- **[twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill)** (MIT): the SwiftUI Pro review guide by Paul Hudson, with its twelve references, in [`mobile-ios`](skills/mobile-ios/SKILL.md).
-- **[mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills)** (Apache-2.0): 15 Kotlin Multiplatform skills by Mariano Miani, as guides in [`mobile-kmp`](skills/mobile-kmp/SKILL.md).
-- **[keysjoao/laws-of-ux-skills](https://github.com/keysjoao/laws-of-ux-skills)** (MIT): the Laws of UX guide, audit and checklist, in [`mobile-ui-ux`](skills/mobile-ui-ux/SKILL.md).
-- **[ceorkm/mobile-app-ui-design](https://github.com/ceorkm/mobile-app-ui-design)** (MIT, declared in its README): the mobile app UI design guide and industry conventions, in [`mobile-ui-ux`](skills/mobile-ui-ux/SKILL.md).
-- **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---
 

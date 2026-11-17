@@ -28,7 +28,7 @@ Turn a product task into a coherent mobile journey and a design that can be impl
 
 Also use [mobile-accessibility](../mobile-accessibility/SKILL.md) for accessibility verification. Open only the references needed for the current target and interaction.
 
-The Laws of UX and app UI design guides come from third parties and use web examples (CSS, JSX, Tailwind, hover, desktop navigation). [UX laws on mobile](references/ux-laws-on-mobile.md) lists what changes on a phone, such as pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, type that scales and only real social proof, and gives each law's API in every stack. Write each fix in the project's toolkit and theme, never as CSS.
+The Laws of UX and app UI design guides use web examples (CSS, JSX, Tailwind, hover, desktop navigation). [UX laws on mobile](references/ux-laws-on-mobile.md) lists what changes on a phone, such as pressed states instead of hover, 44 pt and 48 dp targets, bottom navigation and system back, type that scales and only real social proof, and gives each law's API in every stack. Write each fix in the project's toolkit and theme, never as CSS.
 
 ## Ground the work
 
