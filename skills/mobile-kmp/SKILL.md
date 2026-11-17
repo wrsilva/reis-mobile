@@ -1,6 +1,6 @@
 ---
 name: mobile-kmp
-description: Works on Kotlin Multiplatform mobile projects with shared Kotlin source sets and Android/iOS targets. Use for architecture, tests, debugging, reviews, performance, security, accessibility, dependencies and releases when `org.jetbrains.kotlin.multiplatform` is applied; inspect actual targets, `commonMain`/`commonTest`, target source sets, Compose Multiplatform and the iOS framework/host app before giving platform advice. Includes in-depth guides for KMP architecture and code reviews, feature implementation, modularization, state holders, shared Compose UI, adaptive layouts, navigation, `expect`/`actual` bridges, App Links, data layers, tests, Gradle governance, bug fixes and safe refactoring.
+description: Works on Kotlin Multiplatform projects — shared source sets, `expect`/`actual`, Compose Multiplatform, the iOS framework and host apps. Use for KMP architecture, reviews, tests, debugging, Gradle and releases, checking the configured targets before giving platform advice. Includes guides for modularization, state holders, navigation, data layers and safe refactoring.
 intents: [design, architecture, test, performance, review, debug, security, release, accessibility, migration, dependency, build, deployment]
 stacks: [kotlin-multiplatform]
 ---

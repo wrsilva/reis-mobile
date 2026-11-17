@@ -1,6 +1,6 @@
 ---
 name: mobile-rn
-description: Builds React Native and Expo apps in TypeScript — navigation with React Navigation or Expo Router, lists, forms, styling, gestures and animations with Reanimated, safe areas, accessibility and localization; networking with TanStack Query, response validation, persistence with MMKV, AsyncStorage, SQLite and secure storage; permissions, push notifications, deep links, background tasks, native modules and config plugins; performance with Hermes and the React profiler; and release with EAS Build, EAS Submit and EAS Update or bare Gradle and Xcode builds. Use when writing or changing React Native code, adding a native capability, configuring Expo, preparing a store build or an over-the-air update, or when the user asks how to do something in React Native, even if they do not name the library.
+description: Builds React Native and Expo apps in TypeScript — React Navigation or Expo Router, lists, forms, Reanimated and accessibility; TanStack Query, MMKV, SQLite and secure storage; push, deep links, native modules and config plugins; Hermes performance; EAS Build, Submit and Update. Use for any React Native or Expo code, even if the library is not named.
 intents: [design, performance, release, accessibility]
 stacks: [react-native]
 ---

@@ -1,6 +1,6 @@
 ---
 name: mobile-observability
-description: Designs and reviews production observability for mobile apps on every stack — Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. Covers crash and error reporting with usable context, breadcrumbs, structured logs, traces and custom metrics, release and cohort segmentation, correlation with backend requests, alerting thresholds, sampling and cost, and what must never be collected. Use when production problems cannot be explained from the available data, when setting up crash reporting or telemetry, or when defining release health alerts.
+description: Designs and reviews production observability for mobile apps on every stack — crash and error reporting, breadcrumbs, structured logs, traces and metrics, release segmentation, backend correlation, alerts, sampling and what must never be collected. Use when production problems cannot be explained from the data, or when setting up crash reporting, telemetry or release health alerts.
 intents: [observability]
 stacks: ["*"]
 ---

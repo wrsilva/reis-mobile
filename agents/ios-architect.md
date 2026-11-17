@@ -1,6 +1,6 @@
 ---
 name: ios-architect
-description: Use this agent to analyze or design the architecture of a native iOS app — SwiftUI and UIKit presentation patterns (MVVM, coordinators), navigation, layering between views, view models, services and persistence, modularization with local Swift packages, dependency injection, Swift concurrency boundaries (actors, @MainActor) and misplaced business logic in views or view controllers. Typical triggers are "review the architecture of this iOS app", planning a new feature module, validating a migration from UIKit to SwiftUI and deciding how offline persistence and background synchronization are owned.
+description: Use this agent to analyze or design native iOS architecture — SwiftUI and UIKit patterns (MVVM, coordinators), navigation, layers, Swift packages, dependency injection and concurrency boundaries (actors, @MainActor). Typical triggers are "review the architecture of this iOS app", a new feature module and a UIKit to SwiftUI migration.
 model: inherit
 color: cyan
 tools: ["Read", "Grep", "Glob"]

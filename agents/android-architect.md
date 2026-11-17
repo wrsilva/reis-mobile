@@ -1,6 +1,6 @@
 ---
 name: android-architect
-description: Use this agent to analyze or design the architecture of a native Android app — UI, domain and data layers, unidirectional data flow, ViewModel and state boundaries, Gradle modularization (feature and core modules, convention plugins, version catalog), dependency injection with Hilt or Koin, navigation and misplaced business logic in Activities, Fragments or Composables. Typical triggers are "review the architecture of this Android app", planning a new feature module, validating a modularization refactor and placing offline storage, WorkManager queues and synchronization in the right layer.
+description: Use this agent to analyze or design native Android architecture — UI, domain and data layers, ViewModel and state, Gradle modules and convention plugins, Hilt or Koin, navigation, and business logic misplaced in Activities, Fragments or Composables. Typical triggers are "review the architecture of this Android app", a new feature module and a modularization refactor.
 model: inherit
 color: cyan
 tools: ["Read", "Grep", "Glob"]

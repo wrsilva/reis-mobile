@@ -1,6 +1,6 @@
 ---
 name: mobile-flutter
-description: Builds Flutter apps with guides for everything specific to Flutter and Dart — layouts, responsive UI, forms, animations, theming, declarative routing with go_router, widget previews and home screen widgets; HTTP, JSON serialization, local databases and caching; plugins, platform channels and native views; isolates and app size; accessibility and localization; Effective Dart, Dart 3 features and pattern matching; and macOS setup. Use when writing or changing Flutter UI, data or native integration code, or when the user asks how to do something in Flutter, even if they do not name the topic.
+description: Builds Flutter apps — layouts, responsive UI, forms, animations, theming, go_router and home screen widgets; HTTP, JSON, databases and caching; plugins and platform channels; isolates and app size; accessibility and localization; Effective Dart and Dart 3. Use for any Flutter or Dart code, even if the topic is not named.
 intents: [design, review, performance, accessibility, migration]
 stacks: [flutter]
 ---
