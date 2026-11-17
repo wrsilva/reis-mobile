@@ -54,15 +54,11 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.2.0
+### v1.2.1
 
-#### Added
+#### Fixed
 
-- Fifteen Kotlin Multiplatform guides in `mobile-kmp`, adapted from the skills by Mariano Miani in [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills) (Apache-2.0): architecture review, implemented-code review, feature implementation, modularization, state management, shared Compose UI, adaptive layouts and resources, navigation, `expect`/`actual` bridges, Android App Links and deep links, data layer, testing, Gradle governance, bug fixes and refactor safety. Five theme indexes (`references/architecture.md`, `ui-navigation.md`, `platform.md`, `data-testing-build.md`, `bugfix-refactoring.md`) list them under their upstream names. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`; the upstream orchestration package (agents, hooks, `execute-ticket`) is not included.
-
-#### Changed
-
-- The KMP references in `mobile-architecture`, `mobile-code-review`, `mobile-test`, `mobile-debug`, `mobile-migration` and `mobile-offline-sync` point to the matching in-depth guide, and the `mobile-kmp` description lists the new topics.
+- The router now recognizes `stutter`, `choppy`, `sluggish`, `dropped frame` and `frame drop` as performance terms. A prompt such as "the FlatList stutters while scrolling" previously matched no intent and selected no agent; it now routes to the stack's performance engineer.
 
 <!-- reis-mobile:latest-release:end -->
 

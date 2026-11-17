@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-11-17
+
+### Fixed
+
+- The router now recognizes `stutter`, `choppy`, `sluggish`, `dropped frame` and `frame drop` as performance terms. A prompt such as "the FlatList stutters while scrolling" previously matched no intent and selected no agent; it now routes to the stack's performance engineer.
+
 ## [1.2.0] - 2026-11-17
 
 ### Added
