@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-17
+
+### Added
+
+- SwiftUI Pro guide in `mobile-ios` (`references/swiftui-pro/GUIDE.md`), adapted from the `swiftui-pro` skill by Paul Hudson in [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) (MIT). Its review process and twelve references cover soft-deprecated and modern SwiftUI API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance, Swift and code hygiene. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`.
+
+### Changed
+
+- The `mobile-ios` description and topic table route SwiftUI reviews to the new guide, and the iOS checklist in `mobile-code-review` points SwiftUI sources to it.
+
 ## [1.0.1] - 2026-11-11
 
 ### Fixed
