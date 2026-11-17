@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-17
+
+### Added
+
+- React Native Skills guide in `mobile-rn` (`references/react-native-skills/GUIDE.md`), adapted from the `vercel-react-native-skills` skill in [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) (MIT). Its 36 rules, each with incorrect and correct examples, cover list and scroll performance, Reanimated animations and gestures, native navigators, UI patterns (images, menus, modals, safe areas, styling), state with React Compiler, rendering, monorepos, fonts and imports; the compiled `AGENTS.md` is included. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`. The repository's other skills target the web or Vercel and were not imported; it has no agents.
+
+### Changed
+
+- The `mobile-rn` description and topic table route rule-level React Native work to the new guide, and the React Native references of `mobile-code-review` and `mobile-performance` point to it. Libraries a rule recommends that the project does not already use are proposed, not added.
+
 ## [1.2.0] - 2026-11-17
 
 ### Added
