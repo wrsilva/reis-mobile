@@ -54,11 +54,11 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.2.1
+### v1.2.2
 
 #### Fixed
 
-- The router now recognizes `stutter`, `choppy`, `sluggish`, `dropped frame` and `frame drop` as performance terms. A prompt such as "the FlatList stutters while scrolling" previously matched no intent and selected no agent; it now routes to the stack's performance engineer.
+- The Claude Code plugin and marketplace descriptions now list Kotlin Multiplatform alongside Flutter, Android, iOS and React Native, matching `package.json` and the README.
 
 <!-- reis-mobile:latest-release:end -->
 
