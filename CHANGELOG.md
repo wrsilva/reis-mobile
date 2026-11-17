@@ -4,6 +4,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-17
+
 ### Added
 
 - `reis-mobile run --background -- <command>` for commands that never end on their own: Flutter `flutter run`, `flutter attach`, `flutter logs`; Android `emulator -avd`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`; React Native `npx react-native start`, `log-android`, `log-ios`; Expo `npx expo start`, `npx expo run:android` / `run:ios` without `--no-bundler`; and the Android and iOS host commands of a Kotlin Multiplatform app. It starts the command detached, shows its output and progress, and returns when the app is ready (exit 0), when it ends (its own exit code) or when `--wait` seconds pass while it is still starting (exit 124), printing the PID, the log, the follow command and the stop command. `--follow <log>` keeps watching it, and `--stop <log>` stops its process group after checking that the PID still belongs to that log. Verified with a real `flutter run -d web-server`: ready in 14 seconds, server up, stopped cleanly.

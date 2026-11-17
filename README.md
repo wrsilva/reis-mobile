@@ -54,21 +54,27 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.3.0
+### v1.4.0
 
 #### Added
 
-- `reis-mobile run -- <command>` runs a build, test or tool command and prints only what an agent needs: errors with `path:line` and their code snippet, failed tests with messages, warning headlines and the final summary. The exit code is the command's, the full log is saved (and deleted after a week), and a closing line reports the lines and bytes saved. On real output, one Swift compile error in a raw `xcodebuild` log went from 1,697 lines and 169 KB to 13 lines; a failed Gradle build shrank by 79% and a SwiftPM build error by 91%.
-- Coverage for the commands of every supported stack. Flutter and Dart: `flutter`, `dart`, `fvm`, `melos`, `very_good`, `build_runner`. Android and Kotlin Multiplatform: `./gradlew` and `gradle` with any task (KMP iOS tests, framework linking and `podInstall` included), `kotlinc`, `ktlint`, `detekt`, Android `lint`, `adb`, `sdkmanager`, `avdmanager`, `emulator`. iOS: `xcodebuild`, `xcrun` tools, `swift`, `swiftc`, `pod`, `fastlane`, `swiftlint`, `carthage`, `tuist`. React Native and Expo: `react-native`, `expo`, `eas`, Metro, `jest`, `detox`, `maestro`, `npm`/`yarn`/`pnpm`/`bun`, `tsc`, `eslint`. Wrappers such as `npx`, `xcrun`, `bundle exec`, `VAR=value` and `cd … &&` are recognized, and any other command runs in light mode.
-- Three modes: compact for builds, tests, analyzers and installs; light for queries whose output is the answer (`flutter doctor`, `./gradlew dependencies`, `xcodebuild -showBuildSettings`) and unknown commands; stream for `flutter run`, Metro and `adb logcat`, where an unfiltered logcat shows only warnings, errors and crashes. Repeated errors print once, stack traces stop after six frames, and a failure with no known error pattern shows the last lines. `--raw`, `--mode`, `--max-lines`, `--log-dir`, `--no-log`, `--dir` and `--json` adjust it.
-- `reis-mobile hook [on|off]`, an optional Claude Code hook, off by default, that routes recognized mobile commands through `reis-mobile run`. It skips pipes, redirections and subshells, and steps aside for commands RTK rewrites itself.
-- An extensionless `bin/reis-mobile` entry, so `reis-mobile` resolves where the plugin host puts `bin/` on the PATH.
-- Real output from Flutter, Dart, Gradle, `xcodebuild`, SwiftPM, CocoaPods, npm and Jest under `tests/fixtures/run/`, with tests for every stack's commands, the runner, the arguments and the hook.
+- `reis-mobile run --background -- <command>` for commands that never end on their own: Flutter `flutter run`, `flutter attach`, `flutter logs`; Android `emulator -avd`, `adb logcat`; iOS `xcrun simctl spawn booted log stream`, `xcrun simctl launch --console`; React Native `npx react-native start`, `log-android`, `log-ios`; Expo `npx expo start`, `npx expo run:android` / `run:ios` without `--no-bundler`; and the Android and iOS host commands of a Kotlin Multiplatform app. It starts the command detached, shows its output and progress, and returns when the app is ready (exit 0), when it ends (its own exit code) or when `--wait` seconds pass while it is still starting (exit 124), printing the PID, the log, the follow command and the stop command. `--follow <log>` keeps watching it, and `--stop <log>` stops its process group after checking that the PID still belongs to that log. Verified with a real `flutter run -d web-server`: ready in 14 seconds, server up, stopped cleanly.
+- Readiness signals checked against the tools' own sources: `Flutter run key commands.` for `flutter run` and `flutter attach`, `Boot completed in … ms` for the Android emulator, and Metro's `/status` answering `packager-status:running` for `react-native start`. `--ready <regex>` and `--ready-url <url>` cover any other command.
+- A heartbeat in every `reis-mobile run`: after 30 quiet seconds, a status line with the elapsed time and the last output, including a line still in progress such as `Running Gradle task 'assembleDebug'...`. The closing line now carries the duration. `--heartbeat <seconds>` or `REIS_MOBILE_HEARTBEAT` changes it; `0` turns it off.
+- A Claude Code guard, on by default (`reis-mobile hook guard off` turns it off), that rewrites a foreground Bash call to a never-ending command into `reis-mobile run --background`, so the session gets control back instead of hanging until the tool times out.
+- Session rules: in a mobile project, a SessionStart hook (startup, resume, clear and compact) tells the session to announce long steps, report each phase by name, never block on a command that does not end, and justify each decision with its evidence, the alternatives rejected and how to verify or revert it. `REIS_MOBILE_SESSION_CONTEXT=0` turns it off.
+- `mobile-debug/references/launching.md`: which launch commands end and which do not on Flutter, native Android, native iOS, React Native, Expo and Kotlin Multiplatform, with the exact commands, the ready, progress and failure signals of each, Flutter hot reload through `--pid-file` and `SIGUSR1`, and wait loops for hosts without the CLI.
+- `mobile-ui-ux` gains Laws of UX references: the 30 Laws of UX with a component-type map, a 0–60 audit with critical, warning and suggestion tiers, and a 12-point pre-ship checklist.
+- `mobile-ui-ux` gains a mobile app UI design guide: type hierarchy, 60/30/10 color, 8-point spacing, shadows, thumb zone, peak-end emotional design and industry visual conventions.
+- `mobile-ui-ux/references/ux-laws-on-mobile.md`: what the web-oriented guides change on a phone (pressed states instead of hover, 44 pt on iOS and 48 dp on Android, bottom navigation and system back, Dynamic Type and the Material type scale instead of a fixed size limit, contrast checks, real data only for social proof) and each law's API in Flutter, native Android, native iOS, React Native and Kotlin Multiplatform. `mobile-ui-ux-designer` uses it for audits and checklists.
 
 #### Changed
 
-- The shared agent brief (`docs/agent-context.md`), `mobile-test` and `mobile-debug` tell agents to run builds and tests through `reis-mobile run` when it is available, and to read the full log or use `--raw` when the compact view lacks a detail.
-- The 13 longest agent and skill descriptions are shorter, cutting about 950 tokens from what every session loads, with the same trigger terms.
+- The shared agent brief gains **Progress and decisions**, the contract every agent follows: what to say before a long step, phase reports with real object names, the final report, and decisions with evidence, rejected alternatives and consequences. The debug, review, test, release, consult, debate and project commands apply it to their own flow, and `mobile-debug` and `mobile-test` start devices and apps with `--background`.
+
+#### Fixed
+
+- UX audits, reviews and checklists now route to `design` and `mobile-ui-ux-designer` instead of a code review or a release: the design vocabulary gains `ux`, `laws of ux` / `leis de ux`, `ux audit` / `auditoria de ux`, `ux review` and `ux checklist` / `checklist de ux`, and a tie between design and review or release goes to design.
 
 <!-- reis-mobile:latest-release:end -->
 
