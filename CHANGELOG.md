@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pr
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-17
+
+### Added
+
+- Fifteen Kotlin Multiplatform guides in `mobile-kmp`, adapted from the skills by Mariano Miani in [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills) (Apache-2.0): architecture review, implemented-code review, feature implementation, modularization, state management, shared Compose UI, adaptive layouts and resources, navigation, `expect`/`actual` bridges, Android App Links and deep links, data layer, testing, Gradle governance, bug fixes and refactor safety. Five theme indexes (`references/architecture.md`, `ui-navigation.md`, `platform.md`, `data-testing-build.md`, `bugfix-refactoring.md`) list them under their upstream names. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`; the upstream orchestration package (agents, hooks, `execute-ticket`) is not included.
+
+### Changed
+
+- The KMP references in `mobile-architecture`, `mobile-code-review`, `mobile-test`, `mobile-debug`, `mobile-migration` and `mobile-offline-sync` point to the matching in-depth guide, and the `mobile-kmp` description lists the new topics.
+
 ## [1.1.0] - 2026-11-17
 
 ### Added

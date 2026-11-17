@@ -10,3 +10,5 @@ Resolve the configured targets and actual Gradle test tasks before running a com
 | Shared Compose screen | Compose Multiplatform UI test where supported by the installed version; also verify the target accessibility and host flow. |
 
 For each requested test, record **source path:symbol → input → result → dependency seam → test source set → real task**. Use existing fixtures and test libraries. Discover task names with the project's Gradle wrapper; avoid assuming all iOS targets run on the current machine. Inspect test counts and target results, not only a successful compilation. [Compose Multiplatform UI testing](https://kotlinlang.org/docs/multiplatform/compose-test.html) has separate host constraints.
+
+For test strategy, test doubles, Compose Multiplatform UI tests and screenshot tests, use [kotlin-testing-kmp](../../mobile-kmp/references/data-testing-build/kotlin-testing-kmp/GUIDE.md).

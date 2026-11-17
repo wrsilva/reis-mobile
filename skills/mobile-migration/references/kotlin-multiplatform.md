@@ -7,3 +7,5 @@
 - Verify both hosts after each step, including an upgrade install on each; an Android pass does not prove the iOS framework.
 
 Official references: [Kotlin Multiplatform compatibility guide](https://kotlinlang.org/docs/multiplatform/multiplatform-compatibility-guide.html), [SQLDelight migrations](https://sqldelight.github.io/sqldelight/latest/multiplatform_sqlite/migrations/). Apply the [Android](android.md) and [iOS](ios.md) references to host data.
+
+For refactors and migrations of existing KMP code — scope control, behavior preservation, compatibility and rollback — use [kotlin-kmp-refactor-safety](../../mobile-kmp/references/bugfix-refactoring/kotlin-kmp-refactor-safety/GUIDE.md).

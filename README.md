@@ -54,15 +54,15 @@ When a recurring defect has a precise, enforceable condition, capture it in a re
 ## What's new
 
 <!-- reis-mobile:latest-release:start -->
-### v1.1.0
+### v1.2.0
 
 #### Added
 
-- SwiftUI Pro guide in `mobile-ios` (`references/swiftui-pro/GUIDE.md`), adapted from the `swiftui-pro` skill by Paul Hudson in [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) (MIT). Its review process and twelve references cover soft-deprecated and modern SwiftUI API, views and animation, data flow, navigation, HIG design, resizable windows, accessibility, localization, performance, Swift and code hygiene. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`.
+- Fifteen Kotlin Multiplatform guides in `mobile-kmp`, adapted from the skills by Mariano Miani in [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills) (Apache-2.0): architecture review, implemented-code review, feature implementation, modularization, state management, shared Compose UI, adaptive layouts and resources, navigation, `expect`/`actual` bridges, Android App Links and deep links, data layer, testing, Gradle governance, bug fixes and refactor safety. Five theme indexes (`references/architecture.md`, `ui-navigation.md`, `platform.md`, `data-testing-build.md`, `bugfix-refactoring.md`) list them under their upstream names. Upstream text is unchanged and credited in `THIRD_PARTY_NOTICES.md`; the upstream orchestration package (agents, hooks, `execute-ticket`) is not included.
 
 #### Changed
 
-- The `mobile-ios` description and topic table route SwiftUI reviews to the new guide, and the iOS checklist in `mobile-code-review` points SwiftUI sources to it.
+- The KMP references in `mobile-architecture`, `mobile-code-review`, `mobile-test`, `mobile-debug`, `mobile-migration` and `mobile-offline-sync` point to the matching in-depth guide, and the `mobile-kmp` description lists the new topics.
 
 <!-- reis-mobile:latest-release:end -->
 
@@ -555,7 +555,7 @@ Every skill starts with `mobile-`. **Topic** skills cover every stack with one r
 | `mobile-android` | Native Android specifics, from the Android team | design, performance, release, migration, build, dependency | Compose UI, AGP 9 and R8, profiling, Google Play, identity, camera and media, on-device AI, Wear OS, TV, XR |
 | `mobile-ios` | Native iOS specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release, SwiftUI Pro review guide |
 | `mobile-rn` | React Native and Expo specifics | design, performance, release, accessibility | UI and navigation, data and networking, platform features, performance and release |
-| `mobile-kmp` | Kotlin Multiplatform shared and target boundaries | design, architecture, test, performance, review, debug and more | Source sets, Apple interop, shared Compose UI, build and profiling |
+| `mobile-kmp` | Kotlin Multiplatform shared and target boundaries | design, architecture, test, performance, review, debug and more | Source sets, Apple interop, shared Compose UI, build and profiling; 15 in-depth guides on architecture, reviews, UI and navigation, platform bridges, data, tests, Gradle, bug fixes and refactoring |
 | `mobile-detect-stack` | Deterministic stack detection with the CLI | — | — |
 
 Skills marked — are triggered by Claude Code when the request matches their description, for example *"configure Firestore rules"* → `mobile-firebase`. Notification requests route to `mobile-notifications`, which links Firebase guidance when FCM is the installed provider.
@@ -576,7 +576,7 @@ reis-mobile route --intent auth "review the session lifecycle"
 
 The CLI returns the selected agent and instruction paths; it does not implement a login, delete an account, send a notification or make a purchase. An explicit intent takes precedence over the prompt. Existing security audits, tests and release work retain their own routes, and a plain "analytics" request still goes to `mobile-observability`. When a short prompt is ambiguous, pass `--intent` or invoke the skill directly in the host.
 
-About 85 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules), [android/skills](https://github.com/android/skills) and [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+About 100 guides come from [flutter/skills](https://github.com/flutter/skills), [dart-lang/skills](https://github.com/dart-lang/skills), [evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules), [android/skills](https://github.com/android/skills), [twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill) and [mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills), unchanged and credited in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ---
 
@@ -693,6 +693,7 @@ Questions: [Discussions](https://github.com/wrsilva/reis-mobile/discussions). Wh
 - **[dart-lang/skills](https://github.com/dart-lang/skills)** (BSD-3-Clause): 8 Dart skills.
 - **[evanca/flutter-ai-rules](https://github.com/evanca/flutter-ai-rules)** (MIT): 28 Flutter, testing and Firebase skills.
 - **[twostraws/swiftui-agent-skill](https://github.com/twostraws/swiftui-agent-skill)** (MIT): the SwiftUI Pro review guide by Paul Hudson, with its twelve references, in [`mobile-ios`](skills/mobile-ios/SKILL.md).
+- **[mmiani/kotlin-kmp-claude-agent-skills](https://github.com/mmiani/kotlin-kmp-claude-agent-skills)** (Apache-2.0): 15 Kotlin Multiplatform skills by Mariano Miani, as guides in [`mobile-kmp`](skills/mobile-kmp/SKILL.md).
 - **[OWASP MASVS](https://mas.owasp.org/MASVS/)**: categories used in the `mobile-security` skill.
 
 ---

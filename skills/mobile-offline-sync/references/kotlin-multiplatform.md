@@ -112,3 +112,5 @@ This is where the shared design pays for itself: every case in the skill's §9 i
 - Ktor client retry and timeouts: https://ktor.io/docs/client-retry.html
 - kotlinx.serialization: https://kotlinlang.org/docs/serialization.html
 - Kotlin/Native memory management: https://kotlinlang.org/docs/native-memory-manager.html
+
+For repositories, source-of-truth design and conflict resolution in the shared data layer, use [kotlin-data-kmp-data-layer](../../mobile-kmp/references/data-testing-build/kotlin-data-kmp-data-layer/GUIDE.md).
