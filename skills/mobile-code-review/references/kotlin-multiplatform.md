@@ -9,3 +9,5 @@ Read the changed module's source-set graph and all configured target implementat
 - **Tests:** look for common tests for the rule and target/host tests where behavior depends on platform services. Verify that CI actually runs the relevant target tasks.
 
 Return only reproducible findings at `path:line`, with the affected target and smallest fix. Use the [source-set guide](../../mobile-kmp/references/source-sets.md) for the dependency graph.
+
+For a deeper review of implemented KMP and Compose Multiplatform code, apply [kotlin-kmp-code-review](../../mobile-kmp/references/architecture/kotlin-kmp-code-review/GUIDE.md) and load only the references the changed files need.

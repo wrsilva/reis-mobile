@@ -8,3 +8,5 @@ Find the first failing module, Gradle task, compilation and target in the log. R
 4. For an Android failure, apply the [Android debugging reference](android.md) to the host/module. For a native iOS failure, apply the [iOS reference](ios.md) to the host. A shared-source error remains a KMP issue.
 
 Report the first error line, affected source set/target, configuration evidence and the exact project task that reproduces it. Discover task names from the wrapper instead of guessing them. Kotlin's [source-set reference](https://kotlinlang.org/docs/multiplatform/multiplatform-dsl-reference.html) defines the hierarchy.
+
+For behavior bugs once the project builds — root cause, minimal fix and regression test — use [kotlin-project-bugfix](../../mobile-kmp/references/bugfix-refactoring/kotlin-project-bugfix/GUIDE.md).

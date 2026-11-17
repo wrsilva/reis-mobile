@@ -1,6 +1,6 @@
 ---
 name: mobile-kmp
-description: Works on Kotlin Multiplatform mobile projects with shared Kotlin source sets and Android/iOS targets. Use for architecture, tests, debugging, reviews, performance, security, accessibility, dependencies and releases when `org.jetbrains.kotlin.multiplatform` is applied; inspect actual targets, `commonMain`/`commonTest`, target source sets, Compose Multiplatform and the iOS framework/host app before giving platform advice.
+description: Works on Kotlin Multiplatform mobile projects with shared Kotlin source sets and Android/iOS targets. Use for architecture, tests, debugging, reviews, performance, security, accessibility, dependencies and releases when `org.jetbrains.kotlin.multiplatform` is applied; inspect actual targets, `commonMain`/`commonTest`, target source sets, Compose Multiplatform and the iOS framework/host app before giving platform advice. Includes in-depth guides for KMP architecture and code reviews, feature implementation, modularization, state holders, shared Compose UI, adaptive layouts, navigation, `expect`/`actual` bridges, App Links, data layers, tests, Gradle governance, bug fixes and safe refactoring.
 intents: [design, architecture, test, performance, review, debug, security, release, accessibility, migration, dependency, build, deployment]
 stacks: [kotlin-multiplatform]
 ---
@@ -15,6 +15,18 @@ KMP is a sharing mechanism, not a promise that both apps use the same UI or SDK.
 | How does shared Kotlin reach the iOS app? | [references/apple-interop.md](references/apple-interop.md) |
 | Is UI shared with Compose Multiplatform or native on each target? | [references/compose-ui.md](references/compose-ui.md) |
 | Which build, measurement or release task applies? | [references/build-performance.md](references/build-performance.md) |
+
+## Guides by theme
+
+Fifteen in-depth guides, from `mmiani/kotlin-kmp-claude-agent-skills`. They refer to each other by their upstream names (`kotlin-...`), which are the link texts in these tables. Open only the guides the task needs.
+
+| Theme | Read |
+|---|---|
+| Architecture review, implemented-code review, feature implementation, modularization, state holders | [references/architecture.md](references/architecture.md) |
+| Shared Compose UI, adaptive layouts and resources, navigation | [references/ui-navigation.md](references/ui-navigation.md) |
+| `expect`/`actual` and platform bridges, Android deep links and App Links | [references/platform.md](references/platform.md) |
+| Data layer, test strategy, Gradle build governance | [references/data-testing-build.md](references/data-testing-build.md) |
+| Bug fixes and safe refactoring | [references/bugfix-refactoring.md](references/bugfix-refactoring.md) |
 
 ## Ground the answer
 

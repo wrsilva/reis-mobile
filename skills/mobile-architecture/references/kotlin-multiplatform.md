@@ -9,3 +9,5 @@ Read the [KMP source-set guide](../../mobile-kmp/references/source-sets.md) befo
 5. Return a table of **object/symbol → source set → owner → Android caller → iOS caller → test seam**, plus a minimal migration sequence. Mark proposed paths as proposed.
 
 Check [Kotlin's source-set hierarchy](https://kotlinlang.org/docs/multiplatform/multiplatform-dsl-reference.html) and [platform API connection guidance](https://kotlinlang.org/docs/multiplatform/multiplatform-connect-to-apis.html) against the installed Kotlin version.
+
+In-depth guides: [kotlin-project-architecture-review](../../mobile-kmp/references/architecture/kotlin-project-architecture-review/GUIDE.md) for a full architecture verdict, [kotlin-project-modularization](../../mobile-kmp/references/architecture/kotlin-project-modularization/GUIDE.md) for module boundaries and [kotlin-project-state-management](../../mobile-kmp/references/architecture/kotlin-project-state-management/GUIDE.md) for choosing a state holder. Before writing a feature, use [kotlin-project-feature-implementation](../../mobile-kmp/references/architecture/kotlin-project-feature-implementation/GUIDE.md).

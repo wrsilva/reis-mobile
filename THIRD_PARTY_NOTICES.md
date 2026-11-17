@@ -387,6 +387,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## mmiani/kotlin-kmp-claude-agent-skills
+
+- Source: https://github.com/mmiani/kotlin-kmp-claude-agent-skills
+- Revision: `939786cb13b49daacea7d5fb0a10877b6005e6be` (2026-08-15), upstream package version 1.1.0
+- License: Apache-2.0
+- Skills (0): none as standalone skills; all of its content lives in the files listed below
+- Adapted into reis-mobile skills (upstream skill → file under `skills/`): `kotlin-project-architecture-review` → `mobile-kmp/references/architecture/kotlin-project-architecture-review/GUIDE.md`, `kotlin-kmp-code-review` → `mobile-kmp/references/architecture/kotlin-kmp-code-review/GUIDE.md`, `kotlin-project-feature-implementation` → `mobile-kmp/references/architecture/kotlin-project-feature-implementation/GUIDE.md`, `kotlin-project-modularization` → `mobile-kmp/references/architecture/kotlin-project-modularization/GUIDE.md`, `kotlin-project-state-management` → `mobile-kmp/references/architecture/kotlin-project-state-management/GUIDE.md`, `kotlin-ui-compose-multiplatform` → `mobile-kmp/references/ui-navigation/kotlin-ui-compose-multiplatform/GUIDE.md`, `kotlin-ui-adaptive-resources` → `mobile-kmp/references/ui-navigation/kotlin-ui-adaptive-resources/GUIDE.md`, `kotlin-navigation-compose-multiplatform` → `mobile-kmp/references/ui-navigation/kotlin-navigation-compose-multiplatform/GUIDE.md`, `kotlin-platform-kmp-bridges` → `mobile-kmp/references/platform/kotlin-platform-kmp-bridges/GUIDE.md`, `kotlin-platform-app-links-and-deep-links` → `mobile-kmp/references/platform/kotlin-platform-app-links-and-deep-links/GUIDE.md`, `kotlin-data-kmp-data-layer` → `mobile-kmp/references/data-testing-build/kotlin-data-kmp-data-layer/GUIDE.md`, `kotlin-testing-kmp` → `mobile-kmp/references/data-testing-build/kotlin-testing-kmp/GUIDE.md`, `kotlin-build-kmp-gradle-governance` → `mobile-kmp/references/data-testing-build/kotlin-build-kmp-gradle-governance/GUIDE.md`, `kotlin-project-bugfix` → `mobile-kmp/references/bugfix-refactoring/kotlin-project-bugfix/GUIDE.md`, `kotlin-kmp-refactor-safety` → `mobile-kmp/references/bugfix-refactoring/kotlin-kmp-refactor-safety/GUIDE.md`
+- Changes made by reis-mobile: each skill folder was moved from `skills/<skill>/` into `skills/mobile-kmp/references/<theme>/<skill>/`, grouped by the categories of the upstream README; its `SKILL.md` renamed to `GUIDE.md` and its frontmatter (including `allowed-tools`) replaced by an attribution line. The `reference/` folders and the instructions are unchanged. The upstream orchestration package (`agents/`, `commands/execute-ticket.md`, `hooks/`, `orchestration/`, `settings.json` and the installer) was not copied.
+- The upstream `LICENSE` file is reproduced below; the full Apache License 2.0 text is reproduced in the `android/skills` section above. The upstream repository ships no `NOTICE` file.
+
+```text
+Apache License
+Version 2.0, January 2004
+https://www.apache.org/licenses/LICENSE-2.0
+
+Copyright 2026 Mariano Miani
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this repository except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
 ## External Apple design reading (not redistributed)
 
 Source: https://github.com/dickwu/apple-design-skill
