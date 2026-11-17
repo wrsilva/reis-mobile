@@ -17,7 +17,7 @@ export const INTENTS = {
     'performance', 'desempenho', 'lento', 'lentidao', 'slow', 'jank', 'fps', 'memoria',
     'memory', 'leak', 'startup', 'rebuild', 'bateria', 'battery', 'app size', 'apk size',
     'ipa size', 'tamanho do app', 'tamanho do apk', 'tamanho do ipa', 'lag',
-    'travando', 'engasg',
+    'travando', 'engasg', 'stutter', 'choppy', 'sluggish', 'dropped frame', 'frame drop',
   ],
   test: [
     'test', 'teste', 'cobertura', 'coverage', 'golden', 'espresso', 'xctest', 'maestro',
